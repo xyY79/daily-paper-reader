@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="others/daily-paper-reader-minimal-logo.svg" alt="Daily Paper Reader Logo" width="720" />
+</p>
+
 <h1 align="center">Daily Paper Reader</h1>
 
 <p align="center">

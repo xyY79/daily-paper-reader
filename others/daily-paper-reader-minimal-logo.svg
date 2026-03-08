@@ -1,0 +1,56 @@
+<svg width="1600" height="320" viewBox="0 0 1600 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="textGrad" x1="420" y1="70" x2="1220" y2="250" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#EC4899"/>
+    </linearGradient>
+    <linearGradient id="iconGrad" x1="80" y1="60" x2="360" y2="260" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A78BFA"/>
+      <stop offset="1" stop-color="#F472B6"/>
+    </linearGradient>
+    <linearGradient id="lineGrad" x1="430" y1="240" x2="1320" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A78BFA"/>
+      <stop offset="1" stop-color="#F9A8D4"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#C084FC" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .title { font-family: Inter, Segoe UI, Arial, sans-serif; font-style: italic; font-weight: 800; letter-spacing: -0.04em; }
+    </style>
+  </defs>
+
+  <!-- transparent background -->
+
+  <g filter="url(#softShadow)">
+    <!-- Book icon -->
+    <path d="M106 88C142 88 176 97 205 114C234 97 268 88 304 88C319 88 334 90 348 94V236C335 231 320 228 304 228C269 228 236 238 205 256C174 238 141 228 106 228C90 228 75 231 62 236V94C76 90 91 88 106 88Z" fill="url(#iconGrad)"/>
+    <path d="M205 114V256" stroke="white" stroke-opacity="0.72" stroke-width="6" stroke-linecap="round"/>
+    <path d="M86 117C120 117 152 124 180 138" stroke="white" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+    <path d="M86 145C121 145 153 152 180 166" stroke="white" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+    <path d="M86 173C121 173 153 180 180 194" stroke="white" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+    <path d="M86 201C118 201 149 208 176 221" stroke="white" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+    <path d="M324 117C290 117 258 124 230 138" stroke="white" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+    <path d="M324 145C289 145 257 152 230 166" stroke="white" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+    <path d="M324 173C289 173 257 180 230 194" stroke="white" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+    <path d="M324 201C292 201 261 208 234 221" stroke="white" stroke-opacity="0.55" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- Magnifier -->
+    <circle cx="178" cy="158" r="42" fill="white" fill-opacity="0.18" stroke="#7C3AED" stroke-width="10"/>
+    <circle cx="178" cy="158" r="22" fill="white" fill-opacity="0.42"/>
+    <path d="M146 190L112 224" stroke="#7C3AED" stroke-width="14" stroke-linecap="round"/>
+  </g>
+
+  <!-- Title -->
+  <text x="420" y="148" class="title" font-size="104" fill="url(#textGrad)">Daily</text>
+  <text x="420" y="242" class="title" font-size="104" fill="url(#textGrad)">Paper Reader</text>
+
+  <!-- Accent line -->
+  <path d="M428 258H1318" stroke="url(#lineGrad)" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- Minimal waveform -->
+  <g opacity="0.65" transform="translate(1040 88)">
+    <path d="M0 42V30M16 42V24M32 42V18M48 42V10M64 42V16M80 42V28M96 42V34M112 42V26M128 42V14M144 42V20M160 42V30M176 42V36"
+          stroke="url(#lineGrad)" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>
