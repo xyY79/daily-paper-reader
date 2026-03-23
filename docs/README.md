@@ -6,91 +6,73 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-03-14 ~ 2026-03-23
-- 运行时间：2026-03-23 13:32:37 UTC
+- 最新运行日期：2026-03-23
+- 运行时间：2026-03-23 20:27:45 UTC
 - 运行状态：成功
-- 本次总论文数：23
-- 精读区：12
+- 本次总论文数：17
+- 精读区：6
 - 速读区：11
 
 ### 今日简报（AI）
-深度探索学术科研全流程自动化，精读 AgenticScholar 与 ResearchPilot 等 23 篇 AI 智能体前沿论文。
-智能体正从单一检索进化为复杂的数据编排与文献综述自动撰写，实现了学术语料处理与引文校验的闭环。
-建议优先关注本地化多智能体协作系统，尝试利用 AI 工具重塑文献调研与论文起草的工作流。
-- 详情：[/20260314-20260323/README](/20260314-20260323/README)
+今日聚焦 17 篇前沿成果，深度复盘硬件逆向工程的二十年演进，并拆解了 Corrective RAG 的开源复现细节。
+重点推荐硬件安全综述与 RAG 可解释性分析，揭示了从底层芯片安全到高层检索增强生成的全栈优化路径。
+建议开发者优先研读 CRAG 的复现报告，通过引入事实修复机制提升大模型在复杂问答中的生成准确度。
+- 详情：[/202603/23/README](/202603/23/README)
 
 ### 精读区论文标签
-1. [AgenticScholar: Agentic Data Management with Pipeline Orchestration for Scholarly Corpora](/20260314-20260323/2603.13774v1-agenticscholar-agentic-data-management-with-pipeline-orchestration-for-scholarly-corpora)  
-   标签：评分：10.0/10、query:sr
-   evidence：用于发现的代理式学术数据管理
-2. [ResearchPilot: A Local-First Multi-Agent System for Literature Synthesis and Related Work Drafting](/20260314-20260323/2603.14629v1-researchpilot-a-local-first-multi-agent-system-for-literature-synthesis-and-related-work-drafting)  
-   标签：评分：10.0/10、query:sr
-   evidence：用于文献综述和相关工作起草的多智能体系统
-3. [LR-Robot: A Unified Supervised Intelligent Framework for Real-Time Systematic Literature Reviews with Large Language Models](/20260314-20260323/2603.17723v1-lr-robot-a-unified-supervised-intelligent-framework-for-real-time-systematic-literature-reviews-with-large-language-models)  
-   标签：评分：10.0/10、query:sr
-   evidence：使用大语言模型进行实时系统文献综述的框架
-4. [HindSight: Evaluating Research Idea Generation via Future Impact](/20260314-20260323/2603.15164v1-hindsight-evaluating-research-idea-generation-via-future-impact)  
+1. [SoK: From Silicon to Netlist and Beyond $-$ Two Decades of Hardware Reverse Engineering Research](/202603/23/2603.17883v1-sok-from-silicon-to-netlist-and-beyond---two-decades-of-hardware-reverse-engineering-research)  
    标签：评分：9.0/10、query:sr
-   evidence：通过检索增强系统评估研究想法的生成
-5. [HindSight: Evaluating LLM-Generated Research Ideas via Future Impact](/20260314-20260323/2603.15164v2-hindsight-evaluating-llm-generated-research-ideas-via-future-impact)  
-   标签：评分：9.0/10、query:sr
-   evidence：通过匹配未来出版物来评估研究想法
-6. [The Agentic Researcher: A Practical Guide to AI-Assisted Research in Mathematics and Machine Learning](/20260314-20260323/2603.15914v1-the-agentic-researcher-a-practical-guide-to-ai-assisted-research-in-mathematics-and-machine-learning)  
-   标签：评分：9.0/10、query:sr
-   evidence：AI辅助研究方法的实用指南
-7. [ClaimFlow: Tracing the Evolution of Scientific Claims in NLP](/20260314-20260323/2603.16073v1-claimflow-tracing-the-evolution-of-scientific-claims-in-nlp)  
-   标签：评分：9.0/10、query:sr
-   evidence：追踪科学主张的演变及跨论文关系
-8. [Language Models Don't Know What You Want: Evaluating Personalization in Deep Research Needs Real Users](/20260314-20260323/2603.16120v1-language-models-dont-know-what-you-want-evaluating-personalization-in-deep-research-needs-real-users)  
-   标签：评分：9.0/10、query:sr
-   evidence：根据查询综合科学论文的深度研究工具
-9. [Public Profile Matters: A Scalable Integrated Approach to Recommend Citations in the Wild](/20260314-20260323/2603.17361v1-public-profile-matters-a-scalable-integrated-approach-to-recommend-citations-in-the-wild)  
-   标签：评分：9.0/10、query:sr
-   evidence：针对相关文献的引用推荐
-10. [EDM-ARS: A Domain-Specific Multi-Agent System for Automated Educational Data Mining Research](/20260314-20260323/2603.18273v1-edm-ars-a-domain-specific-multi-agent-system-for-automated-educational-data-mining-research)  
-   标签：评分：9.0/10、query:sr
-   evidence：数据挖掘的自动化研究流程
-11. [SODIUM: From Open Web Data to Queryable Databases](/20260314-20260323/2603.18447v1-sodium-from-open-web-data-to-queryable-databases)  
-   标签：评分：9.0/10、query:sr
-   evidence：对开放网络数据的系统性探索与发现
-12. [Total Recall QA: A Verifiable Evaluation Suite for Deep Research Agents](/20260314-20260323/2603.18516v1-total-recall-qa-a-verifiable-evaluation-suite-for-deep-research-agents)  
-   标签：评分：9.0/10、query:sr
-   evidence：针对执行多步信息检索的深度研究智能体的评估套件
+   evidence：基于187篇同行评审论文的知识系统化
+2. [Open-Source Reproduction and Explainability Analysis of Corrective Retrieval Augmented Generation](/202603/23/2603.16169v1-open-source-reproduction-and-explainability-analysis-of-corrective-retrieval-augmented-generation)  
+   标签：评分：8.0/10、query:sr
+   evidence：用于稳健文档检索的纠正性检索增强生成
+3. [Halo: Domain-Aware Query Optimization for Long-Context Question Answering](/202603/23/2603.17668v1-halo-domain-aware-query-optimization-for-long-context-question-answering)  
+   标签：评分：8.0/10、query:sr
+   evidence：针对科学研究问答的领域感知查询优化
+4. [Mitigating LLM Hallucinations through Domain-Grounded Tiered Retrieval](/202603/23/2603.17872v1-mitigating-llm-hallucinations-through-domain-grounded-tiered-retrieval)  
+   标签：评分：8.0/10、query:sr
+   evidence：基于领域落地的分层检索以拦截事实错误
+5. [TopoChunker: Topology-Aware Agentic Document Chunking Framework](/202603/23/2603.18409v1-topochunker-topology-aware-agentic-document-chunking-framework)  
+   标签：评分：8.0/10、query:sr
+   evidence：拓扑感知的文档分块以保留结构层级
+6. [Inducing Sustained Creativity and Diversity in Large Language Models](/202603/23/2603.19519v1-inducing-sustained-creativity-and-diversity-in-large-language-models)  
+   标签：评分：8.0/10、query:sr
+   evidence：针对被忽视研究课题的探索性搜索
 
 ### 速读区论文标签
-1. [Compute Allocation for Reasoning-Intensive Retrieval Agents](/20260314-20260323/2603.14635v1-compute-allocation-for-reasoning-intensive-retrieval-agents)  
-   标签：评分：8.0/10、query:sr
-   evidence：针对相关文档的推理密集型检索
-2. [Evo-Retriever: LLM-Guided Curriculum Evolution with Viewpoint-Pathway Collaboration for Multimodal Document Retrieval](/20260314-20260323/2603.16455v1-evo-retriever-llm-guided-curriculum-evolution-with-viewpoint-pathway-collaboration-for-multimodal-document-retrieval)  
-   标签：评分：8.0/10、query:sr
-   evidence：多模态文档检索框架
-3. [citecheck: An MCP Server for Automated Bibliographic Verification and Repair in Scholarly Manuscripts](/20260314-20260323/2603.17339v1-citecheck-an-mcp-server-for-automated-bibliographic-verification-and-repair-in-scholarly-manuscripts)  
-   标签：评分：8.0/10、query:sr
-   evidence：学术手稿中参考文献的自动验证与修复
-4. [CRE-T1 Preview Technical Report: Beyond Contrastive Learning for Reasoning-Intensive Retrieval](/20260314-20260323/2603.17387v1-cre-t1-preview-technical-report-beyond-contrastive-learning-for-reasoning-intensive-retrieval)  
-   标签：评分：8.0/10、query:sr
-   evidence：识别检索中的隐式推理关系
-5. [Automatic Inter-document Multi-hop Scientific QA Generation](/20260314-20260323/2603.14257v1-automatic-inter-document-multi-hop-scientific-qa-generation)  
+1. [Rethinking Evaluation in Retrieval-Augmented Personalized Dialogue: A Cognitive and Linguistic Perspective](/202603/23/2603.14217v1-rethinking-evaluation-in-retrieval-augmented-personalized-dialogue-a-cognitive-and-linguistic-perspective)  
    标签：评分：7.0/10、query:sr
-   evidence：自动生成多文档科学问答数据集的框架
-6. [A Comprehensive Survey of Redundancy Systems with a Focus on Triple Modular Redundancy (TMR)](/20260314-20260323/2603.14411v1-a-comprehensive-survey-of-redundancy-systems-with-a-focus-on-triple-modular-redundancy-tmr)  
+   evidence：检索增强系统中的评估方法论
+2. [CounterRefine: Answer-Conditioned Counterevidence Retrieval for Inference-Time Knowledge Repair in Factual Question Answering](/202603/23/2603.16091v1-counterrefine-answer-conditioned-counterevidence-retrieval-for-inference-time-knowledge-repair-in-factual-question-answering)  
    标签：评分：7.0/10、query:sr
-   evidence：对某一领域的全面综述与分类
-7. [Distilling Reasoning Without Knowledge: A Framework for Reliable LLMs](/20260314-20260323/2603.14458v1-distilling-reasoning-without-knowledge-a-framework-for-reliable-llms)  
+   evidence：检索增强的问答与证据检索
+3. [SciZoom: A Large-scale Benchmark for Hierarchical Scientific Summarization across the LLM Era](/202603/23/2603.16131v1-scizoom-a-large-scale-benchmark-for-hierarchical-scientific-summarization-across-the-llm-era)  
    标签：评分：7.0/10、query:sr
-   evidence：在LLM中将规划与事实检索分离
-8. [A Framework and Prototype for a Navigable Map of Datasets in Engineering Design and Systems Engineering](/20260314-20260323/2603.15722v2-a-framework-and-prototype-for-a-navigable-map-of-datasets-in-engineering-design-and-systems-engineering)  
+   evidence：大规模科学文献多层级摘要基准
+4. [Answer Bubbles: Information Exposure in AI-Mediated Search](/202603/23/2603.16138v1-answer-bubbles-information-exposure-in-ai-mediated-search)  
    标签：评分：7.0/10、query:sr
-   evidence：用于映射数据集以识别关键研究资源的系统框架
-9. [Greedy Information Projection for LLM Data Selection](/20260314-20260323/2603.13790v1-greedy-information-projection-for-llm-data-selection)  
+   evidence：AI介导搜索中的信息暴露
+5. [VisBrowse-Bench: Benchmarking Visual-Native Search for Multimodal Browsing Agents](/202603/23/2603.16289v1-visbrowse-bench-benchmarking-visual-native-search-for-multimodal-browsing-agents)  
+   标签：评分：7.0/10、query:sr
+   evidence：为信息发现建立视觉原生搜索基准
+6. [VisBrowse-Bench: Benchmarking Visual-Native Search for Multimodal Browsing Agents](/202603/23/2603.16289v2-visbrowse-bench-benchmarking-visual-native-search-for-multimodal-browsing-agents)  
+   标签：评分：7.0/10、query:sr
+   evidence：多模态浏览智能体的视觉原生搜索基准测试
+7. [Agentic DAG-Orchestrated Planner Framework for Multi-Modal, Multi-Hop Question Answering in Hybrid Data Lakes](/202603/23/2603.14229v1-agentic-dag-orchestrated-planner-framework-for-multi-modal-multi-hop-question-answering-in-hybrid-data-lakes)  
    标签：评分：6.0/10、query:sr
-   evidence：基于互信息的学术数据选择原则性框架
-10. [SmartSearch: How Ranking Beats Structure for Conversational Memory Retrieval](/20260314-20260323/2603.15599v1-smartsearch-how-ranking-beats-structure-for-conversational-memory-retrieval)  
+   evidence：混合数据湖中的多跳问答
+8. [Bridging National and International Legal Data: Two Projects Based on the Japanese Legal Standard XML Schema for Comparative Law Studies](/202603/23/2603.15094v1-bridging-national-and-international-legal-data-two-projects-based-on-the-japanese-legal-standard-xml-schema-for-comparative-law-studies)  
    标签：评分：6.0/10、query:sr
-   evidence：对话记忆检索与排序发现
-11. [A Framework and Prototype for a Navigable Map of Datasets in Engineering Design and Systems Engineering](/20260314-20260323/2603.15722v1-a-framework-and-prototype-for-a-navigable-map-of-datasets-in-engineering-design-and-systems-engineering)  
+   evidence：利用语义文本相似性识别对应条款
+9. [Probe-then-Plan: Environment-Aware Planning for Industrial E-commerce Search](/202603/23/2603.15262v1-probe-then-plan-environment-aware-planning-for-industrial-e-commerce-search)  
    标签：评分：6.0/10、query:sr
-   evidence：工程研究中映射数据集的系统框架
+   evidence：针对复杂用户意图的环境感知搜索规划
+10. [CLAG: Adaptive Memory Organization via Agent-Driven Clustering for Small Language Model Agents](/202603/23/2603.15421v1-clag-adaptive-memory-organization-via-agent-driven-clustering-for-small-language-model-agents)  
+   标签：评分：6.0/10、query:sr
+   evidence：用于记忆组织和知识重用的智能体驱动聚类
+11. [How often do Answers Change? Estimating Recency Requirements in Question Answering](/202603/23/2603.16544v1-how-often-do-answers-change-estimating-recency-requirements-in-question-answering)  
+   标签：评分：6.0/10、query:sr
+   evidence：评估问答中的时效性需求
 
 
 <div class="dpr-home-promo-card">
