@@ -25,3 +25,43 @@ subscriptions:
     stage: A
     diff_threshold_pct: 15
   keyword_recall_mode: or
+  intent_profiles:
+    - tag: SR 检索
+      description: 检索相关研究的论文
+      enabled: true
+      keywords:
+        - keyword: adaptive learning surrogate model
+          keyword_cn: ''
+          query: a
+        - keyword: surrogate model for aerodynamic optimization
+          keyword_cn: 代理模型
+          query: s
+        - keyword: tandem cascade
+          keyword_cn: 串列
+          query: t
+        - keyword: fluid-thermal topology optimization
+          keyword_cn: 流热
+          query: fluid topology optimization
+        - keyword: fluid topology optimization
+          keyword_cn: 流体拓扑优化
+          query: f
+        - keyword: research methodology
+          keyword_cn: 研究方法论
+          query: methods and approaches in academic research
+      intent_queries:
+        - query: systematic approaches to literature search
+          query_cn: 文献检索的系统方法
+          enabled: true
+          source: manual
+          note: ''
+        - query: identifying key research in a field
+          query_cn: 识别领域内的关键研究
+          enabled: true
+          source: manual
+          note: ''
+        - query: comprehensive research paper discovery
+          query_cn: 全面的研究论文发现
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-03-23T13:06:26.884Z'
