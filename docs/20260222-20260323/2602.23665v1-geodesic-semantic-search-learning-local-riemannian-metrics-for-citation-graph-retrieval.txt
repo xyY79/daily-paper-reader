@@ -1,0 +1,774 @@
+Title: Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval
+
+URL Source: https://arxiv.org/pdf/2602.23665v1
+
+Published Time: Mon, 02 Mar 2026 01:24:58 GMT
+
+Number of Pages: 15
+
+Markdown Content:
+# GEODESIC SEMANTIC SEARCH : L EARNING LOCAL RIEMANNIAN 
+
+# METRICS FOR CITATION GRAPH RETRIEVAL 
+
+A P REPRINT 
+
+Brandon Yee, 1 Lucas Wang, 1 Kundana Kommini, 1 Krishna Sharma 21Management Sciences Lab, Yee Collins Research Groups 
+
+> 2
+
+Hoover Institute, Stanford University 
+
+{b.yee, k.kommini}@ycrg-labs.org lucaswang421@gmail.com, ksharma3@stanford.edu 
+
+## ABSTRACT 
+
+We present Geodesic Semantic Search (GSS), a retrieval system that learns node-specific Rie-mannian metrics on citation graphs to enable geometry-aware semantic search. Unlike standard embedding-based retrieval that relies on fixed Euclidean distances, GSS learns a low-rank metric tensor Li ∈ Rd×r at each node, inducing a local positive semi-definite metric Gi = LiL⊤ 
+
+> i
+
++ ϵI. This parameterization guarantees valid metrics while keeping the model tractable. Retrieval proceeds via multi-source Dijkstra on the learned geodesic distances, followed by Maximal Marginal Relevance reranking and path coherence filtering. On citation prediction benchmarks with 169K papers, GSS achieves 23% relative improvement in Recall@20 over SPECTER+FAISS baselines while providing interpretable citation paths. Our hierarchical coarse-to-fine search with k-means pooling reduces computational cost by 4 × compared to flat geodesic search while maintaining 97% retrieval quality. We provide theoretical analysis of when geodesic distances outperform direct similarity, characterize the approximation quality of low-rank metrics, and validate predictions empirically. Code and trained models are available at https://github.com/YCRG-Labs/geodesic-search .
+
+Keywords Information Retrieval · Graph Neural Networks · Metric Learning · Riemannian Geometry · Citation Networks 
+
+## 1 Introduction 
+
+Semantic search in scientific literature requires understanding both textual similarity and structural relationships encoded in citation networks. Standard approaches embed documents into a fixed Euclidean space and retrieve via nearest-neighbor search [Cohan et al., 2020, Reimers and Gurevych, 2019]. However, the geometry of scientific knowledge is inherently non-Euclidean: citation patterns reflect hierarchical topic structures, methodological lineages, and cross-disciplinary bridges that cannot be captured by a single global metric. Consider searching for papers connecting “differential geometry” and “natural language processing.” Direct embedding similarity may fail because these fields occupy distant regions of the semantic space. Yet meaningful paths exist through intermediate work on manifold learning, geometric word embeddings, and hyperbolic language models. A retrieval system that can traverse such paths—respecting the local geometry at each step—would provide more useful results than one limited to direct similarity. We propose Geodesic Semantic Search (GSS) , which learns local Riemannian metrics that vary across the citation graph. Each node i is equipped with a learned metric tensor Gi that defines how distances are measured in its local neighborhood. Retrieval computes geodesic shortest paths under these spatially-varying metrics, naturally respecting the heterogeneous geometry of scientific knowledge. The key insight is that different regions of the citation graph have different notions of “similarity.” In a dense cluster of machine learning papers, small embedding differences may indicate significant methodological distinctions. In a sparse 
+
+> arXiv:2602.23665v1 [cs.IR] 27 Feb 2026
+
+Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+interdisciplinary region, larger embedding distances may connect genuinely related work. Learning local metrics allows the retrieval system to adapt to this heterogeneity. 
+
+Contributions. Our main contributions are: 1. We introduce M ETRIC GAT, a graph attention network that outputs per-node low-rank metric tensors Li ∈
+
+Rd×r , with theoretical guarantees on metric validity and approximation quality (Section 4). 2. We develop a hierarchical geodesic retrieval pipeline combining FAISS seeding, multi-source Dijkstra, MMR reranking, and path coherence filtering, achieving 4 × speedup over flat search (Section 5). 3. We provide theoretical analysis characterizing when geodesic distances outperform direct similarity, with empirical validation (Section 6). 4. We demonstrate 23% improvement in Recall@20 over strong baselines on citation prediction with 169K papers, with particularly large gains (46%) on concept bridging tasks (Section 7). 
+
+## 2 Related Work 
+
+Geometric Deep Learning. The geometric deep learning framework [Bronstein et al., 2021, Battaglia et al., 2018] unifies approaches that respect geometric structure in data. Most work assumes global geometric structure—rotation equivariance [Cohen and Welling, 2016], translation invariance, or fixed graph topology [Kipf and Welling, 2017, Veliˇ ckovi´ c et al., 2018]. Our approach differs by learning local geometry that varies across the graph, without assuming any global structure. 
+
+Hyperbolic Embeddings. Hyperbolic spaces naturally encode hierarchical structures with low distortion [Nickel and Kiela, 2017, Chami et al., 2019, Liu et al., 2019]. Extensions to graph neural networks [Bachmann et al., 2020] enable learning in hyperbolic space. However, these approaches assume uniform negative curvature everywhere, which may not match the heterogeneous geometry of real citation networks. GSS learns spatially-varying geometry without committing to a fixed manifold structure. 
+
+Graph Neural Networks for Retrieval. GNNs learn powerful node representations by aggregating neighborhood information [Hamilton et al., 2017, Veliˇ ckovi´ c et al., 2018, Xu et al., 2019, Wu et al., 2020]. Applications to retrieval typically use learned embeddings with fixed Euclidean or cosine distance [Ying et al., 2018]. GSS integrates learned geometry into the retrieval process itself, computing geodesic distances under spatially-varying metrics. 
+
+Dense Retrieval. Modern dense retrieval systems [Karpukhin et al., 2020, Izacard et al., 2022] learn document embeddings optimized for retrieval. SPECTER [Cohan et al., 2020] specifically targets scientific documents using citation-informed training. These methods use fixed distance metrics; GSS extends this paradigm by learning adaptive metrics. 
+
+Metric Learning. Classical metric learning [Weinberger and Saul, 2009] learns a single global Mahalanobis distance. Local metric learning [Frome et al., 2007] allows metrics to vary but typically requires explicit supervision for each local region. Our approach learns local metrics end-to-end from citation structure, without requiring region-specific supervision. 
+
+## 3 Problem Formulation 
+
+Let G = ( V, E) be a citation graph with N = |V| nodes (papers) and directed edges (i, j ) ∈ E indicating that paper i
+
+cites paper j. Each node has input features xi ∈ Rdin (e.g., SPECTER embeddings of title and abstract). Our goal is to learn: 1. Node representations hi ∈ Rd capturing semantic content 2. Local metric tensors Gi ∈ Rd×d defining geometry at each node 
+
+Definition 1 (Local Riemannian Metric) . A symmetric positive definite matrix Gi ≻ 0 at node i defines the local Mahalanobis distance to any node j:
+
+dGi (i, j ) = 
+
+q
+
+(hi − hj )⊤Gi(hi − hj ) (1) 2Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+This local distance measures how “far” node j appears from the perspective of node i. Crucially, dGi (i, j )̸ = dGj (j, i )
+
+in general—the distance depends on which node’s metric is used. 
+
+Definition 2 (Graph Geodesic Distance) . The geodesic distance between nodes i and j on graph G is the minimum cumulative local distance along any path: 
+
+dG (i, j ) = min 
+
+> γ:i⇝j
+
+X
+
+> (u,v )∈γ
+
+dGu (u, v ) (2) 
+
+where γ ranges over all paths from i to j in G.
+
+The geodesic distance respects the local geometry at each step: when traversing from u to v, we use u’s metric to measure the step length. This allows the path to adapt to varying notions of similarity across the graph. 
+
+3.1 Low-Rank Metric Parameterization 
+
+Learning a full d × d positive definite matrix at each node requires O(d2) parameters per node and is prone to overfitting. We instead parameterize metrics via low-rank factors. 
+
+Proposition 1 (Low-Rank Metric Guarantee) . For any Li ∈ Rd×r with r ≤ d and ϵ > 0, the matrix 
+
+Gi = LiL⊤ 
+
+> i
+
++ ϵId (3) 
+
+is symmetric positive definite with minimum eigenvalue at least ϵ.Proof. Symmetry is immediate. For any x̸ = 0 : x⊤Gix = ∥L⊤ 
+
+> i
+
+x∥22 + ϵ∥x∥22 ≥ ϵ∥x∥22 > 0.This parameterization has several advantages. Metric validity is guaranteed ( Gi ≻ 0 by construction) without constrained optimization. It is also parameter efficient, requiring only d × r parameters rather than d(d + 1) /2 for a full matrix. Finally, distance computation reduces to 
+
+dGi (i, j ) = 
+
+q
+
+∥L⊤ 
+
+> i
+
+(hi − hj )∥22 + ϵ∥hi − hj ∥22 (4) requiring O(dr ) operations instead of O(d2).
+
+## 4 Method 
+
+4.1 MetricGAT Architecture 
+
+METRIC GAT extends graph attention networks [Veliˇ ckovi´ c et al., 2018] to output both node embeddings and metric factors. The architecture consists of three components: 
+
+Graph Attention Layers. We stack L graph attention layers, each computing: 
+
+h(ℓ+1)  
+
+> i
+
+= σ
+
+ X 
+
+> j∈N (i)
+
+α(ℓ) 
+
+> ij
+
+W(ℓ)h(ℓ)
+
+> j
+
+ (5) where N (i) includes node i itself, W(ℓ) ∈ Rd×d is a learnable weight matrix, and attention coefficients are computed as: 
+
+α(ℓ) 
+
+> ij
+
+=exp 
+
+
+
+LeakyReLU 
+
+
+
+a(ℓ)⊤[W(ℓ)h(ℓ) 
+
+> i
+
+∥W(ℓ)h(ℓ) 
+
+> j
+
+]
+
+ P  
+
+> k∈N (i)
+
+exp 
+
+
+
+LeakyReLU 
+
+
+
+a(ℓ)⊤[W(ℓ)h(ℓ) 
+
+> i
+
+∥W(ℓ)h(ℓ) 
+
+> k
+
+]
+
+ (6) We use K = 4 attention heads with concatenation in intermediate layers and averaging in the final layer. 
+
+Embedding Head. The final node embedding is: 
+
+hi = LayerNorm 
+
+
+
+h(L) 
+
+> i
+
++ MLP emb (h(L) 
+
+> i
+
+)
+
+
+
+(7) 3Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+Metric Head. The metric factors are produced by a separate MLP: 
+
+Li = Reshape d×r
+
+
+
+MLP metric (h(L) 
+
+> i
+
+)
+
+
+
+(8) The metric head outputs d × r values which are reshaped into the low-rank factor Li.Input Features 
+
+xi ∈ R768 
+
+GAT Layers 
+
+L = 3 , K = 4 
+
+Embedding Head 
+
+hi ∈ R256 
+
+Metric Head 
+
+Li ∈ R256 ×32 
+
+Figure 1: M ETRIC GAT architecture. Input SPECTER features are processed through graph attention layers, then split into embedding and metric heads. 
+
+4.2 Training Objective 
+
+We train M ETRIC GAT with a multi-component loss function: 
+
+L = Lcontrast + λcite Lrank + λsmooth Lsmooth + λhier Lhier (9) 
+
+Contrastive Loss. We use InfoNCE [van den Oord et al., 2018] to encourage small geodesic distances for citation pairs and large distances for negatives: 
+
+Lcontrast = −E(i,j )∈E 
+
+"
+
+log exp( −dG (i, j )/τ )
+
+P 
+
+> k∈Neg (i)
+
+exp( −dG (i, k )/τ )
+
+#
+
+(10) where τ is a temperature parameter and Neg (i) contains negative samples for node i.
+
+Ranking Loss. We add a margin-based ranking loss to ensure cited papers are closer than non-cited: 
+
+Lrank = E(i,j )∈E ,k / ∈N (i) [max(0 , d G (i, j ) − dG (i, k ) + m)] (11) where m is the margin hyperparameter. 
+
+Metric Smoothness Loss. To prevent discontinuous metrics that would degrade geodesic paths, we regularize metric factors to vary smoothly: 
+
+Lsmooth = E(i,j )∈E 
+
+∥Li − Lj ∥2
+
+> F
+
+ (12) This encourages neighboring nodes to have similar local metrics, ensuring that geodesic paths traverse regions of consistent geometry. 
+
+Hierarchical Loss. We encourage embedding similarity to correlate with graph proximity: 
+
+Lhier = Ei,j,k [max(0 , sim (hi, hk) − sim (hi, hj ) + mh) · 1[dhop (i, j ) < d hop (i, k )]] (13) where dhop is the hop distance in the graph. 
+
+Negative Sampling. We use a mixture of three negative types: hard negatives (papers with high embedding similarity but no citation relationship), random negatives (uniformly sampled papers), and in-batch negatives (other papers in the same training batch). 
+
+## 5 Hierarchical Geodesic Retrieval 
+
+Computing exact geodesic distances to all nodes is expensive for large graphs. We develop a hierarchical retrieval pipeline that maintains quality while reducing computation. 4Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+Algorithm 1 Hierarchical Geodesic Retrieval 
+
+Require: Query q, graph G, embeddings {hi}, metrics {Li}, k 
+
+> 1:
+
+Seeds ← FAISS-TopK (q, √N ) 
+
+> 2:
+
+dist , parent ← MultiSourceDijkstra (Seeds , G, {Li}) 
+
+> 3:
+
+candidates ← TopK (dist , 2k) 
+
+> 4:
+
+results ← MMR-Rerank (candidates , λ ) 
+
+> 5:
+
+results ← FilterByCoherence (results , parent , θ c) 
+
+> 6:
+
+return TopK (results , k )
+
+5.1 Retrieval Pipeline 
+
+Given a query node q (or query embedding q for text queries), retrieval proceeds in four stages: 
+
+Stage 1: Seed Selection. We use FAISS [Johnson et al., 2019] to identify S = ⌈√N ⌉ seed nodes with highest embedding similarity to the query: Seeds (q) = top-S {i : sim (hq , hi)} (14) These seeds serve as starting points for geodesic exploration, focusing computation on promising regions. 
+
+Stage 2: Multi-Source Dijkstra. Starting from all seeds simultaneously, we run Dijkstra’s algorithm [Dijkstra, 1959] with edge weights defined by local metrics: 
+
+w(u, v ) = dGu (u, v ) = 
+
+q
+
+∥L⊤ 
+
+> u
+
+(hu − hv )∥22 + ϵ∥hu − hv ∥22 (15) We use early stopping: terminate when the top-k candidates have been stable for T iterations, avoiding exploration of distant regions. 
+
+Stage 3: MMR Reranking. Maximal Marginal Relevance [Carbonell and Goldstein, 1998] balances relevance and diversity: MMR (i) = λ · rel (q, i ) − (1 − λ) · max  
+
+> j∈S
+
+sim (hi, hj ) (16) where S is the set of already-selected documents, rel (q, i ) = −dG (q, i ) is the relevance score, and λ controls the relevance-diversity tradeoff. 
+
+Stage 4: Path Coherence Filtering. We filter results based on the semantic coherence of their geodesic paths. For each candidate i, let γ∗ = ( q = v0, v 1, . . . , v k = i) be the shortest geodesic path. We compute: coherence (γ∗) = k
+
+min  
+
+> t=1
+
+sim (hvt−1 , hvt ) (17) Candidates with coherence below threshold θc = 0 .3 are filtered, removing results reached via semantically discontinu-ous paths. 
+
+5.2 Hierarchical Graph Construction 
+
+For very large graphs, even seed-based Dijkstra can be expensive. We construct a hierarchy of coarsened graphs using k-means clustering. 
+
+Coarsening. At each level ℓ, we cluster nodes using k-means on embeddings with pooling ratio ρ:
+
+N (ℓ+1) = ⌊ρ · N (ℓ)⌋ (18) Cluster embeddings are computed as the mean of member embeddings: 
+
+h(ℓ+1)  
+
+> c
+
+= 1
+
+|Cc|
+
+X
+
+> i∈Cc
+
+h(ℓ) 
+
+> i
+
+(19) Cluster metrics are computed similarly, averaging the low-rank factors: 
+
+L(ℓ+1)  
+
+> c
+
+= 1
+
+|Cc|
+
+X
+
+> i∈Cc
+
+L(ℓ) 
+
+> i
+
+(20) 5Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+Coarse-to-Fine Search. Search proceeds top-down: 1. At the coarsest level, run full Dijkstra to find top-k clusters 2. At each finer level, restrict search to children of top clusters from the previous level 3. At the finest level, return individual papers This reduces the number of visited nodes from O(N ) to O(k · log ρ N ), providing significant speedup for large graphs. 
+
+Proposition 2 (Hierarchical Approximation) . Let d(ℓ) 
+
+> G
+
+denote geodesic distance at level ℓ. If cluster diameters are bounded by ∆(ℓ), then: 
+
+|d(ℓ) 
+
+> G
+
+(ci, c j ) − d(ℓ−1)  
+
+> G
+
+(i, j )| ≤ ∆(ℓ−1) + ∆ (ℓ) (21) 
+
+for any i ∈ ci, j ∈ cj .
+
+This bounds the approximation error introduced by hierarchical search in terms of cluster diameters, which decrease at finer levels. 
+
+## 6 Theoretical Analysis 
+
+We analyze when geodesic distances provide advantages over direct embedding similarity. 
+
+6.1 When Do Geodesics Help? Theorem 3 (Geodesic Advantage Condition) . Let sim (i, j ) = h⊤ 
+
+> i
+
+hj /(∥hi∥∥ hj ∥) be cosine similarity. Geodesic distance dG (i, j ) provides better retrieval than direct similarity when there exists a path γ = ( i = v0, v 1, . . . , v k = j)
+
+such that: kX
+
+> t=1
+
+dGvt−1 (vt−1, v t) < α · (1 − sim (i, j )) (22) 
+
+for some constant α > 0 depending on the metric scaling. Proof sketch. Direct similarity-based retrieval ranks j by 1 − sim (i, j ). Geodesic retrieval ranks by dG (i, j ) ≤
+
+Pkt=1 dGvt−1 (vt−1, v t). When the path sum is smaller than the direct dissimilarity (scaled appropriately), geodesic retrieval ranks j higher. This theorem formalizes the intuition that geodesics help when high-quality intermediate paths exist but direct similarity is weak—exactly the “concept bridging” scenario. 
+
+6.2 Low-Rank Approximation Quality Theorem 4 (Low-Rank Metric Approximation) . Let G∗ ∈ Rd×d be the optimal full-rank metric with eigendecomposi-tion G∗ = Pdi=1 λiuiu⊤ 
+
+> i
+
+. The best rank-r approximation Gr = LL ⊤ + ϵI satisfies: 
+
+∥G∗ − Gr ∥F ≤
+
+vuut dX
+
+> i=r+1
+
+(λi − ϵ)2 (23) This shows that low-rank metrics can closely approximate full-rank metrics when the spectrum decays rapidly—a property we observe empirically in learned metrics. 
+
+6.3 Metric Smoothness and Path Quality Proposition 5 (Smoothness-Coherence Connection) . If ∥Li − Lj ∥F ≤ δ for all edges (i, j ) ∈ E , then for any geodesic path γ = ( v0, . . . , v k):
+
+∥Lv0 − Lvk ∥F ≤ k · δ (24) This justifies the smoothness regularization: bounding metric variation along edges ensures that geodesic paths traverse regions of consistent geometry, improving path interpretability. 6Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+## 7 Experiments 
+
+7.1 Experimental Setup Dataset. We use an arXiv citation network containing 169,343 papers and 1,166,243 citation edges. Each paper is represented by its 768-dimensional SPECTER embedding [Cohan et al., 2020] computed from title and abstract. We split papers temporally: papers before 2020 for training, 2020-2021 for validation, and 2022+ for testing. 
+
+Tasks. We evaluate on three tasks: 1. Citation Prediction : Given a paper, retrieve its references from 169K candidates. Metrics: Recall@ k,nDCG@ k, MRR. 2. Semantic Search : 1,000 natural language queries with expert relevance judgments (3-point scale). Metrics: nDCG@ k.3. Concept Bridging : Given two distant research areas, find papers that connect them. We use 100 curated area pairs with ground-truth bridge papers. Metrics: Bridge@ k (fraction of ground-truth bridges in top-k), Path Coherence. 
+
+Baselines. We compare against five methods, summarized in Table 1. Table 1: Baseline methods compared against GSS. 
+
+Method Description 
+
+SPECTER+FAISS SPECTER embeddings with FAISS IndexFlatIP Node2Vec [Grover and Leskovec, 2016] Graph structure embeddings Contriever [Izacard et al., 2022] Unsupervised dense retrieval BGE-Large [Xiao et al., 2023] State-of-the-art dense retrieval GAT+Euclidean Our architecture with fixed Euclidean distance ( Li = I)
+
+Implementation Details. We use d = 256 dimensional embeddings, rank r = 32 for metric factors, L = 3 GAT layers with K = 4 heads. Training uses AdamW optimizer with learning rate 10 −3, batch size 512, for 50 epochs. Loss weights: λcite = 0 .5, λsmooth = 0 .1, λhier = 0 .1. All experiments use 5 random seeds with Bonferroni-corrected significance tests ( α = 0 .05 ). 
+
+7.2 Main Results 
+
+Table 2: Citation prediction results on arXiv (169K papers). Mean ± std over 5 seeds. ∗: statistically significant improvement over SPECTER+FAISS ( p < 0.05 , Bonferroni-corrected). 
+
+Method R@10 R@20 nDCG@20 MRR 
+
+SPECTER+FAISS .312 ±.008 .421 ±.011 .389 ±.009 .284 ±.012 
+
+Node2Vec .287 ±.012 .398 ±.015 .361 ±.013 .251 ±.015 
+
+Contriever .325 ±.009 .438 ±.012 .402 ±.010 .295 ±.011 
+
+BGE-Large .338 ±.008 .452 ±.010 .415 ±.009 .308 ±.010 
+
+GAT+Euclidean .341 ±.009 .458 ±.012 .418 ±.010 .312 ±.011 
+
+GSS (Ours) .398 ±.007 ∗ .518 ±.009 ∗ .476 ±.008 ∗ .358 ±.009 ∗
+
+Table 2 shows citation prediction results. GSS achieves a 23% relative improvement in Recall@20 over SPECTER+FAISS (0.518 vs 0.421), a 13% improvement over GAT+Euclidean (same architecture, fixed distance)— isolating the contribution of learned local metrics—and consistent improvements across all other metrics. 7Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+Table 3: Semantic search and concept bridging results. 
+
+Method nDCG@10 nDCG@20 Bridge@10 Coherence 
+
+SPECTER+FAISS .534 ±.015 .498 ±.014 .312 ±.021 —Contriever .558 ±.014 .521 ±.013 .345 ±.020 —BGE-Large .581 ±.013 .542 ±.012 .367 ±.019 —GAT+Euclidean .572 ±.014 .538 ±.013 .378 ±.020 .61 ±.03 
+
+GSS (Ours) .612 ±.012 ∗ .574 ±.011 ∗ .456 ±.018 ∗ .78 ±.02 ∗
+
+Table 3 shows semantic search and concept bridging results. GSS achieves a 14.6% improvement on semantic search nDCG@10 over SPECTER+FAISS, a 46% improvement on concept bridging (Bridge@10) validating Theorem 3, and a path coherence of 0.78 indicating semantically meaningful geodesic paths. The large gain on concept bridging confirms our theoretical prediction: geodesics excel when high-quality intermediate paths exist but direct similarity is weak. 
+
+7.3 Ablation Studies 
+
+Table 4: Ablation studies on metric rank and loss components (Recall@20 on citation prediction). 
+
+Metric Rank R@20 Loss Component R@20 
+
+r = 8 .467 ±.011 Full model .518 ±.009 
+
+r = 16 .498 ±.010 − Contrastive .478 ±.012 
+
+r = 32 (default) .518 ±.009 − Ranking .492 ±.011 
+
+r = 64 .502 ±.012 − Smoothness .451 ±.014 
+
+r = 128 .489 ±.013 − Hierarchical .508 ±.010 
+
+Metric Rank. Table 4 (left) shows performance vs. metric rank. r = 32 is optimal; higher ranks overfit while lower ranks underfit. This suggests the effective dimensionality of local geometry is moderate. 
+
+Loss Components. Table 4 (right) shows ablations on loss components. The smoothness loss is most critical :removing it drops R@20 by 13% (0.518 → 0.451) because discontinuous metrics degrade geodesic paths. The contrastive and ranking losses both contribute significantly, while the hierarchical loss provides a modest improvement. Table 5: Efficiency comparison: flat vs. hierarchical geodesic search. 
+
+Method Latency (ms) Nodes Visited R@20 Quality Ratio 
+
+FAISS only 2.3 169K (index) .421 —Flat Dijkstra 847 ±52 42,891 ±3,241 .518 100% Hierarchical (2 levels) 312 ±28 15,234 ±1,892 .512 98.8% Hierarchical (3 levels) 198 ±21 11,287 ±1,456 .509 98.3% Hierarchical (4 levels) 156 ±18 8,923 ±1,123 .498 96.1% 
+
+Efficiency. Table 5 compares flat and hierarchical search. The 3-level hierarchy reduces latency by 4.3 × (847ms 
+
+→ 198ms) and visited nodes by 3.8 ×, while retaining 98.3% of flat search quality. This trade-off is highly favorable: roughly 4 × speedup for only 2% quality loss. 
+
+7.4 Analysis Learned Metric Visualization. Figure 2 visualizes learned metrics across the citation graph. Dense ML clusters exhibit high-variance metrics where fine distinctions matter, while interdisciplinary regions have low-variance metrics reflecting broader notions of similarity. Metric principal directions consistently align with topical gradients. 8Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+PC1 
+
+PC2 
+
+> ML
+> Physics
+> Bio
+> (a) Metric ellipsoids by field
+
+Metric Variance 
+
+Density 
+
+> Dense
+> Sparse
+> (b) Variance vs. graph density
+
+Figure 2: Visualization of learned local metrics. (a) Metric ellipsoids vary by field. (b) Metric variance correlates with local graph density. 
+
+Geodesic Path Examples. Table 6 shows example geodesic paths for concept bridging queries. Table 6: Example geodesic paths for concept bridging. Cosine similarities shown in parentheses.                             
+
+> Query Geodesic Path
+> Differential geome-try →NLP
+> Riemannian Geometry & Statistical ML (0.82) →Manifold Learning for High-Dim Data (0.76) →Geometric Word Embeddings (0.71) →Hyperbolic Text Representations (0.68) →Poincaré Language Models
+> Quantum comput-ing →Drug discov-ery
+> Quantum ML Algorithms (0.79) →Variational Quantum Eigensolvers (0.74) →
+> Molecular Property Prediction (0.72) →Graph Neural Networks for Molecules
+> (0.69) →AI-Driven Drug Design
+
+Each path maintains semantic coherence (all similarities > 0.65 ) while progressively bridging distant fields. 
+
+Failure Cases. GSS underperforms direct similarity in three scenarios: when query and target reside in the same dense cluster (geodesic adds no value), when graph connectivity is poor (no good paths exist), and when the target is a very recent paper with few citations (limited graph signal). 
+
+## 8 Discussion 
+
+When Does Geometry Help? Our results reveal a clear pattern: geodesic search excels when high-quality intermediate paths exist but direct similarity is weak. The 46% gain on concept bridging reflects paths through intermediate work that connect distant fields. The moderate 14.6% gain on semantic search arises because only some queries benefit from paths, while the consistent 23% gain on citation prediction follows from citations frequently traversing topical paths. 
+
+Scale and Simplicity. Our approach demonstrates that geometric structure provides value even at scale (169K nodes). Three design choices are key: low-rank parameterization ( r = 32 suffices; higher ranks overfit), hierarchical search (4 ×
+
+speedup with only 2% quality loss), and smoothness regularization (critical for path quality). 
+
+Interpretability. Unlike black-box retrieval, GSS provides interpretable results: geodesic paths show why a result is relevant, local metrics reveal how similarity is measured in each region, and path coherence scores indicate result reliability. 
+
+Limitations. Four limitations warrant future work. First, training requires citation structure; unsupervised metric learning would broaden applicability. Second, 198ms latency exceeds FAISS’s 2.3ms, and further optimization is needed for real-time applications. Third, the current approach assumes static graphs, and extending to streaming citations is non-trivial. Fourth, new papers with few citations provide limited graph signal (the cold start problem). 
+
+## 9 Conclusion 
+
+We presented Geodesic Semantic Search (GSS), a retrieval system that learns local Riemannian metrics on citation graphs. By parameterizing metrics as low-rank factors Gi = LiL⊤ 
+
+> i
+
++ ϵI, we guarantee valid metrics while maintaining 9Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+tractability. Our hierarchical retrieval pipeline—combining FAISS seeding, multi-source Dijkstra, MMR reranking, and path coherence filtering—achieves 4 × speedup over flat geodesic search. Experiments on 169K arXiv papers demonstrate 23% improvement in Recall@20 over SPECTER+FAISS, with particularly large gains (46%) on concept bridging tasks where geodesic paths connect distant research areas. Theoretical analysis characterizes when geodesics outperform direct similarity, with empirical validation. The key insight is that local geometry—metrics that vary across the graph—captures the heterogeneous structure of scientific knowledge better than any fixed global metric. This principle may extend beyond citation networks to other domains with complex relational structure. 
+
+Future Work. Promising directions include: (1) unsupervised metric learning without citation supervision; (2) dynamic metrics for evolving graphs; (3) multi-modal metrics incorporating full-text and figures; (4) application to other knowledge graphs beyond citations. 
+
+Acknowledgments 
+
+Computational resources were provided by the Yee Collins Research Group. 10 Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+## References 
+
+Gregor Bachmann, Gary Bécigneul, and Octavian-Eugen Ganea. Constant curvature graph convolutional networks. In 
+
+International Conference on Machine Learning , pages 486–496, 2020. Peter W Battaglia, Jessica B Hamrick, Victor Bapst, Alvaro Sanchez-Gonzalez, Vinicius Zambaldi, Mateusz Malinowski, Andrea Tacchetti, David Raposo, Adam Santoro, Ryan Faulkner, et al. Relational inductive biases, deep learning, and graph networks. arXiv preprint arXiv:1806.01261 , 2018. Michael M Bronstein, Joan Bruna, Taco Cohen, and Petar Veliˇ ckovi´ c. Geometric deep learning: Grids, groups, graphs, geodesics, and gauges. arXiv preprint arXiv:2104.13478 , 2021. Jaime Carbonell and Jade Goldstein. The use of MMR, diversity-based reranking for reordering documents and producing summaries. In Proceedings of the 21st Annual International ACM SIGIR Conference on Research and Development in Information Retrieval , pages 335–336, 1998. Ines Chami, Zhitao Ying, Christopher Ré, and Jure Leskovec. Hyperbolic graph convolutional neural networks. In 
+
+Advances in Neural Information Processing Systems , volume 32, 2019. Arman Cohan, Sergey Feldman, Iz Beltagy, Doug Downey, and Daniel S Weld. SPECTER: Document-level representa-tion learning using citation-informed transformers. In Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics , pages 2270–2282, 2020. Taco Cohen and Max Welling. Group equivariant convolutional networks. In International Conference on Machine Learning , pages 2990–2999, 2016. Edsger W Dijkstra. A note on two problems in connexion with graphs. Numerische Mathematik , 1(1):269–271, 1959. Andrea Frome, Yoram Singer, Fei Sha, and Jitendra Malik. Learning globally-consistent local distance functions for shape-based image retrieval and classification. In IEEE International Conference on Computer Vision , pages 1–8, 2007. Aditya Grover and Jure Leskovec. node2vec: Scalable feature learning for networks. In Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining , pages 855–864, 2016. William L Hamilton, Rex Ying, and Jure Leskovec. Inductive representation learning on large graphs. In Advances in Neural Information Processing Systems , volume 30, 2017. Gautier Izacard, Mathilde Caron, Lucas Hosseini, Sebastian Rber, Edouard Grave, Armand Joulin, et al. Unsupervised dense information retrieval with contrastive learning. Transactions on Machine Learning Research , 2022. Jeff Johnson, Matthijs Douze, and Hervé Jégou. Billion-scale similarity search with GPUs. IEEE Transactions on Big Data , 7(3):535–547, 2019. Vladimir Karpukhin, Barlas O˘ guz, Sewon Min, Patrick Lewis, Ledell Wu, Sergey Edunov, Danqi Chen, and Wen-tau Yih. Dense passage retrieval for open-domain question answering. In Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing , pages 6769–6781, 2020. Thomas N Kipf and Max Welling. Semi-supervised classification with graph convolutional networks. In International Conference on Learning Representations , 2017. Qi Liu, Maximilian Nickel, and Douwe Kiela. Hyperbolic graph neural networks. In Advances in Neural Information Processing Systems , volume 32, 2019. Maximilian Nickel and Douwe Kiela. Poincaré embeddings for learning hierarchical representations. In Advances in Neural Information Processing Systems , volume 30, 2017. Nils Reimers and Iryna Gurevych. Sentence-BERT: Sentence embeddings using siamese BERT-networks. Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing , 2019. Aaron van den Oord, Yazhe Li, and Oriol Vinyals. Representation learning with contrastive predictive coding. In arXiv preprint arXiv:1807.03748 , 2018. Petar Veliˇ ckovi´ c, Guillem Cucurull, Arantxa Casanova, Adriana Romero, Pietro Liò, and Yoshua Bengio. Graph attention networks. In International Conference on Learning Representations , 2018. Kilian Q Weinberger and Lawrence K Saul. Distance metric learning for large margin nearest neighbor classification. 
+
+Journal of Machine Learning Research , 10:207–244, 2009. Zonghan Wu, Shirui Pan, Fengwen Chen, Guodong Long, Chengqi Zhang, and S Yu Philip. A comprehensive survey on graph neural networks. IEEE Transactions on Neural Networks and Learning Systems , 32(1):4–24, 2020. Shitao Xiao, Zheng Liu, Yingxia Shao, and Zhao Cao. BGE: Bidirectional generative embeddings for text. arXiv preprint arXiv:2309.07597 , 2023. 11 Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+Keyulu Xu, Weihua Hu, Jure Leskovec, and Stefanie Jegelka. How powerful are graph neural networks? In International Conference on Learning Representations , 2019. Rex Ying, Ruining He, Kaifeng Chen, Pong Eksombatchai, William L Hamilton, and Jure Leskovec. Graph convolu-tional neural networks for web-scale recommender systems. In Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining , pages 974–983, 2018. 12 Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+## A Proofs 
+
+A.1 Proof of Theorem 3 
+
+Proof. Let rank sim (j|i) denote the rank of node j when retrieving from node i using direct cosine similarity, and rank geo (j|i) the rank using geodesic distance. Direct similarity ranks j by s(i, j ) = 1 − sim (i, j ). Geodesic retrieval ranks by dG (i, j ).For geodesic retrieval to rank j higher than direct similarity would, we need: 
+
+dG (i, j ) < α · s(i, j ) = α · (1 − sim (i, j )) (25) for some scaling constant α that normalizes the two distance scales. Since dG (i, j ) ≤ Pkt=1 dGvt−1 (vt−1, v t) for any path γ = ( v0, . . . , v k), the condition is satisfied when such a path exists with cumulative distance less than α(1 − sim (i, j )) .
+
+A.2 Proof of Theorem 4 
+
+Proof. Let G∗ = Pdi=1 λiuiu⊤ 
+
+> i
+
+be the eigendecomposition of the optimal full-rank metric, with λ1 ≥ λ2 ≥ · · · ≥ 
+
+λd > 0.The best rank-r approximation in Frobenius norm is Gtrunc  
+
+> r
+
+= Pri=1 λiuiu⊤ 
+
+> i
+
+(Eckart-Young theorem). Our parameterization Gr = LL ⊤ + ϵI can represent Gapprox  
+
+> r
+
+= Pri=1 (λi − ϵ)uiu⊤ 
+
+> i
+
++ ϵI by setting L =[√λ1 − ϵu1, . . . , √λr − ϵur ].The approximation error is: 
+
+∥G∗ − Gapprox  
+
+> r
+
+∥2 
+
+> F
+
+=
+
+> d
+
+X
+
+> i=r+1
+
+λiuiu⊤ 
+
+> i
+
+− ϵ
+
+> d
+
+X
+
+> i=r+1
+
+uiu⊤
+
+> i
+> 2
+> F
+
+(26) 
+
+=
+
+> d
+
+X
+
+> i=r+1
+
+(λi − ϵ)2 (27) Taking the square root gives the stated bound. 
+
+A.3 Proof of Proposition 2 
+
+Proof. Let i ∈ ci and j ∈ cj be nodes in clusters ci and cj respectively. Let ¯i and ¯j be the cluster centers. For any path γ from i to j, we can construct a corresponding path ¯γ from ci to cj at the coarser level. The path lengths differ by at most the cluster diameters: 
+
+|d(ℓ) 
+
+> G
+
+(ci, c j ) − d(ℓ−1)  
+
+> G
+
+(i, j )| ≤ dGi (i, ¯i) + dGj (¯ j, j ) (28) 
+
+≤ ∆(ℓ−1) + ∆ (ℓ) (29) where ∆(ℓ) bounds the diameter of clusters at level ℓ.13 Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+## B Additional Experimental Details 
+
+B.1 Dataset Statistics 
+
+Table 7: arXiv citation network statistics. 
+
+Statistic Value 
+
+Total papers 169,343 Total citations 1,166,243 Average degree 13.8 Clustering coefficient 0.142 Diameter 12 Training papers (pre-2020) 121,567 Validation papers (2020-2021) 28,943 Test papers (2022+) 18,833 Categories covered 40 Most common: cs.LG 23,456 Most common: cs.CV 18,234 
+
+B.2 Hyperparameter Sensitivity 
+
+Table 8: Hyperparameter sensitivity analysis (Recall@20).                                              
+
+> Parameter Values
+> Learning rate 10 −45×10 −410 −35×10 −310 −2
+> R@20 .478 .502 .518 .495 .461
+> λsmooth 0.01 0.05 0.10.2 0.5 R@20 .467 .498 .518 .512 .489 GAT layers 12345R@20 .456 .492 .518 .515 .508 Attention heads 124816 R@20 .478 .498 .518 .516 .509
+
+B.3 Computational Resources 
+
+All experiments were conducted on a single NVIDIA A100 GPU (40GB). Training M ETRIC GAT takes approximately 4 hours for 50 epochs. Inference (hierarchical search with 3 levels) processes approximately 5 queries per second. Table 9: Computational cost breakdown. 
+
+Component Time (ms) Fraction 
+
+FAISS seed selection 2.3 1.2% Embedding lookup 5.1 2.6% Multi-source Dijkstra 168.4 85.1% MMR reranking 15.2 7.7% Path coherence filtering 6.8 3.4% 
+
+Total 197.8 100% 
+
+14 Geodesic Semantic Search: Learning Local Riemannian Metrics for Citation Graph Retrieval A P REPRINT 
+
+## C Additional Qualitative Examples 
+
+C.1 Semantic Search Examples 
+
+Table 10: Semantic search examples comparing SPECTER+FAISS and GSS. 
+
+Query SPECTER+FAISS Top-3 GSS Top-3 
+
+“efficient transformers for long documents” 1. Longformer (relevant) 2. BERT survey (partial) 3. GPT-2 analysis (weak) 1. Longformer (relevant) 2. BigBird (relevant) 3. Efficient Attention Survey (relevant) “physics-informed neu-ral networks for PDEs” 1. PINNs original (relevant) 2. Neural ODEs (partial) 3. Deep learning survey (weak) 1. PINNs original (relevant) 2. DeepXDE framework (relevant) 3. Physics-guided ML (relevant) 
+
+C.2 Concept Bridging Examples 
+
+Table 11: Additional concept bridging examples with geodesic paths. 
+
+Source → Target Geodesic Path (cosine similarities) 
+
+Topology → Computer Vision 
+
+Persistent Homology (0.81) → Topological Data Analysis (0.77) → Shape Anal-ysis (0.73) → 3D Point Cloud Processing (0.70) → Deep Learning for 3D Vision 
+
+Game Theory → Rein-fortic Learning 
+
+Nash Equilibria (0.78) → Multi-Agent Systems (0.75) → Cooperative Learning 
+
+(0.72) → Multi-Agent RL (0.69) → Deep MARL 
+
+Causal Inference →
+
+NLP 
+
+Causal Discovery (0.80) → Causal Representation Learning (0.76) → Disentan-gled Representations (0.71) → Controllable Text Generation (0.67) → Causal NLP 
+
+C.3 Failure Case Analysis 
+
+Table 12: Failure cases where GSS underperforms SPECTER+FAISS. 
+
+Query Issue Explanation 
+
+“BERT fine-tuning” Same-cluster query Target papers are in dense NLP cluster; geodesic adds no value over direct similarity “Quantum error correc-tion” Sparse connectivity Few papers bridge quantum computing and error correction; limited path options “GPT-4 capabilities” Cold start Very recent papers have few citations; limited graph signal 
+
+15
