@@ -1,0 +1,2777 @@
+Title: Succinct Structure Representations for Efficient Query Optimization
+
+URL Source: https://arxiv.org/pdf/2603.15465v1
+
+Published Time: Tue, 17 Mar 2026 06:56:32 GMT
+
+Number of Pages: 44
+
+Markdown Content:
+# 240 Succinct Structure Representations for Efficient Query Optimization 
+
+ZHEKAI JIANG ∗, EPFL, Switzerland 
+
+QICHEN WANG ∗, Nanyang Technological University, Singapore 
+
+CHRISTOPH KOCH, EPFL, Switzerland Structural decomposition methods offer powerful theoretical guarantees for join evaluation, yet they are rarely used in real-world query optimizers. A major reason is the difficulty of combining cost-based plan search and structure-based evaluation. In this work, we bridge this gap by introducing meta-decompositions for acyclic queries, a novel representation that succinctly represents all possible join trees and enables their efficient enumeration. Meta-decompositions can be constructed in polynomial time and have sizes linear in the query size. We design an efficient polynomial-time cost-based optimizer based directly on the meta-decomposition, without the need to explicitly enumerate all possible join trees. We characterize plans found by this approach using a novel notion of width, which effectively implies the theoretical worst-case asymptotic bounds of intermediate result sizes and running time of any query plan. Experimental results demonstrate that, in practice, the plans in our class are consistently comparable to—even in many cases better than—the optimal ones found by the state-of-the-art dynamic programming approach, especially on large and complex queries, while our planning process runs by orders of magnitude faster, comparable to the time taken by common heuristic methods. CCS Concepts: • Theory of computation → Database query processing and optimization (theory) ; •
+
+Information systems → Query optimization ; Query planning ; Join algorithms .Additional Key Words and Phrases: Conjunctive queries; Plan enumeration; Cost-based optimization 
+
+ACM Reference Format: 
+
+Zhekai Jiang, Qichen Wang, and Christoph Koch. 2026. Succinct Structure Representations for Efficient Query Optimization. Proc. ACM Manag. Data 4, 3 (SIGMOD), Article 240 (June 2026), 27 pages. https://doi.org/10. 1145/3802117 
+
+1 INTRODUCTION 
+
+Joins are the cornerstone of relational database queries. However, query optimizers face extreme difficulty when planning large multi-way join queries, as the search space of join orders grows exponentially as the number of relations increases. In fact, finding the optimal join order of a query is well-known to be NP-hard in general [ 13 , 43 ]. For this reason, beyond a small number of joins, current query optimizers must abandon exhaustive dynamic programming and resort to heuristic or greedy algorithms. As a consequence, real-world optimizers often miss the best plans and produce suboptimal ones that can be by orders of magnitude slower. The database theory community has long been providing tools that exploit query structures to tackle this complexity. These approaches usually decompose queries into specific tree structures, such as join trees [ 54 ] using the GYO algorithm [ 25 , 55 ], which were later generalized to hypertree decompositions [ 21 ]. The resulting decompositions effectively capture the hardness of queries and, 
+
+> ∗
+
+Both authors contributed equally to this research. Authors’ addresses: Zhekai Jiang, EPFL, Lausanne, Vaud, Switzerland, zhekai.jiang@epfl.ch; Qichen Wang, Nanyang Technological University, Singapore, qichen.wang@ntu.edu.sg; Christoph Koch, EPFL, Lausanne, Vaud, Switzerland, christoph.koch@epfl.ch. 
+
+© 2026 Copyright held by the owner/author(s). This is the author’s version of the work. It is posted here for your personal use. Not for redistribution. The definitive Version of Record was published in Proceedings of the ACM on Management of Data , https://doi.org/10.1145/3802117. Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026.                      
+
+> arXiv:2603.15465v1 [cs.DB] 16 Mar 2026 240:2 Zhekai Jiang, Qichen Wang, and Christoph Koch
+> 𝑅 1
+> 𝑅 2𝑅 3
+> 𝑅 4
+> 𝑥 1
+> 𝑥 2𝑥 3
+> 𝑥 4
+> 𝑥 5𝑥 6
+> 𝑥 7
+> (a) Query hypergraph
+> 𝜆 :{𝑅 1},𝜒 :{𝑥 1, 𝑥 2, 𝑥 3, 𝑥 4}
+> 𝜆 :{𝑅 2}
+> 𝜒 :{𝑥 1, 𝑥 2, 𝑥 5}
+> 𝜆 :{𝑅 3}
+> 𝜒 :{𝑥 1, 𝑥 3, 𝑥 6}
+> 𝜆 :{𝑅 4}
+> 𝜒 :{𝑥 2, 𝑥 3, 𝑥 7}
+> (b) A join tree / hypertree decomposition
+
+𝑅 1
+
+𝑅 2
+
+𝑅 3
+
+𝑅 4
+
+> (c) Query graph
+
+⊲⊳ 
+
+⊲⊳ 
+
+⊲⊳ 
+
+𝑅 1 𝑅 2
+
+𝑅 3
+
+𝑅 4
+
+> (d) A width-1 query plan
+
+⊲⊳ 
+
+⊲⊳ 
+
+⊲⊳ 
+
+𝑅 2 𝑅 3
+
+𝑅 1
+
+𝑅 4  
+
+> (e) A width-2 query plan Fig. 1. The hypergraph, a join tree, the query graph, and two query plans of the query 𝑄 1.1in Example 1.1
+
+through specific requirements on connectivity, allow one to evaluate queries with theoretically-guaranteed instance-optimal complexity using the Yannakakis algorithm [ 7 , 54 ] or its variants [ 21 ,49 ]. Over the years, these structure-based methods have been generalized to evaluate joins with projections [ 4, 15 , 27 ], aggregations [ 2 , 30 ], differences [ 28 , 58 ], top-𝑘 [50 ], comparisons [ 51 ], etc., all with strong theoretical performance guarantees. These results suggest that leveraging a query’s structural properties can be of great help for query optimization and can dramatically improve query evaluation, with robust worst-case bounds. Yet, in practice, despite limited attempts by, e.g., Scarcello et al. [ 42 ], RelationalAI [ 3], and Gottlob et al. [ 20 ], real-world systems rarely utilize such structure-based approaches. Therefore, they continue to struggle with large, complex queries. Why are structure-based methods rarely adopted in mainstream systems? A core obstacle is the dichotomy between cost-based plan search and structure-based evaluation [ 32 ]. Current cost-based optimizers usually search for query plans with optimal or near-optimal cost under some cost model using (1) exact algorithms , mostly based on dynamic programming, such as [ 38 , 44 , 45 , 47 , 48 ], which have to run in exponential time, and thus do not scale to very large numbers of relations; (2) heuristic strategies such as greedy operator ordering (GOO) [ 17 ], iterative dynamic programming [ 31 ], UnionDP [ 36 ], and adaptive approaches [ 9, 39 ], which have neither optimality guarantees nor a reasonable approximation factor unless under some assumption, such as independence of predicate selectivities; (3) transformation-based techniques , such as the Volcano/Cascades framework [ 23 , 24 ] and genetic algorithms [ 6 ]; and (4) more recently, machine learning–based tuning and rewriting [12 , 34 , 37 , 53 , 60 , 61 ]. Although certain approaches leverage, e.g., query graphs [9 , 36 , 38 , 39 ], they only show the existence of join attributes between relations but do not have a clear connection with the requirements of the aforementioned structural decompositions that help reason about asymptotic complexities. 
+
+Example 1.1. Consider the query 
+
+𝑄 1.1 ← 𝜋 ∅ (𝑅 1 [𝑥 1, 𝑥 2, 𝑥 3, 𝑥 4] ⊲⊳ 𝑅 2 [𝑥 1, 𝑥 2, 𝑥 5] ⊲⊳ 𝑅 3 [𝑥 1, 𝑥 3, 𝑥 6] ⊲⊳ 𝑅 4 [𝑥 2, 𝑥 3, 𝑥 7]) ,
+
+which is a Boolean acyclic query. Its hypergraph is shown in Fig. 1a, and a join tree, which is also a hypertree decomposition, in Fig. 1b. Its query graph, as shown in Fig. 1c, is a clique with the four relations as vertices, as each pair shares some join attribute. Fig. 1d is a query plan that follows the structure of the join tree (which we formally define later). Fig. 1e does not, but it is still within the search space of traditional algorithms according to the query graph.                                
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:3
+> Benchmark # Queries # Acyclic % Acyclic TPC-H [46] 22 21 95.45 %
+> JOB [33] 113 113 100 %
+> STATS-CEB [26] 2603 2603 100 %
+> Spider-NLP [56] 4712 4709 99.94 %
+> DSB [16] (SPJ queries only) 300 240 80 %
+> Musicbrainz [36] 375 243 64.8 %
+> Total 8125 7929 97.59 %
+> Table 1. Number of acyclic queries in major benchmarks. Part of the data comes from [35].
+
+Theoretical research typically focuses on worst-case asymptotic data complexity, assuming that cost differences among decompositions are negligible. In practice, however, different decompositions may lead to significantly different concrete cost values. Therefore, using only structural properties, such as hypertree widths, is not sufficient [ 20 ]. However, selecting the best decomposition is challenging, as there can be a super-exponential number of candidates. Without an efficient cost-based exploration of alternatives, explicitly scanning through all of them would be computationally prohibitive. Furthermore, evaluation plans for structure-based methods are not natively supported by current systems that use standard binary query plans [ 20 , 32 ]. As a result, deploying them requires a dedicated optimization and execution pipeline, which limits their practical adoption. 
+
+1.1 Our Contributions 
+
+In this work, we take a major step towards bridging structural decomposition techniques with cost-based query optimization. We start by introducing a novel width measurement for query plans and show that, for query plans of width 1, we can effectively embed the query’s tree structure within a traditional query plan to guide query planning even in the absence of cost information. In particular, we show that acyclic Boolean queries and relation-dominated queries can be evaluated in instance-optimal time using width-1 plans. We also present a method which, for any given join tree of a query, constructs the optimal width-1 query plan that adheres to the join tree in 𝑂 (| 𝑄 |) ,
+
+linear in the query size |𝑄 |.By searching for plans of minimal width, we restrict the search space to only those that follow the query’s optimal tree decompositions. To make this practical, we introduce meta-decompositions 
+
+for acyclic conjunctive queries that universally encode, in one succinct structure, the entire family of join trees of the query . Despite the possibly super-exponential number of join trees of a given query, this representation can be constructed in polynomial time and has size linear in the query size . We give an efficient procedure that enumerates all join trees in polynomial amortized delay from a meta-decomposition, as a potential tool for other structure-based methods requiring explicit join tree enumeration. Nevertheless, such an enumeration still incurs an exponential overhead. Therefore, we develop an efficient structure-guided cost-based optimization framework to find the optimal width-1 query plan among all join trees without naïvely scanning all candidates. For queries whose meta-decompositions have bounded fan-out, our algorithm finds the optimal width-1 plan in linear time . For general queries, we also provide efficient heuristics with the same linear complexity and a low constant factor. Although we currently restrict our focus to acyclic queries only, such queries in fact account for the overwhelming majority of real workloads [ 10 , 35 ]. As shown in Table 1, among 8,125 queries across several popular benchmarks, 7,929 (97.59%) are acyclic. Structure-based methods for optimizing acyclic queries have therefore been of sustained interest [5, 8, 28, 35, 49–52, 54, 59]. We then empirically demonstrate that our approach can indeed be game-changing for query optimization for large joins. We implement an optimizer metaDecomp and evaluate it on  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:4 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+queries from 4 benchmarks, which include many large, complex queries. We compare the results against several state-of-the-art approaches. The results show that width-1 plans consistently match or even outperform the plans found by these baselines, while taking very small amounts of time for optimization. We also demonstrate that join tree enumeration can be by orders of magnitude faster than existing approaches based on naïve GYO reductions, and that selecting join trees using our cost-based optimization framework significantly improves the effectiveness of existing structure-based methods. 
+
+Paper organization. The rest of the paper is organized as follows: After laying out the necessary background in Section 2, we first define the width notion of query plans and discuss the connection between query structures and the widths of query plans in Section 3. In Section 4, we define 
+
+meta-decompositions , the algorithm to construct them, as well as our way of enumerating all join trees based on them. In Section 5, we demonstrate how to perform cost-based optimization using meta-decompositions. In Section 6, we present experimental results to show the efficiency of query optimization and execution using this approach. We conclude and discuss possible future work in Section 7. Due to space constraints, missing proofs can be found in the appendix. 
+
+2 PRELIMINARIES 
+
+We write 2𝑆 for the set of all subsets, i.e., the power set, of a set 𝑆 . If a function 𝑓 : 𝐴 → 𝐵 and 
+
+𝑆 ⊆ 𝐴 , we let 𝑓 (𝑆 ) = {𝑓 (𝑎 ) : 𝑎 ∈ 𝑆 }. For a set of sets 𝑆 , we write ∪𝑆 = Ð𝑥 ∈𝑆 𝑥 . If 𝑓 : 𝐴 → 𝑇 , where 
+
+𝑇 is a set, and 𝑆 ⊆ 𝐴 , we let 𝑓 (𝑆 ) = Ð𝑥 ∈𝑆 𝑓 (𝑥 ).
+
+2.1 Conjunctive Queries and Hypergraphs 
+
+Conjunctive queries can be represented by hypergraphs, and our terminology follows the seminal references on this topic [ 18 , 19 , 21 , 22 , 49 ]. Let D = {𝑅 1 [ ¯𝑥 1], · · · , 𝑅 𝑛 [ ¯𝑥 𝑛 ]} be a database consisting of 
+
+𝑛 relations, where ¯𝑥 𝑖 is the set of attributes of relation 𝑅 𝑖 . A conjunctive query (with self-predicates) is defined as 
+
+𝑄 ← 𝜋 ¯𝑦 (𝜎 1 (𝑅 1 [ ¯𝑥 1]) Z · · · Z 𝜎 𝑛 (𝑅 𝑛 [ ¯𝑥 𝑛 ])) ,
+
+where 𝜎 𝑖 is the set of selection predicates involving only attributes in ¯𝑥 𝑖 , ¯𝑦 is the set of output attributes, and Z denotes natural join (with attribute renaming to avoid ambiguity). If ¯𝑦 = Ð𝑖 ∈ [ 𝑛 ] ¯𝑥 𝑖 ,the query is called a full join query and we omit ¯𝑦 for simplicity; if ¯𝑦 = ∅, the query is a Boolean query that returns true if there exists a tuple satisfying all specified joins and predicates, or false otherwise. We also require the query to be self-join-free at the logical level: If multiple relations correspond to the same physical relation, they are treated as distinct logical relations with unique renamings. We define the associated hypergraph for the conjunctive query 𝑄 as 𝐻 = (𝑉 (𝐻 ), 𝐸 (𝐻 )) , where the vertices set 𝑉 (𝐻 ) consists of all attributes appearing in the query, i.e., 𝑉 (𝐻 ) = Ð𝑖 ∈ [ 𝑛 ] ¯𝑥 𝑖 , and the hyperedges set 𝐸 (𝐻 ) ⊆ 2𝑉 (𝐻 ) \ {∅} contains one hyperedge for each relation, i.e., 𝐸 (𝐻 ) =
+
+{𝑒 1, · · · , 𝑒 𝑛 }, where each 𝑒 𝑖 = ¯𝑥 𝑖 .
+
+2.2 Acyclicity and Join Trees 
+
+A conjunctive query is acyclic if its associated hypergraph is acyclic, and we define acyclicity in the standard way in database theory, e.g., [ 1 , Section 6.4]. Namely, a hypergraph 𝐻 is acyclic if and only if the output of the GYO algorithm [ 25 , 55 ] on 𝐻 is empty [ 1, Theorem 6.4.5]. Equivalently, 𝐻 is acyclic if and only if there exists a join tree [ 1, Theorem 6.4.5], or, a width-1 hypertree decomposition [ 21 ]. Slightly differently from the usual definition of join trees [ 1], where each vertex is simply a relation, in this paper, we define them using notations for hypertree decompositions [ 21 ], to make it easier to generalize to the meta-decompositions that we will define later.  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:5
+
+𝑅 1
+
+𝑅 2 𝑅 3
+
+𝑅 4
+
+𝑥 1
+
+𝑥 2
+
+𝑥 3 𝑥 4
+
+𝑥 5
+
+(a) Hypergraph of the query 
+
+𝑅 1
+
+𝑅 2
+
+𝑅 3
+
+𝑅 4
+
+𝑅 1
+
+𝑅 2 𝑅 3
+
+𝑅 4
+
+(b) Two valid join trees Fig. 2. Hypergraph and two valid join trees of the star query 𝑄 2.3 in Example 2.3 
+
+Let 𝑄 be an acyclic query with associated hypergraph 𝐻 . A join tree of 𝑄 is a labeled tree 
+
+𝑇 = (𝑉 (𝑇 ), 𝑟 (𝑇 ), 𝐸 (𝑇 ), 𝜒, 𝜆 ) with vertices 𝑉 (𝑇 ), root 𝑟 (𝑇 ), and edges 𝐸 (𝑇 ). 𝜒 : 𝑉 (𝑇 ) → 2𝑉 (𝐻 )
+
+is a function s.t. Ð𝑝 ∈𝑉 (𝑇 ) 𝜒 (𝑝 ) = 𝑉 (𝐻 ), and 𝜆 : 𝑉 (𝑇 ) → 2𝐸 (𝐻 ) .1 And 𝑇 needs to satisfy the following conditions: (C 1) Coverage condition. For each 𝑒 ∈ 𝐸 (𝐻 ), there exists exactly one 𝑝 ∈ 𝑉 (𝑇 ) with 𝜆 (𝑝 ) = {𝑒 }.(C 2) Connectedness condition. For each 𝑣 ∈ 𝑉 (𝐻 ), the set of vertices {𝑝 ∈ 𝑉 (𝑇 ) : 𝑣 ∈ 𝜒 (𝑝 )} 
+
+induces a connected subtree of 𝑇 . Or, equivalently, for all pairs of vertices 𝑝, 𝑞 ∈ 𝑉 (𝑇 ) and all 
+
+𝑠 on the (unique) path between 𝑝 and 𝑞 on 𝑇 , we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑠 ).(C 3) Width-1. For all 𝑝 ∈ 𝑉 (𝑇 ), |𝜆 (𝑝 )| = 1 and, without loss of generality, 𝜒 (𝑝 ) = 𝑉 (𝜆 (𝑝 )) .
+
+Example 2.1. We revisit the query 𝑄 1.1 in Example 1.1. Its hypergraph is illustrated in Fig. 1a. It is easy to verify that the join tree in Fig. 1b satisfies conditions (C 1) and (C 3). Regarding condition (C 2), consider, e.g., attribute 𝑥 1. The vertices in the join tree that include 𝑥 1 are the ones with 𝑅 1, 𝑅 2,and 𝑅 3, which induce a connected subtree. Similar arguments apply for all other attributes as well. We assume all trees are rooted and consider rerootings as distinct trees. We write 𝑇 𝑝 as the subtree rooted at 𝑝 , i.e., with 𝑝 and all its descendants. For every neighbor (child or parent) 𝑞 of vertex 𝑝 in 𝑇 , we write 𝑇 𝑝 →𝑞 for the subtree with 
+
+𝑉 (𝑇 𝑝 →𝑞 ) = {𝑠 ∈ 𝑉 (𝑇 ) \ { 𝑝 } : the path from 𝑝 to 𝑠 in 𝑇 contains 𝑞 }.Intuitively, if 𝑞 is a child of 𝑝 , it is the same as 𝑇 𝑞 . If 𝑞 is a parent of 𝑝 , it denotes the subtree of 𝑇 
+
+with all vertices except those in 𝑇 𝑝 .We define the fan-out 𝑓 (𝑝 ) of any 𝑝 ∈ 𝑉 (𝑇 ) as the number of children of 𝑝 on 𝑇 . The fan-out of the entire tree 𝑇 , denoted by 𝑓 (𝑇 ), is the maximum fan-out among all nodes of 𝑇 .Given a join tree 𝑇 , for every 𝑝 ∈ 𝑉 (𝑇 ), we define the induced query 𝑄 (𝑝 ) as the join of all relations in the subtree rooted at 𝑝 .One important observation is that an acyclic conjunctive query may have a super-exponential number of distinct join trees .
+
+Theorem 2.2. Consider star queries 2 of the form 
+
+𝑄 star ← 𝑅 1 [ ¯𝑥 1] Z · · · Z 𝑅 𝑛 [ ¯𝑥 𝑛 ],
+
+where for any 𝑖, 𝑗 ∈ [ 𝑛 ], ¯𝑥 𝑖 ∩ ¯𝑥 𝑗 = {𝑥 }, for some attribute 𝑥 . There are 𝑛 𝑛 −1 possible join trees for such a star query with 𝑛 relations. Example 2.3. The query 𝑄 2.3 ← 𝑅 1 [𝑥 1, 𝑥 2] ⊲⊳ 𝑅 2 [𝑥 1, 𝑥 3] ⊲⊳ 𝑅 3 [𝑥 1, 𝑥 4] ⊲⊳ 𝑅 4 [𝑥 1, 𝑥 5] is such a star query. Fig. 2a shows its associated hypergraph, and Fig. 2b shows two of its valid join trees. In fact, the possible join trees of such queries in Theorem 2.2 and Example 2.3 are simply all possible trees with 𝑛 vertices (or, equivalently, all spanning trees of a complete graph 𝐾 𝑛 ), each       
+
+> 1For simplicity, we may use hyperedges (e.g., 𝑅 1) to label and identify the vertices of join trees instead of writing the full 𝜆 -and 𝜒 -labels when the context is clear.
+> 2We note that, in some literature, e.g., [9], such queries are called “ clique ” queries, because their query graphs are cliques. Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:6 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+labeled by one relation. Any such tree satisfies the connectedness condition (C 2). There are a total of 𝑛 𝑛 −1 such trees ( 𝑛 𝑛 −2 distinct non-rooted trees [40], each of which has 𝑛 possible root nodes). 
+
+2.3 Query Plans and Join Ordering 
+
+A query plan P = (𝑉 (P) , 𝑟 (P) , 𝐸 (P)) for a query 𝑄 is a tree rooted at 𝑟 (P) , where each non-leaf node is a relational operator (e.g., join, projection, selection), and each leaf node corresponds to a base relation. A plan specifies an order of operations to evaluate the query, where the outputs of child nodes serve as inputs to the parent. In this work, we focus on query optimization for binary joins, where each join operation in the query plan has exactly two child nodes. For the purpose of join ordering, we use only join operators in internal nodes and assume selections and projections are inherently integrated in the join or scan operation at the lowest possible level. Namely, in each step of join or scan, we apply a filter condition if all relevant attributes already appear in the subtree, and we project out attributes that neither appear in the output nor act as a join key with some remaining relation. Given a query plan P, for every 𝑝 ∈ 𝑉 (P) , we define the induced query 𝑄 (𝑝 ) as the join of all relations in the subtree rooted at 𝑝 (with all possible projection and filters inherently applied). We exclude Cartesian products: for every join node, the outputs of its children must share some common attribute as the join key. A query plan is called left-deep (or right-deep ) if all join operations have their right (left) child node corresponding to a base relation; otherwise, the query plan is referred to as bushy .We apply cost functions C on query plans, in the following form, to measure the optimality of query plans. 
+
+C(P) =
+
+ 𝑐 (𝑟 (P)) , if 𝑟 (P) is single relation 
+
+𝑐 (𝑟 (P)) ⊕ C(P 1) ⊕ C(P 2), if 𝑟 (P) is join operation where 𝑐 (𝑟 (P)) is the cardinality of the output of 𝑟 (P) ; P1 and P2 (if applicable) are the left and right subtrees of 𝑟 (P) , respectively; and ⊕ is some operator to aggregate 𝑐 (𝑟 ), C(P 1), and C(P 2).In this work, we adopt the cost function 𝐶 out to minimize the total intermediate result size by substituting the ⊕ operator simply with arithmetic +, as is standard in, e.g., [13, 17, 39, 45]. The typical approach to find the optimal plan is to recursively find the optimal split of a set of relations into two disjoint subsets [ 38 , 44 , 45 , 47 , 48 ]. With a given cost function C, the problem can be solved by the dynamic programming (DP) algorithm DPccp [ 38 ] in 𝑂 (3𝑛 ). The recently proposed algorithm DPconv [ 45 ] reduces the complexity for the cost model 𝐶 out to 𝑂 (2𝑛 𝑛 3𝑊 log (𝑊 𝑛 )) ,where 𝑊 is the largest join cardinality. 
+
+3 WIDTHS OF QUERY PLANS AND WIDTH-1 QUERY PLANS 
+
+In this section, we begin by introducing our notion of widths for query plans, which connects a plan’s structure to the potential sizes of its intermediate results. We consider the “interface” of each intermediate step in the query plan, i.e., the set of attributes that serve as join keys with the remaining relations. Intuitively, the width of a query plan shows the number of relations needed to cover the interface of each step in the query plan. This measure helps quantify the sizes of intermediate results and the complexity of a query plan before looking at the specific database instance. 
+
+Example 3.1. Consider the query 
+
+𝑄 3.1 ← 𝜋 ∅ (𝑅 1 [𝑥 1, 𝑥 2, 𝑥 3] ⊲⊳ 𝑅 2 [𝑥 1, 𝑥 4, 𝑥 5] ⊲⊳ 𝑅 3 [𝑥 5, 𝑥 6] ⊲⊳ 𝑅 4 [𝑥 3, 𝑥 7]) .
+
+Its hypergraph is shown in Fig. 3a and a join tree in Fig. 3b. Given this join tree, Fig. 3c is an example of a valid width-1 query plan. After joining 𝑅 1 and 𝑅 4, 𝑥 1 is the only attribute in the intersection with the remaining relations 𝑅 2 and 𝑅 3, and it can be covered by only one relation 𝑅 1. Similarly, at  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:7
+
+𝑅 1
+
+𝑅 2
+
+𝑅 3
+
+𝑅 4
+
+𝑥 1 𝑥 2 𝑥 3
+
+𝑥 4
+
+𝑥 5 𝑥 6
+
+𝑥 7
+
+> (a) Hypergraph of the query
+
+𝑅 1
+
+𝑅 2
+
+𝑅 3
+
+𝑅 4
+
+> (b) A join tree
+
+⊲⊳ 
+
+⊲⊳ 
+
+𝑅 1 𝑅 4
+
+⊲⊳ 
+
+𝑅 2 𝑅 3
+
+> (c) A width-1 query plan, in-duced by the join tree in Fig. 3b
+
+⊲⊳ 
+
+⊲⊳ 
+
+⊲⊳ 
+
+𝑅 1 𝑅 2
+
+𝑅 3
+
+𝑅 4 
+
+> (d) A width-2 query plan Fig. 3. The hypergraph, a join tree, a width-1 query plan, and a width-2 query plan of the query 𝑄 3.1
+
+the step that joins 𝑅 2 and 𝑅 3, 𝑥 1 is the only attribute in the interface. A width of 1 implies that, if the size of any one single relation is bounded by 𝑁 , then the size of each intermediate step can be bounded by 𝑁 , as it is at most the size of the relation that covers the interface. On the contrary, Fig. 3d shows a query plan that is width-2: When we join 𝑅 1 and 𝑅 2, the interface contains 𝑥 5 and 𝑥 3, which are needed to join 𝑅 3 and 𝑅 4, respectively. But there is no single relation that can cover both 𝑥 5 and 𝑥 3, so the intermediate sizes can be as high as 𝑁 2, instead of 𝑁 as in the width-1 plan in Fig. 3c. More formally, given a query plan P = (𝑉 (P) , 𝑟 (P) , 𝐸 (P)) , for any node 𝑝 ∈ 𝑉 (P) , let 𝐻 𝑝 =
+
+(𝑉 (𝐻 𝑝 ), 𝐸 (𝐻 𝑝 )) be the hypergraph induced by the relations being joined in the subtree rooted at 𝑝 ,and let the induced query 𝑄 (𝑝 ) = Z𝑒 ∈𝐸 (𝐻 𝑝 ) 𝑒 . Let 𝐻 𝑝 = (𝑉 (𝐻 𝑝 ), 𝐸 (𝐻 𝑝 )) be the residual hypergraph 
+
+with relations that are not yet joined in the subtree rooted at 𝑝 , i.e., 𝐸 (𝐻 𝑝 ) = 𝐸 (𝐻 ) \ 𝐸 (𝐻 𝑝 ), and 
+
+𝑉 (𝐻 𝑝 ) = ∪( 𝐸 (𝐻 𝑝 )) . We define the interface 𝐼 (𝑝 ) = 𝑉 (𝐻 𝑝 ) ∩ 𝑉 (𝐻 𝑝 ), i.e., the set of attributes that will serve as join keys with the remaining relations. The width of node 𝑝 is the smallest number of relations needed to cover this interface, i.e., 
+
+𝑤 (𝑝 ) = min |𝑆 | : 𝑆 ⊆ 𝐸 (𝐻 𝑝 ) and 𝐼 (𝑝 ) ⊆ ∪ 𝑆 .
+
+The width of the query plan P is the maximum width over all nodes. The width of a query plan indicates an upper bound on the minimal intermediate results over all nodes 𝑝 during evaluation. 
+
+Theorem 3.2. Given a Boolean conjunctive query 𝑄 and a query plan P for the query, the maximum intermediate result size, i.e., max 𝑝 ∈𝑉 (𝐻 𝑝 ) |𝜋 𝐼 (𝑝 )𝑄 (𝑝 )| , is upper-bounded by 𝑂 (𝑁 𝑤 ( P ) ) in the worst case, where 𝑁 is the maximum cardinality of any base relation. 
+
+This notation of width has a direct connection with join trees: 
+
+Example 3.3. We revisit the query 𝑄 3.1 from Example 3.1. Take 𝑝 as the node of the join tree with 
+
+𝑅 2, as an example. The induced query 𝑄 (𝑝 ) = 𝑅 2 ⊲⊳ 𝑅 3. In the width-1 query plan in Fig. 3c, the right child of the root node, which we denote by 𝑞 , induces exactly 𝑄 (𝑝 ) = 𝑅 2 ⊲⊳ 𝑅 3. In the other direction, for the node 𝑞 of the query plan, we consider its children 𝑢 and 𝑣 (which correspond to the leaf nodes with 𝑅 2 and 𝑅 3 respectively). 𝑢 has interface 𝐼 (𝑢 ) = {𝑥 1, 𝑥 5 }, which can be covered by a single relation 𝑅 2. And 𝑣 has interface 𝐼 (𝑣 ) = {𝑥 5 }, which can be covered by 𝑅 3. However, for the width-2 query plan in Fig. 3d, there is no such 𝑞 of the query plan such that 𝑄 (𝑝 ) = 𝑄 (𝑞 ) = 𝑅 2 ⊲⊳ 𝑅 3.We formally define this correspondence as follows: 
+
+Definition 3.4. We say a query plan P is induced by a join tree 𝑇 if (1) for each node 𝑝 ∈ 𝑉 (𝑇 ), there exists 𝑞 ∈ 𝑉 (P) with 𝑄 (𝑝 ) = 𝑄 (𝑞 ), i.e., the induced query of node 𝑝 in the join tree is exactly the induced query of node 𝑞 in the query plan; and  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:8 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+(2) for each non-leaf node 𝑞 ∈ 𝑉 (P) with two children 𝑢 and 𝑣 , there exists some 𝑠 ∈ 𝐸 (𝐻 𝑢 ) and 
+
+𝑡 ∈ 𝐸 (𝐻 𝑣 ) such that 𝐼 (𝑢 ) ⊆ 𝑠 , 𝐼 (𝑣 ) ⊆ 𝑡 , and there exists an edge between 𝑠 and 𝑡 in 𝐸 (𝑇 ).Under this definition, we have that 
+
+Theorem 3.5. Given a query plan P for a query 𝑄 , the width 𝑤 (P) = 1 if and only if there exists a join tree 𝑇 of 𝑄 that induces P.
+
+Theorem 3.5 directly leads to the relationship between width-1 query plans and acyclic queries: 
+
+Theorem 3.6. A conjunctive query 𝑄 has width-1 query plans if and only if 𝑄 is acyclic. 
+
+Width-1 query plans are closely related to structure-based query evaluation methods. Such methods follow a similar pattern: given a join tree, they apply a series of reductions from the leaves upwards until only a single node remains. Width-1 query plans exploit the join tree structure in a similar way, evaluating the query bottom-up: each node 𝑝 ∈ 𝑉 (𝑇 ) completes all its internal joins with its child subtrees before joining with its parent. Such a strategy provides several benefits. 
+
+Limiting intermediate result sizes. We have seen that, by projecting out attributes that are neither part of the final output nor in the interface at each step, we limit the sizes of intermediate results, as shown by Theorem 3.2. Although this approach excludes some alternative plans with higher widths, the excluded ones do not preserve such a theoretical guarantee. Taking again Example 3.1, if we choose the width-2 query plan in Fig. 3d, 𝑥 3 has to be kept in all intermediate results before 𝑅 4
+
+is joined at the very end, whereas, in the width-1 query plan in Fig. 3c, it can already be projected out after completing 𝑅 1 ⊲⊳ 𝑅 4.
+
+Local optimization. Instead of searching in a vast space of arbitrary join orders for all relations, we can locally optimize the join order at each node of the join tree. For each node 𝑝 ∈ 𝑉 (𝑇 ) with children 
+
+𝑐 1, · · · , 𝑐 𝑓 (𝑝 ) in the join tree, we only need to determine the optimal join order between 𝑝 and 
+
+𝑄 (𝑐 1), . . . , 𝑄 (𝑐 𝑓 (𝑝 ) ). The order in which these joins are performed can be optimized independently at each node, without considering other parts of the query. Such an approach, therefore, significantly prunes the search space for optimization, making plan selection much more tractable, and can yield near-optimal performance for most practical queries. In the experiments (Section 6), we show in Table 2 that the fan-out 𝑓 (𝑇 ) tends to be very low in real benchmarks. 
+
+Example 3.7. Consider again the join tree in Fig. 3b for the query 𝑄 3.1. For width-1 query plans induced by this join tree, there must exist a subtree with 𝑅 2 ⊲⊳ 𝑅 3, as required by Definition 3.4(1). It therefore remains only to optimize the order to join 𝑅 1, (𝑅 2 ⊲⊳ 𝑅 3), and 𝑅 4, which is the local optimization problem at the root node 𝑅 1 of the join tree. If the cardinalities |𝑅 1 ⊲⊳ 𝑅 4 | < |( 𝑅 2 ⊲⊳ 
+
+𝑅 3) ⊲⊳ 𝑅 1 |, then the optimal plan in our cost model is the one in Fig. 3c. With only local search needed, assuming a low fan-out, finding the optimal width-1 query plans induced by a join tree can be done more efficiently than through a global search: 
+
+Theorem 3.8. Given a join tree 𝑇 , the optimal width-1 query plan induced by 𝑇 can be found in time 𝑂 (𝑓 (𝑇 )2𝑓 (𝑇 ) |𝑄 |) .Structure-guided query evaluation. An additional advantage of width-1 query plans is that they naturally accommodate structure-guided query evaluation methods. For example, we can simulate the Yannakakis algorithm for evaluating relation-dominated conjunctive queries [ 49 ] by following a width-1 query plan. A conjunctive query is relation-dominated if it is acyclic and there exists a relation 𝑅 𝑖 [ ¯𝑥 𝑖 ] that contains all the output attributes, i.e., ¯𝑦 ⊆ ¯𝑥 𝑖 . It shall be noted that an acyclic Boolean query is also a relation-dominated query, since ¯𝑦 = ∅. For this type of query, we have the following guarantee of evaluation time:  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:9
+
+Theorem 3.9. A relation-dominated conjunctive query can be evaluated in 𝑂 (| 𝑑𝑏 |) time using a width-1 query plan, where |𝑑𝑏 | represents the size of the database. 
+
+To create a linear-time width-1 query plan for evaluating a relation-dominated query, let 𝑅 𝑖 
+
+denote the relation containing all output attributes. One can construct the query plan using any join tree with 𝑅 𝑖 as the root. The width-1 query plan will then evaluate the query bottom-up. Because all output attributes are located at the root of the join tree and at the end of the query plan, when the query plan is evaluating node 𝑝 , all attributes in 𝑇 𝑝 but not in 𝑝 are removed from the query, guaranteeing linear running time. To conclude this section, we highlight some important distinctions between our definition of width-1 query plans and Yannakakis-style query plans [ 49 , 54 ]. Although they both evaluate queries by traversing join trees, width-1 query plans do not use full reductions via semi-joins as in Yannakakis-style algorithms. We have shown, nevertheless, that these plans, by appropriate projections of irrelevant attributes, still preserve favorable theoretical guarantees of asymptotic complexity for Boolean conjunctive queries (Theorem 3.2) and relation-dominated queries (Theo-rem 3.9). In Section 6, we will experimentally show that these plans, in practice, are indeed highly efficient. Furthermore, without the need for full reductions, width-1 query plans are much easier to integrate into the query execution frameworks of current database systems, enabling more efficient cost-based optimization, as we will discuss in the remainder of the paper. 
+
+4 META-DECOMPOSITIONS 
+
+Even though we have shown a connection between join trees and width-1 query plans in Theo-rem 3.2 and Theorem 3.5, it is impractical to find the optimal width-1 query plan by enumerating every possible join tree—As noted earlier, a query can have a super-exponential number of possible join trees. Therefore, in this section, we introduce and explore a generalized representation that efficiently captures all join trees of an acyclic query. This enables us to optimize queries directly on this representation, eliminating the need to enumerate all possible join trees. We highlight an observation that the exponential number of possible join trees often arises when multiple relations share common join attributes , as is the case for star queries discussed in Theorem 2.2 and illustrated by Example 2.3. In such a query, any pair of relations has valid join predicates, so in join trees of such queries, these relations can be connected in any arbitrary tree structure. On the contrary, in the case of a query like in Example 3.1, where the join attributes are unique for all possible pairs of relations to be joined, the query demonstrates a more “tree-like” structure. There is a unique tree structure for such a query, with 𝑛 distinct, structurally isomorphic join trees, differing only by the choice of the root relation. In light of this, we introduce meta-decompositions . In the case of acyclic conjunctive queries, they can capture all possible join trees but require only linear space. One of the major differences from standard join trees is the addition of “minor nodes” to handle cases when more than two relations share the same join key. These nodes have empty 𝜆 -labels, meaning they are not associated with a single relation, but their 𝜒 -labels contain the shared join keys. Additionally, we add a 𝜅 -label to each node to denote the “interface” with the remaining relations of the join tree that are not in the subtree rooted at the node. 
+
+Example 4.1. The meta-decomposition of the query 𝑄 2.3 in Example 2.3 is shown in Fig. 4. The root of this tree is a minor node, showing that the four children share precisely the attribute 𝑥 1.Note also that the 𝜅 -label of all 4 non-root nodes is exactly {𝑥 1 }.
+
+Example 4.2. The meta-decomposition of the query 𝑄 3.1 in Example 3.1 is shown in Fig. 5. It has the exact same structure as the join tree shown in Fig. 3b and has no minor node, as all pairs of relations have different intersections of attributes.                                                                  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:10 Zhekai Jiang, Qichen Wang, and Christoph Koch
+> 𝜆 :∅,𝜒 :{𝑥 1},𝜅 :∅
+> 𝜆 :{𝑅 1}
+> 𝜒 :{𝑥 1, 𝑥 2}
+> 𝜅 :{𝑥 1}
+> 𝜆 :{𝑅 2}
+> 𝜒 :{𝑥 1, 𝑥 3}
+> 𝜅 :{𝑥 1}
+> 𝜆 :{𝑅 3}
+> 𝜒 :{𝑥 1, 𝑥 4}
+> 𝜅 :{𝑥 1}
+> 𝜆 :{𝑅 4}
+> 𝜒 :{𝑥 1, 𝑥 5}
+> 𝜅 :{𝑥 1}
+> Fig. 4. Meta-decomposition of the query 𝑄 2.3
+> 𝜆 :{𝑅 1},𝜒 :{𝑥 1, 𝑥 2, 𝑥 3},𝜅 :∅
+> 𝜆 :{𝑅 2},𝜒 :{𝑥 1, 𝑥 4, 𝑥 5},𝜅 :{𝑥 1}
+> 𝜆 :{𝑅 3},𝜒 :{𝑥 5, 𝑥 6},𝜅 :{𝑥 5}
+> 𝜆 :{𝑅 4},
+> 𝜒 :{𝑥 3, 𝑥 7},
+> 𝜅 :{𝑥 3}
+> Fig. 5. Meta-decomposition of the query 𝑄 3.1
+
+The formal definition is given as follows. 
+
+Definition 4.3. Given a conjunctive query 𝑄 and the associated hyergraph 𝐻 , its meta-decomposition 𝑀 = (𝑉 (𝑀 ), 𝑟 (𝑀 ), 𝐸 (𝑀 ), 𝜆, 𝜒, 𝜅 ) is a labeled tree, where 
+
+• 𝑉 (𝑀 ) is the set of vertices, 𝑟 (𝑀 ) ∈ 𝑉 (𝑀 ) is the root, and 𝐸 (𝑀 ) is the set of edges, 
+
+• 𝜆 : 𝑉 (𝑀 ) → 2𝐸 (𝐻 ) maps each vertex of 𝑀 to a set of hyperedges of 𝐻 (possibly empty), and 
+
+• 𝜒 : 𝑉 (𝑀 ) → 2𝑉 (𝐻 ) and 𝜅 : 𝑉 (𝑀 ) → 2𝑉 (𝐻 ) each maps each vertex of 𝑀 to a set of vertices of 𝐻 ,such that it satisfies (C 1), (C 2), and (C ′
+
+> 3
+
+) For all 𝑝 ∈ 𝑉 (𝑀 ), 𝜒 (𝑝 ) ⊆ 𝑉 (𝜆 (𝑝 )) if 𝜆 (𝑝 ) ≠ ∅.(C 4) Interface condition. For every non-root 𝑝 ∈ 𝑉 (𝑀 ), let 𝑞 be 𝑝 ’s parent node. 𝜅 (𝑝 ) satisfies (a) 𝜅 (𝑝 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑉 (𝑀 ) \ 𝑉 (𝑀 𝑝 )) ⊆ 𝜒 (𝑞 ), where 𝑀 𝑝 is the subtree of 𝑀 rooted at 𝑝 ; and (b) 𝜅 (𝑝 ) ⊈ 𝜒 (𝑠 ) for all 𝑠 ∈ 𝑉 (𝑀 ) \ 𝑉 (𝑀 𝑞 ) if 𝜅 (𝑝 ) ≠ 𝜒 (𝑞 ).For the root node 𝑟 (𝑀 ), we set 𝜅 (𝑟 (𝑀 )) = ∅.(C 5) Minor nodes and uniqueness condition. For every maximal subset of nodes 𝑆 =
+
+{𝑝 1, . . . , 𝑝 𝑛 } ⊆ 𝑉 (𝑀 ) ( 𝑛 ≥ 2) such that 𝜅 (𝑝 1) = · · · = 𝜅 (𝑝 𝑛 ) = 𝜅 for some value of 𝜅 ,there exists one unique node 𝑚 ∈ 𝑉 (𝑀 ) with 𝜆 (𝑚 ) = ∅ and 𝜒 (𝑚 ) = 𝜅 .In this paper, we consider acyclic queries and their “minimal-width” (“width-1”) meta-decompositions, which satisfy (C ′′  
+
+> 3
+
+) For all 𝑝 ∈ 𝑉 (𝑀 ) such that 𝜆 (𝑝 ) ≠ ∅, we have |𝜆 (𝑝 )| = 1 and, w.l.o.g, 𝜒 (𝑝 ) = 𝑉 (𝜆 (𝑝 )) .Besides introducing minor nodes in condition (C 5) and defining 𝜅 as the interface in condition (C 4)(a), we also include condition (C 4)(b) that limits the shape of the meta-decomposition 𝑀 : There can be multiple nodes that can satisfy 𝜅 (𝑝 ) ⊆ 𝜒 (𝑞 ), while condition (C 4)(b) limits 𝑞 to be the highest node with 𝜅 (𝑝 ) ⊆ 𝜒 (𝑞 ). We illustrate this with the following example: 
+
+Example 4.4. Consider the query 
+
+𝑄 4.4 ← 𝑅 1 [𝑥 1, 𝑥 2, 𝑥 6] ⊲⊳ 𝑅 2 [𝑥 1, 𝑥 2, 𝑥 3, 𝑥 7] ⊲⊳ 𝑅 3 [𝑥 1, 𝑥 3, 𝑥 4, 𝑥 8] ⊲⊳ 𝑅 4 [𝑥 1, 𝑥 4, 𝑥 9] ⊲⊳ 𝑅 5 [𝑥 1, 𝑥 5]
+
+Its hypergraph and meta-decomposition are shown in Fig. 6a and Fig. 6b, respectively. Fig. 6c and Fig. 6d show two valid join trees of this hypergraph. We highlight that 𝑅 5 could in fact be the child of any other node of the join tree, because its only interface with the rest of the hypergraph is {𝑥 1 }.For example, Fig. 6e is also a valid join tree. But, for the meta-decomposition in Fig. 6b, according to condition (C 4)(b), we make 𝑅 5 the child of the highest possible node that contains 𝑥 1, which in this case is the root node, i.e., the minor node with 𝜒 -label {𝑥 1, 𝑥 3 }.
+
+4.1 Constructing Meta-Decompositions 
+
+Similar to the original GYO algorithm [ 25 , 55 ], a meta-decomposition can be constructed by a reduction-based algorithm, as shown in Algorithm 1. In this algorithm, 𝑜 (𝑒, 𝐻 ) = 𝑒 ∩ (∪( 𝐸 (𝐻 ) \{ 𝑒 })) 
+
+denotes the set of overlapping vertices of hyperedge 𝑒 and the remaining hyperedges 𝐸 (𝐻 ) \ { 𝑒 }.As in the original GYO algorithm [ 25 , 55 ], a hyperedge 𝑒 is reducible (also called an ear ), if there exists another single hyperedge 𝑒 ′ ∈ 𝐸 (𝐻 ) \ { 𝑒 } such that 𝑜 (𝑒, 𝐻 ) ⊆ 𝑒 ′. The subsuming hyperedge 
+
+𝑒 ′ is called the witness . And, exceptionally, if there is only one hyperedge 𝑒 in the hypergraph, it is  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:11
+
+𝑅 1
+
+𝑅 2
+
+𝑅 3
+
+𝑅 4 𝑅 5
+
+𝑥 1
+
+𝑥 2
+
+𝑥 3
+
+𝑥 4
+
+𝑥 5
+
+𝑥 6
+
+𝑥 7
+
+𝑥 8
+
+𝑥 9
+
+(a) Hypergraph                                                       
+
+> 𝜆 :∅,𝜒 :{𝑥 1, 𝑥 3},𝜅 :∅
+> 𝜆 :{𝑅 2}
+> 𝜒 :{𝑥 1, 𝑥 2, 𝑥 3, 𝑥 7}
+> 𝜅 :{𝑥 1, 𝑥 3}
+> 𝜆 :{𝑅 1}
+> 𝜒 :{𝑥 1, 𝑥 2, 𝑥 6}
+> 𝜅 :{𝑥 1, 𝑥 2}
+> 𝜆 :{𝑅 3}
+> 𝜒 :{𝑥 1, 𝑥 3, 𝑥 4, 𝑥 8}
+> 𝜅 :{𝑥 1, 𝑥 3}
+> 𝜆 :{𝑅 4}
+> 𝜒 :{𝑥 1, 𝑥 4, 𝑥 9}
+> 𝜅 :{𝑥 1, 𝑥 4}
+> 𝜆 :{𝑅 5}
+> 𝜒 :{𝑥 1, 𝑥 5}
+> 𝜅 :{𝑥 1}
+
+(b) Meta-decomposition 
+
+𝑅 2
+
+𝑅 1 𝑅 3
+
+𝑅 4
+
+𝑅 5
+
+(c) A join tree 
+
+𝑅 3
+
+𝑅 2
+
+𝑅 1
+
+𝑅 4 𝑅 5
+
+(d) A second join tree 
+
+𝑅 3
+
+𝑅 2
+
+𝑅 1
+
+𝑅 4
+
+𝑅 5
+
+(e) A third join tree Fig. 6. Hypergraph, meta-decomposition, and three join trees of the query 𝑄 4.4 in Example 4.4 
+
+also considered an ear. We note that the GYO algorithm removes exactly one ear (among possibly many) in each round, thereby establishing a total order of all hyperedge removal. In contrast, Algorithm 1 simultaneously removes all ears in every round until only a single hyperedge remains in the hypergraph. This process introduces only a partial order for all hyperedges, which maintains the flexibility to represent all possible ordering of ear removal, and hence all possible join trees , through the resulting meta-decomposition. 
+
+Example 4.5. For the star query 𝑄 2.3 in Example 2.3, the four hyperedges can be removed in any order in the standard GYO algorithm. For example: (1) With the order 𝑅 4 (witness 𝑅 3) – 𝑅 3 (witness 𝑅 2) – 𝑅 2 (witness 𝑅 1) – 𝑅 1, we obtain the first join tree in Fig. 2b. (2) With the order 𝑅 4 (witness 𝑅 3) – 𝑅 2 (witness 𝑅 1) – 𝑅 3 (witness 𝑅 1) – 𝑅 1, we obtain the second join tree in Fig. 2b. Furthermore, we note that we can also obtain the second join tree by keeping the order in (1) but only changing witnesses, namely 𝑅 4 (witness 𝑅 3) – 𝑅 3 (witness 𝑅 1) – 𝑅 2 (witness 𝑅 1) – 𝑅 1.To address this source of variation, in every round, our algorithm first handles such cases where some edges 𝑒 1, . . . , 𝑒 𝑛 are mutually reducible , i.e., 𝑜 (𝑒 1, 𝐻 ) = · · · = 𝑜 (𝑒 𝑛 , 𝐻 ) = 𝑜 (Lines 4–8). (For example, in the case of 𝑄 2.3, all pairs among 𝑅 1, 𝑅 2, 𝑅 3, and 𝑅 4 are mutually reducible.) The algorithm creates a minor node 𝑝 with 𝜒 (𝑝 ) = 𝑜 if such a node does not yet exist, and then removes 𝑒 1, . . . , 𝑒 𝑛 
+
+from the hypergraph. We then add a special hyperedge 𝑒 𝑚 = 𝑜 , which conceptually corresponds to the minor node, back to the hypergraph, so that the acyclicity of 𝐻 is preserved. The rationale for adding such an 𝑒 𝑚 can be illustrated by the following example: 
+
+Example 4.6. Consider the query 
+
+𝑄 4.6 ← 𝜋 ∅ (𝑅 1 [𝑥 1, 𝑥 2, 𝑥 3, 𝑥 4] ⊲⊳ 𝑅 2 [𝑥 1, 𝑥 2, 𝑥 5] ⊲⊳ 𝑅 3 [𝑥 1, 𝑥 3, 𝑥 6] ⊲⊳ 𝑅 4 [𝑥 2, 𝑥 3, 𝑥 7] ⊲⊳ 𝑅 5 [𝑥 1, 𝑥 2, 𝑥 3, 𝑥 8]) ,
+
+which is similar to Example 1.1 but contains an additional relation 𝑅 5. In this case, at the beginning, 
+
+𝑅 1 and 𝑅 5 are both ears and mutually reducible, as 𝑜 (𝑅 1, 𝐻 ) = 𝑜 (𝑅 5, 𝐻 ) = {𝑥 1, 𝑥 2, 𝑥 3 }. However, if we simply remove both 𝑅 1 and 𝑅 5 at the same time, the remaining hyperedges, 𝑅 2, 𝑅 3, and 𝑅 4, form a cyclic hypergraph . But, if we add 𝑒 𝑚 = 𝑜 (𝑅 1, 𝐻 ) = 𝑜 (𝑅 5, 𝐻 ) = {𝑥 1, 𝑥 2, 𝑥 3 }, then 𝑒 𝑚 , 𝑅 2, 𝑅 3, and 𝑅 4 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:12 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+Algorithm 1: Constructing the meta-decomposition of an acyclic hypergraph 
+
+input : An acyclic hypergraph 𝐻 
+
+output : The meta-decomposition 𝑀 of 𝐻  
+
+> 1
+
+𝐻 ′ ← a copy of the input hypergraph 𝐻 with 𝑉 (𝐻 ′) = 𝑉 (𝐻 ) and 𝐸 (𝐻 ′) = 𝐸 (𝐻 ) 
+
+> 2
+
+𝑉 (𝑀 ) ← ∅ , 𝐸 (𝑀 ) ← ∅ 
+
+// Reduction, creating the vertices in the meta-decomposition at the same time  
+
+> 3
+
+while 𝐸 (𝐻 ′) is not empty do 
+
+// First check if it is possible to create minor nodes for mutually reducible hyperedges  
+
+> 4
+
+foreach maximal 𝑆 ⊆ 𝐸 (𝐻 ′) such that |𝑆 | > 1, and, for all 𝑒 ∈ 𝑆 , 𝑜 (𝑒, 𝐻 ′) has the same value 𝑜 do  
+
+> 5
+
+foreach 𝑒 ∈ 𝑆 do  
+
+> 6
+
+Add a node 𝑝 to 𝑉 (𝑀 ) with 𝜆 (𝑝 ) = {𝑒 } if 𝑒 ∈ 𝐸 (𝐻 ), or 𝜆 (𝑝 ) = ∅ if it is special, 𝜒 (𝑝 ) = 𝑒 ,and 𝜅 (𝑝 ) = 𝑜 (𝑒, 𝐻 ′) , if such 𝑝 does not exist yet  
+
+> 7
+
+Remove 𝑒 from 𝐸 (𝐻 ′) 
+
+> 8
+
+Add a special hyperedge 𝑒 𝑚 = 𝑜 to 𝐸 (𝐻 ′) 
+
+> 9
+
+E ← the set of all ears in 𝐸 (𝐻 ′) 
+
+> 10
+
+foreach 𝑒 ∈ E do  
+
+> 11
+
+Add a new node 𝑝 to 𝑉 (𝑀 ) with 𝜆 (𝑝 ) = {𝑒 } if 𝑒 ∈ 𝐸 (𝐻 ), or 𝜆 (𝑝 ) = ∅ if it is special, 𝜒 (𝑝 ) = 𝑒 ,and 𝜅 (𝑝 ) = 𝑜 (𝑒, 𝐻 ′), if such 𝑝 does not exist yet  
+
+> 12
+
+Remove 𝑒 from 𝐸 (𝐻 ′) 
+
+> 13
+
+if there exists at least two vertices 𝑝 ′ ∈ 𝑉 (𝑀 ) ∪ E such that 𝜅 (𝑝 ′) = 𝜅 (𝑝 ) then  
+
+> 14
+
+Add a (minor) node 𝑣 to 𝑉 (𝑀 ) with 𝜆 (𝑣 ) = ∅, 𝜒 (𝑣 ) = 𝜅 (𝑝 ), and 𝜅 (𝑣 ) = 𝜅 (𝑝 ), if such 𝑣 does not exist yet  
+
+> 15
+
+𝑟 (𝑀 ) ← the node 𝑝 ∈ 𝑉 (𝑀 ) such that 𝜅 (𝑝 ) = ∅
+
+// Generate the edges in the meta-decomposition  
+
+> 16
+
+foreach non-root node 𝑝 ∈ 𝑉 (𝑀 ) do  
+
+> 17
+
+if there exists a (minor) node 𝑞 ∈ 𝑉 (𝑀 ) such that 𝜆 (𝑞 ) = ∅ and 𝜒 (𝑞 ) = 𝜅 (𝑝 ) then  
+
+> 18
+
+Add an edge (𝑞, 𝑝 ) in 𝐸 (𝑀 ) 
+
+> 19
+
+else  
+
+> 20
+
+Find the node 𝑞 ∈ 𝑉 (𝑀 ) such that 𝜅 (𝑝 ) ⊆ 𝜒 (𝑞 ) and 𝜅 (𝑝 ) ⊈ 𝜅 (𝑞 ) // “highest” possible parent  
+
+> 21
+
+Add an edge (𝑞, 𝑝 ) in 𝐸 (𝑀 ) 
+
+> 22
+
+return 𝑀 = (𝑉 (𝑀 ), 𝑟 (𝑀 ), 𝐸 (𝑀 ), 𝜆, 𝜒, 𝜅 )
+
+still form an acyclic query, and the algorithm can proceed to pick 𝑅 2, 𝑅 3, and 𝑅 4 as ears, before 𝑒 𝑚 
+
+is picked and removed at the very end. We formalize this idea as follows: 
+
+Proposition 4.7. Given an acyclic hypergraph 𝐻 , if there exists a set of distinct ears 𝑆 =
+
+{𝑒 1, . . . , 𝑒 𝑛 } ⊆ 𝐸 (𝐻 ) ( 𝑛 ≥ 2) such that 𝑜 (𝑒 1, 𝐻 ) = · · · = 𝑜 (𝑒 𝑛 , 𝐻 ) = 𝑜 , then, the hypergraph 𝐻 ′,with 𝐸 (𝐻 ′) = (𝐸 (𝐻 ) \ 𝑆 ) ∪ { 𝑜 } and 𝑉 (𝐻 ′) = ∪𝐸 (𝐻 ′), is acyclic. 
+
+In each round, the algorithm then finds and removes the set E of all ears of 𝐻 ′. For each 𝑒 ∈ E ,we create a node 𝑝 with set 𝜅 (𝑝 ) = 𝑜 (𝑒, 𝐻 ′). 𝑝 may be either physical or minor, depending on whether 𝑒 is a hyperedge in 𝐻 or a special hyperedge created while removing mutually reducible hyperedges. During the procedure, the algorithm creates minor nodes whenever necessary (Lines 6, 11, and 13–14). This algorithm has the following guarantee of asymptotic complexity: 
+
+Theorem 4.8. Algorithm 1 terminates in time 𝑂 (| 𝐸 (𝐻 )| 3).
+
+Proof sketch. The key observations are (1) that the size |𝐸 (𝐻 ′)| decreases by at least one in each iteration of the while-loop (Line 3), and (2) that, in each iteration of the while loop, all sets 𝑆  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:13
+
+(Line 4) can be enumerated in 𝑂 (| 𝐸 (𝐻 ′)|) = 𝑂 (| 𝐸 (𝐻 )|) time, if we maintain a hash map that maps each 𝑜 ⊆ 𝑉 (𝐻 ′) to all hyperedges 𝑒 ∈ 𝐸 (𝐻 ′) such that 𝑜 (𝑒, 𝐻 ′) = 𝑜 , which is updated whenever a hyperedge 𝑒 is added or removed from 𝐸 (𝐻 ′). □
+
+We show the correctness of the algorithm: 
+
+Theorem 4.9. Given an acyclic query with an acyclic hypergraph 𝐻 , Algorithm 1 returns a valid meta-decomposition of 𝐻 .
+
+Finally, we note that meta-decompositions are highly space-efficient. They only require space linear to the size of the hypergraph. 
+
+Theorem 4.10. In the meta-decomposition 𝑀 of an acyclic hypergraph 𝐻 as constructed by Algo-rithm 1, the number of vertices |𝑉 (𝑀 )| and the number of edges |𝐸 (𝑀 )| are 𝑂 (| 𝐸 (𝐻 )|) .
+
+Proof sketch. Vertices in 𝑀 are either physical or minor. We create one physical node per hyperedge in 𝐸 (𝐻 ). For minor nodes, we note that each minor node has fan-out at least 2, meaning there must be at least two edges incident to each minor node. □
+
+4.2 Join Tree Enumeration 
+
+The meta-decomposition allows one to efficiently enumerate all possible join trees of an acyclic query, as we show with an algorithm in this section. This not only serves as proof of the universality of this representation but also provides a powerful approach to enumerating join trees, which could be of great help to other structure-based methods that require doing so. As an intuition, we can observe that the distinct join trees of the same hypergraph may differ in the following ways: (1) “Re-branching”. If a vertex 𝑝 in a join tree has children 𝑐 1 and 𝑐 2 such that 𝜒 (𝑐 1) ∩ 𝜒 (𝑝 ) ⊆ 𝜒 (𝑐 2),then 𝑐 1 could have been a child of 𝑐 2 without violating any condition. In the meta-decomposition, condition (C 4) ensures that 𝑐 1 is positioned at the highest possible node. When enumerating join trees, we can make 𝑐 1 a child of 𝑐 2 if 𝜅 (𝑐 1) ⊆ 𝜒 (𝑐 2), without violating any condition. The join tree in Fig. 6e based on the meta-decomposition in Fig. 6b from Example 4.4 demonstrates such a case, where 𝑅 5 could be a child of any one of 𝑅 1, 𝑅 2, 𝑅 3, and 𝑅 4.(2) Rerooting. A rerooting of a join tree is still a valid join tree. (3) Mutually reducible relations. If multiple relations share some exact same set of attributes, they can be connected in arbitrary tree structures. This situation is represented by minor nodes in meta-decompositions. An example is the root node with 𝜒 -label {𝑥 1 } in Fig. 4 for Example 2.3, based upon which we should be able to enumerate, among others, the join trees in Fig. 2b. These alternatives should be considered to enumerate all join trees, and the meta-decomposition retains all the necessary information to facilitate this. Algorithm 2 is an algorithm to enumerate all join trees. For each node in the meta-decomposition starting from the root, it recursively enumerates all possible join trees given by the subtree rooted at each of its children (Lines 3–4), and then enumerates all possible ways to combine these join trees into one. For minor nodes 𝑟 , we find its neighbors that share the common set of attributes given by 𝜒 (𝑟 ) (Line 6) and generate all possible distinct structures of join trees, where each vertex will be replaced by the join tree for a subtree given by a neighbor. (At this point, we consider all rerootings of the same tree as identical.) At the very end of this algorithm, we return all combined join trees we obtain, and it remains only to collect all rerootings. Due to space constraints, we omit some lower-level details, e.g., the exact steps for combining sub-join trees and algorithms to enumerate all trees and rerootings without repetition. The full details are given in the appendix.  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:14 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+Algorithm 2: Enumerating all join trees based on a meta-decomposition 
+
+input : A meta-decomposition 𝑀 = (𝑉 (𝑀 ), 𝑟 (𝑀 ), 𝐸 (𝑀 ), 𝜆, 𝜒, 𝜅 )
+
+output : All join trees of the hypergraph induced by 𝑀  
+
+> 1
+
+Function enumRec (𝑣 : a node on 𝑀 ): 
+
+> 2
+
+C ← set of children 𝑐 of 𝑣 on 𝑀 , sorted by partial order ⊇ on 𝜅 (𝑐 ) 
+
+> 3
+
+foreach 𝑐 ∈ C do  
+
+> 4
+
+T𝑐 ← all rerootings 𝑇 ′ 
+
+> 𝑐
+
+of all trees 𝑇 𝑐 returned by enumRec (𝑐 ) such that 𝜅 (𝑐 ) ⊆ 𝜒 (𝑟 (𝑇 ′ 
+
+> 𝑐
+
+))  
+
+> 5
+
+if 𝜆 (𝑣 ) = ∅ then // minor node  
+
+> 6
+
+Corigin ← { 𝑐 ∈ C : 𝜅 (𝑐 ) = 𝜒 (𝑣 )} // They can be found at the head of the sorted C 
+
+> 7
+
+if 𝜅 (𝑣 ) = 𝜒 (𝑣 ) then  
+
+> 8
+
+T ← all non-isomorphic trees with vertices Corigin ∪ { 𝑣 }, all rerooted to 𝑣 
+
+// The minor node 𝑣 will eventually be replaced on Line 18 by the parent of 𝑟  
+
+> 9
+
+else // 𝜅 (𝑣 ) ≠ 𝜒 (𝑣 ), the parent should not participate  
+
+> 10
+
+T ← all non-isomorphic trees with vertices Corigin  
+
+> 11
+
+T ← set of trees 𝑇 ′ that can be obtained from some 𝑇 ∈ T , where each 𝑐 ∈ 𝑉 (𝑇 ), in bottom-up order, is replaced by some 𝑇 𝑐 ∈ T 𝑐 , and, for each non-root 𝑐 ∈ 𝑉 (𝑇 ) with parent 𝑝 , 𝑇 𝑐 could be attached as a child of any 𝑢 ∈ 𝑉 (𝑇 𝑝 ) such that 𝜅 (𝑐 ) ⊆ 𝜒 (𝑢 ) 
+
+> 12
+
+Cproper ← C \ C origin , preserving the order // The set of children 𝑐 such that 𝜅 (𝑐 ) ⊊ 𝜒 (𝑣 ) 
+
+> 13
+
+else  
+
+> 14
+
+T ← a set of one tree with one vertex 𝑣 only  
+
+> 15
+
+Cproper ← C , preserving the order  
+
+> 16
+
+foreach child 𝑐 ∈ C proper in order, 𝑇 𝑐 ∈ T 𝑐 do  
+
+> 17
+
+if 𝜆 (𝑐 ) = ∅ and 𝜅 (𝑐 ) = 𝜒 (𝑐 ) then 
+
+// The root of 𝑇 𝑐 would be a minor node from Line 8. We find a parent of each of its children.  
+
+> 18
+
+T ← set of trees 𝑇 ′ that can be obtained from some 𝑇 ∈ T , where for each child 𝑑 of 𝑟 (𝑇 𝑐 ),we attach the subtree rooted at 𝑑 as a child of some 𝑢 ∈ 𝑉 (𝑇 ) such that 𝜅 (𝑑 ) ⊆ 𝜒 (𝑢 ) 
+
+> 19
+
+else  
+
+> 20
+
+T ← set of trees 𝑇 ′ that can be obtained from some 𝑇 ∈ T , where 𝑇 𝑐 is attached as a child of some 𝑢 ∈ 𝑉 (𝑇 ) such that 𝜅 (𝑐 ) ⊆ 𝜒 (𝑢 ) 
+
+> 21
+
+return T 
+
+> 22
+
+return all rerootings of all trees returned by enumRec (𝑟 (𝑀 )) 
+
+Example 4.11. Consider again the query 𝑄 4.4 in Example 4.4. Its meta-decomposition is shown in Fig. 6b. Let the root node be 𝑟 , and we use 𝑣 1, . . . 𝑣 5 to denote the nodes such that 𝜆 (𝑣 𝑖 ) = {𝑅 𝑖 }. The root node 𝑟 is a minor node, with 𝜒 (𝑟 ) = {𝑥 1, 𝑥 3 }. We start by enumerating all possible join trees induced by the subtrees of the meta-decomposition, rooted at each child of 𝑟 . For the subtree with 
+
+𝑣 2 and 𝑣 1, there is only one valid join tree, rooted at 𝑣 2, which has one child 𝑣 1. It is not possible to reroot to 𝑣 1 because 𝜅 (𝑣 2) = {𝑥 1, 𝑥 3 } ⊈ 𝜒 (𝑣 1). The case is similar for the subtree with 𝑣 3 and 
+
+𝑣 4. And the subtree with 𝑣 5 induces only one join tree with one node 𝑣 5. Since 𝑣 2 and 𝑣 3 (and not 
+
+𝑣 5) have 𝜅 (𝑣 2) = 𝜅 (𝑣 3) = 𝜒 (𝑟 ) = {𝑥 1, 𝑥 3 }, we enumerate all possible skeleton tree structures with vertices 𝑣 2 and 𝑣 3. There are only two such trees, each of which contains one edge connecting 𝑣 2
+
+and 𝑣 3, and they are rerootings of each other. For each tree, we replace 𝑣 2 and 𝑣 3 by their induced join tree. In the end, we have one child 𝑣 5 with 𝜅 (𝑣 5) ⊊ 𝜒 (𝑟 ). It can be a child of any node 𝑣 such that 𝜅 (𝑣 5) ⊆ 𝜒 (𝑣 ). In this example, it can, in fact, be a child of any other node. Fig. 6c is a join tree where the skeleton tree structure is rooted at 𝑅 2, and 𝑅 5 is attached as a child of 𝑅 2. Fig. 6d is a similar example where the skeleton is rooted at 𝑅 3, and 𝑅 5 is attached as a child of 𝑅 3. And Fig. 6e is based on the same skeleton as for Fig. 6d, but 𝑅 5 is attached as a child of 𝑅 4 instead of 𝑅 3. 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:15
+
+We claim that this algorithm is both correct (producing valid join trees) and complete (enumerat-ing all possible join trees). 
+
+Theorem 4.12 (Correctness). Given a meta-decomposition 𝑀 of an acyclic hypergraph 𝐻 , all trees 𝑇 output by Algorithm 2 are valid join trees of 𝐻 .
+
+Theorem 4.13 (Completeness). Given a meta-decomposition 𝑀 of an acyclic hypergraph 𝐻 ,Algorithm 2 enumerates all possible join trees of 𝐻 .
+
+As is detailed in the proof of Theorem 4.13, for each join tree, we can pinpoint exactly one way in which it is enumerated by the algorithm based on the meta-decomposition. Noting that the number of children of each node on a meta-decomposition is bounded by the fan-out, we get the following guarantee of enumeration delay. 
+
+Theorem 4.14 (Time complexity). Given a meta-decomposition 𝑀 of an acyclic hypergraph 𝐻 ,Algorithm 2 enumerates all possible join trees of 𝐻 in an amortized delay of 𝑂 (𝑓 (𝑀 ) · | 𝑉 (𝐻 )|) .
+
+5 COST-BASED OPTIMIZATION FROM META-DECOMPOSITIONS 
+
+Even though we have presented an algorithm, enumerating all possible join trees is infeasible, as their number grows super-exponentially with the number of relations, as shown by Theo-rem 2.2. Instead, we propose a cost-based optimization algorithm that operates directly on the meta-decomposition to find an optimal width-1 query plan. Similar to the case for join tree enu-meration discussed in Section 4.2, the search space for such plans is defined by four key factors: (1) selecting a root of the join tree to induce the width-1 query plan; (2) unnesting minor nodes; (3) handling possible re-branching, and (4) determining the local join order for each node and its neighbors. In this section, we detail our procedure to address them. 
+
+5.1 Re-Branching 
+
+As previously discussed, re-branching can happen when a child node 𝑐 of a node 𝑝 in the meta-decomposition could also be a child of another descendant node 𝑑 of 𝑝 in a join tree, if 𝜅 (𝑐 ) ⊊ 𝜅 (𝑑 ).This scenario, however, is in fact very rare in practice: we found no query in the JOB benchmark that exhibited this scenario, and only one query in the TPC-H benchmark can involve re-branching. Therefore, for simplicity, we do not consider re-branching when describing the algorithm in this section. As we show in the appendix, accommodating a possible re-branching adds only a constant factor to the overall complexity. 
+
+5.2 The Overall Algorithm 
+
+Given a meta-decomposition 𝑀 , our algorithm to produce a width-1 query plan is shown in Algorithm 3. This algorithm first makes two traversals of 𝑀 , one bottom-up and one top-down. In the bottom-up traversal, for each non-root node 𝑞 , we find the optimal plan to join the relation in 𝑞 and all the plans given by the children of 𝑞 , which gives the optimal plan to evaluate 𝑄 (𝑇 𝑞 ),the query induced by the subtree of 𝑀 rooted at 𝑞 .
+
+Example 5.1. For the query 𝑄 3.1 in Example 3.1, with meta-decomposition shown in Fig. 5, this bottom-up traversal visits the nodes in the following order. (For simplicity, we simply use 𝑅 𝑖 to refer to the node with 𝜆 -label {𝑅 𝑖 }.) (1) 𝑅 3. It generates the plan for the subtree 𝑇 𝑅 3 , or 𝑇 𝑅 2→𝑅 3 , containing 𝑅 3 only. The plan is simply a scan of 𝑅 3.(2) 𝑅 2. It generates the plan for 𝑇 𝑅 2 , or 𝑇 𝑅 1→𝑅 2 , containing 𝑅 2 and 𝑅 3. It simply needs to join 𝑅 2 with the plan for 𝑇 𝑅 3 in the previous step, i.e., 𝑅 2 ⊲⊳ 𝑅 3. 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:16 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+Algorithm 3: Finding the optimal width-1 query plan to evaluate the query induced by a meta-decomposition 
+
+input : A meta-decomposition 𝑀 = (𝑉 (𝑀 ), 𝑟 (𝑀 ), 𝐸 (𝑀 ), 𝜆, 𝜒, 𝜅 )
+
+output : The optimal query plan 
+
+// Bottom-up traversal  
+
+> 1
+
+foreach non-root node 𝑞 ∈ 𝑉 (𝑀 ), in bottom-up order do  
+
+> 2
+
+𝑝 ← 𝑞 ’s parent node on 𝑀  
+
+> 3
+
+plan (𝑇 𝑝 →𝑞 ) ← optimizeLocal (𝑞, {plan (𝑇 𝑞 →𝑐 ) : 𝑐 ∈ children (𝑞 )})  
+
+> 4
+
+plan (𝑀 ) ← optimizeLocal (𝑟, {plan (𝑇 𝑟 →𝑐 ) : 𝑐 ∈ children (𝑟 )}) 
+
+// Top-down traversal  
+
+> 5
+
+foreach 𝑐 ∈ children (𝑟 ) do  
+
+> 6
+
+plan (𝑇 𝑐 →𝑟 ) ← optimizeLocal (𝑟, {plan (𝑇 𝑟 →𝑐 ′ ) : 𝑐 ′ ∈ children (𝑟 ) \ { 𝑐 }})  
+
+> 7
+
+foreach non-root node 𝑞 ∈ 𝑉 (𝑀 ), in top-down order do  
+
+> 8
+
+𝑝 ← 𝑞 ’s parent node on 𝑀  
+
+> 9
+
+foreach child 𝑐 ∈ 𝐶 (𝑞 ) do  
+
+> 10
+
+plan (𝑇 𝑐 →𝑞 ) ← optimizeLocal (𝑞, {plan (𝑇 𝑞 →𝑝 )} ∪ { plan (𝑇 𝑞 →𝑐 ′ ) : 𝑐 ′ ∈ children (𝑟 ) \ { 𝑐 }})  
+
+> 11
+
+return the plan plan (𝑇 𝑝 →𝑞 ) ⊲⊳ plan (𝑇 𝑞 →𝑝 ) with the minimum cost among all (𝑝, 𝑞 ) ∈ 𝐸 (𝑀 )
+
+(3) 𝑅 4. It generates the plan for the subtree 𝑇 𝑅 4 , or 𝑇 𝑅 1→𝑅 4 , containing 𝑅 4 only. The plan is simply a scan of 𝑅 4.(4) 𝑅 1. This is the root node. The traversal terminates here. Then, in the top-down traversal, for each node 𝑞 and each child 𝑐 of 𝑞 on the meta-decomposition, we find the optimal plan to join 𝑞 and all plans given by the neighbors (parent and children) of 𝑞 
+
+except 𝑐 , which gives the optimal plan to join all relations in 𝑇 𝑐 →𝑞 .
+
+Example 5.2. Again for 𝑄 3.1, the top-down traversal visits the nodes in the following order. (1) 𝑅 1 → child 𝑅 2. It generates the plan for the subtree 𝑇 𝑅 2→𝑅 1 , containing 𝑅 1 and 𝑅 4. The plan is simply 𝑅 1 ⊲⊳ 𝑅 4.(2) 𝑅 2 → child 𝑅 3. It generates the plan for the subtree 𝑇 𝑅 3→𝑅 2 , containing 𝑅 1, 𝑅 2, and 𝑅 4. Similarly, we join 𝑅 2 with the result of 𝑅 1 ⊲⊳ 𝑅 4, which is the plan for the subtree 𝑇 𝑅 2→𝑅 1 .(3) 𝑅 1 → child 𝑅 4. It generates the plan for the subtree 𝑇 𝑅 4→𝑅 1 , containing 𝑅 1, 𝑅 2, and 𝑅 3. Here, 𝑅 2
+
+and 𝑅 3 are in the same subtree 𝑇 𝑅 1→𝑅 2 of 𝑅 1. So, we first take the plan generated for this subtree, which is 𝑅 2 ⊲⊳ 𝑅 3, and then join this result with 𝑅 1.At the end, we choose the root of the query plan, which is the minimum-cost plan of the form 
+
+plan (𝑇 𝑝 →𝑞 ) ⊲⊳ plan (𝑇 𝑞 →𝑝 ) among all (𝑝, 𝑞 ) ∈ 𝐸 (𝑀 ). For example, the width-1 plan shown in Fig. 3c corresponds to plan (𝑇 𝑅 2→𝑅 1 ) ⊲⊳ plan (𝑇 𝑅 1→𝑅 2 ).In the example we just considered, the fan-out is 2. For higher fan-outs, at each node in the meta-decomposition, we need to decide on an order to join the results of multiple subtrees. To do so, the algorithm calls the function optimizeLocal , which optimizes the local join for each node and its neighbors. We will elaborate on this in Section 5.3. 
+
+5.3 Optimizing the Local Join with Neighbors 
+
+One essential component of this algorithm is to, for a vertex 𝑞 in the meta-decomposition, find the optimal plan to join the relation in this vertex and the optimal query plans given by (a subset of) its neighbors ( optimizeLocal ). This can be viewed as a classic star join optimization problem, where 
+
+𝑅 𝑞 is the hub relation, and the result of the induced query 𝑄 (𝑇 𝑐 𝑖 ) from each of its neighbors 𝑐 𝑖 is a satellite relation, denoted by 𝑅 𝑖 for 𝑖 = 1, . . . , 𝑓 (𝑞 ), where 𝜒 (𝑐 𝑖 ) ∩ 𝜒 (𝑞 ) ≠ ∅ and 𝜒 (𝑐 𝑖 ) ∩ 𝜒 (𝑐 𝑗 ) ⊆ 𝜒 (𝑞 ) 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:17
+
+for all 𝑖 ≠ 𝑗 . Unfortunately, even in this restricted setting, this problem of optimizing the join of 
+
+𝑅 𝑞 and all 𝑅 𝑖 ’s is still NP -hard, because this can be reduced from the problem of optimizing the ordering of a Cartesian product 𝑆 1 × 𝑆 2 × · · · × 𝑆 𝑛 —which is already shown to be NP -hard [ 43 ]—by adding a shared attribute to each 𝑆 𝑖 such that all tuples have the same value for this attribute. By using dynamic programming algorithms [ 38 , 45 ], the problem can be solved in e𝑂 (2𝑓 (𝑞 ) ) , where 
+
+e𝑂 suppresses poly-logarithmic factors and the fan-out 𝑓 (𝑞 ) is the number of children of 𝑞 on the meta-decomposition. However, as mentioned in Section 3, the fan-out of real-world queries is typically very small . This makes the exponential-time exact algorithm practical for the vast majority of cases. In the rare case that a node has a high fan-out, making the exact DP algorithm too slow, we can substitute it with a heuristic. An effective choice is Greedy Operator Ordering (GOO) [ 17 ], which iteratively joins the neighbor that results in the smallest intermediate result. This method is outlined in the appendix. 
+
+5.4 Case Study: Optimizing Relation-Dominated Queries with Meta-Decompositions 
+
+Our framework naturally incorporates projection pushdown for early cardinality reduction. When building a plan for a subquery, such as plan (𝑇 𝑝 →𝑞 ) in Algorithm 3, we can immediately project the result to only the attributes needed for subsequent operations. Specifically, after computing the joins within the subtree 𝑇 𝑞 , we only need to retain (1) attributes that are part of the final output, and (2) attributes required for joining with the remaining relations, which is 𝜅 (𝑞 ) by definition. This strategy is especially effective for relation-dominated queries, where a single relation contains all output attributes. If a subtree contains no output attributes, we can project its result to only 𝜅 (𝑞 ), i.e., the join keys with the remaining relations, which can significantly reduce the size of intermediate results. However, traditional dynamic-programming-based optimizers lack such a comprehensive structural view. Therefore, they typically do not identify such opportunities and must consider the entire search space of query plans, relying solely on cost estimation. 
+
+Example 5.3. Take query 17f in the join order benchmark (JOB) as an example. Omitting irrelevant attributes in each relation, this query can be abstractly represented as 
+
+𝑄 5.3 ← 𝜋 𝑥 n (𝑅 ci [𝑥 mid , 𝑥 pid ] ⊲⊳ 𝑅 cn [𝑥 cid , 𝑥 cc ] ⊲⊳ 𝜎 𝑥 k=··· (𝑅 k [𝑥 kid , 𝑥 k]) ⊲⊳ 𝑅 mc [𝑥 mid , 𝑥 cid ]
+
+⊲⊳ 𝑅 mk [𝑥 mid , 𝑥 kid ] ⊲⊳ 𝜎 𝑥 n=··· (𝑅 n [𝑥 pid , 𝑥 n]) ⊲⊳ 𝑅 t [𝑥 mid , 𝑥 t]) .
+
+This is a relation-dominated query, as it has only one output attribute 𝑥 n, which is an attribute of 
+
+𝑅 n. Fig. 7 shows the hypergraph, the optimal width-1 query plan (found by metaDecomp given cardinalities of the real data set), along with the join tree inducing it, and a width-2 query plan (which is the plan given by dynamic programming). In the width-1 plan in Fig. 7d, all intermediate join results can be projected to a single attribute , since the interface is always only one attribute, and there is no output attribute before the final join with 𝑅 n. But, with the width-2 query plan in Fig. 7e, 
+
+the result of (( 𝑅 mk ⊲⊳ 𝑅 k) ⊲⊳ 𝑅 t) ⊲⊳ 𝑅 ci has to be projected to two attributes 𝑥 mid and 𝑥 pid , which are join keys with 𝑅 mc and 𝑅 n, respectively. Executing these plans, we indeed observe that the width-1 plan has a 1.72x speedup over the width-2 plan .As with evaluating select-project-join queries, one can easily modify the cost model and use a join tree–based query evaluation algorithm, including any Yannakakis-style algorithm, that incorporates cost-based optimization via meta-decompositions. We hope this work inspires further research in related areas and encourages the integration of these theoretically desirable query evaluation techniques into practical systems. 
+
+6 EXPERIMENTAL EVALUATION AND ANALYSIS 
+
+In this section, we present experimental results to answer the following research questions:  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:18 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+𝑅 t𝑅 mk 𝑅 k 𝑅 mc 𝑅 cn 
+
+𝑅 ci 
+
+𝑅 n
+
+𝑥 mid 𝑥 kid 𝑥 k
+
+𝑥 pid 
+
+𝑥 n
+
+𝑥 cid 𝑥 cc 
+
+𝑥 t
+
+(a) Hypergraph 
+
+minor node 
+
+𝜒 : {𝑥 mid }
+
+𝑅 mk 
+
+𝑅 k
+
+𝑅 ci 
+
+𝑅 n
+
+𝑅 mc 
+
+𝑅 cn 
+
+𝑅 t
+
+(b) Meta-decomposition (simplified) 
+
+𝑅 n
+
+𝑅 ci 
+
+𝑅 mk 
+
+𝑅 k 𝑅 t 𝑅 mc 
+
+𝑅 cn 
+
+(c) Join tree inducing the width-1 plan in Fig. 7d 
+
+⊲⊳ 
+
+⊲⊳ 
+
+⊲⊳ 
+
+⊲⊳ 
+
+⊲⊳ 
+
+𝑅 mk 𝑅 k
+
+𝑅 t
+
+⊲⊳ 
+
+𝑅 mc 𝑅 cn 
+
+𝑅 ci 
+
+𝑅 n
+
+(d) Optimal width-1 query plan, in-duced by the join tree in Fig. 7c 
+
+⊲⊳ 
+
+⊲⊳ 
+
+⊲⊳ 
+
+⊲⊳ 
+
+⊲⊳ 
+
+⊲⊳ 
+
+𝑅 mk 𝑅 k
+
+𝑅 t
+
+𝑅 ci 
+
+𝑅 n
+
+𝑅 mc 
+
+𝑅 cn 
+
+(e) Optimal plan by dynamic pro-gramming, of width 2 Fig. 7. The hypergraph, the meta-decomposition, the optimal width-1 query plan with the inducing join tree, and the optimal query plan (of width 2) found by dynamic programming, of the query JOB 17f in Example 5.3 
+
+(RQ1) How fast is query optimization using meta-decompositions? 
+
+(RQ2) How good are width-1 query plans, compared to the globally optimal ones? 
+
+(RQ3) To what extent is our proposed meta-decompositions-based query optimization sensitive to errors in cardinality estimation? 
+
+(RQ4) To what extent can our proposed meta-decompositions-based join tree enumeration tech-nique help structure-based query evaluation? 
+
+6.1 Experimental Setup 
+
+6.1.1 Experimental Environment. Experiments are conducted on an Apple M4 Pro machine with 14 cores and 48 GB RAM, running macOS Tahoe 16.0. We use DuckDB as our test database because of its excellent performance and simple cost model. The experiments use DuckDB 1.2.2, Scala 3.6.3, GraalVM 17.0.12, and LLVM 20.1.3. The full source code for experiments is available at [29]. We implement metaDecomp in Scala. For each query, it first computes the meta-decomposition (Section 4) and then applies our cost-based optimization algorithm (Section 5) to select the best width-1 query plan. In the experiments, we compare the following query optimization approaches: (1) metaDecomp, using our implementation. (2) DPconv [45], the state-of-the-art dynamic programming optimizer. (3) DuckDB’s native optimizer [ 41 ], which uses DPccp [ 38 ] for queries with up to 12 relations and Greedy Operator Ordering (GOO) [17] otherwise. (4) UnionDP, a heuristic approach proposed in [ 36 , Algorithm 4] which (i) partitions the query graph into subgraphs, each with size up to a threshold (which we set to 12, consistent with DuckDB), (ii) runs dynamic programming on each subgraph, and (iii) runs dynamic programming on the entire graph, treating each subgraph as a composite node. (5) Yannakakis + [49], a state-of-the-art structure-guided query evaluation approach.                                                        
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:19
+> Benchmarks →DSB JOB Musicbrainz JOBLarge Overall Number of relations
+> Min 54282Median 6810 18 8Max 917 26 34 34
+> Fan-out
+> Min 22121Median 33443Max 45959
+> Number of join trees
+> Min 512 272 2Median 7144 22500 40000 126 Max 54 352512 >10 8>10 8>10 8
+> Table 2. Structural properties of queries in each benchmark
+
+(6) LearnedRewrite [60, 61], a machine learning–based query rewriter. (7) LLM-R 2 [34], a query rewriter based on machine learning and large language models (LLMs). For Yannakakis +, we use the implemented system as a black box and run the rewritten queries in DuckDB. For LearnedRewrite and LLM-R 2, we similarly evaluate them using their pre-trained models as-is and run the rewritten queries in DuckDB. For metaDecomp, DPconv, and UnionDP, the query plans are enforced in DuckDB by rewriting queries into a sequence of subqueries that create a temporary view at each step, as is standard in, e.g., [ 20 , 49 ]. For all three methods, we apply the same strategies of selection and projection pushdown as explained in Section 2.3. Namely, we project out all irrelevant attributes (those that are neither in the output nor in subsequent joins) at every step, and we integrate each selection (filter) condition in the join or scan operation at the lowest possible level, i.e., as soon as all relevant attributes exist. Each query plan is executed 10 times, and we report the median optimization and execution time. To ensure accuracy, we exclude I/O time from time measurements. The full dataset is preloaded into the DuckDB database, and the estimated cardinalities are preloaded into memory, with all loading time excluded from timing. We enforce a 5-minute timeout on execution time. Queries that none of the optimizers can complete within this time limit are excluded from the results. 
+
+6.1.2 Queries, Benchmarks, and Cardinalities. We experiment with the following four benchmarks: (1) The SPJ (select-project-join) queries in the Decision Support Benchmark (DSB) [ 16 ]. We use the implemented system to generate a 10 GB database instance and generate queries using the default settings. We only consider acyclic queries (240 out of 300). (2) The Join Order Benchmark (JOB) [33 ] over the IMDB dataset. All queries in this benchmark are already acyclic. (3) Musicbrainz , a benchmark proposed by [ 36 ] with significantly larger queries that join up to 26 relations. We use the implemented query generator with default settings, except that we project the output to at most 5 randomly-selected attributes. We retain only the acyclic queries (243 out of 375). (4) JOBLarge , a new benchmark we introduce to extend JOB to simulate practical but larger analytical scenarios, where each query is generated by selecting two queries from the JOB that share at least one common output attribute and merging them into a single query, with a join on a shared attribute, such that the query remains acyclic. We only retain generated queries that take DuckDB at least 50 ms to evaluate. In Table 2, we show detailed statistics of some structural properties of queries in each benchmark. For metaDecomp, DPconv, and UnionDP, which all follow the same cost model, we precompute (by running appropriate COUNT(*) queries) true cardinalities of all possible intermediate join results for the relatively small benchmarks DSB and JOB, in the approach and format consistent with the implementation of DPconv [ 45 ]. For the larger benchmarks Musicbrainz and JOBLarge, computing                
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:20 Zhekai Jiang, Qichen Wang, and Christoph Koch metaDecomp DPconv DuckDB UnionDP Yannakakis +LLM-R 2LearnedRewrite 56789
+> Number of relations
+> 10 5
+> 10 3
+> 10 1
+> 10 1
+> 10 3
+> Optimization
+> time (ms)
+
+(a) DSB 4 6 8 10 12 14 16 18     
+
+> Number of relations
+> 10 5
+> 10 3
+> 10 1
+> 10 1
+> 10 3
+> Optimization
+> time (ms)
+
+(b) JOB 3 6 9 12 15 18 21 24 27  
+
+> Number of relations
+> 10 1
+> 10 1
+> 10 3
+> 10 5
+> Optimization
+> time (ms)
+> Timeout (5 min)
+
+(c) Musicbrainz 9 12 15 18 21 24 27 30 33   
+
+> Number of relations
+> 10 1
+> 10 1
+> 10 3
+> 10 5
+> Optimization
+> time (ms)
+> Timeout (5 min)
+
+(d) JOBLarge Fig. 8. Optimization time for queries in each benchmark. For each number of relations, the dot shows the average, and the whiskers show the minimum and maximum optimization time. 
+
+exact cardinalities for all possible intermediate joins is infeasible due to the much larger query sizes. Therefore, we use estimated cardinalities instead, via DuckDB’s EXPLAIN command. Note, however, that these estimates may sometimes be highly inaccurate and may not reflect the true relative sizes of intermediate results. DuckDB, Yannakakis +, Learned Rewrite, and LLM-R 2 are used as black boxes with their own cost models. 
+
+6.2 Results 
+
+In this section, we present the results of our experiments. 
+
+6.2.1 (RQ1) Optimization Time. We first compare the optimization time. The results are shown in Fig. 8. The figures clearly show that the optimization time of metaDecomp remains almost constant as the number of relations increases, typically below 10 ms, as is also the case for DuckDB, UnionDP, and Yannakakis +. The two machine learning–based approaches, LLM-R 2 and LearnedRewrite, exhibit stable but higher optimization time, in the order of seconds, due to the overhead of the complex models and, for LLM-R 2, the interaction with LLMs. DPconv, however, has an exponential growth, and its optimization time surpasses that of metaDecomp starting at approximately 9 relations. For many queries in Musicbrainz and JOBLarge (starting from approximately 25 relations), DPconv fails to find a valid plan within the 5-minute limit, again highlighting that traditional exponential-time dynamic programming–based optimizers do not scale to such large queries. 
+
+6.2.2 (RQ2) Quality of width-1 query plans. Even though metaDecomp restricts its search to width-1 plans only, as shown in Fig. 9, for most queries, it finds query plans with cost values comparable to those of the optimal plans . Furthermore, Fig. 10 shows the speedups achieved by executing the    
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:21 0.90 0.95 1.00
+> Ratio
+> 0%
+> 50%
+> Frequency
+
+(a) DSB 0.6 0.8 1.0  
+
+> Ratio
+> 0%
+> 50%
+> Frequency
+
+(b) JOB 0.0 0.5 1.0  
+
+> Ratio
+> 0%
+> 50%
+> Frequency
+
+(c) Musicbrainz 0.0 0.5 1.0  
+
+> Ratio
+> 0%
+> 20%
+> Frequency
+
+(d) JOBLarge Fig. 9. Ratios between the costs of the globally optimal query plans and the costs of the optimal width-1 plans. A ratio of 1 indicates they have the same cost, and is included in the bar between 0.9 and 1.0. 30 0.5 1 1.5 2 10 1 10 3 10 5
+
+> Speedup
+> 0%
+> 10%
+> 20%
+> Frequency
+
+(a) DSB 0 0.5 1 1.5 2 10 1 10 3 10 5 
+
+> Speedup
+> 0%
+> 10%
+> 20%
+> Frequency
+
+(b) JOB 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+> Speedup
+> 0%
+> 10%
+> 20%
+> Frequency
+
+(c) Musicbrainz 0 0.5 1 1.5 2 10 1 10 3 10 5 
+
+> Speedup
+> 0%
+> 10%
+> Frequency
+
+(d) JOBLarge Fig. 10. Histograms of execution speedups of the optimal width-1 plans over the globally optimal plans 
+
+optimal width-1 query plans over executing the globally optimal query plans. Note that, even though one would typically not expect speedups since the optimal plans have the minimum possible cost values, in many cases, the optimal width-1 query plans in fact run faster in the actual execution, thanks to the small intermediate result sizes through exploiting queries’ structural properties. 
+
+6.2.3 (RQ1) & (RQ2) Combined: Overall Performance. Taking both optimization and execution time into account, we observe in Table 3, Fig. 11, and Fig. 12 that metaDecomp shows a clear advantage overall. This is especially the case for queries that are complex, as shown by the 95th and 99th percentiles in Table 3, and in the points towards the right in the scatter plots in Fig. 12. For DuckDB, UnionDP, Yannakakis +, LearnedRewrite, and LLM-R 2, although their optimization is fast, they are also very likely to generate plans that are significantly worse than the optimal width-1 query plans, especially for larger queries. In addition, for Yannakakis +, there is an overhead in the reduction phase, which may be costly for certain queries. For DPconv, the main disadvantage is the exponential optimization time, which becomes the dominant factor in the overall evaluation time for large queries. The overall results demonstrate that finding and executing width-1 plans with metaDecomp is indeed highly efficient in practice. More detailed, separate figures for individual benchmarks can be found in the appendix. 
+
+6.2.4 (RQ3) Sensitivity to cardinality misestimation. Recent research has shown that structure-based query optimization tends to be more robust even in the presence of errors in cardinality estimation [ 8, 49 , 59 ]. This is also the case for metaDecomp. To illustrate, we compare metaDecomp 
+
+> 3This measure is analogous to speedups. Since width-1 plans are a restricted class, their theoretical cost values cannot be better (lower) than the global optimal, and thus the ratios are at most 1. Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026.
+
+240:22 Zhekai Jiang, Qichen Wang, and Christoph Koch 
+
+Benchmark → DSB JOB Musicbrainz JOBLarge Metric ↓ Method ↓ Mean Med. 95th 99th Mean Med. 95th 99th Mean Med. 95th 99th Mean Med. 95th 99th 
+
+> Optimization time
+
+metaDecomp 0.15 ms 0.10 ms 0.32 ms 1.01 ms 0.38 ms0.26 ms 0.94 ms 1.04 ms 2.62 ms0.37 ms10.45 ms45.05 ms 0.59 ms0.37 ms 1.67 ms 4.17 ms DPconv 0.08 ms 0.03 ms 0.36 ms 0.37 ms 8.32 ms0.16 ms38.22 ms 45.08 ms 7.37 s0.30 ms 14.62 s 244.44 s 42.17 s 1.26 s > 5 min > 5 min DuckDB 0.32 ms 0.12 ms 1.83 ms 1.87 ms 1.13 ms0.32 ms 5.58 ms 8.43 ms 1.89 ms0.47 ms11.34 ms18.59 ms 0.62 ms0.55 ms 1.23 ms 3.81 ms UnionDP 0.01 ms0.007 ms 0.04 ms 0.04 ms 0.10 ms0.03 ms 0.38 ms 0.45 ms 0.25 ms0.11 ms 0.64 ms 0.77 ms 0.29 ms0.24 ms 0.77 ms 1.18 ms Yannakakis + 0.78 ms 0.70 ms 1.48 ms 1.50 ms 1.44 ms1.37 ms 3.78 ms 4.59 ms 2.29 ms1.72 ms 6.43 ms 8.15 ms 3.55 ms3.27 ms 6.53 ms10.89 ms LearnedRew. 0.89 s 0.95 s 1.03 s 1.06 s 0.96 s 0.94 s 1.13 s 1.30 s 1.11 s 1.00 s 1.78 s 2.14 s 1.09 s 1.10 s 1.29 s 1.42 s LLM-R 2 3.03 s 2.92 s 3.66 s 4.71 s 3.75 s 2.99 s 3.98 s 24.96 s 3.11 s 3.03 s 3.57 s 6.10 s 3.40 s 3.11 s 5.72 s 6.84 s 
+
+> Execution time
+
+metaDecomp 0.01 s 0.01 s 0.04 s 0.04 s 0.04 s 0.03 s 0.08 s 0.11 s 1.08 s 0.52 s 2.56 s 13.75 s 1.02 s 0.17 s 2.31 s 23.84 s DPconv 0.02 s 0.01 s 0.09 s 0.10 s 0.04 s 0.04 s 0.09 s 0.11 s 1.42 s 0.50 s 2.65 s 28.27 s 17.50 s 0.24 s 89.05 s > 5 min DuckDB 23.85 s 0.01 s > 5 min > 5 min 0.04 s 0.04 s 0.09 s 0.13 s 95.92 s 0.52 s > 5 min > 5 min 22.46 s 0.13 s > 5 min > 5 min UnionDP 0.03 s 0.01 s 0.10 s 0.11 s 0.05 s 0.04 s 0.10 s 0.12 s 58.75 s 0.28 s > 5 min > 5 min 25.04 s 0.15 s > 5 min > 5 min Yannakakis + 0.03 s 0.02 s 0.08 s 0.08 s 0.06 s 0.06 s 0.12 s 0.15 s 13.63 s 0.41 s 34.61 s > 5 min 5.11 s 0.13 s 1.52 s 232.60 s LearnedRew. 23.95 s 0.05 s > 5 min > 5 min 26.91 s 0.15 s > 5 min > 5 min 42.47 s 0.42 s > 5 min > 5 min 42.03 s 0.14 s > 5 min > 5 min LLM-R 2 23.79 s 0.01 s > 5 min > 5 min 0.04 s 0.04 s 0.10 s 0.14 s 96.32 s 0.53 s > 5 min > 5 min 29.94 s 0.12 s > 5 min > 5 min 
+
+> Overall evaluation time
+
+metaDecomp 0.01 s 0.01 s 0.04 s 0.04 s 0.04 s 0.03 s 0.08 s 0.11 s 1.09 s 0.52 s 2.65 s 13.75 s 1.02 s 0.17 s 2.31 s 23.84 s DPconv 0.02 s 0.01 s 0.09 s 0.10 s 0.05 s 0.04 s 0.10 s 0.12 s 8.78 s 0.51 s 26.36 s 246.63 s 58.26 s 4.32 s > 5 min > 5 min DuckDB 23.85 s 0.01 s > 5 min > 5 min 0.04 s 0.04 s 0.09 s 0.13 s 95.93 s 0.52 s > 5 min > 5 min 22.46 s 0.13 s > 5 min > 5 min UnionDP 0.03 s 0.01 s 0.10 s 0.11 s 0.05 s 0.04 s 0.10 s 0.12 s 58.75 s 0.28 s > 5 min > 5 min 25.04 s 0.15 s > 5 min > 5 min Yannakakis + 0.03 s 0.02 s 0.08 s 0.08 s 0.06 s 0.06 s 0.13 s 0.15 s 13.63 s 0.41 s 34.61 s > 5 min 5.11 s 0.13 s 1.52 s 232.60 s LearnedRew. 24.84 s 1.01 s > 5 min > 5 min 27.87 s 1.12 s > 5 min > 5 min 54.93 s 1.43 s > 5 min > 5 min 43.12 s 1.28 s > 5 min > 5 min LLM-R 2 26.82 s 3.03 s > 5 min > 5 min 3.79 s 3.05 s 4.01 s 24.99 s 99.43 s 4.06 s > 5 min > 5 min 33.34 s 3.41 s > 5 min > 5 min 
+
+> Overall speedup of metaDecomp over ...
+
+DPconv 1.22x 0.99x 2.90x 3.29x 1.18x 1.08x 2.77x 3.11x 1.34x 0.99x 15.49x 138.59x 27.61x 21.23x2308.55x 5014.14x DuckDB 2.75x 0.97x16938.94x18945.33x 1.11x 1.07x 2.03x 3.53x 6.39x 1.86x 238.77x 901.19x 1.46x 0.82x 118.01x 1872.97x UnionDP 1.28x 1.03x 3.38x 6.57x 1.12x 1.04x 2.09x 3.01x 2.67x 0.94x 293.61x 844.52x 1.91x 0.94x 606.52x 2328.21x Yannakakis + 1.83x 1.91x 2.77x 7.03x 1.61x 1.50x 3.75x 5.07x 1.07x 0.72x 47.66x 656.33x 0.76x 0.73x 2.13x 22.05x LearnedRew. 142.29x 123.70x16993.51x19006.30x 59.91x 38.45x 7958.89x11031.32x 14.49x 11.44x 442.62x 967.06x 13.65x 8.85x2444.33x 7240.85x LLM-R 2 379.88x 282.20x17095.75x19117.48x 103.68x 98.29x 484.18x 832.41x 65.93x 78.95x 927.52x 2488.64x 23.98x 21.60x 174.23x 3632.91x 
+
+Table 3. Statistics of query evaluation time. The "mean" values are arithmetic mean for time and geometric mean for speedup factors. DSB JOB Musicbrainz JOBLarge 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+(a) Speedup over DPconv 
+
+0% 
+
+20% 
+
+> Frequency
+
+0 0.5 1 1.5 2 10 1 10 3 10 5
+
+(b) Speedup over DuckDB 
+
+0% 
+
+5% 
+
+10% 
+
+> Frequency
+
+0 0.5 1 1.5 2 10 1 10 3 10 5
+
+(c) Speedup over UnionDP 
+
+0% 
+
+10% 
+
+> Frequency
+
+0 0.5 1 1.5 2 10 1 10 3 10 5
+
+(d) Speedup over Yannakakis +
+
+0% 
+
+10% 
+
+20% 
+
+> Frequency
+
+10 3 10 2 10 1 10 0 10 1 10 2 10 3 10 4 10 5
+
+(e) Speedup over LearnedRewrite 
+
+0% 
+
+5% 
+
+10% 
+
+> Frequency
+
+10 3 10 2 10 1 10 0 10 1 10 2 10 3 10 4 10 5
+
+(f) Speedup over LLM-R 2
+
+0% 
+
+5% 
+
+10% 
+
+> Frequency
+
+Fig. 11. Histograms of overall speedups of using metaDecomp over using other methods 
+
+with DPconv and UnionDP, which use the exact same cost model. We run them on DSB and JOB queries with (1) exact and (2) misestimated cardinalities. The misestimated cardinalities are generated by adding a multiplicative noise to the exact cardinalities using a log-normal distribution. 
+
+Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:23 DSB JOB Musicbrainz JOBLarge 10 1 10 3 10 5              
+
+> (a) DPconv (ms)
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> DPconv
+> timeout
+> (5 min) 10 110 310 5
+> (b) DuckDB (ms)
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> DuckDB
+> timeout
+> (5 min) 10 110 310 5
+> (c) UnionDP (ms)
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> UnionDP
+> timeout
+> (5 min) 10 110 310 5
+> (d) Yannakakis +(ms)
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> Yannakakis +
+> timeout
+> (5 min) 10 110 310 5
+> (e) LearnedRewrite (ms)
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> Learned-
+> Rewrite
+> timeout
+> (5 min) 10 110 310 5
+> (f) LLM-R 2(ms)
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> LLM-R 2
+> timeout
+> (5 min)
+
+Fig. 12. Scatter plots of overall evaluation time using metaDecomp versus using other methods. Queries for which the difference is less than 10% are omitted in the figures. 
+
+Benchmark → DSB JOB Method ↓ Cardinality ↓ Mean Median 95th 99th Mean Median 95th 99th metaDecomp Exact 0.01 s 0.01 s 0.04 s 0.04 s 0.04 s 0.03 s 0.08 s 0.11 s Misestimated 0.02 s 0.01 s 0.06 s 0.12 s 0.05 s 0.04 s 0.11 s 0.15 s DPconv Exact 0.02 s 0.01 s 0.09 s 0.10 s 0.04 s 0.04 s 0.09 s 0.11 s Misestimated 0.03 s 0.01 s 0.11 s 0.14 s 0.46 s 0.05 s 0.23 s 2.07 s UnionDP Exact 0.03 s 0.01 s 0.10 s 0.11 s 0.05 s 0.04 s 0.10 s 0.12 s Misestimated 0.03 s 0.01 s 0.11 s 0.14 s 0.48 s 0.05 s 0.22 s 1.86 s 
+
+Table 4. Query execution time when optimized with exact vs misestimated cardinalities 
+
+Specifically, for each exact cardinality 𝐶 , we generate a perturbed estimate ˆ𝐶 = 𝐶 · 𝑒 𝜖 , where 
+
+𝜖 ∼ N ( 0, 𝜎 2), i.e., following a normal (Gaussian) distribution, with standard deviation 𝜎 set to 10 .From the results in Table 4, metaDecomp still has excellent performance despite such errors in cardinality estimation. The advantage is particularly pronounced at the 99th percentile of the JOB benchmark, where DPconv and UnionDP, which rely solely on cardinality values, are significantly misled by the highly inaccurate estimation. 
+
+6.2.5 (RQ4) Meta-decompositions applied to other structure-based optimization techniques. Finally, we demonstrate how meta-decompositions can help other recently developed structure-based optimization techniques. A crucial step in those techniques is selecting a good join tree, as it can significantly influence the structures and, consequently, the costs of the generated query plans. Thus, we first evaluate metaDecomp’s efficiency in enumerating join trees , compared to the standard GYO reduction–based approach from [ 14 ]. As shown in Fig. 13, metaDecomp shows up to four orders of magnitude of speedups over the traditional approach. In particular, for many 
+
+Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:24 Zhekai Jiang, Qichen Wang, and Christoph Koch metaDecomp GYO reduction 10 1
+
+> Number of join trees
+> 10 0
+> 10 1
+> Enumeration time (ms)
+
+(a) DSB 10 2 10 4 
+
+> Number of join trees
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> Enumeration time (ms)
+
+(b) JOB 10 2 10 5 10 8 
+
+> Number of join trees
+> 10 1
+> 10 3
+> 10 5
+> Enumeration time (ms)
+> Timeout (1 hour)
+
+(c) Musicbrainz 10 3 10 5 10 7 
+
+> Number of join trees
+> 10 2
+> 10 4
+> 10 6
+> Enumeration time (ms)
+> Timeout (1 hour)
+
+(d) JOBLarge Fig. 13. Scatter plots of join tree enumeration time using metaDecomp versus using naïve GYO reduction 
+
+highly complex queries in the Musicbrainz and JOBLarge benchmarks with more than 10 7 join trees, the traditional approach already takes over 1 hour, whereas metaDecomp can complete the enumeration in 2 seconds to 1 minute. A more effective approach is to apply cost-based optimization directly on meta-decompositions, as has already been done in metaDecomp, since this eliminates the need to enumerate exponentially large numbers of join trees. Therefore, in our second experiment, we use Yannakakis + [ 49 ] to rewrite queries based on join trees selected by metaDecomp that induce the optimal width-1 query plans. This modification achieves an average speedup of 1.11x on JOB queries. This demonstrates that structure-based evaluation algorithms, such as Yannakakis +, can benefit significantly from our efficient cost-based optimization framework. 
+
+7 CONCLUSIONS AND FUTURE WORK 
+
+In this paper, we have introduced novel techniques for query optimization based on structural properties via meta-decompositions. They offer promising opportunities to integrate theoretically desirable structure-based optimization into practical database systems to efficiently evaluate large, complex queries. A natural next step is to extend our width notion and meta-decompositions-based framework to cyclic queries. While width-1 query plans cannot exist for cyclic queries (according to Theorem 3.6) we may, e.g., identify minimal-width query plans and represent all minimal-width hypertree decompositions. In addition, to improve our current simple strategy of selection pushdown, it is possible to incorporate existing techniques for evaluating conjunctive queries with comparisons [ 51 ]. Similar is the case for many other operators that are so far excluded in this paper, such as aggregations [ 2 , 30 ], top-𝑘 [50 ], differences [ 28 , 58 ], etc., for which there already exist theoretically desirable structure-guided approaches. The performance of such methods can also benefit from our cost-based optimization framework. Finally, even though our technique has shown its robustness, it will still benefit from more accurate cardinality estimation. Recent research [ 11 , 57 ] shows promising techniques that can be adopted to develop efficient, reliable cardinality estimators suitable within our proposed framework. 
+
+ACKNOWLEDGMENTS 
+
+Qichen Wang is supported by the Ministry of Education, Singapore, through the Academic Research Fund Tier 1 grant (RS32/25), and by the Nanyang Technological University Startup Grant. Part of this work was completed while Qichen Wang was at EPFL. 
+
+REFERENCES   
+
+> [1] Serge Abiteboul, Richard Hull, and Victor Vianu. 1996. Foundations of Databases . Addison-Wesley, Reading, MA, USA. Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026.
+
+Succinct Structure Representations for Efficient Query Optimization 240:25 
+
+[2] Mahmoud Abo Khamis, Hung Q. Ngo, and Atri Rudra. 2016. FAQ: Questions Asked Frequently. In Proceedings of the 35th ACM SIGMOD-SIGACT-SIGAI Symposium on Principles of Database Systems (San Francisco, CA, USA) (PODS ’16) .Association for Computing Machinery, New York, NY, USA, 13–28. https://doi.org/10.1145/2902251.2902280 [3] Mahmoud Abo Khamis, Hung Q. Ngo, and Dan Suciu. 2017. What Do Shannon-type Inequalities, Submodular Width, and Disjunctive Datalog Have to Do with One Another?. In Proceedings of the 36th ACM SIGMOD-SIGACT-SIGAI Symposium on Principles of Database Systems (Chicago, IL, USA) (PODS ’17) . Association for Computing Machinery, New York, NY, USA, 429–444. https://doi.org/10.1145/3034786.3056105 [4] Guillaume Bagan, Arnaud Durand, and Etienne Grandjean. 2007. On Acyclic Conjunctive Queries and Constant Delay Enumeration. In Computer Science Logic , Jacques Duparc and Thomas A. Henzinger (Eds.). Springer, Berlin, Heidelberg, 208–222. https://doi.org/10.1007/978-3-540-74915-8_18 [5] Liese Bekkers, Frank Neven, Stijn Vansummeren, and Yisu Remy Wang. 2025. Instance-optimal acyclic join processing without regret: Engineering the Yannakakis algorithm in column stores. Proc. VLDB Endow. 18, 8 (2025), 2413–2426. https://doi.org/10.14778/3742728.3742737 [6] Kristin Bennett, Michael C. Ferris, and Yannis E. Ioannidis. 1991. A genetic algorithm for database query optimization .Technical Report #1004. Center for Parallel Optimization. https://minds.wisconsin.edu/bitstream/handle/1793/59438/ TR1004.pdf [7] Philip A. Bernstein and Dah-Ming W. Chiu. 1981. Using Semi-Joins to Solve Relational Queries. J. ACM 28, 1 (Jan. 1981), 25–40. https://doi.org/10.1145/322234.322238 [8] Altan Birler, Alfons Kemper, and Thomas Neumann. 2024. Robust Join Processing with Diamond Hardened Joins. Proc. VLDB Endow. 17, 11 (July 2024), 3215–3228. https://doi.org/10.14778/3681954.3681995 [9] Altan Birler, Mihail Stoian, and Thomas Neumann. 2025. Optimizing Linearized Join Enumeration by Adapting to the Query Structure. Datenbanksysteme für Business, Technologie und Web (BTW 2025) (2025), 171–194. https: //doi.org/10.18420/BTW2025-09 [10] Angela Bonifati, Wim Martens, and Thomas Timm. 2020. An analytical study of large SPARQL query logs. VLDB J. 29, 2-3 (2020), 655–679. https://doi.org/10.1007/S00778-019-00558-9 [11] Walter Cai, Magdalena Balazinska, and Dan Suciu. 2019. Pessimistic Cardinality Estimation: Tighter Upper Bounds for Intermediate Join Cardinalities. In Proceedings of the 2019 International Conference on Management of Data (Amsterdam, Netherlands) (SIGMOD ’19) . ACM, New York, NY, USA, 18–35. https://doi.org/10.1145/3299869.3319894 [12] Jin Chen, Guanyu Ye, Yan Zhao, Shuncheng Liu, Liwei Deng, Xu Chen, Rui Zhou, and Kai Zheng. 2022. Efficient Join Order Selection Learning with Graph-based Representation. In Proceedings of the 28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining . ACM, New York, NY, USA, 97–107. https://doi.org/10.1145/3534678.3539303 [13] Sophie Cluet and Guido Moerkotte. 1995. On the complexity of generating optimal left-deep processing trees with cross products. In Database Theory — ICDT ’95 , Georg Gottlob and Moshe Y. Vardi (Eds.). Springer, Berlin, Heidelberg, 54–67. https://doi.org/10.1007/3-540-58907-4_6 [14] Binyang Dai, Qichen Wang, and Ke Yi. 2023. SparkSQL +: Next-generation Query Planning over Spark. In Companion of the 2023 International Conference on Management of Data (SIGMOD-Companion ’23), June 18–23, 2023, Seattle, WA, USA . ACM, New York, NY, USA, 115–118. https://doi.org/10.1145/3555041.3589715 [15] Shaleen Deep, Hangdong Zhao, Austen Z. Fan, and Paraschos Koutris. 2024. Output-sensitive Conjunctive Query Evaluation. Proc. ACM Manag. Data 2, 5, Article 220 (Nov. 2024), 24 pages. https://doi.org/10.1145/3695838 [16] Bailu Ding, Surajit Chaudhuri, Johannes Gehrke, and Vivek Narasayya. 2021. DSB: a decision support benchmark for workload-driven and traditional database systems. Proc. VLDB Endow. 14, 13 (Sept. 2021), 3376–3388. https: //doi.org/10.14778/3484224.3484234 [17] Leonidas Fegaras. 1998. A new heuristic for optimizing large queries. In Database and Expert Systems Applications ,Gerald Quirchmayr, Erich Schweighofer, and Trevor J.M. Bench-Capon (Eds.). Springer, Berlin, Heidelberg, 726–735. https://doi.org/10.1007/BFb0054528 [18] Georg Gottlob, Gianluigi Greco, Nicola Leone, and Francesco Scarcello. 2016. Hypertree Decompositions: Questions and Answers. In Proceedings of the 35th ACM SIGMOD-SIGACT-SIGAI Symposium on Principles of Database Systems, PODS 2016, San Francisco, CA, USA, June 26 - July 01, 2016 , Tova Milo and Wang-Chiew Tan (Eds.). ACM, 57–74. https://doi.org/10.1145/2902251.2902309 [19] Georg Gottlob, Martin Grohe, Nysret Musliu, Marko Samer, and Francesco Scarcello. 2005. Hypertree Decompositions: Structure, Algorithms, and Applications. In Graph-Theoretic Concepts in Computer Science, 31st International Workshop, WG 2005, Metz, France, June 23-25, 2005, Revised Selected Papers (Lecture Notes in Computer Science, Vol. 3787) , Dieter Kratsch (Ed.). Springer, 1–15. https://doi.org/10.1007/11604686_1 [20] Georg Gottlob, Matthias Paul Lanzinger, Davide Mario Longo, Cem Okulmus, Reinhard Pichler, and Alexander Selzer. 2023. Reaching Back to Move Forward: Using Old Ideas to Achieve a New Level of Query Optimization. In Proceedings of the 15th Alberto Mendelzon International Workshop on Foundations of Data Management (AMW 2023) . CEUR-WS.org. https://doi.org/10.34726/5396 Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:26 Zhekai Jiang, Qichen Wang, and Christoph Koch 
+
+[21] Georg Gottlob, Nicola Leone, and Francesco Scarcello. 2002. Hypertree Decompositions and Tractable Queries. J. Comput. Syst. Sci. 64, 3 (2002), 579–627. https://doi.org/10.1006/JCSS.2001.1809 [22] Georg Gottlob, Nicola Leone, and Francesco Scarcello. 2003. Robbers, marshals, and guards: Game theoretic and logical characterizations of hypertree width. J. Comput. Syst. Sci. 66, 4 (2003), 775–808. https://doi.org/10.1016/S0022-0000(03)00030-8 [23] Goetz Graefe. 1995. The Cascades Framework for Query Optimization. IEEE Data(base) Engineering Bulletin 18 (1995), 19–29. [24] Goetz Graefe and William J. McKenna. 1993. The Volcano optimizer generator: Extensibility and efficient search. In Proceedings of IEEE 9th International Conference on Data Engineering . IEEE Comput. Soc. Press, Vienna, Austria, 209–218. https://doi.org/10.1109/ICDE.1993.344061 [25] Marc H. Graham. 1979. On the universal relation . Technical Report. University of Toronto. [26] Yuxing Han, Ziniu Wu, Peizhi Wu, Rong Zhu, Jingyi Yang, Liang Wei Tan, Kai Zeng, Gao Cong, Yanzhao Qin, Andreas Pfadler, Zhengping Qian, Jingren Zhou, Jiangneng Li, and Bin Cui. 2021. Cardinality estimation in DBMS: a comprehensive benchmark evaluation. Proc. VLDB Endow. 15, 4 (Dec. 2021), 752–765. https://doi.org/10.14778/ 3503585.3503586 [27] Xiao Hu. 2025. Output-Optimal Algorithms for Join-Aggregate Queries. Proc. ACM Manag. Data 3, 2, Article 104 (June 2025), 27 pages. https://doi.org/10.1145/3725241 [28] Xiao Hu and Qichen Wang. 2023. Computing the Difference of Conjunctive Queries Efficiently. Proc. ACM Manag. Data 1, 2, Article 153 (June 2023), 26 pages. https://doi.org/10.1145/3589298 [29] Zhekai Jiang, Qichen Wang, and Christoph Koch. 2026. metaDecomp. GitHub repository. https://github.com/epfldata/ metaDecomp [30] Manas R. Joglekar, Rohan Puttagunta, and Christopher Ré. 2016. AJAR: Aggregations and Joins over Annotated Relations. In Proceedings of the 35th ACM SIGMOD-SIGACT-SIGAI Symposium on Principles of Database Systems (San Francisco, California, USA) (PODS ’16) . ACM, New York, NY, USA, 91–106. https://doi.org/10.1145/2902251.2902293 [31] Donald Kossmann and Konrad Stocker. 2000. Iterative dynamic programming: a new class of query optimization algorithms. ACM Transactions on Database Systems 25, 1 (March 2000), 43–82. https://doi.org/10.1145/352958.352982 [32] Paraschos Koutris, Stijn Vansummeren, Qichen Wang, Yisu Remy Wang, and Xiangyao Yu. 2026. Database Theory in Action: Yannakakis’ Algorithm. In 29th International Conference on Database Theory (ICDT 2026) . 21:1–21:6. https: //doi.org/10.4230/LIPIcs.ICDT.2026.21 [33] Viktor Leis, Bernhard Radke, Andrey Gubichev, Atanas Mirchev, Peter Boncz, Alfons Kemper, and Thomas Neumann. 2018. Query optimization through the looking glass, and what we found running the Join Order Benchmark. The VLDB Journal 27, 5 (Oct. 2018), 643–668. https://doi.org/10.1007/s00778-017-0480-7 [34] Zhaodonghui Li, Haitao Yuan, Huiming Wang, Gao Cong, and Lidong Bing. 2024. LLM-R 2 : A Large Language Model Enhanced Rule-Based Rewrite System for Boosting Query Efficiency. Proc. VLDB Endow. 18, 1 (Sept. 2024), 53–65. https://doi.org/10.14778/3696435.3696440 [35] Zheng Luo, Wim Van den Broeck, Guy Van den Broeck, and Yisu Remy Wang. 2026. Algorithms for Optimizing Acyclic Queries. In 29th International Conference on Database theory (ICDT 2026) .[36] Riccardo Mancini, Srinivas Karthik, Bikash Chandra, Vasilis Mageirakos, and Anastasia Ailamaki. 2022. Efficient Mas-sively Parallel Join Optimization for Large Queries. In Proceedings of the 2022 International Conference on Management of Data . ACM, Philadelphia PA USA, 122–135. https://doi.org/10.1145/3514221.3517871 [37] Ryan Marcus, Parimarjan Negi, Hongzi Mao, Nesime Tatbul, Mohammad Alizadeh, and Tim Kraska. 2021. Bao: Making Learned Query Optimization Practical. In Proceedings of the 2021 International Conference on Management of Data (SIGMOD ’21) . ACM, New York, NY, USA, 1275–1288. https://doi.org/10.1145/3448016.3452838 [38] Guido Moerkotte and Thomas Neumann. 2008. Dynamic programming strikes back. In Proceedings of the 2008 ACM SIGMOD international conference on Management of data (SIGMOD ’08) . Association for Computing Machinery, New York, NY, USA, 539–552. https://doi.org/10.1145/1376616.1376672 [39] Thomas Neumann and Bernhard Radke. 2018. Adaptive Optimization of Very Large Join Queries. In Proceedings of the 2018 International Conference on Management of Data (SIGMOD ’18) . Association for Computing Machinery, New York, NY, USA, 677–692. https://doi.org/10.1145/3183713.3183733 [40] Heinz Prüfer. 1918. Neuer Beweis eines Satzes über Permutationen. Archiv der Mathematischen Physik 27 (1918), 742–744. [41] Mark Raasveldt and Hannes Mühleisen. 2019. DuckDB: an Embeddable Analytical Database. In Proceedings of the 2019 International Conference on Management of Data . ACM, New York, NY, USA, 1981–1984. https://doi.org/10.1145/ 3299869.3320212 [42] Francesco Scarcello, Gianluigi Greco, and Nicola Leone. 2007. Weighted hypertree decompositions and optimal query plans. J. Comput. System Sci. 73, 3 (May 2007), 475–506. https://doi.org/10.1016/j.jcss.2006.10.010 Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:27 
+
+[43] Wolfgang Scheufele and Guido Moerkotte. 1996. Constructing Optimal Bushy Processing Trees for Join Queries is NP-hard .Technical Report. Universität Mannheim. [44] Patricia Griffiths Selinger, Morton Michael Astrahan, Donald D. Chamberlin, Raymond A. Lorie, and Thomas Gordon Price. 1979. Access path selection in a relational database management system. In Proceedings of the 1979 ACM SIGMOD international conference on Management of data (SIGMOD ’79) . Association for Computing Machinery, New York, NY, USA, 23–34. https://doi.org/10.1145/582095.582099 [45] Mihail Stoian and Andreas Kipf. 2024. DPconv: Super-Polynomially Faster Join Ordering. Proc. ACM Manag. Data 2, 6, Article 234 (Dec. 2024), 26 pages. https://doi.org/10.1145/3698809 [46] Transaction Processing Council (TPC). 2022. TPC Benchmark H. Available: https://tpc.org/tpc_documents_current_ versions/pdf/tpc-h_v3.0.1.pdf. [47] Bennet Vance. 1998. Join-order optimization with Cartesian products . Ph. D. Dissertation. Oregon Graduate Institute of Science and Technology. https://digitalcollections.ohsu.edu/record/177 [48] Bennet Vance and David Maier. 1996. Rapid bushy join-order optimization with Cartesian products. In Proceedings of the 1996 ACM SIGMOD international conference on Management of data (SIGMOD ’96) . Association for Computing Machinery, New York, NY, USA, 35–46. https://doi.org/10.1145/233269.233317 [49] Qichen Wang, Bingnan Chen, Binyang Dai, Ke Yi, Feifei Li, and Liang Lin. 2025. Yannakakis +: Practical Acyclic Query Evaluation with Theoretical Guarantees. Proc. ACM Manag. Data 3, 3, Article 235 (June 2025), 28 pages. https://doi.org/10.1145/3725423 [50] Qichen Wang, Qiyao Luo, and Yilei Wang. 2024. Relational Algorithms for Top-𝑘 Query Evaluation. Proc. ACM Manag. Data 2, 3, Article 168 (May 2024), 27 pages. https://doi.org/10.1145/3654971 [51] Qichen Wang and Ke Yi. 2022. Conjunctive Queries with Comparisons. In Proceedings of the 2022 International Conference on Management of Data (Philadelphia, PA, USA) (SIGMOD ’22) . Association for Computing Machinery, New York, NY, USA, 108–121. https://doi.org/10.1145/3514221.3517830 [52] Yifei Yang, Hangdong Zhao, Xiangyao Yu, and Paraschos Koutris. 2024. Predicate Transfer: Efficient Pre-Filtering on Multi-Join Queries. In 14th Annual Conference on Innovative Data Systems Research (CIDR ’24) .[53] Zongheng Yang, Wei-Lin Chiang, Sifei Luan, Gautam Mittal, Michael Luo, and Ion Stoica. 2022. Balsa: Learning a Query Optimizer Without Expert Demonstrations. In Proceedings of the 2022 International Conference on Management of Data . ACM, Philadelphia PA USA, 931–944. https://doi.org/10.1145/3514221.3517885 [54] Mihalis Yannakakis. 1981. Algorithms for Acyclic Database Schemes. In VLDB ’81: Proceedings of the seventh international conference on Very Large Data Bases , Vol. 7. 82–94. [55] Clement T. Yu and Meral Z. Özsoyoğlu. 1979. An algorithm for tree-query membership of a distributed query. In 
+
+The IEEE Computer Society’s Third International Computer Software and Applications Conference, COMPSAC 1979, 6-8 November, 1979, Chicago, Illinois, USA . IEEE, 306–312. https://doi.org/10.1109/CMPSAC.1979.762509 [56] Tao Yu, Rui Zhang, Kai Yang, Michihiro Yasunaga, Dongxu Wang, Zifan Li, James Ma, Irene Li, Qingning Yao, Shanelle Roman, Zilin Zhang, and Dragomir Radev. 2018. Spider: A Large-Scale Human-Labeled Dataset for Complex and Cross-Domain Semantic Parsing and Text-to-SQL Task. In Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing , Ellen Riloff, David Chiang, Julia Hockenmaier, and Jun’ichi Tsujii (Eds.). Association for Computational Linguistics, Brussels, Belgium, 3911–3921. https://doi.org/10.18653/v1/D18-1425 [57] Haozhe Zhang, Christoph Mayer, Mahmoud Abo Khamis, Dan Olteanu, and Dan Suciu. 2025. LpBound: Pessimistic Cardinality Estimation Using ℓ𝑝 -Norms of Degree Sequences. Proc. ACM Manag. Data 3, 3, Article 184 (June 2025), 27 pages. https://doi.org/10.1145/3725321 [58] Hangdong Zhao, Austen Z. Fan, Xiating Ouyang, and Paraschos Koutris. 2024. Conjunctive Queries with Negation and Aggregation: A Linear Time Characterization. Proc. ACM Manag. Data 2, 2, Article 75 (May 2024), 19 pages. https://doi.org/10.1145/3651138 [59] Junyi Zhao, Kai Su, Yifei Yang, Xiangyao Yu, Paraschos Koutris, and Huanchen Zhang. 2025. Debunking the Myth of Join Ordering: Toward Robust SQL Analytics. Proc. ACM Manag. Data 3, 3, Article 146 (June 2025), 28 pages. https://doi.org/10.1145/3725283 [60] Xuanhe Zhou, Guoliang Li, Chengliang Chai, and Jianhua Feng. 2021. A Learned Query Rewrite System Using Monte Carlo Tree Search. Proc. VLDB Endow. 15, 1 (Sept. 2021), 46–58. https://doi.org/10.14778/3485450.3485456 [61] Xuanhe Zhou, Guoliang Li, Jianming Wu, Jiesi Liu, Zhaoyan Sun, and Xinning Zhang. 2023. A Learned Query Rewrite System. Proc. VLDB Endow. 16, 12 (Aug. 2023), 4110–4113. https://doi.org/10.14778/3611540.3611633 Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:28 Zhekai Jiang, Qichen Wang, and Christoph Koch 
+
+A GLOSSARY OF FREQUENTLY-USED TERMS AND NOTATIONS IN THE PAPER 
+
+Table 5 gives a glossary of frequently-used terms and notations in the paper, each with a brief intuitive explanation. 
+
+Term / Notation Explanation 
+
+𝑓 (𝑆 ) on a set 𝑆 of elements Set of all 𝑓 (𝑎 ) for all elements 𝑎 in 𝑆 .
+
+∪𝑆 on a set 𝑆 of sets Union of all sets in 𝑆 .Conjunctive query A query with joins, with selection and projection involving only attributes in base relations. Full (conjunctive) query Conjunctive query where no attribute is projected out. Boolean (conjunctive) query Conjunctive query whose output contains no attribute, but only a Boolean value indicating whether there exists any tuple satisfying all predicates. Relation-dominated query Conjunctive query in which all output attributes are present in some single relation. Hypergraph 𝐻 (𝑄 )
+
+associated with query 𝑄 
+
+Hypergraph where each vertex is an attribute, and each hyperedge corresponds to a relation, containing all attributes in the relation. 
+
+𝜆 -label 𝜆 (𝑝 ) In a hypertree decomposition or meta-decomposition, maps each tree vertex 𝑝 to a set of hyperedges (relations). Non-empty in hypertree decompositions, possibly empty in minor nodes of meta-decompositions. 
+
+𝜒 -label 𝜒 (𝑝 ) In a hypertree decomposition or meta-decomposition, maps each tree vertex 𝑝 to a set of hypergraph vertices (attributes). Subset of vertices in the 𝜆 -label. 
+
+𝜅 -label 𝜅 (𝑝 ) In a meta-decomposition, maps each tree vertex to the “interface”, i.e., hypergraph vertices in the intersection between 𝑝 and other tree vertices not on the subtree rooted at 𝑝 .
+
+𝑇 𝑝 , subtree of 𝑇 rooted at 𝑝 Subtree of 𝑇 containing 𝑝 and its descendants. 
+
+𝑇 𝑝 →𝑞 If 𝑞 is a child of 𝑝 , same as 𝑇 𝑞 . If 𝑞 is a parent of 𝑝 , the subtree of 𝑇 with all vertices except those in 𝑇 𝑝 .Fan-out 𝑓 (𝑝 ), 𝑓 (𝑇 ) For a tree vertex 𝑝 , the number of children. For a tree 𝑇 , the maximum number of children per vertex. Induced query 𝑄 (𝑝 ) For vertices 𝑝 on a join tree or query plan, the join of all relations on the subtree rooted at 𝑝 , with appropriate selection and projection applied. Interface 𝐼 (𝑝 ) For a vertex 𝑝 on a meta-decomposition or query plan, the intersection (of vertices) between 𝑝 and other vertices not in the subtree rooted at 𝑝 .Width 𝑤 (𝑝 ), 𝑤 (P) of (vertex on) query plan For a vertex 𝑝 on a query plan, the number of relations needed to cover the attributes in the interface. For an entire query plan P, the maximum number of relations needed to cover the attributes in the interface of any intermediate step. Width 𝑤 (𝑝 ), 𝑤 (T ) of (vertex on) hypertree decomposition For a vertex 𝑝 on a hypertree decomposition, the number of hyperedges / relations in the 𝜆 -label. For a hypertree decomposition T , the maximum number of hyperedges / relations in the 𝜆 -label of a single vertex. Ear, reducible hyperedge/relation In GYO reduction on an acyclic hypergraph/query, a hyperedge/relation whose intersection (hypergraph vertices / query attributes) with the rest of the hyperedges/relations is covered by some other single hyperedge/relation. 
+
+𝑜 (𝑒, 𝐻 ) Set of overlapping vertices of hyperedge 𝑒 and the remaining hyperedges 
+
+𝐸 (𝐻 ) \ { 𝑒 }.
+
+Table 5. Glossary of frequently-used terms and notations in the paper  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:29
+
+B OMITTED PROOFS IN SECTION 3 B.1 Proof of Theorem 3.2 
+
+Let 𝑝 ∗ ∈ 𝑉 (P) be a node in the plan where the maximum width is achieved, i.e., 𝑤 (𝑝 ∗) = 𝑤 (P) .By the definition of 𝑤 (𝑝 ∗), there must exist a set of relations 𝑆 ⊆ 𝐸 (𝐻 𝑝 ∗ ) such that |𝑆 | = 𝑤 (𝑝 ∗) and 
+
+𝐼 (𝑝 ∗) ⊆ Ð𝑒 ∈𝑆 𝑒 . Therefore, the result of 𝑄 (𝑝 ∗) must be a subset of the join of all relations in 𝑆 . In the worst-case scenario, where all relations in 𝑆 share no common attributes and their join is a Cartesian product, the size of this join is 𝑂 (𝑁 |𝑆 | ), which gives an upper bound of 𝑂 (𝑁 𝑤 ( P ) ).
+
+B.2 Proof of Theorem 3.5 
+
+(⇐) . Let 𝑇 be the join tree of the query 𝑄 that induces the query plan P. Then, for any 𝑞 ∈ 𝑉 (𝑇 ),the interface 𝐼 𝑞 between the induced hypergraph 𝐻 𝑞 for subtree 𝑇 𝑞 rooted at 𝑞 and the residual hypergraph 𝐻 𝑞 satisfies 𝐼 𝑞 ⊆ 𝑞 , because of the connectedness condition of the join tree. In addition, by Definition 3.4(1), we have 𝑄 (𝑝 ) = 𝑄 (𝑞 ). This implies that the induced hypergraphs 𝐻 𝑝 = 𝐻 𝑞 .Therefore, for every 𝑝 ∈ P , we can find a set 𝑆 = {𝑞 } that covers 𝐼 𝑝 , and 𝑤 (𝑝 ) = 1 holds as |𝑆 | = 1.
+
+(⇒) . Given a width-1 query plan P, we construct such a join tree 𝑇 by induction. For each leaf node 𝑝 ∈ 𝑉 (P) , we simply construct a tree with the relation corresponding to the leaf node, and this is vacuously a join tree. For each join operation 𝑝 ∈ 𝑉 (P) , assume that there exist valid join trees 𝑇 𝑐 1 and 𝑇 𝑐 2 for each of the two child nodes 𝑐 1 and 𝑐 2, repsectively. Let 𝑞 1 ∈ 𝑉 (𝑇 𝑐 1 ) be the relation that covers the interface 𝐼 𝑐 1 and 𝑞 2 ∈ 𝑉 (𝑇 𝑐 2 ) covers 𝐼 𝑐 2 , we make 𝑞 1 the root of 𝑇 𝑐 1 and 𝑞 2
+
+the root of 𝑇 𝑐 2 , then 𝐼 𝑐 1 ∩ 𝐼 𝑐 2 = 𝑞 1 ∩𝑞 2, and we can merge 𝑇 1 and 𝑇 2 to obtain 𝑇 ′ by connecting 𝑞 1 and 
+
+𝑞 2. The new tree 𝑇 ′ still preserves the connectedness condition, since, for all 𝑞 ′ 
+
+> 1
+
+∈ 𝑉 (𝑇 𝑐 1 ) and all 
+
+𝑞 ′ 
+
+> 2
+
+∈ 𝑉 (𝑇 𝑐 2 ), 𝑞 1 and 𝑞 2 are on the path between 𝑞 ′ 
+
+> 1
+
+and 𝑞 ′
+
+> 2
+
+, and therefore 𝜒 (𝑞 ′
+
+> 1
+
+) ∩ 𝜒 (𝑞 ′
+
+> 2
+
+) ⊆ 𝐼 𝑐 1 ⊆ 𝜒 (𝑞 1)
+
+and 𝜒 (𝑞 ′
+
+> 1
+
+) ∩ 𝜒 (𝑞 ′
+
+> 2
+
+) ⊆ 𝐼 𝑐 2 ⊆ 𝜒 (𝑞 2). Then, by the connectedness condition within each of the two subtrees 𝑇 𝑐 1 and 𝑇 𝑐 2 , we have that 𝜒 (𝑞 ′
+
+> 1
+
+) ∩ 𝜒 (𝑞 ′
+
+> 2
+
+) ⊆ 𝜒 (𝑞 ′
+
+> 1
+
+) ∩ 𝜒 (𝑞 1) ⊆ 𝜒 (𝑞 ′′  
+
+> 1
+
+) for all 𝑞 ′′  
+
+> 1
+
+on the path between 𝑞 ′ 
+
+> 1
+
+and 𝑞 1, and 𝜒 (𝑞 ′
+
+> 1
+
+) ∩ 𝜒 (𝑞 ′
+
+> 2
+
+) ⊆ 𝜒 (𝑞 ′
+
+> 2
+
+) ∩ 𝜒 (𝑞 2) ⊆ 𝜒 (𝑞 ′′  
+
+> 2
+
+) for all 𝑞 ′′  
+
+> 2
+
+on the path between 𝑞 ′
+
+> 2
+
+and 𝑞 2. Therefore, 𝑇 ′ is a valid join tree for the query induced by the node 𝑝 .
+
+B.3 Proof of Theorem 3.8 
+
+Following Theorem 3.5, we have 
+
+Lemma B.1. For all width-1 query plans P induced by a join tree 𝑇 , for all non-leaf nodes 𝑡 ∈ 𝑉 (𝑇 )
+
+with distinct children 𝑐 1 and 𝑐 2, if 𝑝 1, 𝑝 2 ∈ 𝑉 (P) are the nodes on P such that 𝑄 (𝑝 1) = 𝑄 (𝑐 1) and 
+
+𝑄 (𝑝 2) = 𝑄 (𝑐 2), then there exists no 𝑞 ∈ P such that 𝑄 (𝑞 ) = 𝑄 (𝑝 1) ⊲⊳ 𝑄 (𝑝 2) = 𝑄 (𝑐 1) ⊲⊳ 𝑄 (𝑐 2).
+
+Proof. Suppose there is such a 𝑞 , then by Definition 3.4, there would have been an edge between 
+
+𝑐 1 and 𝑐 2 on 𝑇 , contradicting with the assumption that 𝑐 1 and 𝑐 2 are distinct children of some node 
+
+𝑡 . □
+
+This means that, given a width-1 query plan P induced by a join tree 𝑇 , for each 𝑡 ∈ 𝑉 (𝑇 ), with children 𝑐 1, . . . , 𝑐 𝑓 (𝑡 ) and the corresponding 𝑝 ∈ 𝑉 (P) such that 𝑄 (𝑡 ) = 𝑄 (𝑝 ), if we consider the sub–query plans P𝑐 1 , . . . , P𝑐 𝑓 (𝑡 ) , induced by the sub–join trees 𝑇 𝑐 1 , . . . ,𝑇 𝑐 𝑓 (𝑡 ) rooted at the children of 𝑡 , each as a single relation, then the sub–query plan P𝑝 rooted at 𝑝 is a left-deep plan consisting of 𝑡 , P𝑐 1 , . . . , P𝑐 𝑓 (𝑡 ) , and 𝑡 is an operand of the deepest join operation. Therefore, the optimization can be done by a dynamic programming algorithm, as shown in Algorithm 4. In the algorithm, children (𝑣 ) is the set of all children of 𝑣 .In the algorithm, the outer loop (Line 1) is executed |𝑉 (𝑇 )| = |𝑄 | times. The complexity of the loop body is dominated by enumerating all possible 𝑇 (Line 13) and 𝑢 ∈ 𝑇 (Line 14). Noting that the number of children of 𝑣 is bounded by the fan-out 𝑓 (𝑝 ), the complexity of this part is given by  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:30 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+Algorithm 4: Finding the optimal width-1 query plan induced by a join tree 
+
+input : A join tree 𝑇 
+
+output : The optimal width-1 query plan induced by 𝑇  
+
+> 1
+
+foreach 𝑣 ∈ 𝑉 (𝑇 ), in bottom-up order do  
+
+> 2
+
+foreach child 𝑐 of 𝑣 do  
+
+> 3
+
+if 𝜆 (𝑐 ) ≠ ∅ then  
+
+> 4
+
+𝑃 (𝑣, {𝑐 }) ← 𝑃 (𝑐, children (𝑐 ) ∪ { 𝑐 })  
+
+> 5
+
+else  
+
+> 6
+
+𝑃 (𝑣, {𝑐 }) ← 𝑃 (𝑐, children (𝑐 ))  
+
+> 7
+
+if 𝜆 (𝑣 ) ≠ ∅ then  
+
+> 8
+
+𝑃 (𝑣, {𝑣 }) ← query plan with one node 𝑣  
+
+> 9
+
+if 𝜆 (𝑣 ) = ∅ then  
+
+> 10
+
+𝑆 ← 2children (𝑣 ) \ {∅}  
+
+> 11
+
+else  
+
+> 12
+
+𝑆 ← { 𝑇 ∪ { 𝑣 } : 𝑇 ∈ 2children (𝑣 ) \ ∅}  
+
+> 13
+
+foreach 𝑇 ∈ 𝑆 , ordered by increasing size do  
+
+> 14
+
+𝑃 (𝑣,𝑇 ) ← argmin 𝑝 ∈ { 𝑃 (𝑣,𝑇 \{ 𝑢 } ) ⊲⊳ 𝑃 (𝑣, {𝑢 } ) :𝑢 ∈𝑇 } cost (𝑝 ) 
+
+> 15
+
+return 𝑃 (root (𝑇 ), 𝑆 (root (𝑇 )))  
+
+> 𝑓 (𝑣 )
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑓 (𝑣 )
+
+𝑖 
+
+
+
+× 𝑖 = 
+
+> 𝑓 (𝑣 )
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑓 (𝑣 )!
+
+𝑖 !(𝑓 (𝑣 ) − 𝑖 )! × 𝑖 = 
+
+> 𝑓 (𝑣 )
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑓 (𝑣 )!
+
+(𝑖 − 1)!(𝑓 (𝑣 ) − 𝑖 )!
+
+= 
+
+> 𝑓 (𝑣 )
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑓 (𝑣 ) × (𝑓 (𝑣 ) − 1)!
+
+(𝑖 − 1)!(( 𝑓 (𝑣 ) − 1) − ( 𝑖 − 1)) !
+
+= 
+
+> 𝑓 (𝑣 )
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑓 (𝑣 ) × 
+
+𝑓 (𝑣 ) − 1
+
+𝑖 − 1
+
+
+
+= 𝑓 (𝑣 ) 
+
+> 𝑓 (𝑣 ) − 1
+
+∑︁ 
+
+> 𝑖 =0
+
+𝑓 (𝑣 ) − 1
+
+𝑖 
+
+
+
+= 𝑓 (𝑣 )2𝑓 (𝑣 ) − 1 ≤ max     
+
+> 𝑣 ∈𝑉 (𝑇 )
+
+𝑓 (𝑣 )2𝑓 (𝑣 ) − 1 = 𝑓 (𝑇 )2𝑓 (𝑇 ) − 1.
+
+So, overall, the complexity is 𝑂 (𝑓 (𝑇 )2𝑓 (𝑇 ) − 1 |𝑄 |) .
+
+C OMITTED DETAILS IN SECTION 4 C.1 Omitted Details on Algorithm 2 
+
+C.1.1 Detailed Version of Algorithm 2. A more detailed version of Algorithm 2 is shown in Algo-rithm 5. It shows in particular the detailed steps to construct join trees from sub–join trees. Some functions being used are detailed in the following subsections. 
+
+C.1.2 Enumeration of Non-Isomorphic Trees Based on Prüfer Sequences. For minor nodes 𝑝 , as is illustrated by Example 2.3, all of its neighbors 𝑞 for which 𝜅 (𝑞 ) = 𝜒 (𝑝 ) can be connected in an arbitrary tree structure with these neighbors being vertices. In order to enumerate all such possibilities without repetition, we (1) enumerate all non-isomorphic trees up to rerooting and (2) enumerate all rerootings for each tree enumerated in step (1). We start with the enumeration of non-isomorphic trees up to rerooting—namely, if two trees are simply rerootings of each other, they are treated as the same and only one of them will be enumerated. This can be done based on Prüfer sequences [ 40 ]. A Prüfer sequence is a sequence of |𝑉 | − 2 numbers, each of which is an integer between 1 and |𝑉 |, inclusive. It can be shown that each sequence bijectively encodes one tree (up to rerooting) of size |𝑉 |, with vertices labeled by integers ranging from 1 to |𝑉 |, inclusive. 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026.
+
+Succinct Structure Representations for Efficient Query Optimization 240:31 
+
+Algorithm 5: Enumerating all join trees based on a meta-decomposition 
+
+input : A meta-decomposition 𝑀 = (𝑉 (𝑀 ), 𝑟 (𝑀 ), 𝐸 (𝑀 ), 𝜆, 𝜒, 𝜅 )
+
+output : All join trees of the hypergraph induced by 𝑀  
+
+> 1
+
+Function enumRec (𝑣 : a node on 𝑀 ): 
+
+> 2
+
+C ← set of children 𝑐 of 𝑣 on 𝑀 , sorted by partial order ⊇ on 𝜅 (𝑐 ) 
+
+> 3
+
+foreach 𝑐 ∈ 𝐶 do  
+
+> 4
+
+T𝑐 ← Ð𝑇 ∈enumRec (𝑐 ) rerootings (𝑇 , ∅, 𝜅 (𝑐 ))  
+
+> 5
+
+if 𝜆 (𝑣 ) = ∅ then // minor node  
+
+> 6
+
+Corigin ← { 𝑐 ∈ C | 𝜅 (𝑐 ) = 𝜒 (𝑣 )} // they can be found at the head of the sorted C 
+
+> 7
+
+if 𝜅 (𝑣 ) = 𝜒 (𝑣 ) then  
+
+> 8
+
+T𝑃 ← enumerateTrees (C origin ∪ { 𝑣 }) , all rerooted to 𝑣 // All non-isomorphic trees with vertices Corigin ∪ { 𝑣 }. The minor node 𝑣 will eventually be replaced on Line 32 by the parent of 𝑟 . 
+
+> 9
+
+else // 𝜅 (𝑣 ) ≠ 𝜒 (𝑣 ), the parent should not participate  
+
+> 10
+
+T𝑃 ← enumerateTrees (𝑆 ) 
+
+> 11
+
+foreach 𝑇 𝑃 ∈ T 𝑃 do // A skeleton of a way to connect subtrees  
+
+> 12
+
+foreach 𝑐 ∈ 𝑉 (𝑇 𝑃 ) do  
+
+> 13
+
+if 𝑐 is a leaf node then  
+
+> 14
+
+T ′ 
+
+> 𝑐
+
+← T 𝑐  
+
+> 15
+
+else  
+
+> 16
+
+T ′ 
+
+> 𝑐
+
+← ∅  
+
+> 17
+
+foreach non-leaf 𝑐 ∈ 𝑉 (𝑇 𝑃 ), in bottom-up order, 𝑇 𝑐 ∈ T 𝑐 , child 𝑑 of 𝑐 on 𝑇 𝑃 ,
+
+𝑇 𝑑 ∈ Ð𝑇 𝑑 ∈ T 𝑑 rerootings (𝑇 𝑑 , ∅, 𝜅 (𝑑 )) , 𝑢 ∈ 𝑉 (𝑇 𝑐 ) such that 𝜅 (𝑑 ) ⊆ 𝜒 (𝑢 ) do  
+
+> 18
+
+𝑇 ′ 
+
+> 𝑐
+
+← 𝑇 𝑐 , with 𝑇 𝑐 added as a child of 𝑢  
+
+> 19
+
+Add 𝑇 ′ 
+
+> 𝑐
+
+to T ′ 
+
+> 𝑐
+> 20
+
+T ← T ∪ T ′   
+
+> 𝑟 (𝑇 𝑃 )
+> 21
+
+Cproper ← C \ C origin , preserving the order  
+
+> 22
+
+else  
+
+> 23
+
+T ← a set of one tree with one vertex 𝑣 only  
+
+> 24
+
+Cproper ← C , preserving the order  
+
+> 25
+
+foreach child 𝑐 ∈ C proper in order do  
+
+> 26
+
+T ′ ← ∅  
+
+> 27
+
+foreach 𝑇 𝑐 ∈ T 𝑐 , 𝑇 ∈ T do 
+
+// Enumerate all possible 𝑣 in some 𝑇 which 𝑇 𝑐 can be attached to  
+
+> 28
+
+if 𝜆 (𝑐 ) = ∅ and 𝜅 (𝑐 ) = 𝜒 (𝑐 ) then // The root of 𝑇 𝑐 would be a minor node from Line 8. We find a parent of each of its children.  
+
+> 29
+
+foreach child 𝑑 of the root of 𝑇 𝑐 do  
+
+> 30
+
+T ′′ ← ∅  
+
+> 31
+
+foreach 𝑇 ′ ∈ T ′, 𝑢 ∈ 𝑇 ′ such that 𝜅 (𝑑 ) ⊆ 𝜒 (𝑢 ) do  
+
+> 32
+
+𝑇 ′′ ← 𝑇 ′ with 𝑇 𝑑 attached as a child of 𝑢  
+
+> 33
+
+Add 𝑇 ′′ to T ′′  
+
+> 34
+
+T ′ ← T ′′  
+
+> 35
+
+else  
+
+> 36
+
+foreach 𝑢 ∈ 𝑇 such that 𝜅 (𝑐 ) ⊆ 𝜒 (𝑢 ) do  
+
+> 37
+
+𝑇 ′ ← 𝑇 with 𝑇 𝑐 added as a child of 𝑢  
+
+> 38
+
+Add 𝑇 ′ to T ′ 
+
+> 39
+
+T ← T ′ 
+
+> 40
+
+return T 
+
+> 41
+
+return Ð𝑇 ∈enumRec (𝑟 ) rerootings (𝑇 , ∅, ∅) 
+
+Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:32 Zhekai Jiang, Qichen Wang, and Christoph Koch 
+
+Therefore, we use Algorithm 6 which simply enumerates all such numeric sequences and converts each sequence into a tree. 
+
+Algorithm 6: enumerateTrees (𝑉 ): Enumerate all non-homomorphic trees, up to rerooting, with vertices 𝑉 , using Prüfer sequences 
+
+input : Set of vertices 𝑉 
+
+output : A set T of all non-isomorphic trees with vertices 𝑉  
+
+> 1
+
+Arbitrarily order the vertices in 𝑉 and let 𝑣 𝑖 be the 𝑖 -th vertex in 𝑉 under this ordering  
+
+> 2
+
+T ← ∅  
+
+> 3
+
+foreach sequence 𝑃 = 𝑝 1, . . . , 𝑝 |𝑉 | − 2 of |𝑉 | − 2 integers, each with value in range [1, |𝑉 |] do  
+
+> 4
+
+foreach 𝑖 = 1, . . . , |𝑉 | do  
+
+> 5
+
+𝑑 (𝑖 ) ← 1 
+
+> 6
+
+𝑆 ← [ 1, |𝑉 |] // maintains the set of indices 𝑖 with 𝑑 (𝑣 𝑖 ) = 1, in increasing order  
+
+> 7
+
+foreach 𝑖 = 1, . . . , |𝑉 | − 2 do  
+
+> 8
+
+𝑑 (𝑠 𝑖 ) ← 𝑑 (𝑝 𝑖 ) + 1 
+
+> 9
+
+𝑆 ← 𝑆 \ { 𝑖 } 
+
+> 10
+
+Initialize a tree 𝑇 with set of vertices 𝑉 and no edge  
+
+> 11
+
+foreach 𝑖 = 1, . . . , |𝑉 | − 2 do  
+
+> 12
+
+𝑗 ← remove the least element in 𝑆  
+
+> 13
+
+𝑑 (𝑖 ) ← 𝑑 (𝑖 ) − 1 
+
+> 14
+
+𝑑 ( 𝑗 ) ← 𝑑 ( 𝑗 ) − 1 
+
+> 15
+
+if 𝑑 (𝑖 ) = 1 then  
+
+> 16
+
+Add 𝑖 into 𝑆  
+
+> 17
+
+In 𝑇 , add 𝑣 𝑗 as a child of 𝑣 𝑖  
+
+> 18
+
+𝑖, 𝑗 ← the remaining two elements in 𝑆  
+
+> 19
+
+In 𝑇 , add 𝑣 𝑗 as a child of 𝑣 𝑖 // the direction does not matter  
+
+> 20
+
+T ← T ∪ { 𝑇 } 
+
+> 21
+
+return T
+
+C.1.3 Enumeration of Rerootings. We then recursively enumerate all possible rerootings of a tree 
+
+𝑇 such that the new root 𝑟 ′ has 𝜅 ⊆ 𝜒 (𝑟 ′), where 𝜅 is the set of keys as required by the original Algorithm 5. This can be done as shown in Algorithm 7. 
+
+Algorithm 7: rerootings (𝑇 , 𝑝, 𝜅 ): Enumerate all valid rerootings of a tree 𝑇 such that the new root 𝑟 ′ has 𝜅 ⊆ 𝜒 (𝑟 ′)
+
+input : A tree 𝑇 , optionally the previous parent 𝑝 of the root 𝑟 of 𝑇 before the previous rotation, the expected key 𝜅 
+
+output : A set T of all valid rerootings of 𝑇 such that the new root 𝑟 ′ has 𝜅 ⊆ 𝜒 (𝑟 ′) 
+
+> 1
+
+T ← ∅  
+
+> 2
+
+foreach child 𝑐 of the root 𝑟 of 𝑇 do  
+
+> 3
+
+if 𝜅 ⊆ 𝜒 (𝑐 ) and 𝑐 ≠ 𝑝 then  
+
+> 4
+
+𝑇 ′ ← 𝑇 rerooted to 𝑐  
+
+> 5
+
+T ← T ∪ { 𝑇 ′ } ∪ rerootings (𝑇 ′, 𝑟, 𝜅 ) 
+
+> 6
+
+return T
+
+C.2 Proof of Proposition 4.7 
+
+We start with the following lemma: 
+
+Lemma C.1. Given an acyclic hypergraph 𝐻 , if there exist two ears 𝑒 1, 𝑒 2 ∈ 𝐸 (𝐻 ) such that 𝑜 (𝑒 1, 𝐻 ) =
+
+𝑜 (𝑒 2, 𝐻 ), then 𝑜 (𝑒 1, 𝐻 ) = 𝑜 (𝑒 2, 𝐻 ) = 𝑒 1 ∩ 𝑒 2. 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:33
+
+Proof. (⊆): 𝑜 (𝑒 1, 𝐻 ) = 𝑒 1 ∩ (∪( 𝐸 (𝐻 ) \ { 𝑒 1 })) ⊆ 𝑒 1, and, similarly, 𝑜 (𝑒 2, 𝐻 ) ⊆ 𝑒 2. So it follows that 𝑜 (𝑒 1, 𝐻 ) = 𝑜 (𝑒 2, 𝐻 ) ⊆ 𝑒 1 ∩ 𝑒 2.(⊇): Since 𝑒 1 ∈ 𝐸 (𝐻 ) \ { 𝑒 2 }, we have 𝑜 (𝑒 1, 𝐻 ) = 𝑜 (𝑒 2, 𝐻 ) = 𝑒 2 ∩ (∪( 𝐸 (𝐻 ) \ { 𝑒 2 })) ⊇ 𝑒 1 ∩ 𝑒 2. □
+
+A hypergraph is acyclic if and only if it has a join tree, satisfying conditions (C 1)–(C 3). Since 𝑒 1
+
+and 𝑒 2 are ears in 𝐻 such that 𝑜 (𝑒 1, 𝐻 ) = 𝑜 (𝑒 2, 𝐻 ) ⊆ 𝑒 2, in the GYO algorithm for 𝐻 , 𝑒 1 can already be removed, with 𝑒 2 being its witness. Therefore, there exists a join tree 𝑇 of 𝐻 where there is a leaf node 𝑝 1 with 𝜆 (𝑝 1) = {𝑒 1 }, and its parent 𝑝 2 has 𝜆 (𝑝 2) = {𝑒 2 }. We construct a tree 𝑇 ′ that is exactly the same as 𝑇 except that 𝑝 1 and 𝑝 2 are merged into a single node 𝑚 with 𝜆 (𝑚 ) = {𝑜 (𝑒 1, 𝐻 )} 
+
+and 𝜒 (𝑚 ) = 𝑜 (𝑒 1, 𝐻 ), and we show that 𝑇 ′ is a valid join tree of 𝐻 ′. (C 1) and (C 3) are satisfied by construction. It remains to show that 𝑇 ′ satisfies (C 2). Suppose by way of contradiction that this is not the case. By (C 2) on the join tree 𝑇 , this means, on 𝑇 ′, either (1) there exist 𝑠, 𝑡 ∈ 𝑉 (𝑇 ′) such that 𝑚 is on the path between 𝑠 and 𝑡 , and 𝜒 (𝑠 ) ∩ 𝜒 (𝑡 ) ⊈ 𝜒 (𝑚 ), or (2) there exists 𝑠 ∈ 𝑉 (𝑇 ′) and 𝑡 
+
+on the path between 𝑠 and 𝑚 , such that 𝜒 (𝑠 ) ∩ 𝜒 (𝑚 ) ⊈ 𝜒 (𝑡 ).For case (1), since, by Lemma C.1, 𝜒 (𝑚 ) = 𝑜 (𝑒 1, 𝐻 ) = 𝑒 1∩𝑒 2 = 𝜒 (𝑝 1)∩ 𝜒 (𝑝 2), if 𝜒 (𝑠 )∩ 𝜒 (𝑡 ) ⊈ 𝜒 (𝑚 ),this means either 𝜒 (𝑠 ) ∩ 𝜒 (𝑡 ) ⊈ 𝜒 (𝑝 1) or 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊈ 𝜒 (𝑝 2). On 𝑇 , since 𝑝 1 is a leaf node, 𝑝 2
+
+should be on the path between 𝑠 and 𝑡 . By (C 2) for 𝑇 , we have 𝜒 (𝑠 ) ∩ 𝜒 (𝑡 ) ⊆ 𝜒 (𝑝 2). So it can only be that 𝜒 (𝑠 ) ∩ 𝜒 (𝑡 ) ⊈ 𝜒 (𝑝 1), i.e., there exists some 𝑣 ∈ 𝜒 (𝑠 ) ∩ 𝜒 (𝑡 ) ⊆ 𝜒 (𝑝 2) such that 𝑣 ∉ 𝜒 (𝑝 1).But then, 𝑣 ∈ 𝑜 (𝑒 2, 𝐻 ) but 𝑣 ∉ 𝑜 (𝑒 1, 𝐻 ), contradicting 𝑜 (𝑒 1, 𝐻 ) = 𝑜 (𝑒 2, 𝐻 ).For case (2), we first note that 𝜒 (𝑠 ) ∩ 𝑜 (𝑒 1, 𝐻 ) = 𝜒 (𝑠 ) ∩ 𝑒 1. This is because ( ⊆) 𝑜 (𝑒 1, 𝐻 ) =
+
+𝑒 1 ∩ (∪( 𝐸 (𝐻 ) \{ 𝑒 1 })) ⊆ 𝑒 1, and ( ⊇) 𝜒 (𝑠 ) ∩ 𝑒 1 ⊆ (∪( 𝐸 (𝐻 ) \{ 𝑒 1 })) ∩ 𝑒 1 = 𝑜 (𝑒 1, 𝐻 ). Then, 𝜒 (𝑠 ) ∩ 𝜒 (𝑚 ) =
+
+𝜒 (𝑠 ) ∩ 𝑜 (𝑒 1, 𝐻 ) = 𝜒 (𝑠 ) ∩ 𝑒 1 = 𝜒 (𝑠 ) ∩ 𝜒 (𝑝 1). So, 𝜒 (𝑠 ) ∩ 𝜒 (𝑝 1) = 𝜒 (𝑠 ) ∩ 𝜒 (𝑚 ) ⊈ 𝜒 (𝑝 2). Since 𝑝 1 is a leaf and 𝑝 2 is the parent of 𝑝 1 in 𝑇 , 𝑝 2 must be on the path between 𝑠 and 𝑝 1, so this contradicts (C 2) for 𝑇 .
+
+C.3 Proof of Theorem 4.8 
+
+We start by considering the while-loop (Line 3). At the start of each iteration, an ear must exist because the hypergraph 𝐻 ′ must be acyclic, as guaranteed by Proposition 4.7. Furthermore, 𝐸 (𝐻 ′)
+
+always decreases in size by at least 1 in each iteration, because we only remove ears from 𝐸 (𝐻 ′),except when we have mutually reducible ears, in which case we remove all (at least 2) those ears sharing the same intersection but add only one special hyperedge 𝑒 𝑚 to 𝐸 (𝐻 ′). Therefore, the body of the while loop is executed at most |𝐸 (𝐻 )| times. For each iteration of the while-loop, all sets 𝑆 (Line 4) can be enumerated in 𝑂 (| 𝐸 (𝐻 ′)|) , if we maintain two hash maps: (1) 𝑇 1, which maps each 𝑜 ⊆ 𝑉 (𝐻 ′) to all hyperedges 𝑒 ∈ 𝐸 (𝐻 ′) such that 
+
+𝑜 (𝑒, 𝐻 ′) = 𝑜 , and (2) 𝑇 2, which maps each 𝑣 ∈ 𝑉 (𝐻 ′) to the number of hyperedges 𝑒 ∈ 𝐸 (𝐻 ′) such that 𝑣 ∈ 𝑒 . Each time a hyperedge 𝑒 is added or removed from 𝐸 (𝐻 ′), we update 𝑇 2 for each 𝑣 ∈ 𝑒 ,and then update 𝑇 1 if some 𝑣 ∈ 𝑒 is/was covered by exactly one hyperedge. These updates can be done in 𝑂 (| 𝐸 (𝐻 ′)|) , which is 𝑂 (| 𝐸 (𝐻 )|) .With these observations, the runtime 𝑂 (| 𝐸 (𝐻 )| 3) can be obtained by following the control flow. 
+
+C.4 Proof of Theorem 4.9 
+
+We show that 𝑀 output by the algorithm satisfies (C 1)–(C 5). 
+
+(C 1). For each 𝑒 ∈ 𝐸 (𝐻 ), the algorithm has to remove 𝑒 from 𝐸 (𝐻 ′) on Line 7 or Line 12 before it terminates. In any of these cases, the algorithm will create a node 𝑝 in 𝑀 with 𝜆 (𝑝 ) = {𝑒 }, on Line 6 or Line 11. Before proceeding with (C 2), we have the following lemmas: 
+
+Lemma C.2. For each edge (𝑞, 𝑝 ) ∈ 𝐸 (𝑀 ), where 𝜒 (𝑝 ) = {𝑒 𝑝 } and 𝜒 (𝑞 ) = {𝑒 𝑞 }, we have either  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:34 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+(1) 𝑒 𝑝 is removed as ear by the algorithm before 𝑒 𝑞 is, or 
+
+(2) 𝜆 (𝑞 ) = ∅ and 𝜅 (𝑞 ) = 𝜒 (𝑞 )
+
+Additionally, 𝜅 (𝑝 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ).
+
+Proof. We first have 𝜅 (𝑝 ) ⊆ 𝜒 (𝑝 ) by definition on Lines 6, 11, and 14. Since the algorithm adds the edge (𝑞, 𝑝 ), by Lines 17 and 20, we have 𝜅 (𝑝 ) ⊆ 𝜒 (𝑞 ). Therefore, 𝜅 (𝑝 ) ⊆ 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ).We then consider the relative order in which 𝑒 𝑝 and 𝑒 𝑞 are removed from 𝐸 (𝐻 ′) in the algorithm. (1) If 𝑒 𝑝 is removed before 𝑒 𝑞 is, then at the time 𝑒 𝑝 is removed, 𝑒 𝑞 ∈ 𝐸 (𝐻 ′), and therefore 
+
+𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) = 𝑒 𝑝 ∩ 𝑒 𝑞 ⊆ 𝑒 𝑝 ∩ (∪( 𝐸 (𝐻 ′) \ { 𝑒 𝑝 })) = 𝜅 (𝑝 ). Since also 𝜅 (𝑝 ) ⊆ 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ), we have 
+
+𝜅 (𝑝 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ).(2) If 𝑒 𝑝 is removed after 𝑒 𝑞 is, then, symmetric to case (1), we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜅 (𝑞 ). Then, since we have shown that 𝜅 (𝑝 ) ⊆ 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ), we have 𝜅 (𝑝 ) ⊆ 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜅 (𝑞 ). By Line 17 and Line 20, this is only possible if 𝜆 (𝑞 ) = ∅ and 𝜅 (𝑝 ) = 𝜒 (𝑞 ). Since 𝜅 (𝑝 ) ⊆ 𝜒 (𝑝 ) and 𝜅 (𝑝 ) = 𝜒 (𝑞 ),it is true that 𝜅 (𝑝 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ). □
+
+It follows that 
+
+Corollary C.3. 𝑝 is a descendant of 𝑞 on 𝑀 if and only if 𝑒 𝑝 is removed as ear by the algorithm before 𝑒 𝑞 is. (C 2). The algorithm iteratively adds edges (𝑞, 𝑝 ) to attach a connected subtree 𝑀 𝑝 rooted at 𝑝 to a connected subtree 𝑀 𝑞 that contains 𝑞 . Suppose by way of contradiction that (C 2) is violated at the end, and suppose it is when processing 𝑝 ∈ 𝑉 (𝑀 ), that the addition of edge (𝑞, 𝑝 ) violates this condition for the first time. Namely, 𝑀 𝑝 and 𝑀 𝑞 each satisfies (C 2), but the resulting 𝑀 violates (C 2), i.e., for some 𝑠, 𝑡 ∈ 𝑉 (𝑀 ), there exists 𝑢 on the path betwween 𝑠 and 𝑡 such that 𝜒 (𝑠 ) ∩ 𝜒 (𝑡 ) ⊈ 𝜒 (𝑢 ).Without loss of generality, we take the shortest possible path from 𝑠 to 𝑡 where the condition is violated, where 𝑢 is the node immediately before 𝑡 on the path. Then, 𝜅 (𝑡 ) = 𝜒 (𝑡 ) ∩ 𝜒 (𝑢 ).Since 𝑀 𝑝 and 𝑀 𝑞 each satisfies (C 2), the only way it can be violated is if 𝑠 ∈ 𝑉 (𝑀 𝑝 ), i.e., 𝑠 is a descendent of 𝑝 , 𝑡 ∈ 𝑀 𝑞 , and thus 𝑝 and 𝑞 are on the path between 𝑠 and 𝑡 . For the purpose of the proof, we think of the subtree 𝑀 𝑝 as being added to the subtree 𝑀 𝑞 one node at a time, in a top-down order, starting from the root 𝑝 . We then show that each time a node is added, the connectedness condition is preserved. Let 𝜆 (𝑝 ) = {𝑒 𝑝 } and 𝜆 (𝑡 ) = {𝑒 𝑡 }.As the base case, when 𝑝 is added as a child of 𝑞 , we consider two cases on the relative order in which 𝑒 𝑝 and 𝑒 𝑡 are removed from 𝐸 (𝐻 ′) by the algorithm. (1) If 𝑒 𝑝 is removed as the ear by the algorithm before 𝑒 𝑡 is, then 𝜒 (𝑝 ) ∩ 𝜒 (𝑡 ) = 𝑒 𝑝 ∩ 𝑒 𝑡 ⊆
+
+𝜅 (𝑝 ) ⊆ 𝜒 (𝑞 ). And, for all 𝑢 between 𝑞 and 𝑡 on the path between 𝑝 and 𝑡 , we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑡 ) =
+
+𝜒 (𝑝 ) ∩ 𝜒 (𝑡 ) ∩ 𝜒 (𝑡 ) ⊆ 𝜒 (𝑞 ) ∩ 𝜒 (𝑡 ) ⊆ 𝜒 (𝑢 ), by the connectedness condition on 𝑀 𝑞 .(2) If 𝑒 𝑡 is removed as the ear by the algorithm before 𝑒 𝑝 is, then 𝜒 (𝑝 ) ∩ 𝜒 (𝑡 ) = 𝑒 𝑝 ∩ 𝑒 𝑡 ⊆ 𝜅 (𝑡 ).By Corollary C.3, 𝑡 is a descendant of 𝑞 , and so the parent 𝑢 of 𝑡 is on the path between 𝑝 and 𝑡 .Then, 𝜒 (𝑝 ) ∩ 𝜒 (𝑡 ) ⊆ 𝜅 (𝑡 ) = 𝜒 (𝑡 ) ∩ 𝜒 (𝑢 ) ⊆ 𝜒 (𝑢 )
+
+As the induction step, assuming that the condition holds for the connected subtree with nodes in 
+
+𝑀 𝑞 and all 𝑝 ′ that are added before 𝑠 . Following a similar argument as for the base case, substituting 
+
+𝑞 with the parent of 𝑠 , we can also derive that 𝜒 (𝑠 ) ∩ 𝜒 (𝑡 ) ⊆ 𝜒 (𝑢 ) for all 𝑢 .
+
+(C ′
+
+> 3
+
+). This is guaranteed by construction on Lines 6, 11, and 14. 
+
+(C 4)(a). By Lemma C.2, for each 𝑝 ∈ 𝑉 (𝑀 ) and its parent 𝑞 , we have 𝜅 (𝑝 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ). ( ⊆): 
+
+𝜅 (𝑝 ) = 𝜒 (𝑝 )∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑞 ). ( ⊇): For all 𝑠 ∈ 𝑉 (𝑀 )\ 𝑉 (𝑀 𝑝 ), since 𝑞 is the parent of 𝑝 , 𝑞 has to be on the path between 𝑝 and 𝑠 . Then, by the connectedness condition (C 2) on 𝑀 , we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑠 ) ⊆ 𝜒 (𝑞 ).Therefore, 𝜅 (𝑝 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊇ 𝜒 (𝑝 ) ∩ 
+
+Ð𝑠 ∈𝑉 (𝑀 )\ 𝑉 (𝑀 𝑝 ) 𝜒 (𝑠 )
+
+
+
+= 𝜒 (𝑝 ) ∩ 𝜒 (𝑉 (𝑀 ) \ 𝑉 (𝑀 𝑝 )) . 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:35
+
+(C 4)(b). This is guaranteed by Lines 17 and 20. 
+
+(C 5). Lines 4–8 and Lines 13–14 create such minor nodes when necessary. The condition when creating a minor node on Line 6, Line 11, and Line 14 ensures there are no duplicate minor nodes. 
+
+C.5 Proof of Theorem 4.10 
+
+Vertices 𝑉 (𝑀 ) of 𝑀 are either physical nodes or minor nodes. Let 𝑉 𝑃 (𝑀 ) be the set of physical nodes and 𝑉 𝑀 (𝑀 ) be the set of minor nodes, such that 𝑉 (𝑀 ) = 𝑉 𝑃 (𝑀 ) ∪ 𝑉 𝑀 (𝑀 ). Each time we create a physical node 𝑝 with 𝜆 (𝑝 ) = {𝑒 } (Lines 6 and 11), we remove 𝑒 from 𝐸 (𝐻 ′) (Lines 7 and 12). So there are at most |𝐸 (𝐻 )| physical nodes, i.e., |𝑉 𝑃 (𝑀 )| ≤ | 𝐸 (𝐻 )| . Now let us consider the number of minor nodes, |𝑉 𝑀 (𝑀 )| . Note that each minor node 𝑚 ∈ 𝑉 𝑀 (𝑀 ) must have at least two children (see Line 4 and Line 13), i.e., the fanout 𝑓 (𝑚 ) ≥ 2. Then, the total number of vertices 
+
+|𝑉 (𝑀 )| = |𝑉 𝑃 (𝑀 )| + | 𝑉 𝑀 (𝑀 )| = |𝐸 (𝑀 )| + 1
+
+= 1 +∑︁    
+
+> 𝑝 ∈𝑉 (𝑀 )
+
+𝑓 (𝑝 ) > 1 +∑︁    
+
+> 𝑚 ∈𝑉 𝑀 (𝑀 )
+
+𝑓 (𝑚 ) ≥ 1 +∑︁    
+
+> 𝑚 ∈𝑉 𝑀 (𝑀 )
+
+2 = 2|𝑉 𝑀 (𝑀 )| + 1.
+
+Then, |𝑉 𝑃 (𝑀 )| + | 𝑉 𝑀 (𝑀 )| > 2|𝑉 𝑀 (𝑀 )| + 1, so |𝑉 𝑀 (𝑀 )| < |𝑉 𝑃 (𝑀 )| − 1 = |𝐸 (𝐻 )| − 1. So, |𝑉 (𝑀 )| =
+
+|𝑉 𝑃 (𝑀 )| + | 𝑉 𝑀 (𝑀 )| < |𝐸 (𝐻 )| + | 𝐸 (𝐻 )| − 1 = 2|𝐸 (𝐻 )| − 1. And |𝐸 (𝑀 )| = |𝑉 (𝑀 )| − 1 ≤ 2|𝐸 (𝐻 )| − 2.
+
+C.6 Proof of Theorem 4.12 
+
+We prove by showing that all trees 𝑇 output by Algorithm 2 satisfy (C 1), (C 2), and (C 3). For (C 1), note that this condition must already hold for the meta-decomposition 𝑀 . In Algorithm 2, all physical nodes, for which 𝜆 (𝑟 ) ≠ ∅, will be kept in T , on Line 23. Minor nodes, for which 𝜆 (𝑟 ) = ∅,will no longer exist in the output. If 𝜅 (𝑟 ) ≠ 𝜒 (𝑟 ), trees in T𝑝 , and thus T , will not contain minor nodes (Line 10) but only nodes in the subtrees rooted at the children of 𝑟 (Lines 11–20). If 𝜅 (𝑟 ) = 𝜒 (𝑟 ),the minor node 𝑟 on Line 8 will eventually be removed and replaced by 𝑣 on Line 32. Therefore, the trees output by Algorithm 2 contain only physical nodes. (C 3) then follows, by (C ′
+
+> 3
+
+) for 𝑀 .It now remains to show (C 2), the connectedness condition. We prove by structural induction on vertices 𝑣 ∈ 𝑉 (𝑀 ), i.e., for each 𝑣 ∈ 𝑉 (𝑀 ), all trees 𝑇 returned by the function enumRec satisfy (C 2). In the base case, for all leaf nodes 𝑣 , 𝑣 has to be physical, and the function simply returns a tree with one single node, so these conditions hold. For non-leaf nodes 𝑣 , we assume as induction hypothesis that for all children 𝑐 of 𝑣 , all trees returned by the function call enumRec (𝑐 ) satisfy (C 2). And we now show that it remains satisfied throughout the operations in enumRec (𝑣 ).We start with the trees in T constructed on Lines 5–23. If 𝜆 (𝑣 ) ≠ ∅, this vacuously holds as there is only one tree with one vertex 𝑟 in T (Line 23). If 𝜆 (𝑣 ) = ∅, we will show that it still holds for all 𝑇 ′ 
+
+> 𝑐
+
+(constructed on Lines 11–20), assuming that it holds for 𝑇 𝑐 ∈ T 𝑐 from the previous iteration. It suffices to show that, for each (𝑇 𝑃 , 𝑐,𝑇 𝑐 , 𝑑,𝑇 𝑑 , 𝑢 ) processed in the loop, for all 𝑝 ∈ 𝑇 𝑐 and 𝑞 ∈ 𝑇 𝑑 , all 𝑠 on the path between 𝑝 and 𝑞 has 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑠 ). Let the root of 𝑇 𝑐 be 𝑟 𝑐 and the root of 𝑇 𝑑 be 𝑟 𝑑 . The path from 𝑝 to 𝑞 needs to go through 𝑢 then 𝑟 𝑑 . For 𝑠 
+
+on the path between 𝑝 and 𝑢 , we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑣 ) = 𝜅 (𝑑 ) ⊆ 𝜒 (𝑢 ). Since 𝑇 𝑐 satisfies (C 2), we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ ( 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 )) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑢 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑠 ). For 𝑠 on the path between 𝑟 𝑑 and 𝑞 , we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑣 ) = 𝜅 (𝑑 ) ⊆ 𝜒 (𝑟 𝑑 ). Since 𝑇 𝑑 satisfies (C 2), we have 
+
+𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ ( 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 )) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑟 𝑑 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑠 ).We now continue to show that lines Line 25–Line 39 preserve the condition (C 2) for all 𝑇 ∈ T ,by showing that the condition is preserved for all 𝑇 ′ ∈ T ′ after each child 𝑐 ∈ 𝑋 is processed, assuming that all the previous 𝑇 ∈ T satisfy (C 2). Let the root of 𝑇 𝑐 be 𝑟 𝑐 . By the connectedness condition on 𝑀 , we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑣 ), and 
+
+𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑐 ). Since 𝑐 is a child of 𝑣 , 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑣 ) ∩ 𝜒 (𝑐 ) = 𝜅 (𝑐 ). 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:36 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+(1) If 𝜆 (𝑐 ) ≠ ∅ or 𝜅 (𝑐 ) ≠ 𝜒 (𝑐 ), 𝑇 𝑐 is added directly as a child of 𝑢 on 𝑇 ′ (Line 37). For all 
+
+𝑝 ∈ 𝑉 (𝑇 ′) and 𝑞 ∈ 𝑉 (𝑇 𝑐 ), the path from 𝑝 to 𝑞 needs to go through 𝑢 then 𝑟 𝑐 . For 𝑠 on the path between 𝑝 and 𝑢 , we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜅 (𝑐 ) ⊆ 𝜒 (𝑢 ). Since 𝑇 ′ satisfies (C 2), we have 
+
+𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ (𝜒 (𝑝 ) ∩ 𝜒 (𝑞 )) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑢 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑠 ). For 𝑠 on the path between 𝑟 𝑐 
+
+and 𝑞 , we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜅 (𝑐 ) ⊆ 𝜒 (𝑟 𝑐 ). Since 𝑇 𝑐 satisfies (C 2), we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ (𝜒 (𝑝 ) ∩ 𝜒 (𝑞 )) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑟 𝑐 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑠 ).(2) If 𝜆 (𝑐 ) = ∅ and 𝜅 (𝑐 ) ≠ 𝜒 (𝑐 ), for each child 𝑑 of the root of 𝑇 𝑐 , we attach 𝑇 𝑑 as a child of 𝑢 . Let the root of 𝑇 𝑑 be 𝑟 𝑑 . Then, 𝜅 (𝑑 ) ⊆ 𝜒 (𝑟 𝑑 ) and 𝜅 (𝑑 ) ⊆ 𝜒 (𝑢 ). For all 𝑝 ∈ 𝑉 (𝑇 ′) and 𝑞 ∈ 𝑉 (𝑇 𝑑 ), the path from 
+
+𝑝 to 𝑞 needs to go through 𝑢 then 𝑟 𝑑 . For 𝑠 on the path between 𝑝 and 𝑢 , we have 𝜒 (𝑝 )∩ 𝜒 (𝑞 ) ⊆ 𝜅 (𝑐 ) =
+
+𝜅 (𝑑 ) ⊆ 𝜒 (𝑢 ). Since 𝑇 ′ satisfies (C 2), we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ ( 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 )) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑢 ) ∩ 𝜒 (𝑞 ) ⊆ 
+
+𝜒 (𝑠 ). For 𝑠 on the path between 𝑟 𝑐 and 𝑞 , we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜅 (𝑐 ) = 𝜅 (𝑑 ) ⊆ 𝜒 (𝑟 𝑑 ). Since 𝑇 𝑐 
+
+satisfies (C 2), we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ ( 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 )) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑟 𝑑 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑠 ).
+
+C.7 Proof of Theorem 4.13 
+
+We start from a few lemmas: 
+
+Lemma C.4. For any non-root node 𝑝 on a meta-decomposition 𝑀 with parent 𝑞 , 𝜅 (𝑝 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ).
+
+Proof. (⊇): Since 𝑞 ∈ 𝑉 (𝑀 ) \ 𝑉 (𝑀 𝑝 ), 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑝 ) ∩ 𝜒 (𝑉 (𝑀 ) \ 𝑉 (𝑀 𝑝 )) = 𝜅 (𝑝 ). (⊆): For any 𝑣 ∈ 𝜅 (𝑝 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑉 (𝑀 ) \ 𝑉 (𝑀 𝑝 )) , i.e., any 𝑣 ∈ 𝜒 (𝑝 ) ∩ 𝜒 (𝑠 ) for some 𝑠 ∈ 𝑉 (𝑀 ) \ 𝑉 (𝑀 𝑝 ),the parent 𝑞 of 𝑝 lies on the path on 𝑀 between 𝑝 and 𝑠 . Then, by the connectedness condition (C 2)for 𝑀 , 𝑣 ∈ 𝜒 (𝑞 ). □
+
+Lemma C.5. For all 𝑝 ∈ 𝑉 (𝑀 ) with 𝜆 (𝑝 ) = ∅ and 𝜅 (𝑝 ) = 𝜒 (𝑝 ), all children 𝑐 of 𝑝 satisfy 
+
+𝜅 (𝑐 ) = 𝜒 (𝑝 ).
+
+Proof. Suppose by way of contradiction that there exists such a 𝑝 ∈ 𝑉 (𝑇 ) with child 𝑐 such that 
+
+𝜅 (𝑐 ) ≠ 𝜒 (𝑝 ). By Lemma C.4, we have 𝜅 (𝑐 ) = 𝜒 (𝑐 ) ∩ 𝜒 (𝑝 ) ⊆ 𝜒 (𝑝 ). Since 𝜅 (𝑝 ) = 𝜒 (𝑝 ) ≠ ∅, 𝑝 is not the root of 𝑀 and thus has a parent 𝑞 . Again by Lemma C.4, we have 𝜅 (𝑝 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑞 ). But then, 𝜅 (𝑐 ) ⊆ 𝜒 (𝑝 ) = 𝜅 (𝑝 ) ⊆ 𝜒 (𝑞 ), contradicting (C 4)(b) since 𝜅 (𝑐 ) ≠ 𝜒 (𝑝 ) but 𝑞 ∈ 𝑉 (𝑇 ) \ 𝑉 (𝑇 𝑝 ). □
+
+Lemma C.6. Given a meta-decomposition 𝑀 , if some non-root node 𝑝 ∈ 𝑉 (𝑀 ) has 𝜆 (𝑝 ) = ∅ and 
+
+𝜅 (𝑝 ) = 𝜒 (𝑝 ), then its parent 𝑞 has either 𝜆 (𝑞 ) ≠ ∅ or 𝜅 (𝑞 ) ≠ 𝜒 (𝑞 ).
+
+Proof. Suppose by way of contradiction that, on a meta-decomposition 𝑀 , there is 𝑝 ∈ 𝑉 (𝑀 )
+
+such that 𝜆 (𝑝 ) = ∅ and 𝜅 (𝑝 ) = 𝜒 (𝑝 ), and its parent 𝑞 has 𝜆 (𝑞 ) = ∅ and 𝜅 (𝑞 ) = 𝜒 (𝑞 ). Then, 
+
+𝜅 (𝑝 ) ⊆ 𝜒 (𝑞 ) = 𝜅 (𝑞 ). Since 𝜅 (𝑞 ) = 𝜒 (𝑞 ) ≠ ∅, 𝑞 has a parent as well. Let the parent of 𝑞 be 𝑠 . Then, 
+
+𝜅 (𝑞 ) = 𝜒 (𝑞 ) ∩ 𝜒 (𝑠 ) ⊆ 𝜒 (𝑠 ). So, 𝜅 (𝑝 ) ⊆ 𝜅 (𝑞 ) ⊆ 𝜒 (𝑠 ). By (C 5), 𝜅 (𝑝 ) ≠ 𝜅 (𝑞 ) = 𝜒 (𝑞 ), contradicting (C 4)(b). □
+
+Lemma C.7. Given a meta-decomposition 𝑀 of an acyclic hypergraph 𝐻 , for all 𝑣 ∈ 𝑉 (𝑀 ),(1) if 𝜆 (𝑣 ) = ∅ and 𝜅 (𝑣 ) = 𝜒 (𝑣 ), then, for each join tree 𝑇 of 𝐻 , there exists some 𝑆 = {𝑝 ∈ 𝑉 (𝑀 ) | 
+
+𝜆 (𝑝 ) ≠ ∅, 𝜒 (𝑣 ) ⊆ 𝜒 (𝑝 )} such that the set 𝑉 𝑃 𝑣 = {𝑝 ∈ 𝑉 (𝑀 𝑣 ) | 𝜆 (𝑝 ) ≠ ∅} ∪ 𝑆 induces a connected subtree 𝑇 𝑣 of 𝑇 ;(2) if 𝜆 (𝑣 ) ≠ ∅ or 𝜅 (𝑣 ) ≠ 𝜒 (𝑣 ), then, for each join tree 𝑇 of 𝐻 , the set 𝑉 𝑃 𝑣 = {𝑝 ∈ 𝑉 (𝑀 𝑣 ) | 𝜆 (𝑝 ) ≠ ∅} ,i.e., physical nodes on the subtree 𝑀 𝑣 rooted at 𝑣 , induces a connected subtree 𝑇 𝑣 of 𝑇 .
+
+Proof. We prove by structural induction on 𝑀 . In the base case, for leaf nodes 𝑣 ∈ 𝑉 (𝑀 ), there is only one node on the subtree 𝑀 𝑣 , so the statement is vacuously true. For non-leaf nodes 𝑣 ∈ 𝑉 (𝑀 ),we assume as induction hypothesis that the statement is true for all children 𝑐 of 𝑣 . Let 𝑐 and 𝑑 be the children of 𝑣 such that 𝑝 ∈ 𝑉 (𝑀 𝑐 ) and 𝑞 ∈ 𝑉 (𝑀 𝑑 ). We now consider two cases of 𝑣 . 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:37
+
+(1) If 𝜆 (𝑣 ) = ∅ and 𝜅 (𝑣 ) = 𝜒 (𝑣 ), then, for any 𝑠 on the path between 𝑝 and 𝑞 on 𝑇 such that 
+
+𝑠 ∉ 𝑀 𝑣 , we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑠 ) by the connectedness condition on 𝑇 . By (the contrapositive of) Lemma C.6, 𝜆 (𝑐 ) ≠ ∅ or 𝜅 (𝑐 ) ≠ 𝜒 (𝑐 ), so by the inductive hypothesis, 𝑉 𝑃 𝑐 induces a connected subtree 𝑇 𝑐 of 𝑇 . Similarly, 𝑉 𝑃 𝑑 induces a connected subtree 𝑇 𝑑 of 𝑇 . If 𝑐 = 𝑑 , then 𝑝 and 𝑞 are in the same subtree rooted at the same child of 𝑣 , and the statement would hold. If 𝑐 ≠ 𝑑 , on the path from 
+
+𝑝 to 𝑞 on 𝑇 , let the last node on 𝑇 𝑐 be 𝑥 and the first node on 𝑇 𝑑 be 𝑦 . 𝑠 is between 𝑥 and 𝑦 . Then, the path from 𝑐 and 𝑑 has to go through 𝑥 and 𝑦 , and hence also 𝑠 . Therefore, 𝜒 (𝑐 ) ∩ 𝜒 (𝑑 ) ⊆ 𝜒 (𝑠 ).By Lemma C.5, in this case, 𝜅 (𝑣 ) = 𝜅 (𝑐 ) = 𝜅 (𝑑 ) = 𝜒 (𝑐 ) ∩ 𝜒 (𝑑 ) ⊆ 𝜒 (𝑠 ).(2) If 𝜆 (𝑣 ) ≠ ∅ or 𝜅 (𝑣 ) ≠ 𝜒 (𝑣 ), we would like to show that for any 𝑠 on the path between 𝑝 and 𝑞 
+
+on 𝑇 , 𝑠 ∈ 𝑉 (𝑀 𝑣 ). Suppose by way of contradiction that this is not the case, i.e., there exists some 𝑠 
+
+on the path between 𝑝 and 𝑞 on 𝑇 , but 𝑠 ∈ 𝑉 (𝑀 ) \ 𝑉 (𝑀 𝑣 ). By the connectedness condition on 𝑇 ,we have 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑠 ). Furthermore, on 𝑀 , 𝜒 (𝑝 ) ∩ 𝜒 (𝑠 ) ⊆ 𝜒 (𝑣 ) and 𝜒 (𝑞 ) ∩ 𝜒 (𝑠 ) ⊆ 𝜒 (𝑣 ), so 
+
+𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ∩ 𝜒 (𝑠 ) ⊆ 𝜒 (𝑣 ). Let the parent of 𝑝 on 𝑀 be 𝑡 . Then, 𝜒 (𝑡 ) ∩ 𝜒 (𝑠 ) ⊆ 𝜒 (𝑣 ).Then, 𝜅 (𝑝 ) = 𝜅 (𝑝 ) ∩ 𝜒 (𝑠 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑡 ) ∩ 𝜒 (𝑠 ) = (𝜒 (𝑝 ) ∩ 𝜒 (𝑠 )) ∩ ( 𝜒 (𝑡 ) ∩ 𝜒 (𝑠 )) ⊆ 𝜒 (𝑣 ) ∩ 𝜒 (𝑣 ) = 𝜒 (𝑣 ).But, by (C 4), this means either 𝑡 = 𝑣 or 𝑡 is a minor node with 𝜅 (𝑡 ) = 𝜒 (𝑡 ). In either case, we have 
+
+𝜒 (𝑡 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑣 ), because (i) if 𝑡 = 𝑣 , 𝜒 (𝑡 ) ∩ 𝜒 (𝑞 ) = 𝜒 (𝑣 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑣 ), and (ii) if 𝑡 is a minor node with 𝜅 (𝑡 ) = 𝜒 (𝑡 ), then 𝜒 (𝑡 ) ∩ 𝜒 (𝑞 ) = 𝜅 (𝑡 ) ∩ 𝜒 (𝑞 ) = 𝜅 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) ⊆ 𝜒 (𝑣 ). Also, we have 𝜅 (𝑡 ) = 𝜒 (𝑝 ) ∩ 𝜒 (𝑡 ) ⊆ 𝜒 (𝑞 ), because either 𝑡 is on the path between 𝑝 and 𝑞 , or 𝑝 is on the path between 𝑡 and 𝑞 . Let the parent of 𝑣 be 𝑢 . Then, we have 𝜅 (𝑡 ) = 𝜅 (𝑡 ) ∩ 𝜒 (𝑞 ) = 𝜒 (𝑡 ) ∩ 𝜒 (𝑞 ) =
+
+(𝜒 (𝑡 ) ∩ 𝜒 (𝑞 )) ∩ ( 𝜅 (𝑝 ) ∩ 𝜒 (𝑞 )) ⊆ ( 𝜒 (𝑡 ) ∩ 𝜒 (𝑞 )) ∩ ( 𝜒 (𝑝 ) ∩ 𝜒 (𝑞 )) ⊆ 𝜒 (𝑣 ) ∩ 𝜒 (𝑠 ) ⊆ 𝜒 (𝑢 ). But, since it cannot be that 𝜅 (𝑣 ) = 𝜒 (𝑣 ) in this case, this violates (C 4), contradiction. □
+
+Lemma C.8. Given a meta-decomposition 𝑀 of hypergraph 𝐻 , for all 𝑣 ∈ 𝑉 (𝑀 ), let 𝑉 𝑃 𝑣 = {𝑝 ∈
+
+𝑉 (𝑀 𝑣 ) | 𝜆 (𝑝 ) ≠ ∅} . Then, (1) if 𝜆 (𝑣 ) = ∅ and 𝜅 (𝑣 ) = 𝜒 (𝑣 ), then Algorithm 2 enumerates all join trees of the hypergraph 𝐻 𝑣 with 
+
+𝐸 (𝐻 𝑣 ) = 𝜆 (𝑉 𝑃 𝑣 ) ∪ { 𝜒 (𝑣 )} and 𝑉 (𝐻 𝑣 ) = ∪𝐸 (𝐻 𝑣 );(2) if 𝜆 (𝑣 ) ≠ ∅ or 𝜅 (𝑣 ) ≠ 𝜒 (𝑣 ), then Algorithm 2 enumerates all join trees of the hypergrpah 𝐻 𝑣 with 
+
+𝐸 (𝐻 𝑣 ) = 𝜆 (𝑉 𝑃 𝑣 ) and 𝑉 (𝐻 𝑣 ) = ∪𝐸 (𝐻 𝑣 ).
+
+Proof. We will show that each join tree 𝑇 of 𝐻 can be enumerated by the algorithm based on the meta-decomposition 𝑀 of 𝐻 . We prove by structural induction on vertices 𝑣 ∈ 𝑉 (𝑀 ). If 𝑣 is a leaf node, there is only one node in the subtree 𝑀 𝑣 , so this statement is vacuously true. If 𝑣 is a non-leaf node, consider the following cases. (1) If 𝜆 (𝑣 ) = ∅ and 𝜅 (𝑣 ) = 𝜒 (𝑣 ), by Lemma C.6, all children 𝑐 of 𝑣 have either 𝜆 (𝑐 ) ≠ ∅ or 
+
+𝜅 (𝑐 ) ≠ 𝜒 (𝑐 ), so, by the induction hypothesis, Algorithm 2 enumerates all join trees of hypergraph 
+
+𝐻 𝑐 with 𝐸 (𝐻 𝑐 ) = Ð𝑝 ∈𝑉 𝑃 𝑐 𝜆 (𝑝 ) and 𝑉 (𝐻 𝑐 ) = Ð𝑒 ∈𝐸 (𝐻 𝑐 ) 𝑒 . Also, note that it is possible to obtain a meta-decomposition 𝑀 ′ 
+
+> 𝑣
+
+of the hypergraph 𝐻 𝑣 from 𝑀 𝑣 by simply replacing 𝑣 by a physical node 𝑣 ′
+
+with 𝜆 (𝑣 ′) = {𝜒 (𝑣 )} , 𝜒 (𝑣 ′) = 𝜒 (𝑣 ), and 𝜅 (𝑣 ′) = ∅. By Lemma C.7, for each child 𝑐 of 𝑣 , on any join tree 𝑇 𝑐 of hypergraph 𝐻 𝑐 , 𝑉 𝑃 𝑐 induces a connected subtree 𝑇 𝑐 of 𝑇 . Furthermore, 𝑇 𝑐 is a join tree of the meta-decomposition 𝑀 𝑐 , and can hence be enumerated on Line 4. So it remains to show that the algorithm enumerates all possible ways to combine these subtrees along with 𝑣 . For each possible join tree 𝑇 𝑣 of 𝐻 𝑣 , without loss of generality, assume that 𝑇 𝑣 is rooted at 𝑣 ′. 𝑇 𝑣 can be constructed from the algorithm as follows. We first construct a tree 𝑇 𝑃 , by a top-down traversal of 𝑇 𝑣 , where, for each node 𝑝 , if (i) 𝜒 (𝑣 ) ⊆ 𝜒 (𝑝 ), (ii) 𝑝 ∈ 𝑀 𝑐 , i.e., in the subtree 𝑀 𝑐 rooted at some child 𝑐 of 𝑣 , and (iii) its parent 𝑞 is in a different subtree 𝑀 𝑑 rooted at some child 𝑑 ≠ 𝑐 of 𝑣 , then we add an edge from 𝑑 to 𝑐 . If 𝑝 = 𝑣 , and its parent 𝑞 ∈ 𝑉 (𝑀 𝑑 ) for some child 𝑑 of 𝑣 , we add an edge from 𝑑 to 𝑣 . If 
+
+𝑝 ∈ 𝑉 (𝑀 𝑐 ) for some child 𝑐 of 𝑣 , and its parent 𝑞 = 𝑣 , we add an edge from 𝑣 to 𝑐 . Note that, for all pairs of 𝑐 and 𝑑 where we add edges, 𝜅 (𝑐 ) = 𝜅 (𝑑 ) = 𝜒 (𝑣 ). Now, this tree 𝑇 𝑃 is a spanning tree of  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:38 Zhekai Jiang, Qichen Wang, and Christoph Koch
+
+the clique with vertices 𝐶 ∪ { 𝑣 }, where 𝐶 is the set of all children of 𝑣 , so it can be enumerated by the Prüfer sequence on Line 8. For each child 𝑐 of 𝑣 , by Lemma C.7, 𝑉 𝑃 𝑐 induces a connected subtree 
+
+𝑇 𝑐 of 𝑇 𝑣 . We traverse the vertices 𝑐 ∈ 𝑉 (𝑇 𝑃 ) in bottom-up order. For each 𝑐 and each child 𝑑 of 𝑐 on 
+
+𝑇 𝑃 , let 𝑟 𝑑 be the root of the connected subtrees 𝑇 𝑑 of 𝑇 𝑣 induced by 𝑉 𝑃 𝑑 , and 𝑢 be the parent of 𝑟 𝑑 on 
+
+𝑇 𝑣 . The algorithm will be able to reroot 𝑇 𝑑 to 𝑟 𝑑 , find 𝑢 (since 𝜅 (𝑑 ) = 𝜅 (𝑣 ) = 𝜒 (𝑣 ) = 𝜒 (𝑐 ) ⊆ 𝜒 (𝑢 )), and attach 𝑇 𝑑 as a child of 𝑢 . Finally, by Lemma C.5, in this case, 𝑆 = 𝐶 and 𝑋 = ∅, so the second part will not be executed at all. (2) If 𝜆 (𝑣 ) = ∅ and 𝜅 (𝑣 ) ≠ 𝜒 (𝑣 ), starting from Lines 11–20, note that it is not possible to have a child 𝑐 ∈ 𝐶 such that 𝜅 (𝑐 ) = 𝜒 (𝑐 ), because if that is the case, 𝜅 (𝑐 ) = 𝜒 (𝑐 ) = 𝜒 (𝑣 ), violating the uniqueness condition (C 5). Therefore, for all 𝑐 ∈ 𝐶 , we have 𝜆 (𝑐 ) ≠ ∅ or 𝜆 (𝑐 ) ≠ 𝜒 (𝑐 ). Furthermore, we claim that the vertices 𝑉 𝑃 𝐶 = Ð𝑐 ∈𝐶 𝑉 𝑃 𝑐 induces a connected subtree 𝑇 𝐶 on any join tree 𝑇 𝑣 of 
+
+𝑀 𝑣 . This is because, if this is not the case, i.e., if there is some 𝑠 on the path between some 𝑝 ∈ 𝑉 𝑃 𝑐 
+
+and 𝑞 ∈ 𝑉 𝑃 𝑑 , where 𝑐 and 𝑑 are children of 𝑣 with 𝜅 (𝑐 ) = 𝜅 (𝑑 ) = 𝜒 (𝑣 ), such that 𝜅 (𝑠 ) ⊊ 𝜒 (𝑣 ), then 
+
+𝜒 (𝑝 ) ∩ 𝜒 (𝑞 ) = 𝜒 (𝑣 ) ⊈ 𝜅 (𝑠 ), violating the connectedness condition (C 2). Therefore, we can follow the same method as in case (1) to construct 𝑇 𝑃 with vertices 𝐶 and show that, at the end of this part, it is possible to obtain a partial join tree 𝑇 with vertices in 𝑉 𝑃 𝐶 .Now consider all children 𝑐 ∈ 𝑋 = {𝑐 ∈ 𝐶 | 𝜅 (𝑐 ) ⊊ 𝜒 (𝑣 )} .(i) If 𝜆 (𝑐 ) = ∅ and 𝜅 (𝑐 ) = 𝜒 (𝑐 ), by Lemma C.6, all children 𝑑 of 𝑐 has either 𝜆 (𝑑 ) ≠ ∅ or 
+
+𝜅 (𝑑 ) ≠ 𝜒 (𝑑 ), so, by Lemma C.7, 𝑉 𝑃 𝑑 induces a connected subtree in any join tree. We build a tree 
+
+𝑇 𝑐 by (a) collecting all maximal connected subtrees of the join tree with nodes 𝑝 ∈ 𝑉 𝑃 𝑐 and (b) adding a common parent 𝑐 as the root node. This is a valid join tree of the hypergraph 𝐻 𝑐 with 
+
+𝐸 (𝐻 𝑐 ) =
+
+Ð𝑝 ∈𝑉 𝑃 𝑐 𝜆 (𝑝 )
+
+
+
+∪ { 𝜒 (𝑐 )} and 𝑉 (𝐻 𝑐 ) = Ð𝑒 ∈𝐸 (𝐻 𝑐 ) 𝑒 , and, by our inductive hypothesis, can be enumerated. For each child 𝑑 of 𝑐 on 𝑇 𝑐 , let the parent of 𝑑 on 𝑇 be 𝑢 . The algorithm will be able to find such 𝑢 to attach 𝑇 𝑑 , because 𝜅 (𝑑 ) = 𝜒 (𝑑 ) ∩ 𝜒 (𝑐 ) ⊆ 𝜒 (𝑢 ), by the connectedness condition on 𝑇 .(ii) If 𝜆 (𝑐 ) ≠ ∅ or 𝜅 (𝑐 ) ≠ 𝜒 (𝑐 ), similarly to case (i), by Lemma C.7, 𝑉 𝑃 𝑐 induces a connected subtree on 𝑇 , which, by our inductive hypothesis, can be enumerated. Then, the algorithm will be able to find such 𝑢 to attach 𝑇 𝑐 , because 𝜅 (𝑐 ) = 𝜒 (𝑐 ) ∩ 𝜒 (𝑣 ) ⊆ 𝜒 (𝑢 ), by the connectedness condition on 𝑇 .(3) If 𝜆 (𝑣 ) ≠ ∅, we can follow a similar argument for the children 𝑐 ∈ 𝑋 in case (2). □
+
+Finally, based on Lemma C.8, taking 𝑣 = 𝑟 , the root of 𝑀 (for which 𝜅 (𝑟 ) = ∅ ≠ 𝜒 (𝑟 )), we finish the proof of completeness for the algorithm. 
+
+D OMITTED DETAILS IN ?? 
+
+D.1 Supporting Re-branching for Algorithm 3 
+
+For each node 𝑝 , if there exists a subtree 𝑇 𝑞 that can be attached as a child of 𝑝 , we simply use an additional bit in the DP table ( plan ) to indicate whether 𝑇 𝑞 is included. And we call optimizeLocal 
+
+with or without the relations in 𝑇 𝑞 accordingly. We note again that this is a very rare possibility in practical queries. 
+
+D.2 Greedy Algorithm for Local Join Ordering 
+
+The implementation of local join ordering using a greedy algorithm is as shown in Algorithm 8.  
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:39
+
+Algorithm 8: Greedy implementation of optimizeLocal 
+
+input : Node 𝑞 on meta representation, a set of query plans P
+
+output : A query plan that joins the relation in 𝑞 with all query plans in P 
+
+> 1
+
+if 𝑞 is a minor node then // 𝜆 (𝑞 ) = ∅, there is no relation in 𝑞  
+
+> 2
+
+𝑃 ← remove 𝑃 1 from P with the minimum result cardinality  
+
+> 3
+
+else  
+
+> 4
+
+𝑃 ← the relation in 𝜆 (𝑞 ) 
+
+> 5
+
+while P ≠ ∅ do  
+
+> 6
+
+𝑃 𝑖 ← remove 𝑃 𝑖 from P that minimizes the cost to join 𝑃 with 𝑃 𝑖  
+
+> 7
+
+𝑃 ← the plan 𝑃 𝑖 ⊲⊳ 𝑃  
+
+> 8
+
+return 𝑃 
+
+E OMITTED DETAILS IN ?? 
+
+E.1 Overall Evaluation Time Using metaDecomp vs Other Methods on Each Benchmark 
+
+E.1.1 metaDecomp versus DPconv. 
+
+Histograms of speedups. Fig. 14 shows histograms of the speedups of the overall query execution time using metaDecomp over using DPconv for queries in each of the four benchmarks. In DSB, JOB, and Musicbrainz, most of the queries show a speedup close to 1. In JOBLarge, however, we observe a large number of significant speedups by multiple orders of magnitude, mostly due to the high optimization time of DPconv for the large query sizes in this benchmark. 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+> Speedup
+> 0%
+> 20%
+> 40%
+> Frequency
+
+(a) DSB 0 0.5 1 1.5 2 10 1 10 3 10 5 
+
+> Speedup
+> 0%
+> 10%
+> 20%
+> Frequency
+
+(b) JOB 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+> Speedup
+> 0%
+> 10%
+> 20%
+> Frequency
+
+(c) Musicbrainz 0 0.5 1 1.5 2 10 1 10 3 10 5 
+
+> Speedup
+> 0%
+> 20%
+> Frequency
+
+(d) JOBLarge Fig. 14. Histograms of speedups of overall evaluation time of metaDecomp over DPconv on each benchmark 
+
+Scatter plots. Fig. 15 shows scatter plots of the overall evaluation time using metaDecomp and DPconv, measured for queries in each of the four benchmarks. The trends that can be observed in each of the four benchmarks and the overall figure (Section 6.2.4) are mostly consistent. The two approaches have similar performance for queries that takes DPconv less than 1 second ( 10 3 ms ). For those taking DPconv more than 1 second, metaDecomp starts to show significant speedups. Notably, for complex queries in Musicbrainz (Fig. 15c) and JOBLarge (Fig. 15d) for which DPconv times out (taking more than 5 minutes), metaDecomp can evaluate them within merely 1 second. 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026.
+
+240:40 Zhekai Jiang, Qichen Wang, and Christoph Koch 10 1 10 2
+
+> DPconv (ms)
+> 10 1
+> 10 2
+> metaDecomp (ms)
+
+(a) DSB 10 1 10 2 
+
+> DPconv (ms)
+> 10 1
+> 10 2
+> metaDecomp (ms)
+
+(b) JOB 10 1 10 3 10 5 
+
+> DPconv (ms)
+> 10 1
+> 10 3
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(c) Musicbrainz 10 3 10 5 
+
+> DPconv (ms)
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(d) JOBLarge Fig. 15. Scatter plots of overall evaluation time of using metaDecomp versus DPconv on each benchmark 
+
+E.1.2 metaDecomp versus DuckDB. 
+
+Histograms of speedups. Fig. 16 shows histograms of speedups of the overall evaluation time using metaDecomp over DuckDB for queries in each benchmark. Most of the queries show a speedup close to 1, with some notable speedups especially for larger queries in the Musicbrainz benchmark. 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+Speedup 
+
+0% 
+
+10% 
+
+20% 
+
+> Frequency
+
+(a) DSB 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+Speedup 
+
+0% 
+
+10% 
+
+20%  
+
+> Frequency
+
+(b) JOB 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+Speedup 
+
+0% 
+
+20% 
+
+> Frequency
+
+(c) Musicbrainz 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+Speedup 
+
+0% 
+
+5% 
+
+10%  
+
+> Frequency
+
+(d) JOBLarge Fig. 16. Histograms of speedups of overall evaluation time of metaDecomp over DuckDB on each benchmark 
+
+Scatter plots. Fig. 17 shows the detailed breakdown of overall query evaluation time using metaDecomp and using DuckDB measured for queries in each of the four benchmarks. With the exception of JOBLarge, all approaches have similar performance for queries that takes DuckDB less 10 1 10 3 10 5
+
+> DuckDB (ms)
+> 10 1
+> 10 3
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(a) DSB 10 1 10 2 
+
+> DuckDB (ms)
+> 10 1
+> 10 2
+> metaDecomp (ms)
+
+(b) JOB 10 1 10 3 10 5 
+
+> DuckDB (ms)
+> 10 1
+> 10 3
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(c) Musicbrainz 10 3 10 5 
+
+> DuckDB (ms)
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(d) JOBLarge Fig. 17. Scatter plot of overall query evaluation time of using metaDecomp versus DuckDB on each benchmark 
+
+Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:41 
+
+than 100 ms. For those taking DuckDB more than 100 ms, metaDecomp starts to show significant speedups, mostly due to the greedy strategy of DuckDB used for large queries, which does not have optimality guarantees but may lead to highly suboptimal plans. 
+
+E.1.3 metaDecomp versus UnionDP. 
+
+Histograms of speedups. Fig. 18 shows histograms of the speedups of the overall query execution time using metaDecomp over using UnionDP for queries in each of the four benchmarks. In the relatively smaller benchmarks DSB and JOB, the performance is similar. In Musicbrainz and JOBLarge, however, we observe a large number of significant speedups by multiple orders of magnitude, mostly due to the fact that UnionDP starts to use the heuristic partitioning which may lead to highly suboptimal plans. 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+> Speedup
+> 0%
+> 20%
+> Frequency
+
+(a) DSB 0 0.5 1 1.5 2 10 1 10 3 10 5 
+
+> Speedup
+> 0%
+> 10%
+> 20%
+> Frequency
+
+(b) JOB 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+> Speedup
+> 0%
+> 10%
+> Frequency
+
+(c) Musicbrainz 0 0.5 1 1.5 2 10 1 10 3 10 5 
+
+> Speedup
+> 0%
+> 5%
+> 10%
+> Frequency
+
+(d) JOBLarge Fig. 18. Histograms of speedups of overall evaluation time of metaDecomp over UnionDP on each benchmark 
+
+Scatter plots. Fig. 19 shows scatter plots of the overall query evaluation time using metaDecomp and using UnionDP measured for queries in each of the four benchmarks. The two approaches have similar performance for queries that takes UnionDP less than 1 second ( 10 3 ms ). For those taking UnionDP more than 1 second, metaDecomp starts to show significant speedups. This is especially the case in the Musicbrainz and JOBLarge benchmarks. 10 1 10 2
+
+> UnionDP (ms)
+> 10 1
+> 10 2
+> metaDecomp (ms)
+
+(a) DSB 10 1 10 2 
+
+> UnionDP (ms)
+> 10 1
+> 10 2
+> metaDecomp (ms)
+
+(b) JOB 10 1 10 3 10 5 
+
+> UnionDP (ms)
+> 10 1
+> 10 3
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(c) Musicbrainz 10 3 10 5 
+
+> UnionDP (ms)
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(d) JOBLarge Fig. 19. Scatter plot of overall evaluation time of using metaDecomp versus UnionDP on each benchmark 
+
+> Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026.
+
+240:42 Zhekai Jiang, Qichen Wang, and Christoph Koch 
+
+E.1.4 metaDecomp versus Yannakakis +.
+
+Histograms of speedups. Fig. 20 shows histograms of the speedups of the overall execution time using metaDecomp over using Yannakakis + for queries in each of the four benchmarks. The major advantage of metaDecomp over Yannakakis + is the elimination of the overhead of full reduction, and this is very clearly reflected in the speedups in the smaller benchmarks DSB and JOB. On the larger benchmarks Musicbrainz and JOBLarge, metaDecomp also shows comparable performance, with significant speedups on a few queries in which the full reduction takes a very long time. 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+> Speedup
+> 0%
+> 20%
+> 40%
+> Frequency
+
+(a) DSB 0 0.5 1 1.5 2 10 1 10 3 10 5 
+
+> Speedup
+> 0%
+> 10%
+> 20%
+> Frequency
+
+(b) JOB 0 0.5 1 1.5 2 10 1 10 3 10 5
+
+> Speedup
+> 0%
+> 5%
+> 10%
+> Frequency
+
+(c) Musicbrainz 0 0.5 1 1.5 2 10 1 10 3 10 5 
+
+> Speedup
+> 0%
+> 5%
+> 10%
+> Frequency
+
+(d) JOBLarge Fig. 20. Histograms of speedups of overall evaluation time of metaDecomp over Yannakakis + on each benchmark 
+
+Scatter plots. Fig. 21 shows scatter plots of the overall query evaluation time using metaDecomp and using Yannakakis + measured for queries in each of the four benchmarks. Again, the elimination of the overhead of full reduction allows for speedups in many queries in all four benchmarks, and there are significant speedups on a few queries in Musicbrainz and JOBLarge for which the full reduction takes a very long time. 10 1 10 2  
+
+> Yannakakis +(ms)
+> 10 1
+> 10 2
+> metaDecomp (ms)
+
+(a) DSB 10 1 10 2   
+
+> Yannakakis +(ms)
+> 10 1
+> 10 2
+> metaDecomp (ms)
+
+(b) JOB 10 1 10 3 10 5   
+
+> Yannakakis +(ms)
+> 10 1
+> 10 3
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(c) Musicbrainz 10 3 10 5   
+
+> Yannakakis +(ms)
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(d) JOBLarge Fig. 21. Scatter plots of overall evaluation time of using metaDecomp versus Yannakakis + on each benchmark 
+
+Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. Succinct Structure Representations for Efficient Query Optimization 240:43 
+
+E.1.5 metaDecomp versus LearnedRewrite. 
+
+Histograms of speedups. Fig. 22 shows histograms of the speedups of the overall execution time using metaDecomp over LearnedRewrite for queries in each of the four benchmarks. We can observe a clear overall advantage of metaDecomp, due to (1) the large optimization overhead and (2) the limitation of the cost-based optimization and rewrite rules in LearnedRewrite. 10 2 10 0 10 2 10 4
+
+> Speedup
+> 0%
+> 20%
+> Frequency
+
+(a) DSB 10 2 10 0 10 2 10 4 
+
+> Speedup
+> 0%
+> 20%
+> Frequency
+
+(b) JOB 10 2 10 0 10 2 10 4
+
+> Speedup
+> 0%
+> 10%
+> Frequency
+
+(c) Musicbrainz 10 2 10 0 10 2 10 4 
+
+> Speedup
+> 0%
+> 20%
+> Frequency
+
+(d) JOBLarge Fig. 22. Histograms of speedups of overall evaluation time of metaDecomp over LearnedRewrite on each benchmark 
+
+Scatter plots. Fig. 23 shows scatter plots of the overall query evaluation time using metaDecomp and using Learned Rewrite, measured for queries in each of the four benchmarks. Again, we observe a clear overall advantage of metaDecomp over Learned Rewrite in all four benchmarks. In particular, it takes Learned Rewrite an overhead of at least 1 second to optimize each query. For many small queries, this is already more than the overall evaluation time for metaDecomp as well as other traditional query optimization approaches. 10 1 10 3 10 5
+
+> Learned Rewrite (ms)
+> 10 1
+> 10 3
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(a) DSB 10 2 10 4 
+
+> Learned Rewrite (ms)
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(b) JOB 10 1 10 3 10 5 
+
+> Learned Rewrite (ms)
+> 10 1
+> 10 3
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(c) Musicbrainz 10 3 10 5 
+
+> Learned Rewrite (ms)
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(d) JOBLarge Fig. 23. Scatter plots of overall evaluation time using metaDecomp versus LearnedRewrite on each benchmark 
+
+Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026. 240:44 Zhekai Jiang, Qichen Wang, and Christoph Koch 
+
+E.1.6 metaDecomp versus LLM-R 2.
+
+Histograms of speedups. Fig. 24 shows histograms of the speedups of the overall query execution time using metaDecomp over using LLM-R 2 for queries in each of the four benchmarks. Similar to the case for Learned Rewrite, we can observe a clear overall advantage of metaDecomp over LLM-R 2,due to (1) the large optimization overhead and (2) the limitation of the cost-based optimization and rewrite rules of LLM-R 2.10 2 10 0 10 2 10 4
+
+> Speedup
+> 0%
+> 20%
+> Frequency
+
+(a) DSB 10 2 10 0 10 2 10 4 
+
+> Speedup
+> 0%
+> 10%
+> 20%
+> Frequency
+
+(b) JOB 10 2 10 0 10 2 10 4
+
+> Speedup
+> 0%
+> 5%
+> 10%
+> Frequency
+
+(c) Musicbrainz 10 2 10 0 10 2 10 4 
+
+> Speedup
+> 0%
+> 10%
+> 20%
+> Frequency
+
+(d) JOBLarge Fig. 24. Histograms of speedups of overall evaluation time of metaDecomp over LLM-R 2 on each benchmark 
+
+Scatter plots. Fig. 25 shows scatter plots of the overall query evaluation time using metaDecomp and using LLM-R 2, measured for queries in each of the four benchmarks. Again, we observe a clear overall advantage of metaDecomp over LLM-R 2 in all four benchmarks. Similar to the case with Learned Rewrite, it takes LLM-R 2 an even higher overhead of at least 3 seconds to optimize each query. For many small queries, this is already more than the overall evaluation time for metaDecomp as well as other traditional query optimization approaches. 10 1 10 3 10 5 
+
+> LLM-R 2(ms)
+> 10 1
+> 10 3
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(a) DSB 10 2 10 4  
+
+> LLM-R 2(ms)
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> metaDecomp (ms)
+
+(b) JOB 10 1 10 3 10 5  
+
+> LLM-R 2(ms)
+> 10 1
+> 10 3
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(c) Musicbrainz 10 3 10 5  
+
+> LLM-R 2(ms)
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> metaDecomp (ms)
+> Timeout (5 min)
+
+(d) JOBLarge Fig. 25. Scatter plot of overall evaluation time of using metaDecomp versus LLM-R 2 on each benchmark 
+
+Received October 2025; revised January 2026; accepted February 2026 
+
+Proc. ACM Manag. Data, Vol. 4, No. 3 (SIGMOD), Article 240. Publication date: June 2026.

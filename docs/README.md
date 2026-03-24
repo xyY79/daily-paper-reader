@@ -4,88 +4,73 @@
 ────────────────────────────────────────
 
 ## 每次日报
-- 最新运行日期：2026-03-15 ~ 2026-03-24
-- 运行时间：2026-03-24 03:44:40 UTC
+- 最新运行日期：2026-03-24
+- 运行时间：2026-03-24 20:22:07 UTC
 - 运行状态：成功
-- 本次总论文数：22
-- 精读区：11
+- 本次总论文数：17
+- 精读区：6
 - 速读区：11
 
 ### 今日简报（AI）
-本期深度解析 22 篇 AI 科研前沿，聚焦多智能体文献综述与个性化深度研究。
-满分论文 ResearchPilot 展示了本地优先的自动化综述能力，并强调真实用户反馈是衡量 AI 研究助手的核心标准。
-建议关注推理检索中的算力分配与知识修复技术，以提升复杂科学问答的逻辑性与事实准确度。
-- 详情：[/20260315-20260324/README](/20260315-20260324/README)
+聚焦 LLM 评价范式转型与创造力激发，今日精选 17 篇论文带你洞察大模型从孤立评分到协作排序、从噪声到信号的演进。
+核心结论指出，协作排序框架能显著提升论文评价的准确性，而特定诱导机制可有效解决 LLM 创作中的同质化难题。
+建议优先研读协作排序框架以优化模型评估流程，并关注 IndexRAG 在跨文档推理中的实战潜力。
+- 详情：[/202603/24/README](/202603/24/README)
 
 ### 精读区论文标签
-1. [ResearchPilot: A Local-First Multi-Agent System for Literature Synthesis and Related Work Drafting](/20260315-20260324/2603.14629v1-researchpilot-a-local-first-multi-agent-system-for-literature-synthesis-and-related-work-drafting)  
-   标签：评分：10.0/10、query:sr
-   evidence：用于文献综述和相关工作起草的多智能体系统
-2. [Language Models Don't Know What You Want: Evaluating Personalization in Deep Research Needs Real Users](/20260315-20260324/2603.16120v1-language-models-dont-know-what-you-want-evaluating-personalization-in-deep-research-needs-real-users)  
-   标签：评分：10.0/10、query:sr
-   evidence：针对科学论文的个性化深度研究工具
-3. [LR-Robot: A Unified Supervised Intelligent Framework for Real-Time Systematic Literature Reviews with Large Language Models](/20260315-20260324/2603.17723v1-lr-robot-a-unified-supervised-intelligent-framework-for-real-time-systematic-literature-reviews-with-large-language-models)  
-   标签：评分：10.0/10、query:sr
-   evidence：用于实时系统性文献综述的智能框架
-4. [HindSight: Evaluating Research Idea Generation via Future Impact](/20260315-20260324/2603.15164v1-hindsight-evaluating-research-idea-generation-via-future-impact)  
+1. [From Isolated Scoring to Collaborative Ranking: A Comparison-Native Framework for LLM-Based Paper Evaluation](/202603/24/2603.17588v1-from-isolated-scoring-to-collaborative-ranking-a-comparison-native-framework-for-llm-based-paper-evaluation)  
    标签：评分：9.0/10、query:sr
-   evidence：通过未来影响力评估研究想法的质量
-5. [HindSight: Evaluating LLM-Generated Research Ideas via Future Impact](/20260315-20260324/2603.15164v2-hindsight-evaluating-llm-generated-research-ideas-via-future-impact)  
+   evidence：基于大语言模型论文评估的协作排序框架
+2. [Inducing Sustained Creativity and Diversity in Large Language Models](/202603/24/2603.19519v1-inducing-sustained-creativity-and-diversity-in-large-language-models)  
    标签：评分：9.0/10、query:sr
-   evidence：通过匹配未来出版物来评估研究想法
-6. [The Agentic Researcher: A Practical Guide to AI-Assisted Research in Mathematics and Machine Learning](/20260315-20260324/2603.15914v1-the-agentic-researcher-a-practical-guide-to-ai-assisted-research-in-mathematics-and-machine-learning)  
-   标签：评分：9.0/10、query:sr
-   evidence：AI 辅助研究方法的实用指南
-7. [ClaimFlow: Tracing the Evolution of Scientific Claims in NLP](/20260315-20260324/2603.16073v1-claimflow-tracing-the-evolution-of-scientific-claims-in-nlp)  
-   标签：评分：9.0/10、query:sr
-   evidence：追踪科学主张的演变及跨论文关系
-8. [Public Profile Matters: A Scalable Integrated Approach to Recommend Citations in the Wild](/20260315-20260324/2603.17361v1-public-profile-matters-a-scalable-integrated-approach-to-recommend-citations-in-the-wild)  
-   标签：评分：9.0/10、query:sr
-   evidence：可扩展的集成引文推荐方法
-9. [CRE-T1 Preview Technical Report: Beyond Contrastive Learning for Reasoning-Intensive Retrieval](/20260315-20260324/2603.17387v1-cre-t1-preview-technical-report-beyond-contrastive-learning-for-reasoning-intensive-retrieval)  
-   标签：评分：9.0/10、query:sr
-   evidence：用于识别隐含关系的推理密集型检索
-10. [SoK: From Silicon to Netlist and Beyond $-$ Two Decades of Hardware Reverse Engineering Research](/20260315-20260324/2603.17883v1-sok-from-silicon-to-netlist-and-beyond---two-decades-of-hardware-reverse-engineering-research)  
-   标签：评分：9.0/10、query:sr
-   evidence：基于 187 篇出版物分析的知识系统化
-11. [Total Recall QA: A Verifiable Evaluation Suite for Deep Research Agents](/20260315-20260324/2603.18516v1-total-recall-qa-a-verifiable-evaluation-suite-for-deep-research-agents)  
-   标签：评分：9.0/10、query:sr
-   evidence：深度研究智能体信息搜寻能力的评估套件
+   evidence：针对被忽视研究课题的探索性搜索
+3. [Open-Source Reproduction and Explainability Analysis of Corrective Retrieval Augmented Generation](/202603/24/2603.16169v1-open-source-reproduction-and-explainability-analysis-of-corrective-retrieval-augmented-generation)  
+   标签：评分：8.0/10、query:sr
+   evidence：评估检索到的文档质量并触发纠正措施
+4. [citecheck: An MCP Server for Automated Bibliographic Verification and Repair in Scholarly Manuscripts](/202603/24/2603.17339v1-citecheck-an-mcp-server-for-automated-bibliographic-verification-and-repair-in-scholarly-manuscripts)  
+   标签：评分：8.0/10、query:sr
+   evidence：自动文献验证与修复
+5. [Halo: Domain-Aware Query Optimization for Long-Context Question Answering](/202603/24/2603.17668v1-halo-domain-aware-query-optimization-for-long-context-question-answering)  
+   标签：评分：8.0/10、query:sr
+   evidence：针对科学研究和长文本问答的领域感知查询优化
+6. [Helix: A Dual-Helix Co-Evolutionary Multi-Agent System for Prompt Optimization and Question Reformulation](/202603/24/2603.19732v1-helix-a-dual-helix-co-evolutionary-multi-agent-system-for-prompt-optimization-and-question-reformulation)  
+   标签：评分：8.0/10、query:sr
+   evidence：问题重构与提示词设计的联合优化
 
 ### 速读区论文标签
-1. [Automatic Inter-document Multi-hop Scientific QA Generation](/20260315-20260324/2603.14257v1-automatic-inter-document-multi-hop-scientific-qa-generation)  
+1. [IndexRAG: Bridging Facts for Cross-Document Reasoning at Index Time](/202603/24/2603.16415v1-indexrag-bridging-facts-for-cross-document-reasoning-at-index-time)  
    标签：评分：8.0/10、query:sr
-   evidence：多文档科学问答与语义对齐的自动化框架
-2. [Compute Allocation for Reasoning-Intensive Retrieval Agents](/20260315-20260324/2603.14635v1-compute-allocation-for-reasoning-intensive-retrieval-agents)  
+   evidence：跨文档推理和检索的桥接事实
+2. [Negation is Not Semantic: Diagnosing Dense Retrieval Failure Modes for Trade-offs in Contradiction-Aware Biomedical QA](/202603/24/2603.17580v1-negation-is-not-semantic-diagnosing-dense-retrieval-failure-modes-for-trade-offs-in-contradiction-aware-biomedical-qa)  
    标签：评分：8.0/10、query:sr
-   evidence：用于信息获取的推理密集型检索智能体
-3. [CounterRefine: Answer-Conditioned Counterevidence Retrieval for Inference-Time Knowledge Repair in Factual Question Answering](/20260315-20260324/2603.16091v1-counterrefine-answer-conditioned-counterevidence-retrieval-for-inference-time-knowledge-repair-in-factual-question-answering)  
+   evidence：生物医学研究检索架构的系统优化
+3. [From Noise to Signal: When Outliers Seed New Topics](/202603/24/2603.18358v1-from-noise-to-signal-when-outliers-seed-new-topics)  
    标签：评分：8.0/10、query:sr
-   evidence：用于推理时知识修复的反证检索
-4. [SciZoom: A Large-scale Benchmark for Hierarchical Scientific Summarization across the LLM Era](/20260315-20260324/2603.16131v1-scizoom-a-large-scale-benchmark-for-hierarchical-scientific-summarization-across-the-llm-era)  
+   evidence：识别新兴话题和弱信号
+4. [TopoChunker: Topology-Aware Agentic Document Chunking Framework](/202603/24/2603.18409v1-topochunker-topology-aware-agentic-document-chunking-framework)  
    标签：评分：8.0/10、query:sr
-   evidence：针对信息过载的分层科学文献摘要
-5. [Agentic DAG-Orchestrated Planner Framework for Multi-Modal, Multi-Hop Question Answering in Hybrid Data Lakes](/20260315-20260324/2603.14229v1-agentic-dag-orchestrated-planner-framework-for-multi-modal-multi-hop-question-answering-in-hybrid-data-lakes)  
+   evidence：面向检索的拓扑感知文档分块
+5. [Compute Allocation for Reasoning-Intensive Retrieval Agents](/202603/24/2603.14635v2-compute-allocation-for-reasoning-intensive-retrieval-agents)  
    标签：评分：7.0/10、query:sr
-   evidence：混合数据湖中的多跳问答
-6. [Distilling Reasoning Without Knowledge: A Framework for Reliable LLMs](/20260315-20260324/2603.14458v1-distilling-reasoning-without-knowledge-a-framework-for-reliable-llms)  
+   evidence：推理密集型检索与查询扩展
+6. [SmartSearch: How Ranking Beats Structure for Conversational Memory Retrieval](/202603/24/2603.15599v1-smartsearch-how-ranking-beats-structure-for-conversational-memory-retrieval)  
    标签：评分：7.0/10、query:sr
-   evidence：将规划与事实检索分离以实现可靠搜索
-7. [Mitigating KG Quality Issues: A Robust Multi-Hop GraphRAG Retrieval Framework](/20260315-20260324/2603.14828v1-mitigating-kg-quality-issues-a-robust-multi-hop-graphrag-retrieval-framework)  
+   evidence：排序优于结构化处理，可提升检索召回率和证据发现
+7. [A Framework and Prototype for a Navigable Map of Datasets in Engineering Design and Systems Engineering](/202603/24/2603.15722v1-a-framework-and-prototype-for-a-navigable-map-of-datasets-in-engineering-design-and-systems-engineering)  
    标签：评分：7.0/10、query:sr
-   evidence：针对知识图谱的鲁棒多跳检索框架
-8. [Probe-then-Plan: Environment-Aware Planning for Industrial E-commerce Search](/20260315-20260324/2603.15262v1-probe-then-plan-environment-aware-planning-for-industrial-e-commerce-search)  
+   evidence：工程设计领域数据集映射的系统框架
+8. [A Framework and Prototype for a Navigable Map of Datasets in Engineering Design and Systems Engineering](/202603/24/2603.15722v2-a-framework-and-prototype-for-a-navigable-map-of-datasets-in-engineering-design-and-systems-engineering)  
    标签：评分：7.0/10、query:sr
-   evidence：针对复杂搜索意图的动态推理过程
-9. [A Comprehensive Survey of Redundancy Systems with a Focus on Triple Modular Redundancy (TMR)](/20260315-20260324/2603.14411v1-a-comprehensive-survey-of-redundancy-systems-with-a-focus-on-triple-modular-redundancy-tmr)  
+   evidence：工程研究中数据集映射的系统框架
+9. [Succinct Structure Representations for Efficient Query Optimization](/202603/24/2603.15465v1-succinct-structure-representations-for-efficient-query-optimization)  
    标签：评分：6.0/10、query:sr
-   evidence：对技术的结构化和全面分析
-10. [LongVidSearch: An Agentic Benchmark for Multi-hop Evidence Retrieval Planning in Long Videos](/20260315-20260324/2603.14468v1-longvidsearch-an-agentic-benchmark-for-multi-hop-evidence-retrieval-planning-in-long-videos)  
+   evidence：高效查询优化和连接评估
+10. [TabKD: Tabular Knowledge Distillation through Interaction Diversity of Learned Feature Bins](/202603/24/2603.15481v1-tabkd-tabular-knowledge-distillation-through-interaction-diversity-of-learned-feature-bins)  
    标签：评分：6.0/10、query:sr
-   evidence：多跳证据检索规划与系统性搜索基准
-11. [SIA: A Synthesize-Inject-Align Framework for Knowledge-Grounded and Secure E-commerce Search LLMs with Industrial Deployment](/20260315-20260324/2603.16137v2-sia-a-synthesize-inject-align-framework-for-knowledge-grounded-and-secure-e-commerce-search-llms-with-industrial-deployment)  
+   evidence：知识蒸馏中特征组合的系统覆盖
+11. [PJB: A Reasoning-Aware Benchmark for Person-Job Retrieval](/202603/24/2603.17386v1-pjb-a-reasoning-aware-benchmark-for-person-job-retrieval)  
    标签：评分：6.0/10、query:sr
-   evidence：利用结构化和非结构化数据的知识增强搜索
+   evidence：具备推理能力的检索评估数据集
 
 
 ════════════════════════════════════════
