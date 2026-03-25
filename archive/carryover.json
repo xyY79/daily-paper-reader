@@ -1,208 +1,8 @@
 {
-  "generated_at": "2026-03-24T20:19:53.809974+00:00",
-  "updated_date": "20260324",
+  "generated_at": "2026-03-25T19:51:16.543884+00:00",
+  "updated_date": "20260325",
   "carryover_days": 9,
   "items": [
-    {
-      "id": "2603.20034v1",
-      "title": "CoverageBench: Evaluating Information Coverage across Tasks and Domains",
-      "abstract": "We wish to measure the information coverage of an ad hoc retrieval algorithm, that is, how much of the range of available relevant information is covered by the search results. Information coverage is a central aspect for retrieval, especially when the retrieval system is integrated with generative models in a retrieval-augmented generation (RAG) system. The classic metrics for ad hoc retrieval, precision and recall, reward a system as more and more relevant documents are retrieved. However, since relevance in ad hoc test collections is defined for a document without any relation to other documents that might contain the same information, high recall is sufficient but not necessary to ensure coverage. The same is true for other metrics such as rank-biased precision (RBP), normalized discounted cumulative gain (nDCG), and mean average precision (MAP). Test collections developed around the notion of diversity ranking in web search incorporate multiple aspects that support a concept of coverage in the web domain. In this work, we construct a suite of collections for evaluating information coverage from existing collections. This suite offers researchers a unified testbed spanning multiple genres and tasks. All topics, nuggets, relevance labels, and baseline rankings are released on Hugging Face Datasets, along with instructions for accessing the publicly available document collections.",
-      "authors": [
-        "Saron Samuel",
-        "Andrew Yates",
-        "Dawn Lawrie",
-        "Ian Soboroff",
-        "Trevor Adriaanse",
-        "Benjamin Van Durme",
-        "Eugene Yang"
-      ],
-      "primary_category": "cs.IR",
-      "categories": [
-        "cs.IR",
-        "cs.AI"
-      ],
-      "published": "2026-03-20T15:20:44+00:00",
-      "link": "https://arxiv.org/pdf/2603.20034v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Evaluating information coverage in ad hoc retrieval algorithms",
-      "llm_evidence_cn": "评估即时检索算法中的信息覆盖率",
-      "llm_evidence": "评估即时检索算法中的信息覆盖率",
-      "canonical_evidence": "评估即时检索算法中的信息覆盖率",
-      "llm_tldr_en": "CoverageBench measures how well retrieval systems cover the range of available relevant information.",
-      "llm_tldr_cn": "CoverageBench 衡量检索系统对可用相关信息的覆盖程度。",
-      "llm_tldr": "CoverageBench 衡量检索系统对可用相关信息的覆盖程度。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "systematic approaches to literature search",
-      "matched_requirement_id": "req-7",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.20034v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.18447v1",
-      "title": "SODIUM: From Open Web Data to Queryable Databases",
-      "abstract": "During research, domain experts often ask analytical questions whose answers require integrating data from a wide range of web sources. Thus, they must spend substantial effort searching, extracting, and organizing raw data before analysis can begin. We formalize this process as the SODIUM task, where we conceptualize open domains such as the web as latent databases that must be systematically instantiated to support downstream querying. Solving SODIUM requires (1) conducting in-depth and specialized exploration of the open web, which is further strengthened by (2) exploiting structural correlations for systematic information extraction and (3) integrating collected information into coherent, queryable database instances.   To quantify the challenges in automating SODIUM, we construct SODIUM-Bench, a benchmark of 105 tasks derived from published academic papers across 6 domains, where systems are tasked with exploring the open web to collect and aggregate data from diverse sources into structured tables. Existing systems struggle with SODIUM tasks: we evaluate 6 advanced AI agents on SODIUM-Bench, with the strongest baseline achieving only 46.5% accuracy. To bridge this gap, we develop SODIUM-Agent, a multi-agent system composed of a web explorer and a cache manager. Powered by our proposed ATP-BFS algorithm and optimized through principled management of cached sources and navigation paths, SODIUM-Agent conducts deep and comprehensive web exploration and performs structurally coherent information extraction. SODIUM-Agent achieves 91.1% accuracy on SODIUM-Bench, outperforming the strongest baseline by approximately 2 times and the weakest by up to 73 times.",
-      "authors": [
-        "Chuxuan Hu",
-        "Philip Li",
-        "Maxwell Yang",
-        "Daniel Kang"
-      ],
-      "primary_category": "cs.DB",
-      "categories": [
-        "cs.DB",
-        "cs.AI",
-        "cs.CL",
-        "cs.CV",
-        "cs.IR"
-      ],
-      "published": "2026-03-19T03:17:56+00:00",
-      "link": "https://arxiv.org/pdf/2603.18447v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Systematic exploration of open web for research data integration",
-      "llm_evidence_cn": "系统性探索开放网络以进行研究数据集成",
-      "llm_evidence": "系统性探索开放网络以进行研究数据集成",
-      "canonical_evidence": "系统性探索开放网络以进行研究数据集成",
-      "llm_tldr_en": "Formalizes the SODIUM task for systematically instantiating web data into queryable databases for research.",
-      "llm_tldr_cn": "形式化了SODIUM任务，旨在将网络数据系统地实例化为可查询数据库以支持研究。",
-      "llm_tldr": "形式化了SODIUM任务，旨在将网络数据系统地实例化为可查询数据库以支持研究。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "comprehensive research paper discovery",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.18447v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.19008v1",
-      "title": "Hypothesis-Conditioned Query Rewriting for Decision-Useful Retrieval",
-      "abstract": "Retrieval-Augmented Generation (RAG) improves Large Language Models (LLMs) by grounding generation in external, non-parametric knowledge. However, when a task requires choosing among competing options, simply grounding generation in broadly relevant context is often insufficient to drive the final decision. Existing RAG methods typically rely on a single initial query, which often favors topical relevance over decision-relevant evidence, and therefore retrieves background information that can fail to discriminate among answer options. To address this issue, here we propose Hypothesis-Conditioned Query Rewriting (HCQR), a training-free pre-retrieval framework that reorients RAG from topic-oriented retrieval to evidence-oriented retrieval. HCQR first derives a lightweight working hypothesis from the input question and candidate options, and then rewrites retrieval into three targeted queries that seek evidence to: (1) support the hypothesis, (2) distinguish it from competing alternatives, and (3) verify salient clues in the question. This approach enables context retrieval that is more directly aligned with answer selection, allowing the generator to confirm or overturn the initial hypothesis based on the retrieved evidence. Experiments on MedQA and MMLU-Med show that HCQR consistently outperforms single-query RAG and re-rank/filter baselines, improving average accuracy over Simple RAG by 5.9 and 3.6 points, respectively. Code is available at https://anonymous.4open.science/r/HCQR-1C2E.",
-      "authors": [
-        "Hangeol Chang",
-        "Changsun Lee",
-        "Seungjoon Rho",
-        "Junho Yeo",
-        "Jong Chul Ye"
-      ],
-      "primary_category": "cs.CL",
-      "categories": [
-        "cs.CL",
-        "cs.AI",
-        "cs.LG"
-      ],
-      "published": "2026-03-19T15:15:58+00:00",
-      "link": "https://arxiv.org/pdf/2603.19008v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Evidence-oriented retrieval for decision-useful information",
-      "llm_evidence_cn": "面向决策有用信息的证据导向检索",
-      "llm_evidence": "面向决策有用信息的证据导向检索",
-      "canonical_evidence": "面向决策有用信息的证据导向检索",
-      "llm_tldr_en": "Proposes a query rewriting framework to reorient retrieval from topical to evidence-oriented discovery.",
-      "llm_tldr_cn": "提出一种查询重写框架，将检索从主题导向转向证据导向发现。",
-      "llm_tldr": "提出一种查询重写框架，将检索从主题导向转向证据导向发现。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "comprehensive research paper discovery",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.19008v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.20513v1",
-      "title": "ReBOL: Retrieval via Bayesian Optimization with Batched LLM Relevance Observations and Query Reformulation",
-      "abstract": "LLM-reranking is limited by the top-k documents retrieved by vector similarity, which neither enables contextual query-document token interactions nor captures multimodal relevance distributions. While LLM query reformulation attempts to improve recall by generating improved or additional queries, it is still followed by vector similarity retrieval. We thus propose to address these top-k retrieval stage failures by introducing ReBOL, which 1) uses LLM query reformulations to initialize a multimodal Bayesian Optimization (BO) posterior over document relevance, and 2) iteratively acquires document batches for LLM query-document relevance scoring followed by posterior updates to optimize relevance. After exploring query reformulation and document batch diversification techniques, we evaluate ReBOL against LLM reranker baselines on five BEIR datasets and using two LLMs (Gemini-2.5-Flash-Lite, GPT-5.2). ReBOL consistently achieves higher recall and competitive rankings, for example compared to the best LLM reranker on the Robust04 dataset with 46.5% vs. 35.0% recall@100 and 63.6% vs. 61.2% NDCG@10. We also show that ReBOL can achieve comparable latency to LLM rerankers.",
-      "authors": [
-        "Anton Korikov",
-        "Scott Sanner"
-      ],
-      "primary_category": "cs.IR",
-      "categories": [
-        "cs.IR",
-        "cs.AI"
-      ],
-      "published": "2026-03-20T21:30:13+00:00",
-      "link": "https://arxiv.org/pdf/2603.20513v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "iterative document retrieval and query reformulation",
-      "llm_evidence_cn": "迭代文档检索与查询重构",
-      "llm_evidence": "迭代文档检索与查询重构",
-      "canonical_evidence": "迭代文档检索与查询重构",
-      "llm_tldr_en": "Introduces ReBOL to improve document retrieval using Bayesian Optimization and LLM query reformulation.",
-      "llm_tldr_cn": "引入 ReBOL，通过贝叶斯优化和 LLM 查询重构来改进文档检索。",
-      "llm_tldr": "引入 ReBOL，通过贝叶斯优化和 LLM 查询重构来改进文档检索。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "comprehensive research paper discovery",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.20513v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.20990v1",
-      "title": "ECI: Effective Contrastive Information to Evaluate Hard-Negatives",
-      "abstract": "Hard negatives play a critical role in training and fine-tuning dense retrieval models, as they are semantically similar to positive documents yet non-relevant, and correctly distinguishing them is essential for improving retrieval accuracy. However, identifying effective hard negatives typically requires extensive ablation studies involving repeated fine-tuning with different negative sampling strategies and hyperparameters, resulting in substantial computational cost. In this paper, we introduce ECI: Effective Contrastive Information , a theoretically grounded metric grounded in Information Theory and Information Retrieval principles that enables practitioners to assess the quality of hard negatives prior to model fine-tuning. ECI evaluates negatives by optimizing the trade-off between Information Capacity the logarithmic bound on mutual information determined by set size and Discriminative Efficiency, a harmonic balance of Signal Magnitude (Hardness) and Safety (Max-Margin). Unlike heuristic approaches, ECI strictly penalizes unsafe, false-positive negatives prevalent in generative methods. We evaluate ECI across hard-negative sets mined or generated using BM25, cross-encoders, and large language models. Our results demonstrate that ECI accurately predicts downstream retrieval performance, identifying that hybrid strategies (BM25+Cross-Encoder) offer the optimal balance of volume and reliability, significantly reducing the need for costly end-to-end ablation studies.",
-      "authors": [
-        "Aarush Sinha",
-        "Rahul Seetharaman",
-        "Aman Bansal"
-      ],
-      "primary_category": "cs.IR",
-      "categories": [
-        "cs.IR",
-        "cs.AI"
-      ],
-      "published": "2026-03-22T00:21:05+00:00",
-      "link": "https://arxiv.org/pdf/2603.20990v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Evaluating hard-negatives to improve retrieval accuracy",
-      "llm_evidence_cn": "评估负样本以提高检索准确性",
-      "llm_evidence": "评估负样本以提高检索准确性",
-      "canonical_evidence": "评估负样本以提高检索准确性",
-      "llm_tldr_en": "Introduces a metric to assess hard-negative quality for better dense retrieval model training.",
-      "llm_tldr_cn": "引入一种评估难负样本质量的指标，以优化稠密检索模型的训练。",
-      "llm_tldr": "引入一种评估难负样本质量的指标，以优化稠密检索模型的训练。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "comprehensive research paper discovery",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.20990v1",
-      "carry_days": 1
-    },
     {
       "id": "2603.20309v1",
       "title": "BubbleRAG: Evidence-Driven Retrieval-Augmented Generation for Black-Box Knowledge Graphs",
@@ -244,86 +44,7 @@
       "matched_requirement_id": "req-9",
       "selection_source": "carryover_cache",
       "paper_id": "2603.20309v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.21193v1",
-      "title": "Context Selection for Hypothesis and Statistical Evidence Extraction from Full-Text Scientific Articles",
-      "abstract": "Extracting hypotheses and their supporting statistical evidence from full-text scientific articles is central to the synthesis of empirical findings, but remains difficult due to document length and the distribution of scientific arguments across sections of the paper. The work studies a sequential full-text extraction setting, where the statement of a primary finding in an article's abstract is linked to (i) a corresponding hypothesis statement in the paper body and (ii) the statistical evidence that supports or refutes that hypothesis. This formulation induces a challenging within-document retrieval setting in which many candidate paragraphs are topically related to the finding but differ in rhetorical role, creating hard negatives for retrieval and extraction. Using a two-stage retrieve-and-extract framework, we conduct a controlled study of retrieval design choices, varying context quantity, context quality (standard Retrieval Augmented Generation, reranking, and a fine-tuned retriever paired with reranking), as well as an oracle paragraph setting to separate retrieval failures from extraction limits across four Large Language Model extractors. We find that targeted context selection consistently improves hypothesis extraction relative to full-text prompting, with gains concentrated in configurations that optimize retrieval quality and context cleanliness. In contrast, statistical evidence extraction remains substantially harder. Even with oracle paragraphs, performance remains moderate, indicating persistent extractor limitations in handling hybrid numeric-textual statements rather than retrieval failures alone.",
-      "authors": [
-        "Sai Koneru",
-        "Jian Wu",
-        "Sarah Rajtmajer"
-      ],
-      "primary_category": "cs.CL",
-      "categories": [
-        "cs.CL",
-        "cs.AI",
-        "cs.DL"
-      ],
-      "published": "2026-03-22T12:28:21+00:00",
-      "link": "https://arxiv.org/pdf/2603.21193v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "extraction of evidence from full-text scientific articles",
-      "llm_evidence_cn": "从科学论文全文中提取证据",
-      "llm_evidence": "从科学论文全文中提取证据",
-      "canonical_evidence": "从科学论文全文中提取证据",
-      "llm_tldr_en": "Studies within-document retrieval to link findings in abstracts to evidence in the paper body.",
-      "llm_tldr_cn": "研究文档内检索技术，将摘要中的发现与正文中的统计证据相关联。",
-      "llm_tldr": "研究文档内检索技术，将摘要中的发现与正文中的统计证据相关联。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "comprehensive research paper discovery",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.21193v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.19044v1",
-      "title": "MoRI: Learning Motivation-Grounded Reasoning for Scientific Ideation in Large Language Models",
-      "abstract": "Scientific ideation aims to propose novel solutions within a given scientific context. Existing LLM-based agentic approaches emulate human research workflows, yet inadequately model scientific reasoning, resulting in surface-level conceptual recombinations that lack technical depth and scientific grounding. To address this issue, we propose \\textbf{MoRI} (\\textbf{Mo}tivation-grounded \\textbf{R}easoning for Scientific \\textbf{I}deation), a framework that enables LLMs to explicitly learn the reasoning process from research motivations to methodologies. The base LLM is initialized via supervised fine-tuning to generate a research motivation from a given context, and is subsequently trained under a composite reinforcement learning reward that approximates scientific rigor: (1) entropy-aware information gain encourages the model to uncover and elaborate high-complexity technical details grounded in ground-truth methodologies, and (2) contrastive semantic gain constrains the reasoning trajectory to maintain conceptually aligned with scientifically valid solutions. Empirical results show that MoRI significantly outperforms strong commercial LLMs and complex agentic baselines across multiple dimensions, including novelty, technical rigor, and feasibility. The code will be made available on \\href{https://github.com/ECNU-Text-Computing/IdeaGeneration}{GitHub}.",
-      "authors": [
-        "Chenyang Gu",
-        "Jiahao Cheng",
-        "Meicong Zhang",
-        "Pujun Zheng",
-        "Jinquan Zheng",
-        "Guoxiu He"
-      ],
-      "primary_category": "cs.CL",
-      "categories": [
-        "cs.CL"
-      ],
-      "published": "2026-03-19T15:39:38+00:00",
-      "link": "https://arxiv.org/pdf/2603.19044v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "reasoning process from research motivations to methodologies",
-      "llm_evidence_cn": "从研究动机到方法论的推理过程",
-      "llm_evidence": "从研究动机到方法论的推理过程",
-      "canonical_evidence": "从研究动机到方法论的推理过程",
-      "llm_tldr_en": "MoRI framework enables LLMs to learn scientific reasoning for ideation by modeling research motivations.",
-      "llm_tldr_cn": "MoRI框架通过模拟研究动机，使大模型能够学习科学构思中的推理过程。",
-      "llm_tldr": "MoRI框架通过模拟研究动机，使大模型能够学习科学构思中的推理过程。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "methods and approaches in academic research",
-      "matched_requirement_id": "req-6",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.19044v1",
-      "carry_days": 1
+      "carry_days": 2
     },
     {
       "id": "2603.21139v1",
@@ -346,13 +67,13 @@
         "query:SR 检索"
       ],
       "llm_score": 8.0,
-      "llm_evidence_en": "personalized information retrieval and semantic similarity",
-      "llm_evidence_cn": "个性化信息检索与语义相似度",
-      "llm_evidence": "个性化信息检索与语义相似度",
-      "canonical_evidence": "个性化信息检索与语义相似度",
-      "llm_tldr_en": "Integrates domain ontologies and user profiles to improve personalized retrieval from XML documents.",
-      "llm_tldr_cn": "整合领域本体和用户画像，以改进XML文档的个性化检索效果。",
-      "llm_tldr": "整合领域本体和用户画像，以改进XML文档的个性化检索效果。",
+      "llm_evidence_en": "personalized information retrieval using ontology and user profiles",
+      "llm_evidence_cn": "利用本体和用户画像的个性化信息检索",
+      "llm_evidence": "利用本体和用户画像的个性化信息检索",
+      "canonical_evidence": "利用本体和用户画像的个性化信息检索",
+      "llm_tldr_en": "Enhances XML document retrieval by integrating domain ontologies and user profiles for semantic matching.",
+      "llm_tldr_cn": "通过整合领域本体和用户画像，利用语义匹配增强 XML 文档的检索效果。",
+      "llm_tldr": "通过整合领域本体和用户画像，利用语义匹配增强 XML 文档的检索效果。",
       "llm_tags": [
         "query:sr"
       ],
@@ -361,6 +82,314 @@
       "matched_requirement_id": "req-9",
       "selection_source": "carryover_cache",
       "paper_id": "2603.21139v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.22765v1",
+      "title": "DALDALL: Data Augmentation for Lexical and Semantic Diverse in Legal Domain by leveraging LLM-Persona",
+      "abstract": "Data scarcity remains a persistent challenge in low-resource domains. While existing data augmentation methods leverage the generative capabilities of large language models (LLMs) to produce large volumes of synthetic data, these approaches often prioritize quantity over quality and lack domain-specific strategies. In this work, we introduce DALDALL, a persona-based data augmentation framework tailored for legal information retrieval (IR). Our method employs domain-specific professional personas--such as attorneys, prosecutors, and judges--to generate synthetic queries that exhibit substantially greater lexical and semantic diversity than vanilla prompting approaches. Experiments on the CLERC and COLIEE benchmarks demonstrate that persona-based augmentation achieves improvement in lexical diversity as measured by Self-BLEU scores, while preserving semantic fidelity to the original queries. Furthermore, dense retrievers fine-tuned on persona-augmented data consistently achieve competitive or superior recall performance compared to those trained on original data or generic augmentations. These findings establish persona-based prompting as an effective strategy for generating high-quality training data in specialized, low-resource domains.",
+      "authors": [
+        "Janghyeok Choi",
+        "Jaewon Lee",
+        "Sungzoon Cho"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-03-24T03:49:09+00:00",
+      "link": "https://arxiv.org/pdf/2603.22765v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "persona-based data augmentation for information retrieval",
+      "llm_evidence_cn": "基于角色的信息检索数据增强",
+      "llm_evidence": "基于角色的信息检索数据增强",
+      "canonical_evidence": "基于角色的信息检索数据增强",
+      "llm_tldr_en": "Uses LLM personas to generate diverse synthetic queries for improving domain-specific information retrieval.",
+      "llm_tldr_cn": "利用大模型角色生成多样化合成查询，以改进特定领域的信息检索效果。",
+      "llm_tldr": "利用大模型角色生成多样化合成查询，以改进特定领域的信息检索效果。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.22765v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.21925v1",
+      "title": "Guideline-grounded retrieval-augmented generation for ophthalmic clinical decision support",
+      "abstract": "In this work, we propose Oph-Guid-RAG, a multimodal visual RAG system for ophthalmology clinical question answering and decision support. We treat each guideline page as an independent evidence unit and directly retrieve page images, preserving tables, flowcharts, and layout information. We further design a controllable retrieval framework with routing and filtering, which selectively introduces external evidence and reduces noise. The system integrates query decomposition, query rewriting, retrieval, reranking, and multimodal reasoning, and provides traceable outputs with guideline page references. We evaluate our method on HealthBench using a doctor-based scoring protocol. On the hard subset, our approach improves the overall score from 0.2969 to 0.3861 (+0.0892, +30.0%) compared to GPT-5.2, and achieves higher accuracy, improving from 0.5956 to 0.6576 (+0.0620, +10.4%). Compared to GPT-5.4, our method achieves a larger accuracy gain of +0.1289 (+24.4%). These results show that our method is more effective on challenging cases that require precise, evidence-based reasoning. Ablation studies further show that reranking, routing, and retrieval design are critical for stable performance, especially under difficult settings. Overall, we show how combining visionbased retrieval with controllable reasoning can improve evidence grounding and robustness in clinical AI applications,while pointing out that further work is needed to be more complete.",
+      "authors": [
+        "Shuying Chen",
+        "Sen Cui",
+        "Zhong Cao"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-23T12:47:34+00:00",
+      "link": "https://arxiv.org/pdf/2603.21925v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "multimodal visual RAG for clinical evidence retrieval",
+      "llm_evidence_cn": "用于临床证据检索的多模态视觉RAG",
+      "llm_evidence": "用于临床证据检索的多模态视觉RAG",
+      "canonical_evidence": "用于临床证据检索的多模态视觉RAG",
+      "llm_tldr_en": "Develops a multimodal RAG system to retrieve and reason over complex clinical guideline documents.",
+      "llm_tldr_cn": "开发了一种多模态RAG系统，用于检索和推理复杂的临床指南文档。",
+      "llm_tldr": "开发了一种多模态RAG系统，用于检索和推理复杂的临床指南文档。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.21925v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.22340v1",
+      "title": "Graphs RAG at Scale: Beyond Retrieval-Augmented Generation With Labeled Property Graphs and Resource Description Framework for Complex and Unknown Search Spaces",
+      "abstract": "Recent advances in Retrieval-Augmented Generation (RAG) have revolutionized knowledge-intensive tasks, yet traditional RAG methods struggle when the search space is unknown or when documents are semi-structured or structured. We introduce a novel end-to-end Graph RAG framework that leverages both Labeled Property Graph (LPG) and Resource Description Framework (RDF) architectures to overcome these limitations. Our approach enables dynamic document retrieval without the need to pre-specify the number of documents and eliminates inefficient reranking. We propose an innovative method for converting documents into RDF triplets using JSON key-value pairs, facilitating seamless integration of semi-structured data. Additionally, we present a text to Cypher framework for LPG, achieving over 90% accuracy in real-time translation of text queries to Cypher, enabling fast and reliable query generation suitable for online applications. Our empirical evaluation demonstrates that Graph RAG significantly outperforms traditional embedding-based RAG in accuracy, response quality, and reasoning, especially for complex, semi-structured tasks. These findings establish Graph RAG as a transformative solution for next-generation retrieval-augmented systems.",
+      "authors": [
+        "Manie Tadayon",
+        "Mayank Gupta"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-21T11:35:29+00:00",
+      "link": "https://arxiv.org/pdf/2603.22340v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Graph RAG for complex and unknown search spaces",
+      "llm_evidence_cn": "针对复杂且未知搜索空间的图增强检索生成",
+      "llm_evidence": "针对复杂且未知搜索空间的图增强检索生成",
+      "canonical_evidence": "针对复杂且未知搜索空间的图增强检索生成",
+      "llm_tldr_en": "Introduces a Graph RAG framework to improve retrieval in structured and unknown search spaces.",
+      "llm_tldr_cn": "引入了一种图RAG框架，以改进结构化和未知搜索空间中的检索。",
+      "llm_tldr": "引入了一种图RAG框架，以改进结构化和未知搜索空间中的检索。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.22340v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.23125v1",
+      "title": "From Questions to Trust Reports: A LLM-IR Framework for the TREC 2025 DRAGUN Track",
+      "abstract": "The DRAGUN Track at TREC 2025 targets the growing need for effective support tools that help users evaluate the trustworthiness of online news. We describe the UR_Trecking system submitted for both Task 1 (critical question generation) and Task 2 (retrieval-augmented trustworthiness reporting). Our approach combines LLM-based question generation with semantic filtering, diversity enforcement using clustering, and several query expansion strategies (including reasoning-based Chain-of-Thought expansion) to retrieve relevant evidence from the MS MARCO V2.1 segmented corpus. Retrieved documents are re-ranked using a monoT5 model and filtered using an LLM relevance judge together with a domain-level trustworthiness dataset. For Task 2, selected evidence is synthesized by an LLM into concise trustworthiness reports with citations. Results from the official evaluation indicate that Chain-of-Thought query expansion and re-ranking substantially improve both relevance and domain trust compared to baseline retrieval, while question-generation performance shows moderate quality with room for improvement. We conclude by outlining key challenges encountered and suggesting directions for enhancing robustness and trustworthiness assessment in future iterations of the system.",
+      "authors": [
+        "Ignacy Alwasiak",
+        "Kene Nnolim",
+        "Jaclyn Thi",
+        "Samy Ateia",
+        "Markus Bink",
+        "Gregor Donabauer",
+        "David Elsweiler",
+        "Udo Kruschwitz"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-03-24T12:22:27+00:00",
+      "link": "https://arxiv.org/pdf/2603.23125v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "retrieval-augmented framework for evidence discovery and trustworthiness reporting",
+      "llm_evidence_cn": "用于证据发现和可信度报告的检索增强框架",
+      "llm_evidence": "用于证据发现和可信度报告的检索增强框架",
+      "canonical_evidence": "用于证据发现和可信度报告的检索增强框架",
+      "llm_tldr_en": "Combines query expansion and semantic filtering to retrieve evidence for trustworthiness evaluation.",
+      "llm_tldr_cn": "结合查询扩展和语义过滤，检索证据以进行在线信息的可信度评估。",
+      "llm_tldr": "结合查询扩展和语义过滤，检索证据以进行在线信息的可信度评估。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.23125v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.20336v1",
+      "title": "GEM: A Native Graph-based Index for Multi-Vector Retrieval",
+      "abstract": "In multi-vector retrieval, both queries and data are represented as sets of high-dimensional vectors, enabling finer-grained semantic matching and improving retrieval quality over single-vector approaches. However, its practical adoption is held back by the lack of effective indexing algorithms. Existing work, attempting to reuse standard single-vector indexes, often fails to preserve multi-vector semantics or remains slow. In this work, we present GEM, a native indexing framework for multi-vector representations. The core idea is to construct a proximity graph directly over vector sets, preserving their fine-grained semantics while enabling efficient navigation. First, GEM designs a set-level clustering scheme. It associates each vector set with only its most informative clusters, effectively reducing redundancy without hurting semantic coverage. Then, it builds local proximity graphs within clusters and bridges them into a globally navigable structure. To handle the non-metric nature of multi-vector similarity, GEM decouples the graph construction metric from the final relevance score and injects semantic shortcuts to guide efficient navigation toward relevant regions. At query time, GEM launches beam search from multiple entry points and prunes paths early using cluster cues. To further enhance efficiency, a quantized distance estimation technique is used for both indexing and search. Across in-domain, out-of-domain, and multi-modal benchmarks, GEM achieves up to 16x speedup over state-of-the-art methods while matching or improving accuracy.",
+      "authors": [
+        "Yao Tian",
+        "Zhoujin Tian",
+        "Xi Zhao",
+        "Ruiyuan Zhang",
+        "Xiaofang Zhou"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI",
+        "cs.DB"
+      ],
+      "published": "2026-03-20T08:44:21+00:00",
+      "link": "https://arxiv.org/pdf/2603.20336v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "native graph-based index for multi-vector retrieval",
+      "llm_evidence_cn": "用于多向量检索的原生图索引",
+      "llm_evidence": "用于多向量检索的原生图索引",
+      "canonical_evidence": "用于多向量检索的原生图索引",
+      "llm_tldr_en": "Presents GEM, a graph-based indexing framework that improves the efficiency and quality of multi-vector retrieval.",
+      "llm_tldr_cn": "提出 GEM 框架，通过原生图索引提升多向量检索的效率和语义匹配质量。",
+      "llm_tldr": "提出 GEM 框架，通过原生图索引提升多向量检索的效率和语义匹配质量。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.20336v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.22510v1",
+      "title": "Do Large Language Models Reduce Research Novelty? Evidence from Information Systems Journals",
+      "abstract": "Large language models such as ChatGPT have increased scholarly output, but whether this productivity boost produces genuine intellectual advancement remains untested. I address this gap by measuring the semantic novelty of 13,847 articles published between 2020 and 2025 in 44 Information Systems journals. Using SPECTER2 embeddings, I operationalize novelty as the cosine distance between each paper and its nearest prior neighbors. A difference-in-differences design with the November 2022 release of ChatGPT as the treatment break reveals a heterogeneous pattern: authors affiliated with institutions in non-English-dominant countries show a 0.18 standard deviation decline in relative novelty compared to authors in English-dominant countries (beta = -0.176, p < 0.001), equivalent to a 7-percentile-point drop in the novelty distribution. This finding is robust across alternative novelty specifications, treatment break dates, and sub-samples, and survives a placebo test at a pre-treatment break. I interpret these results through the lens of construal level theory, proposing that LLMs function as proximity tools that shift researchers from abstract, exploratory thinking toward concrete, convention-following execution. The paper contributes to the growing debate on whether LLM-driven productivity gains come at the cost of intellectual diversity.",
+      "authors": [
+        "Ali Safari"
+      ],
+      "primary_category": "cs.DL",
+      "categories": [
+        "cs.DL",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-03-23T19:16:54+00:00",
+      "link": "https://arxiv.org/pdf/2603.22510v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "measuring semantic novelty of research papers using embeddings",
+      "llm_evidence_cn": "使用嵌入技术衡量研究论文的语义创新性",
+      "llm_evidence": "使用嵌入技术衡量研究论文的语义创新性",
+      "canonical_evidence": "使用嵌入技术衡量研究论文的语义创新性",
+      "llm_tldr_en": "Analyzes the impact of LLMs on research novelty by measuring semantic distance between thousands of articles.",
+      "llm_tldr_cn": "通过测量数万篇论文间的语义距离，分析大模型对科研创新性的影响。",
+      "llm_tldr": "通过测量数万篇论文间的语义距离，分析大模型对科研创新性的影响。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.22510v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.20670v2",
+      "title": "Towards Intelligent Geospatial Data Discovery: a knowledge graph-driven multi-agent framework powered by large language models",
+      "abstract": "The rapid growth in the volume, variety, and velocity of geospatial data has created data ecosystems that are highly distributed, heterogeneous, and semantically inconsistent. Existing data catalogs, portals, and infrastructures still rely largely on keyword-based search with limited semantic support, which often fails to capture user intent and leads to weak retrieval performance. To address these challenges, this study proposes a knowledge graph-driven multi-agent framework for intelligent geospatial data discovery, powered by large language models. The framework introduces a unified geospatial metadata ontology as a semantic mediation layer to align heterogeneous metadata standards across platforms and constructs a geospatial metadata knowledge graph to explicitly model datasets and their multidimensional relationships. Building on the structured representation, the framework adopts a multi-agent collaborative architecture to perform intent parsing, knowledge graph retrieval, and answer synthesis, forming an interpretable and closed-loop discovery process from user queries to results. Results from representative use cases and performance evaluation show that the framework substantially improves intent matching accuracy, ranking quality, recall, and discovery transparency compared with traditional systems. This study advances geospatial data discovery toward a more semantic, intent-aware, and intelligent paradigm, providing a practical foundation for next-generation intelligent and autonomous spatial data infrastructures and contributing to the broader vision of Autonomous GIS.",
+      "authors": [
+        "Ruixiang Liu",
+        "Zhenlong Li",
+        "Ali Khosravi Kazazi"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.MA"
+      ],
+      "published": "2026-03-21T06:16:56+00:00",
+      "link": "https://arxiv.org/pdf/2603.20670v2",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "knowledge graph-driven framework for geospatial data discovery",
+      "llm_evidence_cn": "知识图谱驱动的地理空间数据发现框架",
+      "llm_evidence": "知识图谱驱动的地理空间数据发现框架",
+      "canonical_evidence": "知识图谱驱动的地理空间数据发现框架",
+      "llm_tldr_en": "Develops a multi-agent framework using LLMs and ontologies to improve semantic geospatial data search.",
+      "llm_tldr_cn": "开发了一个利用大模型和本体的多智能体框架，以改进地理空间数据的语义搜索。",
+      "llm_tldr": "开发了一个利用大模型和本体的多智能体框架，以改进地理空间数据的语义搜索。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.20670v2",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.22376v1",
+      "title": "AI Co-Scientist for Ranking: Discovering Novel Search Ranking Models alongside LLM-based AI Agents with Cloud Computing Access",
+      "abstract": "Recent advances in AI agents for software engineering and scientific discovery have demonstrated remarkable capabilities, yet their application to developing novel ranking models in commercial search engines remains unexplored. In this paper, we present an AI Co-Scientist framework that automates the full search ranking research pipeline: from idea generation to code implementation and GPU training job scheduling with expert in the loop. Our approach strategically employs single-LLM agents for routine tasks while leveraging multi-LLM consensus agents (GPT 5.2, Gemini Pro 3, and Claude Opus 4.5) for challenging phases such as results analysis and idea generation. To our knowledge, this is the first study in the ranking community to utilize an AI Co-Scientist framework for algorithmic research. We demonstrate that this framework discovered a novel technique for handling sequence features, with all model enhancements produced automatically, yielding substantial offline performance improvements. Our findings suggest that AI systems can discover ranking architectures comparable to those developed by human experts while significantly reducing routine research workloads.",
+      "authors": [
+        "Liwei Wu",
+        "Cho-Jui Hsieh"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-23T09:29:08+00:00",
+      "link": "https://arxiv.org/pdf/2603.22376v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "automating search ranking research pipeline",
+      "llm_evidence_cn": "自动化搜索排序研究流程",
+      "llm_evidence": "自动化搜索排序研究流程",
+      "canonical_evidence": "自动化搜索排序研究流程",
+      "llm_tldr_en": "AI Co-Scientist automates the research pipeline for developing search ranking models.",
+      "llm_tldr_cn": "AI Co-Scientist实现了搜索排序模型研究全流程的自动化。",
+      "llm_tldr": "AI Co-Scientist实现了搜索排序模型研究全流程的自动化。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.22376v1",
       "carry_days": 1
     }
   ]

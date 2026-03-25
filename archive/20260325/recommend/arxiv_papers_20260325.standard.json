@@ -1,0 +1,704 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-25T19:51:16.542704+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 20,
+    "deep_cap": 6,
+    "deep_selected": 6,
+    "quick_candidates": 48,
+    "quick_skim_target": 11,
+    "quick_selected": 11
+  },
+  "deep_dive": [
+    {
+      "id": "2603.22648v1",
+      "title": "AwesomeLit: Towards Hypothesis Generation with Agent-Supported Literature Research",
+      "abstract": "There are different goals for literature research, from understanding an unfamiliar topic to generate hypothesis for the next research project. The nature of literature research also varies according to user's familiarity level of the topic. For inexperienced researchers, identifying gaps in the existing literature and generating feasible hypothesis are crucial but challenging. While general ``deep research'' tools can be used, they are not designed for such use case, thus often not effective. In addition, the ``black box\" nature and hallucination of Large Language Models (LLMs) often lead to distrust. In this paper, we introduce a human-agent collaborative visualization system AwesomeLit to address this need. It has several novel features: a transparent user-steerable agentic workflow; a dynamically generated query exploring tree, visualizing the exploration path and provenance; and a semantic similarity view, depicting the relationships between papers. It enables users to transition from general intentions to detailed research topics. Finally, a qualitative study involving several early researchers showed that AwesomeLit is effective in helping users explore unfamiliar topics, identify promising research directions, and improve confidence in research results.",
+      "authors": [
+        "Zefei Xie",
+        "Yuhan Guo",
+        "Kai Xu"
+      ],
+      "primary_category": "cs.HC",
+      "categories": [
+        "cs.HC",
+        "cs.AI"
+      ],
+      "published": "2026-03-23T23:51:14+00:00",
+      "link": "https://arxiv.org/pdf/2603.22648v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "agent-supported literature research and hypothesis generation",
+      "llm_evidence_cn": "智能体辅助的文献研究与假设生成",
+      "llm_evidence": "智能体辅助的文献研究与假设生成",
+      "canonical_evidence": "智能体辅助的文献研究与假设生成",
+      "llm_tldr_en": "AwesomeLit is a collaborative system for literature research and identifying research gaps.",
+      "llm_tldr_cn": "AwesomeLit是一个用于文献研究和识别研究空白的人机协作系统。",
+      "llm_tldr": "AwesomeLit是一个用于文献研究和识别研究空白的人机协作系统。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.20513v1",
+      "title": "ReBOL: Retrieval via Bayesian Optimization with Batched LLM Relevance Observations and Query Reformulation",
+      "abstract": "LLM-reranking is limited by the top-k documents retrieved by vector similarity, which neither enables contextual query-document token interactions nor captures multimodal relevance distributions. While LLM query reformulation attempts to improve recall by generating improved or additional queries, it is still followed by vector similarity retrieval. We thus propose to address these top-k retrieval stage failures by introducing ReBOL, which 1) uses LLM query reformulations to initialize a multimodal Bayesian Optimization (BO) posterior over document relevance, and 2) iteratively acquires document batches for LLM query-document relevance scoring followed by posterior updates to optimize relevance. After exploring query reformulation and document batch diversification techniques, we evaluate ReBOL against LLM reranker baselines on five BEIR datasets and using two LLMs (Gemini-2.5-Flash-Lite, GPT-5.2). ReBOL consistently achieves higher recall and competitive rankings, for example compared to the best LLM reranker on the Robust04 dataset with 46.5% vs. 35.0% recall@100 and 63.6% vs. 61.2% NDCG@10. We also show that ReBOL can achieve comparable latency to LLM rerankers.",
+      "authors": [
+        "Anton Korikov",
+        "Scott Sanner"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-20T21:30:13+00:00",
+      "link": "https://arxiv.org/pdf/2603.20513v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "retrieval via Bayesian Optimization and query reformulation",
+      "llm_evidence_cn": "通过贝叶斯优化和查询重构进行检索",
+      "llm_evidence": "通过贝叶斯优化和查询重构进行检索",
+      "canonical_evidence": "通过贝叶斯优化和查询重构进行检索",
+      "llm_tldr_en": "ReBOL uses Bayesian Optimization and LLM query reformulation to improve document retrieval recall.",
+      "llm_tldr_cn": "ReBOL 利用贝叶斯优化和大模型查询重构来优化文档检索的召回率。",
+      "llm_tldr": "ReBOL 利用贝叶斯优化和大模型查询重构来优化文档检索的召回率。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.21193v1",
+      "title": "Context Selection for Hypothesis and Statistical Evidence Extraction from Full-Text Scientific Articles",
+      "abstract": "Extracting hypotheses and their supporting statistical evidence from full-text scientific articles is central to the synthesis of empirical findings, but remains difficult due to document length and the distribution of scientific arguments across sections of the paper. The work studies a sequential full-text extraction setting, where the statement of a primary finding in an article's abstract is linked to (i) a corresponding hypothesis statement in the paper body and (ii) the statistical evidence that supports or refutes that hypothesis. This formulation induces a challenging within-document retrieval setting in which many candidate paragraphs are topically related to the finding but differ in rhetorical role, creating hard negatives for retrieval and extraction. Using a two-stage retrieve-and-extract framework, we conduct a controlled study of retrieval design choices, varying context quantity, context quality (standard Retrieval Augmented Generation, reranking, and a fine-tuned retriever paired with reranking), as well as an oracle paragraph setting to separate retrieval failures from extraction limits across four Large Language Model extractors. We find that targeted context selection consistently improves hypothesis extraction relative to full-text prompting, with gains concentrated in configurations that optimize retrieval quality and context cleanliness. In contrast, statistical evidence extraction remains substantially harder. Even with oracle paragraphs, performance remains moderate, indicating persistent extractor limitations in handling hybrid numeric-textual statements rather than retrieval failures alone.",
+      "authors": [
+        "Sai Koneru",
+        "Jian Wu",
+        "Sarah Rajtmajer"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.DL"
+      ],
+      "published": "2026-03-22T12:28:21+00:00",
+      "link": "https://arxiv.org/pdf/2603.21193v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "extracting hypotheses and evidence from full-text scientific articles",
+      "llm_evidence_cn": "从科学论文全文中提取假设和证据",
+      "llm_evidence": "从科学论文全文中提取假设和证据",
+      "canonical_evidence": "从科学论文全文中提取假设和证据",
+      "llm_tldr_en": "Links abstract findings to hypotheses and statistical evidence within full-text scientific papers.",
+      "llm_tldr_cn": "将摘要结论与科学论文全文中的假设及统计证据进行关联提取。",
+      "llm_tldr": "将摘要结论与科学论文全文中的假设及统计证据进行关联提取。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.22633v1",
+      "title": "Graph-Aware Late Chunking for Retrieval-Augmented Generation in Biomedical Literature",
+      "abstract": "Retrieval-Augmented Generation (RAG) systems for biomedical literature are typically evaluated using ranking metrics like Mean Reciprocal Rank (MRR), which measure how well the system identifies the single most relevant chunk. We argue that for full-text scientific documents, this paradigm is incomplete: it rewards retrieval precision while ignoring retrieval breadth -- the ability to surface evidence from across a document's structural sections. We propose GraLC-RAG, a framework that unifies late chunking with graph-aware structural intelligence, introducing structure-aware chunk boundary detection, UMLS knowledge graph infusion, and graph-guided hybrid retrieval. We evaluate six strategies on 2,359 IMRaD-filtered PubMed Central articles using 2,033 cross-section questions and two metric families: standard ranking metrics (MRR, Recall@k) and structural coverage metrics (SecCov@k, CS Recall). Our results expose a sharp divergence: content-similarity methods achieve the highest MRR (0.517) but always retrieve from a single section, while structure-aware methods retrieve from up to 15.6x more sections. Generation experiments show that KG-infused retrieval narrows the answer-quality gap to delta-F1 = 0.009 while maintaining 4.6x section diversity. These findings demonstrate that standard metrics systematically undervalue structural retrieval and that closing the multi-section synthesis gap is a key open problem for biomedical RAG.",
+      "authors": [
+        "Pouria Mortezaagha",
+        "Arya Rahgozar"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-03-23T23:22:58+00:00",
+      "link": "https://arxiv.org/pdf/2603.22633v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Graph-aware retrieval framework for surfacing evidence across full-text scientific documents",
+      "llm_evidence_cn": "用于在全文科学文献中提取证据的图感知检索框架",
+      "llm_evidence": "用于在全文科学文献中提取证据的图感知检索框架",
+      "canonical_evidence": "用于在全文科学文献中提取证据的图感知检索框架",
+      "llm_tldr_en": "GraLC-RAG improves scientific document retrieval by using structural intelligence and knowledge graphs.",
+      "llm_tldr_cn": "GraLC-RAG通过结构化智能和知识图谱提升了科学文献的检索广度与精度。",
+      "llm_tldr": "GraLC-RAG通过结构化智能和知识图谱提升了科学文献的检索广度与精度。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.23136v1",
+      "title": "HGNet: Scalable Foundation Model for Automated Knowledge Graph Generation from Scientific Literature",
+      "abstract": "Automated knowledge graph (KG) construction is essential for navigating the rapidly expanding body of scientific literature. However, existing approaches struggle to recognize long multi-word entities, often fail to generalize across domains, and typically overlook the hierarchical nature of scientific knowledge. While general-purpose large language models (LLMs) offer adaptability, they are computationally expensive and yield inconsistent accuracy on specialized tasks. As a result, current KGs are shallow and inconsistent, limiting their utility for exploration and synthesis. We propose a two-stage framework for scalable, zero-shot scientific KG construction. The first stage, Z-NERD, introduces (i) Orthogonal Semantic Decomposition (OSD), which promotes domain-agnostic entity recognition by isolating semantic \"turns\" in text, and (ii) a Multi-Scale TCQK attention mechanism that captures coherent multi-word entities through n-gram-aware attention heads. The second stage, HGNet, performs relation extraction with hierarchy-aware message passing, explicitly modeling parent, child, and peer relations. To enforce global consistency, we introduce two complementary objectives: a Differentiable Hierarchy Loss to discourage cycles and shortcut edges, and a Continuum Abstraction Field (CAF) Loss that embeds abstraction levels along a learnable axis in Euclidean space. This is the first approach to formalize hierarchical abstraction as a continuous property within standard Euclidean embeddings, offering a simpler alternative to hyperbolic methods. We release SPHERE (https://github.com/basiralab/SPHERE), a multi-domain benchmark for hierarchical relation extraction. Our framework establishes a new state of the art on SciERC, SciER, and SPHERE, improving NER by 8.08% and RE by 5.99% on out-of-distribution tests. In zero-shot settings, gains reach 10.76% for NER and 26.2% for RE.",
+      "authors": [
+        "Devvrat Joshi",
+        "Islem Rekik"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-03-24T12:35:10+00:00",
+      "link": "https://arxiv.org/pdf/2603.23136v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Automated knowledge graph generation from scientific literature for navigation and synthesis",
+      "llm_evidence_cn": "从科学文献中自动生成知识图谱以进行导航和综合",
+      "llm_evidence": "从科学文献中自动生成知识图谱以进行导航和综合",
+      "canonical_evidence": "从科学文献中自动生成知识图谱以进行导航和综合",
+      "llm_tldr_en": "HGNet enables scalable, zero-shot knowledge graph construction from scientific papers to aid research discovery.",
+      "llm_tldr_cn": "HGNet实现了从科学论文中大规模构建知识图谱，辅助研究发现与综述。",
+      "llm_tldr": "HGNet实现了从科学论文中大规模构建知识图谱，辅助研究发现与综述。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.17205v1",
+      "title": "OPERA: Online Data Pruning for Efficient Retrieval Model Adaptation",
+      "abstract": "Domain-specific finetuning is essential for dense retrievers, yet not all training pairs contribute equally to the learning process. We introduce OPERA, a data pruning framework that exploits this heterogeneity to improve both the effectiveness and efficiency of retrieval model adaptation. We first investigate static pruning (SP), which retains only high-similarity query-document pairs, revealing an intrinsic quality-coverage tradeoff: ranking (NDCG) improves while retrieval (Recall) can degrade due to reduced query diversity. To resolve this tradeoff, we propose a two-stage dynamic pruning (DP) strategy that adaptively modulates sampling probabilities at both query and document levels throughout training, prioritizing high-quality examples while maintaining access to the full training set. Evaluations across eight datasets spanning six domains demonstrate the effectiveness of both approaches: SP improves ranking over standard finetuning (NDCG@10 +0.5\\%), while DP achieves the strongest performance on both ranking (NDCG@10 +1.9\\%) and retrieval (Recall@20 +0.7\\%), with an average rank of 1.38 across all methods. These findings scale to Qwen3-Embedding, an LLM-based dense retriever, confirming architecture-agnostic benefits. Notably, DP reaches comparable performance in less than 50\\% of the training time required by standard finetuning.",
+      "authors": [
+        "Haoyang Fang",
+        "Shuai Zhang",
+        "Yifei Ma",
+        "Hengyi Wang",
+        "Cuixiong Hu",
+        "Katrin Kirchhoff",
+        "Bernie Wang",
+        "George Karypis"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-03-17T23:11:45+00:00",
+      "link": "https://arxiv.org/pdf/2603.17205v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "data pruning framework for efficient retrieval model adaptation",
+      "llm_evidence_cn": "用于高效检索模型适配的数据剪枝框架",
+      "llm_evidence": "用于高效检索模型适配的数据剪枝框架",
+      "canonical_evidence": "用于高效检索模型适配的数据剪枝框架",
+      "llm_tldr_en": "Improves retrieval model adaptation efficiency by adaptively pruning training data pairs.",
+      "llm_tldr_cn": "通过自适应剪枝训练数据对，提高检索模型领域适配的效率和效果。",
+      "llm_tldr": "通过自适应剪枝训练数据对，提高检索模型领域适配的效率和效果。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2603.17872v1",
+      "title": "Mitigating LLM Hallucinations through Domain-Grounded Tiered Retrieval",
+      "abstract": "Large Language Models (LLMs) have achieved unprecedented fluency but remain susceptible to \"hallucinations\" - the generation of factually incorrect or ungrounded content. This limitation is particularly critical in high-stakes domains where reliability is paramount. We propose a domain-grounded tiered retrieval and verification architecture designed to systematically intercept factual inaccuracies by shifting LLMs from stochastic pattern-matchers to verified truth-seekers. The proposed framework utilizes a four-phase, self-regulating pipeline implemented via LangGraph: (I) Intrinsic Verification with Early-Exit logic to optimize compute, (II) Adaptive Search Routing utilizing a Domain Detector to target subject-specific archives, (III) Corrective Document Grading (CRAG) to filter irrelevant context, and (IV) Extrinsic Regeneration followed by atomic claim-level verification. The system was evaluated across 650 queries from five diverse benchmarks: TimeQA v2, FreshQA v2, HaluEval General, MMLU Global Facts, and TruthfulQA. Empirical results demonstrate that the pipeline consistently outperforms zero-shot baselines across all environments. Win rates peaked at 83.7% in TimeQA v2 and 78.0% in MMLU Global Facts, confirming high efficacy in domains requiring granular temporal and numerical precision. Groundedness scores remained robustly stable between 78.8% and 86.4% across factual-answer rows. While the architecture provides a robust fail-safe for misinformation, a persistent failure mode of \"False-Premise Overclaiming\" was identified. These findings provide a detailed empirical characterization of multi-stage RAG behavior and suggest that future work should prioritize pre-retrieval \"answerability\" nodes to further bridge the reliability gap in conversational AI.",
+      "authors": [
+        "Md. Asraful Haque",
+        "Aasar Mehdi",
+        "Maaz Mahboob",
+        "Tamkeen Fatima"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-03-18T15:59:30+00:00",
+      "link": "https://arxiv.org/pdf/2603.17872v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "domain-grounded tiered retrieval and verification architecture",
+      "llm_evidence_cn": "领域落地的分层检索与验证架构",
+      "llm_evidence": "领域落地的分层检索与验证架构",
+      "canonical_evidence": "领域落地的分层检索与验证架构",
+      "llm_tldr_en": "A tiered retrieval pipeline to mitigate LLM hallucinations by targeting subject-specific archives.",
+      "llm_tldr_cn": "一种分层检索流水线，通过针对特定领域的档案来减少大模型的幻觉。",
+      "llm_tldr": "一种分层检索流水线，通过针对特定领域的档案来减少大模型的幻觉。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.16137v1",
+      "title": "SIA: A Synthesize-Inject-Align Framework for Knowledge-Grounded and Secure E-commerce Search LLMs with Industrial Deployment",
+      "abstract": "Large language models offer transformative potential for e-commerce search by enabling intent-aware recommendations. However, their industrial deployment is hindered by two critical challenges: (1) knowledge hallucination due to insufficient encoding of dynamic, fine-grained product knowledge, and (2) security vulnerabilities under jailbreak attacks that threaten compliance. To address these issues, we propose SI--a Synthesize-Inject-Align framework for building knowledgeable and secure e-commerce search LLMs. Our approach first synthesizes high-quality natural language corpus by combining structured knowledge graphs with unstructured behavioral logs, augmented with reasoning chains and safety-aware data.We then introduce a parameter-efficient pre-training strategy based on Depth Up-Scaling to inject domain knowledge while preserving general capabilities. Finally, a dual-path alignment method via multi-task instruction tuning and adversarial training strengthens both task performance and safety robustness. The framework has been deployed at JD.com, China's largest self-operated e-commerce platform, where A/B tests across five core search scenarios demonstrate significant improvements in key business metrics, validating its industrial effectiveness and scalability.",
+      "authors": [
+        "Zhouwei Zhai",
+        "Mengxiang Chen",
+        "Anmeng Zhang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-17T05:41:22+00:00",
+      "link": "https://arxiv.org/pdf/2603.16137v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "knowledge-grounded search framework combining structured and unstructured data",
+      "llm_evidence_cn": "结合结构化与非结构化数据的知识增强搜索框架",
+      "llm_evidence": "结合结构化与非结构化数据的知识增强搜索框架",
+      "canonical_evidence": "结合结构化与非结构化数据的知识增强搜索框架",
+      "llm_tldr_en": "Builds secure e-commerce search LLMs by injecting fine-grained product knowledge.",
+      "llm_tldr_cn": "通过注入细粒度产品知识，构建安全且具备知识背景的电商搜索大模型。",
+      "llm_tldr": "通过注入细粒度产品知识，构建安全且具备知识背景的电商搜索大模型。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.16715v1",
+      "title": "Novelty-Driven Target-Space Discovery in Automated Electron and Scanning Probe Microscopy",
+      "abstract": "Modern automated microscopy faces a fundamental discovery challenge: in many systems, the most important scientific information does not reside in the immediately visible image features, but in the target space of sequentially acquired spectra or functional responses, making it essential to develop strategies that can actively search for new behaviors rather than simply optimize known objectives. Here, we developed a deep-kernel-learning BEACON framework that is explicitly designed to guide discovery in the target space by learning structure-property relationships during the experiment and using that evolving model to seek diverse response regimes. We first established the method through demonstration workflows built on pre-acquired ground-truth datasets, which enabled direct benchmarking against classical acquisition strategies and allowed us to define a set of monitoring functions for comparing exploration quality, target-space coverage, and surrogate-model behavior in a transparent and reproducible manner. This benchmarking framework provides a practical basis for evaluating discovery-driven algorithms, not just optimization performance. We then operationalized and deployed the workflow on STEM, showing that the approach can transition from offline validation to real experimental implementation. To support adoption and extension by the broader community, the associated notebooks are available, allowing users to reproduce the workflows, test the benchmarks, and adapt the method to their own instruments and datasets.",
+      "authors": [
+        "Utkarsh Pratiush",
+        "Kamyar Barakati",
+        "Boris N. Slautin",
+        "Catherine C. Bodinger",
+        "Christopher D. Lowe",
+        "Brandi M. Cossairt",
+        "Sergei V. Kalinin"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cond-mat.mtrl-sci"
+      ],
+      "published": "2026-03-17T16:04:20+00:00",
+      "link": "https://arxiv.org/pdf/2603.16715v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Novelty-driven discovery of key scientific behaviors in microscopy",
+      "llm_evidence_cn": "显微镜研究中关键科学行为的新颖性驱动发现",
+      "llm_evidence": "显微镜研究中关键科学行为的新颖性驱动发现",
+      "canonical_evidence": "显微镜研究中关键科学行为的新颖性驱动发现",
+      "llm_tldr_en": "Uses deep kernel learning to guide the discovery of new scientific behaviors in experimental data.",
+      "llm_tldr_cn": "利用深度核学习指导实验数据中新科学行为的发现。",
+      "llm_tldr": "利用深度核学习指导实验数据中新科学行为的发现。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.18273v1",
+      "title": "EDM-ARS: A Domain-Specific Multi-Agent System for Automated Educational Data Mining Research",
+      "abstract": "In this technical report, we present the Educational Data Mining Automated Research System (EDM-ARS), a domain-specific multi-agent pipeline that automates end-to-end educational data mining (EDM) research. We conceptualize EDM-ARS as a general framework for domain-aware automated research pipelines, where educational expertise is embedded into each stage of the research lifecycle. As a first instantiation of this framework, we focus on predictive modeling tasks. Within this scope, EDM-ARS orchestrates five specialized LLM-powered agents (ProblemFormulator, DataEngineer, Analyst, Critic, and Writer) through a state-machine coordinator that supports revision loops, checkpoint-based recovery, and sandboxed code execution. Given a research prompt and a dataset, EDM-ARS produces a complete LaTeX manuscript with real Semantic Scholar citations, validated machine learning analyses, and automated methodological peer review. We also provide a detailed description of the system architecture, the three-tier data registry design that encodes educational domain expertise, the specification of each agent, the inter-agent communication protocol, and mechanisms for error-handling and self-correction. Finally, we discuss current limitations, including single-dataset scope and formulaic paper output, and outline a phased roadmap toward causal inference, transfer learning, psychometric, and multi-dataset generalization. EDM-ARS is released as an open-source project to support the educational research community.",
+      "authors": [
+        "Chenguang Pan",
+        "Zhou Zhang",
+        "Weixuan Xiao",
+        "Chengyuan Yao"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-18T20:45:45+00:00",
+      "link": "https://arxiv.org/pdf/2603.18273v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "automates end-to-end research lifecycle with specialized agents",
+      "llm_evidence_cn": "通过专业代理自动化端到端研究生命周期",
+      "llm_evidence": "通过专业代理自动化端到端研究生命周期",
+      "canonical_evidence": "通过专业代理自动化端到端研究生命周期",
+      "llm_tldr_en": "A multi-agent system that automates the entire research process for educational data mining.",
+      "llm_tldr_cn": "一种多代理系统，可自动执行教育数据挖掘的整个研究过程。",
+      "llm_tldr": "一种多代理系统，可自动执行教育数据挖掘的整个研究过程。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.16138v1",
+      "title": "Answer Bubbles: Information Exposure in AI-Mediated Search",
+      "abstract": "Generative search systems are increasingly replacing link-based retrieval with AI-generated summaries, yet little is known about how these systems differ in sources, language, and fidelity to cited material. We examine responses to 11,000 real search queries across four systems -- vanilla GPT, Search GPT, Google AI Overviews, and traditional Google Search -- at three levels: source diversity, linguistic characterization of the generated summary, and source-summary fidelity. We find that generative search systems exhibit significant \\textit{source-selection} biases in their citations, favoring certain sources over others. Incorporating search also selectively attenuates epistemic markers, reducing hedging by up to 60\\% while preserving confidence language in the AI-generated summaries. At the same time, AI summaries further compound the citation biases: Wikipedia and longer sources are disproportionately overrepresented, whereas cited social media content and negatively framed sources are substantially underrepresented. Our findings highlight the potential for \\textit{answer bubbles}, in which identical queries yield structurally different information realities across systems, with implications for user trust, source visibility, and the transparency of AI-mediated information access.",
+      "authors": [
+        "Michelle Huang",
+        "Agam Goyal",
+        "Koustuv Saha",
+        "Eshwar Chandrasekharan"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.CL"
+      ],
+      "published": "2026-03-17T05:41:39+00:00",
+      "link": "https://arxiv.org/pdf/2603.16138v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Evaluates source selection and fidelity in AI-mediated search systems",
+      "llm_evidence_cn": "评估AI介导搜索系统中的来源选择和忠实度",
+      "llm_evidence": "评估AI介导搜索系统中的来源选择和忠实度",
+      "canonical_evidence": "评估AI介导搜索系统中的来源选择和忠实度",
+      "llm_tldr_en": "Analyzes biases and source diversity in generative AI search systems compared to traditional search.",
+      "llm_tldr_cn": "分析生成式AI搜索系统与传统搜索相比在来源选择上的偏差和多样性。",
+      "llm_tldr": "分析生成式AI搜索系统与传统搜索相比在来源选择上的偏差和多样性。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.17533v1",
+      "title": "A Unified Language Model for Large Scale Search, Recommendation, and Reasoning",
+      "abstract": "LLMs are increasingly applied to recommendation, retrieval, and reasoning, yet deploying a single end-to-end model that can jointly support these behaviors over large, heterogeneous catalogs remains challenging. Such systems must generate unambiguous references to real items, handle multiple entity types, and operate under strict latency and reliability constraints requirements that are difficult to satisfy with text-only generation. While tool-augmented recommender systems address parts of this problem, they introduce orchestration complexity and limit end-to-end optimization. We view this setting as an instance of a broader research problem: how to adapt LLMs to reason jointly over multiple-domain entities, users, and language in a fully self-contained manner. To this end, we introduce NEO, a framework that adapts a pre-trained decoder-only LLM into a tool-free, catalog-grounded generator. NEO represents items as SIDs and trains a single model to interleave natural language and typed item identifiers within a shared sequence. Text prompts control the task, target entity type, and output format (IDs, text, or mixed), while constrained decoding guarantees catalog-valid item generation without restricting free-form text. We refer to this instruction-conditioned controllability as language-steerability. We treat SIDs as a distinct modality and study design choices for integrating discrete entity representations into LLMs via staged alignment and instruction tuning. We evaluate NEO at scale on a real-world catalog of over 10M items across multiple media types and discovery tasks, including recommendation, search, and user understanding. In offline experiments, NEO consistently outperforms strong task-specific baselines and exhibits cross-task transfer, demonstrating a practical path toward consolidating large-scale discovery capabilities into a single language-steerable generative model.",
+      "authors": [
+        "Marco De Nadai",
+        "Edoardo D'Amico",
+        "Max Lefarov",
+        "Alexandre Tamborrino",
+        "Divita Vohra",
+        "Mark VanMiddlesworth",
+        "Shawn Lin",
+        "Jacqueline Wood",
+        "Jan Stypka",
+        "Eliza Klyce",
+        "Keshi Dai",
+        "Timothy Christopher Heath",
+        "Martin D. Gould",
+        "Yves Raimond",
+        "Sandeep Ghael",
+        "Tony Jebara",
+        "Andreas Damianou",
+        "Vladan Radosavljevic",
+        "Paul N. Bennett",
+        "Mounia Lalmas",
+        "Praveen Chandar"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.LG"
+      ],
+      "published": "2026-03-18T09:42:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.17533v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Unified language model for large-scale search and retrieval over heterogeneous catalogs",
+      "llm_evidence_cn": "用于大规模异构目录搜索和检索的统一语言模型",
+      "llm_evidence": "用于大规模异构目录搜索和检索的统一语言模型",
+      "canonical_evidence": "用于大规模异构目录搜索和检索的统一语言模型",
+      "llm_tldr_en": "A unified LLM framework for joint search, recommendation, and reasoning over large catalogs.",
+      "llm_tldr_cn": "一种用于在大规模目录中进行联合搜索、推荐和推理的统一大模型框架。",
+      "llm_tldr": "一种用于在大规模目录中进行联合搜索、推荐和推理的统一大模型框架。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.19008v1",
+      "title": "Hypothesis-Conditioned Query Rewriting for Decision-Useful Retrieval",
+      "abstract": "Retrieval-Augmented Generation (RAG) improves Large Language Models (LLMs) by grounding generation in external, non-parametric knowledge. However, when a task requires choosing among competing options, simply grounding generation in broadly relevant context is often insufficient to drive the final decision. Existing RAG methods typically rely on a single initial query, which often favors topical relevance over decision-relevant evidence, and therefore retrieves background information that can fail to discriminate among answer options. To address this issue, here we propose Hypothesis-Conditioned Query Rewriting (HCQR), a training-free pre-retrieval framework that reorients RAG from topic-oriented retrieval to evidence-oriented retrieval. HCQR first derives a lightweight working hypothesis from the input question and candidate options, and then rewrites retrieval into three targeted queries that seek evidence to: (1) support the hypothesis, (2) distinguish it from competing alternatives, and (3) verify salient clues in the question. This approach enables context retrieval that is more directly aligned with answer selection, allowing the generator to confirm or overturn the initial hypothesis based on the retrieved evidence. Experiments on MedQA and MMLU-Med show that HCQR consistently outperforms single-query RAG and re-rank/filter baselines, improving average accuracy over Simple RAG by 5.9 and 3.6 points, respectively. Code is available at https://anonymous.4open.science/r/HCQR-1C2E.",
+      "authors": [
+        "Hangeol Chang",
+        "Changsun Lee",
+        "Seungjoon Rho",
+        "Junho Yeo",
+        "Jong Chul Ye"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-03-19T15:15:58+00:00",
+      "link": "https://arxiv.org/pdf/2603.19008v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Query rewriting for evidence-oriented retrieval in decision-making tasks",
+      "llm_evidence_cn": "针对决策任务中证据导向检索的查询重写",
+      "llm_evidence": "针对决策任务中证据导向检索的查询重写",
+      "canonical_evidence": "针对决策任务中证据导向检索的查询重写",
+      "llm_tldr_en": "Reorients RAG from topic-oriented to evidence-oriented retrieval via hypothesis-conditioned query rewriting.",
+      "llm_tldr_cn": "通过假设条件查询重写，将RAG从主题导向检索转向证据导向检索。",
+      "llm_tldr": "通过假设条件查询重写，将RAG从主题导向检索转向证据导向检索。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.16289v1",
+      "title": "VisBrowse-Bench: Benchmarking Visual-Native Search for Multimodal Browsing Agents",
+      "abstract": "The rapid advancement of Multimodal Large Language Models (MLLMs) has enabled browsing agents to acquire and reason over multimodal information in the real world. But existing benchmarks suffer from two limitations: insufficient evaluation of visual reasoning ability and the neglect of native visual information of web pages in the reasoning chains. To address these challenges, we introduce a new benchmark for visual-native search, VisBrowse-Bench. It contains 169 VQA instances covering multiple domains and evaluates the models' visual reasoning capabilities during the search process through multimodal evidence cross-validation via text-image retrieval and joint reasoning. These data were constructed by human experts using a multi-stage pipeline and underwent rigorous manual verification. We additionally propose an agent workflow that can effectively drive the browsing agent to actively collect and reason over visual information during the search process. We comprehensively evaluated both open-source and closed-source models in this workflow. Experimental results show that even the best-performing model, Claude-4.6-Opus only achieves an accuracy of 47.6%, while the proprietary Deep Research model, o3-deep-research only achieves an accuracy of 41.1%. The code and data can be accessed at: https://github.com/ZhengboZhang/VisBrowse-Bench",
+      "authors": [
+        "Zhengbo Zhang",
+        "Jinbo Su",
+        "Zhaowen Zhou",
+        "Changtao Miao",
+        "Yuhan Hong",
+        "Qimeng Wu",
+        "Yumeng Liu",
+        "Feier Wu",
+        "Yihe Tian",
+        "Yuhao Liang",
+        "Zitong Shan",
+        "Wanke Xia",
+        "Yi-Fan Zhang",
+        "Bo Zhang",
+        "Zhe Li",
+        "Shiming Xiang",
+        "Ying Yan"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-03-17T09:24:13+00:00",
+      "link": "https://arxiv.org/pdf/2603.16289v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "benchmarking visual-native search for browsing agents",
+      "llm_evidence_cn": "多模态浏览智能体的视觉原生搜索基准测试",
+      "llm_evidence": "多模态浏览智能体的视觉原生搜索基准测试",
+      "canonical_evidence": "多模态浏览智能体的视觉原生搜索基准测试",
+      "llm_tldr_en": "Proposes VisBrowse-Bench to evaluate visual reasoning and multimodal evidence retrieval in web browsing.",
+      "llm_tldr_cn": "提出 VisBrowse-Bench 基准，用于评估网页浏览中的视觉推理和多模态证据检索。",
+      "llm_tldr": "提出 VisBrowse-Bench 基准，用于评估网页浏览中的视觉推理和多模态证据检索。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.18835v2",
+      "title": "Tursio Database Search: How far are we from ChatGPT?",
+      "abstract": "Business users need to search enterprise databases using natural language, just as they now search the web using ChatGPT or Perplexity. However, existing benchmarks -- designed for open-domain QA or text-to-SQL -- do not evaluate the end-to-end quality of such a search experience. We present an evaluation framework for structured database search that generates realistic banking queries across varying difficulty levels and assesses answer quality using relevance, safety, and conversational metrics via an LLM-as-judge approach. We apply this framework to compare Tursio, a database search platform, against ChatGPT and Perplexity on a credit union banking schema. Our results show that Tursio achieves answer relevancy statistically comparable to both baselines (97.8% vs. 98.1% on simple, 90.0% vs. 100.0% on medium, 89.5% vs. 100.0% on hard questions), even though Tursio answers from a structured database while the baselines generate responses from the open web. We analyze the failure modes, identify database completeness as the primary bottleneck, and outline directions for improving both the evaluation methodology and the systems under evaluation.",
+      "authors": [
+        "Sulbha Jain",
+        "Shivani Tripathi",
+        "Shi Qiao",
+        "Alekh Jindal"
+      ],
+      "primary_category": "cs.DB",
+      "categories": [
+        "cs.DB"
+      ],
+      "published": "2026-03-19T12:36:48+00:00",
+      "link": "https://arxiv.org/pdf/2603.18835v2",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "evaluation framework for structured database search using natural language",
+      "llm_evidence_cn": "使用自然语言进行结构化数据库搜索的评估框架",
+      "llm_evidence": "使用自然语言进行结构化数据库搜索的评估框架",
+      "canonical_evidence": "使用自然语言进行结构化数据库搜索的评估框架",
+      "llm_tldr_en": "Evaluates end-to-end quality of natural language search in structured enterprise databases.",
+      "llm_tldr_cn": "评估在结构化企业数据库中进行自然语言搜索的端到端质量。",
+      "llm_tldr": "评估在结构化企业数据库中进行自然语言搜索的端到端质量。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.20034v1",
+      "title": "CoverageBench: Evaluating Information Coverage across Tasks and Domains",
+      "abstract": "We wish to measure the information coverage of an ad hoc retrieval algorithm, that is, how much of the range of available relevant information is covered by the search results. Information coverage is a central aspect for retrieval, especially when the retrieval system is integrated with generative models in a retrieval-augmented generation (RAG) system. The classic metrics for ad hoc retrieval, precision and recall, reward a system as more and more relevant documents are retrieved. However, since relevance in ad hoc test collections is defined for a document without any relation to other documents that might contain the same information, high recall is sufficient but not necessary to ensure coverage. The same is true for other metrics such as rank-biased precision (RBP), normalized discounted cumulative gain (nDCG), and mean average precision (MAP). Test collections developed around the notion of diversity ranking in web search incorporate multiple aspects that support a concept of coverage in the web domain. In this work, we construct a suite of collections for evaluating information coverage from existing collections. This suite offers researchers a unified testbed spanning multiple genres and tasks. All topics, nuggets, relevance labels, and baseline rankings are released on Hugging Face Datasets, along with instructions for accessing the publicly available document collections.",
+      "authors": [
+        "Saron Samuel",
+        "Andrew Yates",
+        "Dawn Lawrie",
+        "Ian Soboroff",
+        "Trevor Adriaanse",
+        "Benjamin Van Durme",
+        "Eugene Yang"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-20T15:20:44+00:00",
+      "link": "https://arxiv.org/pdf/2603.20034v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "measuring information coverage of retrieval algorithms",
+      "llm_evidence_cn": "衡量检索算法的信息覆盖范围",
+      "llm_evidence": "衡量检索算法的信息覆盖范围",
+      "canonical_evidence": "衡量检索算法的信息覆盖范围",
+      "llm_tldr_en": "A benchmark for evaluating how much relevant information is covered by search results across domains.",
+      "llm_tldr_cn": "一个用于评估搜索结果在不同领域涵盖多少相关信息的基准。",
+      "llm_tldr": "一个用于评估搜索结果在不同领域涵盖多少相关信息的基准。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.16289v2",
+      "title": "VisBrowse-Bench: Benchmarking Visual-Native Search for Multimodal Browsing Agents",
+      "abstract": "The rapid advancement of Multimodal Large Language Models (MLLMs) has enabled browsing agents to acquire and reason over multimodal information in the real world. But existing benchmarks suffer from two limitations: insufficient evaluation of visual reasoning ability and the neglect of native visual information of web pages in the reasoning chains. To address these challenges, we introduce a new benchmark for visual-native search, VisBrowse-Bench. It contains 169 VQA instances covering multiple domains and evaluates the models' visual reasoning capabilities during the search process through multimodal evidence cross-validation via text-image retrieval and joint reasoning. These data were constructed by human experts using a multi-stage pipeline and underwent rigorous manual verification. We additionally propose an agent workflow that can effectively drive the browsing agent to actively collect and reason over visual information during the search process. We comprehensively evaluated both open-source and closed-source models in this workflow. Experimental results show that even the best-performing model, Claude-4.6-Opus only achieves an accuracy of 47.6%, while the proprietary Deep Research model, o3-deep-research only achieves an accuracy of 41.1%. The code and data can be accessed at: https://github.com/ZhengboZhang/VisBrowse-Bench",
+      "authors": [
+        "Zhengbo Zhang",
+        "Jinbo Su",
+        "Zhaowen Zhou",
+        "Changtao Miao",
+        "Yuhan Hong",
+        "Qimeng Wu",
+        "Yumeng Liu",
+        "Feier Wu",
+        "Yihe Tian",
+        "Yuhao Liang",
+        "Zitong Shan",
+        "Wanke Xia",
+        "Yi-Fan Zhang",
+        "Bo Zhang",
+        "Zhe Li",
+        "Shiming Xiang",
+        "Ying Yan"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.AI"
+      ],
+      "published": "2026-03-17T09:24:13+00:00",
+      "link": "https://arxiv.org/pdf/2603.16289v2",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "visual-native search and multimodal evidence cross-validation",
+      "llm_evidence_cn": "视觉原生搜索与多模态证据交叉验证",
+      "llm_evidence": "视觉原生搜索与多模态证据交叉验证",
+      "canonical_evidence": "视觉原生搜索与多模态证据交叉验证",
+      "llm_tldr_en": "Introduces a benchmark for visual-native search to evaluate multimodal reasoning in browsing agents.",
+      "llm_tldr_cn": "引入视觉原生搜索基准，用于评估浏览代理在搜索过程中的多模态推理能力。",
+      "llm_tldr": "引入视觉原生搜索基准，用于评估浏览代理在搜索过程中的多模态推理能力。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}
