@@ -4,73 +4,73 @@
 ────────────────────────────────────────
 
 ## 每次日报
-- 最新运行日期：2026-03-25
-- 运行时间：2026-03-25 19:53:46 UTC
+- 最新运行日期：2026-03-26
+- 运行时间：2026-03-26 20:06:07 UTC
 - 运行状态：成功
 - 本次总论文数：17
 - 精读区：6
 - 速读区：11
 
 ### 今日简报（AI）
-今日聚焦 AI Agent 赋能的科研自动化，深度解析 17 篇涵盖假设生成与精准检索的前沿成果。
-重点推荐 AwesomeLit 驱动的文献研究新范式，以及利用贝叶斯优化与查询重写大幅提升检索决策效能。
-建议普通读者关注多智能体协作与分层检索技术，这是解决
-- 详情：[/202603/25/README](/202603/25/README)
+今日深度解析 17 篇前沿成果，重点聚焦 AI 智能体在自动化搜索排序与科学文献检索中的突破。
+核心看点在于 AI Co-Scientist 如何自主发现新型排序模型，以及 VILLA 框架对复杂科学数据检索的极致优化。
+建议关注 LLM 智能体如何从简单的对话助手进化为具备自主科研能力的“数字科学家”。
+- 详情：[/202603/26/README](/202603/26/README)
 
 ### 精读区论文标签
-1. [AwesomeLit: Towards Hypothesis Generation with Agent-Supported Literature Research](/202603/25/2603.22648v1-awesomelit-towards-hypothesis-generation-with-agent-supported-literature-research)  
-   标签：评分：10.0/10、query:sr
-   evidence：智能体辅助的文献研究与假设生成
-2. [ReBOL: Retrieval via Bayesian Optimization with Batched LLM Relevance Observations and Query Reformulation](/202603/25/2603.20513v1-rebol-retrieval-via-bayesian-optimization-with-batched-llm-relevance-observations-and-query-reformulation)  
+1. [AI Co-Scientist for Ranking: Discovering Novel Search Ranking Models alongside LLM-based AI Agents with Cloud Computing Access](/202603/26/2603.22376v1-ai-co-scientist-for-ranking-discovering-novel-search-ranking-models-alongside-llm-based-ai-agents-with-cloud-computing-access)  
    标签：评分：9.0/10、query:sr
-   evidence：通过贝叶斯优化和查询重构进行检索
-3. [Context Selection for Hypothesis and Statistical Evidence Extraction from Full-Text Scientific Articles](/202603/25/2603.21193v1-context-selection-for-hypothesis-and-statistical-evidence-extraction-from-full-text-scientific-articles)  
+   evidence：用于搜索排序研究和想法生成的AI协同科学家框架
+2. [VILLA: Versatile Information Retrieval From Scientific Literature Using Large LAnguage Models](/202603/26/2603.23849v1-villa-versatile-information-retrieval-from-scientific-literature-using-large-language-models)  
    标签：评分：9.0/10、query:sr
-   evidence：从科学论文全文中提取假设和证据
-4. [Graph-Aware Late Chunking for Retrieval-Augmented Generation in Biomedical Literature](/202603/25/2603.22633v1-graph-aware-late-chunking-for-retrieval-augmented-generation-in-biomedical-literature)  
+   evidence：从科学文献中进行信息检索与提取
+3. [Where Do Your Citations Come From? Citation-Constellation: A Free, Open-Source, No-Code, and Auditable Tool for Citation Network Decomposition with Complementary BARON and HEROCON Scores](/202603/26/2603.24216v1-where-do-your-citations-come-from-citation-constellation-a-free-open-source-no-code-and-auditable-tool-for-citation-network-decomposition-with-complementary-baron-and-herocon-scores)  
    标签：评分：9.0/10、query:sr
-   evidence：用于在全文科学文献中提取证据的图感知检索框架
-5. [HGNet: Scalable Foundation Model for Automated Knowledge Graph Generation from Scientific Literature](/202603/25/2603.23136v1-hgnet-scalable-foundation-model-for-automated-knowledge-graph-generation-from-scientific-literature)  
-   标签：评分：9.0/10、query:sr
-   evidence：从科学文献中自动生成知识图谱以进行导航和综合
-6. [OPERA: Online Data Pruning for Efficient Retrieval Model Adaptation](/202603/25/2603.17205v1-opera-online-data-pruning-for-efficient-retrieval-model-adaptation)  
+   evidence：用于引文网络分解以识别学术影响力的工具
+4. [Mitigating LLM Hallucinations through Domain-Grounded Tiered Retrieval](/202603/26/2603.17872v2-mitigating-llm-hallucinations-through-domain-grounded-tiered-retrieval)  
    标签：评分：8.0/10、query:sr
-   evidence：用于高效检索模型适配的数据剪枝框架
+   evidence：基于领域落地的分层检索架构以提高可靠性
+5. [Rethinking Retrieval-Augmentation as Synthesis: A Query-Aware Context Merging Approach](/202603/26/2603.20286v1-rethinking-retrieval-augmentation-as-synthesis-a-query-aware-context-merging-approach)  
+   标签：评分：8.0/10、query:sr
+   evidence：检索增强生成的查询感知上下文合并
+6. [BubbleRAG: Evidence-Driven Retrieval-Augmented Generation for Black-Box Knowledge Graphs](/202603/26/2603.20309v1-bubblerag-evidence-driven-retrieval-augmented-generation-for-black-box-knowledge-graphs)  
+   标签：评分：8.0/10、query:sr
+   evidence：知识密集型任务的证据驱动检索
 
 ### 速读区论文标签
-1. [Mitigating LLM Hallucinations through Domain-Grounded Tiered Retrieval](/202603/25/2603.17872v1-mitigating-llm-hallucinations-through-domain-grounded-tiered-retrieval)  
+1. [SODIUM: From Open Web Data to Queryable Databases](/202603/26/2603.18447v1-sodium-from-open-web-data-to-queryable-databases)  
    标签：评分：8.0/10、query:sr
-   evidence：领域落地的分层检索与验证架构
-2. [EDM-ARS: A Domain-Specific Multi-Agent System for Automated Educational Data Mining Research](/202603/25/2603.18273v1-edm-ars-a-domain-specific-multi-agent-system-for-automated-educational-data-mining-research)  
+   evidence：系统性探索开放网络以进行研究数据集成
+2. [MetaCues: Enabling Critical Engagement with Generative AI for Information Seeking and Sensemaking](/202603/26/2603.19634v1-metacues-enabling-critical-engagement-with-generative-ai-for-information-seeking-and-sensemaking)  
    标签：评分：8.0/10、query:sr
-   evidence：通过专业代理自动化端到端研究生命周期
-3. [Hypothesis-Conditioned Query Rewriting for Decision-Useful Retrieval](/202603/25/2603.19008v1-hypothesis-conditioned-query-rewriting-for-decision-useful-retrieval)  
+   evidence：用于信息寻求和理解的交互式工具，引导用户进行搜索
+3. [GEM: A Native Graph-based Index for Multi-Vector Retrieval](/202603/26/2603.20336v1-gem-a-native-graph-based-index-for-multi-vector-retrieval)  
    标签：评分：8.0/10、query:sr
-   evidence：针对决策任务中证据导向检索的查询重写
-4. [CoverageBench: Evaluating Information Coverage across Tasks and Domains](/202603/25/2603.20034v1-coveragebench-evaluating-information-coverage-across-tasks-and-domains)  
+   evidence：用于多向量检索的原生图索引
+4. [Towards Intelligent Geospatial Data Discovery: a knowledge graph-driven multi-agent framework powered by large language models](/202603/26/2603.20670v2-towards-intelligent-geospatial-data-discovery-a-knowledge-graph-driven-multi-agent-framework-powered-by-large-language-models)  
    标签：评分：8.0/10、query:sr
-   evidence：衡量检索算法的信息覆盖范围
-5. [SIA: A Synthesize-Inject-Align Framework for Knowledge-Grounded and Secure E-commerce Search LLMs with Industrial Deployment](/202603/25/2603.16137v1-sia-a-synthesize-inject-align-framework-for-knowledge-grounded-and-secure-e-commerce-search-llms-with-industrial-deployment)  
+   evidence：知识图谱驱动的地理空间数据发现框架
+5. [Augmenting Scholarly Reading with Cross-Media Annotations](/202603/26/2603.17957v1-augmenting-scholarly-reading-with-cross-media-annotations)  
    标签：评分：7.0/10、query:sr
-   evidence：结合结构化与非结构化数据的知识增强搜索框架
-6. [Answer Bubbles: Information Exposure in AI-Mediated Search](/202603/25/2603.16138v1-answer-bubbles-information-exposure-in-ai-mediated-search)  
+   evidence：增强学术阅读并将PDF内容与其他材料关联
+6. [From Topic to Transition Structure: Unsupervised Concept Discovery at Corpus Scale via Predictive Associative Memory](/202603/26/2603.18420v1-from-topic-to-transition-structure-unsupervised-concept-discovery-at-corpus-scale-via-predictive-associative-memory)  
    标签：评分：7.0/10、query:sr
-   evidence：评估AI介导搜索系统中的来源选择和忠实度
-7. [VisBrowse-Bench: Benchmarking Visual-Native Search for Multimodal Browsing Agents](/202603/25/2603.16289v1-visbrowse-bench-benchmarking-visual-native-search-for-multimodal-browsing-agents)  
+   evidence：语料库规模的无监督概念发现，用于映射结构
+7. [MoRI: Learning Motivation-Grounded Reasoning for Scientific Ideation in Large Language Models](/202603/26/2603.19044v1-mori-learning-motivation-grounded-reasoning-for-scientific-ideation-in-large-language-models)  
    标签：评分：7.0/10、query:sr
-   evidence：多模态浏览智能体的视觉原生搜索基准测试
-8. [VisBrowse-Bench: Benchmarking Visual-Native Search for Multimodal Browsing Agents](/202603/25/2603.16289v2-visbrowse-bench-benchmarking-visual-native-search-for-multimodal-browsing-agents)  
+   evidence：模拟科学推理和研究方法论
+8. [ConSearcher: Supporting Conversational Information Seeking in Online Communities with Member Personas](/202603/26/2603.19747v1-consearcher-supporting-conversational-information-seeking-in-online-communities-with-member-personas)  
    标签：评分：7.0/10、query:sr
-   evidence：视觉原生搜索与多模态证据交叉验证
-9. [Novelty-Driven Target-Space Discovery in Automated Electron and Scanning Probe Microscopy](/202603/25/2603.16715v1-novelty-driven-target-space-discovery-in-automated-electron-and-scanning-probe-microscopy)  
+   evidence：在线社区的对话式信息检索工具
+9. [Tursio Database Search: How far are we from ChatGPT?](/202603/26/2603.18835v1-tursio-database-search-how-far-are-we-from-chatgpt)  
    标签：评分：6.0/10、query:sr
-   evidence：显微镜研究中关键科学行为的新颖性驱动发现
-10. [A Unified Language Model for Large Scale Search, Recommendation, and Reasoning](/202603/25/2603.17533v1-a-unified-language-model-for-large-scale-search-recommendation-and-reasoning)  
+   evidence：结构化数据库搜索相关性的评估框架
+10. [Scalable Prompt Routing via Fine-Grained Latent Task Discovery](/202603/26/2603.19415v1-scalable-prompt-routing-via-fine-grained-latent-task-discovery)  
    标签：评分：6.0/10、query:sr
-   evidence：用于大规模异构目录搜索和检索的统一语言模型
-11. [Tursio Database Search: How far are we from ChatGPT?](/202603/25/2603.18835v2-tursio-database-search-how-far-are-we-from-chatgpt)  
+   evidence：自动细粒度任务发现与查询路由
+11. [AIGQ: An End-to-End Hybrid Generative Architecture for E-commerce Query Recommendation](/202603/26/2603.19710v1-aigq-an-end-to-end-hybrid-generative-architecture-for-e-commerce-query-recommendation)  
    标签：评分：6.0/10、query:sr
-   evidence：使用自然语言进行结构化数据库搜索的评估框架
+   evidence：用于搜索中意图捕获和需求发现的生成式框架
 
 
 ════════════════════════════════════════
