@@ -1,211 +1,73 @@
 {
-  "generated_at": "2026-03-26T20:03:50.667161+00:00",
-  "updated_date": "20260326",
+  "generated_at": "2026-03-27T19:59:44.265997+00:00",
+  "updated_date": "20260327",
   "carryover_days": 9,
   "items": [
     {
-      "id": "2603.21139v1",
-      "title": "Ontology-driven personalized information retrieval for XML documents",
-      "abstract": "This paper addresses the challenge of improving information retrieval from semi-structured eXtensible Markup Language (XML) documents. Traditional information retrieval systems (IRS) often overlook user-specific needs and return identical results for the same query, despite differences in users' knowledge, preferences, and objectives. We integrate external semantic resources, namely a domain ontology and user profiles, into the retrieval process. Documents, queries, and user profiles are represented as vectors of weighted concepts. The ontology applies a concept-weighting mechanism that emphasizes highly specific concepts, as lower-level nodes in the hierarchy provide more precise and targeted information. Relevance is assessed using semantic similarity measures that capture conceptual relationships beyond keyword matching, enabling personalized and fine-grained matching among user profiles, queries, and documents. Experimental results show that combining ontologies with user profiles improves retrieval effectiveness, achieving higher precision and recall than keyword-based approaches. Overall, the proposed framework enhances the relevance and adaptability of XML search results, supporting more user-centered retrieval.",
+      "id": "2603.25640v1",
+      "title": "RenoBench: A Citation Parsing Benchmark",
+      "abstract": "Accurate parsing of citations is necessary for machine-readable scholarly infrastructure. But, despite sustained interest in this problem, existing evaluation techniques are often not generalizable, based on synthetic data, or not publicly available. We introduce RenoBench, a public domain benchmark for citation parsing, sourced from PDFs released on four publishing ecosystems: SciELO, Redalyc, the Public Knowledge Project, and Open Research Europe. Starting from 161,000 annotated citations, we apply automated validation and feature-based sampling to produce a dataset of 10,000 citations spanning multiple languages, publication types, and platforms. We then evaluate a variety of citation parsing systems and report field-level precision and recall. Our results show strong performance from language models, particularly when fine-tuned. RenoBench enables reproducible, standardized evaluation of citation parsing systems, and provides a foundation for advancing automated citation parsing and metascientific research.",
       "authors": [
-        "Ounnaci Iddir",
-        "Ahmed-ouamer Rachid",
-        "Tai Dinh"
-      ],
-      "primary_category": "cs.IR",
-      "categories": [
-        "cs.IR",
-        "cs.LG"
-      ],
-      "published": "2026-03-22T09:29:43+00:00",
-      "link": "https://arxiv.org/pdf/2603.21139v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "ontology-driven personalized information retrieval and semantic similarity",
-      "llm_evidence_cn": "本体驱动的个性化信息检索与语义相似度",
-      "llm_evidence": "本体驱动的个性化信息检索与语义相似度",
-      "canonical_evidence": "本体驱动的个性化信息检索与语义相似度",
-      "llm_tldr_en": "Enhances XML document retrieval using domain ontologies and user profiles for personalized semantic matching.",
-      "llm_tldr_cn": "利用领域本体和用户画像增强XML文档检索，实现个性化的语义匹配。",
-      "llm_tldr": "利用领域本体和用户画像增强XML文档检索，实现个性化的语义匹配。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "comprehensive research paper discovery",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.21139v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.22340v1",
-      "title": "Graphs RAG at Scale: Beyond Retrieval-Augmented Generation With Labeled Property Graphs and Resource Description Framework for Complex and Unknown Search Spaces",
-      "abstract": "Recent advances in Retrieval-Augmented Generation (RAG) have revolutionized knowledge-intensive tasks, yet traditional RAG methods struggle when the search space is unknown or when documents are semi-structured or structured. We introduce a novel end-to-end Graph RAG framework that leverages both Labeled Property Graph (LPG) and Resource Description Framework (RDF) architectures to overcome these limitations. Our approach enables dynamic document retrieval without the need to pre-specify the number of documents and eliminates inefficient reranking. We propose an innovative method for converting documents into RDF triplets using JSON key-value pairs, facilitating seamless integration of semi-structured data. Additionally, we present a text to Cypher framework for LPG, achieving over 90% accuracy in real-time translation of text queries to Cypher, enabling fast and reliable query generation suitable for online applications. Our empirical evaluation demonstrates that Graph RAG significantly outperforms traditional embedding-based RAG in accuracy, response quality, and reasoning, especially for complex, semi-structured tasks. These findings establish Graph RAG as a transformative solution for next-generation retrieval-augmented systems.",
-      "authors": [
-        "Manie Tadayon",
-        "Mayank Gupta"
-      ],
-      "primary_category": "cs.IR",
-      "categories": [
-        "cs.IR",
-        "cs.AI"
-      ],
-      "published": "2026-03-21T11:35:29+00:00",
-      "link": "https://arxiv.org/pdf/2603.22340v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Graph RAG framework for complex and unknown search spaces",
-      "llm_evidence_cn": "针对复杂且未知搜索空间的图RAG框架",
-      "llm_evidence": "针对复杂且未知搜索空间的图RAG框架",
-      "canonical_evidence": "针对复杂且未知搜索空间的图RAG框架",
-      "llm_tldr_en": "Proposes a Graph RAG framework using LPG and RDF to improve retrieval in complex, unstructured search spaces.",
-      "llm_tldr_cn": "提出了一种结合LPG和RDF的图RAG框架，以改进复杂非结构化搜索空间中的检索。",
-      "llm_tldr": "提出了一种结合LPG和RDF的图RAG框架，以改进复杂非结构化搜索空间中的检索。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "comprehensive research paper discovery",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.22340v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.23125v1",
-      "title": "From Questions to Trust Reports: A LLM-IR Framework for the TREC 2025 DRAGUN Track",
-      "abstract": "The DRAGUN Track at TREC 2025 targets the growing need for effective support tools that help users evaluate the trustworthiness of online news. We describe the UR_Trecking system submitted for both Task 1 (critical question generation) and Task 2 (retrieval-augmented trustworthiness reporting). Our approach combines LLM-based question generation with semantic filtering, diversity enforcement using clustering, and several query expansion strategies (including reasoning-based Chain-of-Thought expansion) to retrieve relevant evidence from the MS MARCO V2.1 segmented corpus. Retrieved documents are re-ranked using a monoT5 model and filtered using an LLM relevance judge together with a domain-level trustworthiness dataset. For Task 2, selected evidence is synthesized by an LLM into concise trustworthiness reports with citations. Results from the official evaluation indicate that Chain-of-Thought query expansion and re-ranking substantially improve both relevance and domain trust compared to baseline retrieval, while question-generation performance shows moderate quality with room for improvement. We conclude by outlining key challenges encountered and suggesting directions for enhancing robustness and trustworthiness assessment in future iterations of the system.",
-      "authors": [
-        "Ignacy Alwasiak",
-        "Kene Nnolim",
-        "Jaclyn Thi",
-        "Samy Ateia",
-        "Markus Bink",
-        "Gregor Donabauer",
-        "David Elsweiler",
-        "Udo Kruschwitz"
-      ],
-      "primary_category": "cs.IR",
-      "categories": [
-        "cs.IR"
-      ],
-      "published": "2026-03-24T12:22:27+00:00",
-      "link": "https://arxiv.org/pdf/2603.23125v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "LLM-IR framework for evidence retrieval and relevance judging",
-      "llm_evidence_cn": "用于证据检索和相关性判定的LLM-IR框架",
-      "llm_evidence": "用于证据检索和相关性判定的LLM-IR框架",
-      "canonical_evidence": "用于证据检索和相关性判定的LLM-IR框架",
-      "llm_tldr_en": "Presents a framework combining query expansion and LLM relevance judging for trustworthy information retrieval.",
-      "llm_tldr_cn": "提出一个结合查询扩展和LLM相关性判定的框架，用于可靠的信息检索。",
-      "llm_tldr": "提出一个结合查询扩展和LLM相关性判定的框架，用于可靠的信息检索。",
-      "llm_tags": [
-        "query:sr:composite"
-      ],
-      "matched_query_tag": "query:sr:composite",
-      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
-      "matched_requirement_id": "req-composite-sr",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.23125v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.22510v1",
-      "title": "Do Large Language Models Reduce Research Novelty? Evidence from Information Systems Journals",
-      "abstract": "Large language models such as ChatGPT have increased scholarly output, but whether this productivity boost produces genuine intellectual advancement remains untested. I address this gap by measuring the semantic novelty of 13,847 articles published between 2020 and 2025 in 44 Information Systems journals. Using SPECTER2 embeddings, I operationalize novelty as the cosine distance between each paper and its nearest prior neighbors. A difference-in-differences design with the November 2022 release of ChatGPT as the treatment break reveals a heterogeneous pattern: authors affiliated with institutions in non-English-dominant countries show a 0.18 standard deviation decline in relative novelty compared to authors in English-dominant countries (beta = -0.176, p < 0.001), equivalent to a 7-percentile-point drop in the novelty distribution. This finding is robust across alternative novelty specifications, treatment break dates, and sub-samples, and survives a placebo test at a pre-treatment break. I interpret these results through the lens of construal level theory, proposing that LLMs function as proximity tools that shift researchers from abstract, exploratory thinking toward concrete, convention-following execution. The paper contributes to the growing debate on whether LLM-driven productivity gains come at the cost of intellectual diversity.",
-      "authors": [
-        "Ali Safari"
+        "Parth Sarin",
+        "Juan Pablo Alperin",
+        "Adam Buttrick",
+        "Dione Mentis"
       ],
       "primary_category": "cs.DL",
       "categories": [
         "cs.DL",
-        "cs.AI",
-        "cs.IR"
+        "cs.CL"
       ],
-      "published": "2026-03-23T19:16:54+00:00",
-      "link": "https://arxiv.org/pdf/2603.22510v1",
+      "published": "2026-03-26T16:52:31+00:00",
+      "link": "https://arxiv.org/pdf/2603.25640v1",
       "tags": [
         "keyword:SR 检索",
         "query:SR 检索"
       ],
       "llm_score": 8.0,
-      "llm_evidence_en": "measuring semantic novelty of research articles using embeddings",
-      "llm_evidence_cn": "使用嵌入向量衡量研究论文的语义创新性",
-      "llm_evidence": "使用嵌入向量衡量研究论文的语义创新性",
-      "canonical_evidence": "使用嵌入向量衡量研究论文的语义创新性",
-      "llm_tldr_en": "Analyzes the impact of LLMs on research novelty by measuring semantic distance between papers in academic journals.",
-      "llm_tldr_cn": "通过衡量学术期刊论文间的语义距离，分析了LLM对研究创新性的影响。",
-      "llm_tldr": "通过衡量学术期刊论文间的语义距离，分析了LLM对研究创新性的影响。",
+      "llm_evidence_en": "citation parsing for scholarly infrastructure",
+      "llm_evidence_cn": "学术基础设施的引用解析",
+      "llm_evidence": "学术基础设施的引用解析",
+      "canonical_evidence": "学术基础设施的引用解析",
+      "llm_tldr_en": "Introduces a benchmark for citation parsing to improve the accuracy of machine-readable scholarly data.",
+      "llm_tldr_cn": "引入引用解析基准，以提高机器可读学术数据的准确性。",
+      "llm_tldr": "引入引用解析基准，以提高机器可读学术数据的准确性。",
       "llm_tags": [
         "query:sr"
       ],
       "matched_query_tag": "query:sr",
-      "matched_query_text": "identifying key research in a field",
-      "matched_requirement_id": "req-8",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
       "selection_source": "carryover_cache",
-      "paper_id": "2603.22510v1",
+      "paper_id": "2603.25640v1",
       "carry_days": 1
     },
     {
-      "id": "2603.24422v1",
-      "title": "OneSearch-V2: The Latent Reasoning Enhanced Self-distillation Generative Search Framework",
-      "abstract": "Generative Retrieval (GR) has emerged as a promising paradigm for modern search systems. Compared to multi-stage cascaded architecture, it offers advantages such as end-to-end joint optimization and high computational efficiency. OneSearch, as a representative industrial-scale deployed generative search framework, has brought significant commercial and operational benefits. However, its inadequate understanding of complex queries, inefficient exploitation of latent user intents, and overfitting to narrow historical preferences have limited its further performance improvement. To address these challenges, we propose \\textbf{OneSearch-V2}, a latent reasoning enhanced self-distillation generative search framework. It contains three key innovations: (1) a thought-augmented complex query understanding module, which enables deep query understanding and overcomes the shallow semantic matching limitations of direct inference; (2) a reasoning-internalized self-distillation training pipeline, which uncovers users' potential yet precise e-commerce intentions beyond log-fitting through implicit in-context learning; (3) a behavior preference alignment optimization system, which mitigates reward hacking arising from the single conversion metric, and addresses personal preference via direct user feedback. Extensive offline evaluations demonstrate OneSearch-V2's strong query recognition and user profiling capabilities. Online A/B tests further validate its business effectiveness, yielding +3.98\\% item CTR, +3.05\\% buyer conversion rate, and +2.11\\% order volume. Manual evaluation further confirms gains in search experience quality, with +1.65\\% in page good rate and +1.37\\% in query-item relevance. More importantly, OneSearch-V2 effectively mitigates common search system issues such as information bubbles and long-tail sparsity, without incurring additional inference costs or serving latency.",
+      "id": "2603.25248v1",
+      "title": "ColBERT-Att: Late-Interaction Meets Attention for Enhanced Retrieval",
+      "abstract": "Vector embeddings from pre-trained language models form a core component in Neural Information Retrieval systems across a multitude of knowledge extraction tasks. The paradigm of late interaction, introduced in ColBERT, demonstrates high accuracy along with runtime efficiency. However, the current formulation fails to take into account the attention weights of query and document terms, which intuitively capture the \"importance\" of similarities between them, that might lead to a better understanding of relevance between the queries and documents. This work proposes ColBERT-Att, to explicitly integrate attention mechanism into the late interaction framework for enhanced retrieval performance. Empirical evaluation of ColBERT-Att depicts improvements in recall accuracy on MS-MARCO as well as on a wide range of BEIR and LoTTE benchmark datasets.",
       "authors": [
-        "Ben Chen",
-        "Siyuan Wang",
-        "Yufei Ma",
-        "Zihan Liang",
-        "Xuxin Zhang",
-        "Yue Lv",
-        "Ying Yang",
-        "Huangyu Dai",
-        "Lingtao Mao",
-        "Tong Zhao",
-        "Zhipeng Qian",
-        "Xinyu Sun",
-        "Zhixin Zhai",
-        "Yang Zhao",
-        "Bochao Liu",
-        "Jingshan Lv",
-        "Xiao Liang",
-        "Hui Kong",
-        "Jing Chen",
-        "Han Li",
-        "Chenyi Lei",
-        "Wenwu Ou",
-        "Kun Gai"
+        "Raj Nath Patel",
+        "Sourav Dutta"
       ],
       "primary_category": "cs.IR",
       "categories": [
-        "cs.IR",
-        "cs.AI",
-        "cs.CL"
+        "cs.IR"
       ],
-      "published": "2026-03-25T15:33:34+00:00",
-      "link": "https://arxiv.org/pdf/2603.24422v1",
+      "published": "2026-03-26T09:51:54+00:00",
+      "link": "https://arxiv.org/pdf/2603.25248v1",
       "tags": [
         "keyword:SR 检索",
         "query:SR 检索"
       ],
       "llm_score": 8.0,
-      "llm_evidence_en": "generative search framework for complex queries and latent intents",
-      "llm_evidence_cn": "针对复杂查询和潜在意图的生成式搜索框架",
-      "llm_evidence": "针对复杂查询和潜在意图的生成式搜索框架",
-      "canonical_evidence": "针对复杂查询和潜在意图的生成式搜索框架",
-      "llm_tldr_en": "Proposes a generative search framework using latent reasoning to improve complex query understanding.",
-      "llm_tldr_cn": "提出一种利用潜在推理增强复杂查询理解的生成式搜索框架。",
-      "llm_tldr": "提出一种利用潜在推理增强复杂查询理解的生成式搜索框架。",
+      "llm_evidence_en": "Enhanced retrieval performance through attention-integrated late interaction",
+      "llm_evidence_cn": "通过集成注意力的延迟交互增强检索性能",
+      "llm_evidence": "通过集成注意力的延迟交互增强检索性能",
+      "canonical_evidence": "通过集成注意力的延迟交互增强检索性能",
+      "llm_tldr_en": "ColBERT-Att integrates attention mechanisms into late interaction to improve document retrieval relevance.",
+      "llm_tldr_cn": "ColBERT-Att将注意力机制集成到延迟交互框架中，以提高文档检索的相关性。",
+      "llm_tldr": "ColBERT-Att将注意力机制集成到延迟交互框架中，以提高文档检索的相关性。",
       "llm_tags": [
         "query:sr"
       ],
@@ -213,42 +75,39 @@
       "matched_query_text": "comprehensive research paper discovery",
       "matched_requirement_id": "req-9",
       "selection_source": "carryover_cache",
-      "paper_id": "2603.24422v1",
+      "paper_id": "2603.25248v1",
       "carry_days": 1
     },
     {
-      "id": "2603.24580v1",
-      "title": "Retrieval Improvements Do Not Guarantee Better Answers: A Study of RAG for AI Policy QA",
-      "abstract": "Retrieval-augmented generation (RAG) systems are increasingly used to analyze complex policy documents, but achieving sufficient reliability for expert usage remains challenging in domains characterized by dense legal language and evolving, overlapping regulatory frameworks. We study the application of RAG to AI governance and policy analysis using the AI Governance and Regulatory Archive (AGORA) corpus, a curated collection of 947 AI policy documents. Our system combines a ColBERT-based retriever fine-tuned with contrastive learning and a generator aligned to human preferences using Direct Preference Optimization (DPO). We construct synthetic queries and collect pairwise preferences to adapt the system to the policy domain. Through experiments evaluating retrieval quality, answer relevance, and faithfulness, we find that domain-specific fine-tuning improves retrieval metrics but does not consistently improve end-to-end question answering performance. In some cases, stronger retrieval counterintuitively leads to more confident hallucinations when relevant documents are absent from the corpus. These results highlight a key concern for those building policy-focused RAG systems: improvements to individual components do not necessarily translate to more reliable answers. Our findings provide practical insights for designing grounded question-answering systems over dynamic regulatory corpora.",
+      "id": "2603.25737v1",
+      "title": "Training the Knowledge Base through Evidence Distillation and Write-Back Enrichment",
+      "abstract": "The knowledge base in a retrieval-augmented generation (RAG) system is typically assembled once and never revised, even though the facts a query requires are often fragmented across documents and buried in irrelevant content. We argue that the knowledge base should be treated as a trainable component and propose WriteBack-RAG, a framework that uses labeled examples to identify where retrieval succeeds, isolate the relevant documents, and distill them into compact knowledge units that are indexed alongside the original corpus. Because the method modifies only the corpus, it can be applied once as an offline preprocessing step and combined with any RAG pipeline. Across four RAG methods, six benchmarks, and two LLM backbones, WriteBack-RAG improves every evaluated setting, with gains averaging +2.14%. Cross-method transfer experiments further show that the distilled knowledge benefits RAG pipelines other than the one used to produce it, confirming that the improvement resides in the corpus itself.",
       "authors": [
-        "Saahil Mathur",
-        "Ryan David Rittner",
-        "Vedant Ajit Thakur",
-        "Daniel Stuart Schiff",
-        "Tunazzina Islam"
+        "Yuxing Lu",
+        "Xukai Zhao",
+        "Wei Wu",
+        "Jinzhuo Wang"
       ],
-      "primary_category": "cs.CL",
+      "primary_category": "cs.AI",
       "categories": [
+        "cs.AI",
         "cs.CL",
-        "cs.AI",
-        "cs.CY",
-        "cs.IR",
-        "cs.LG"
+        "cs.IR"
       ],
-      "published": "2026-03-25T17:54:39+00:00",
-      "link": "https://arxiv.org/pdf/2603.24580v1",
+      "published": "2026-03-26T17:59:49+00:00",
+      "link": "https://arxiv.org/pdf/2603.25737v1",
       "tags": [
         "keyword:SR 检索",
         "query:SR 检索"
       ],
       "llm_score": 8.0,
-      "llm_evidence_en": "RAG system for analyzing complex policy documents",
-      "llm_evidence_cn": "用于分析复杂政策文件的RAG系统",
-      "llm_evidence": "用于分析复杂政策文件的RAG系统",
-      "canonical_evidence": "用于分析复杂政策文件的RAG系统",
-      "llm_tldr_en": "Studies retrieval-augmented generation for expert-level analysis of dense regulatory and policy archives.",
-      "llm_tldr_cn": "研究针对密集监管和政策档案进行专家级分析的检索增强生成技术。",
-      "llm_tldr": "研究针对密集监管和政策档案进行专家级分析的检索增强生成技术。",
+      "llm_evidence_en": "Distilling and enriching knowledge bases for improved research discovery",
+      "llm_evidence_cn": "蒸馏和丰富知识库以改进研究发现",
+      "llm_evidence": "蒸馏和丰富知识库以改进研究发现",
+      "canonical_evidence": "蒸馏和丰富知识库以改进研究发现",
+      "llm_tldr_en": "WriteBack-RAG treats the knowledge base as a trainable component to improve retrieval success.",
+      "llm_tldr_cn": "WriteBack-RAG将知识库视为可训练组件，通过蒸馏和回写提高检索成功率。",
+      "llm_tldr": "WriteBack-RAG将知识库视为可训练组件，通过蒸馏和回写提高检索成功率。",
       "llm_tags": [
         "query:sr"
       ],
@@ -256,75 +115,76 @@
       "matched_query_text": "comprehensive research paper discovery",
       "matched_requirement_id": "req-9",
       "selection_source": "carryover_cache",
-      "paper_id": "2603.24580v1",
+      "paper_id": "2603.25737v1",
       "carry_days": 1
     },
     {
-      "id": "2603.22999v1",
-      "title": "PaperVoyager : Building Interactive Web with Visual Language Models",
-      "abstract": "Recent advances in visual language models have enabled autonomous agents for complex reasoning, tool use, and document understanding. However, existing document agents mainly transform papers into static artifacts such as summaries, webpages, or slides, which are insufficient for technical papers involving dynamic mechanisms and state transitions. In this work, we propose a Paper-to-Interactive-System Agent that converts research papers into executable interactive web systems. Given a PDF paper, the agent performs end-to-end processing without human intervention, including paper understanding, system modeling, and interactive webpage synthesis, enabling users to manipulate inputs and observe dynamic behaviors. To evaluate this task, we introduce a benchmark of 19 research papers paired with expert-built interactive systems as ground truth. We further propose PaperVoyager, a structured generation framework that explicitly models mechanisms and interaction logic during synthesis. Experiments show that PaperVoyager significantly improves the quality of generated interactive systems, offering a new paradigm for interactive scientific paper understanding.",
+      "id": "2603.25660v1",
+      "title": "SHAPR: Operationalising Human-AI Collaborative Research Through Structured Knowledge Generation",
+      "abstract": "SHAPR (Solo Human-Centred and AI-Assisted Practice) is a framework for research software development that integrates human-centred decision-making with AI-assisted capabilities. While prior work introduced SHAPR as a conceptual framework, this paper focuses on its operationalisation as a structured, traceable, and knowledge-generating approach to AI-assisted research practice. We present a set of interconnected models describing how research activities are organised through iterative cycles (Explore-Build-Use-Evaluate-Learn), how artefacts evolve through development and use, and how empirical evidence is transformed into conceptual knowledge. Central to this process are Structured Knowledge Units (SKUs), which provide modular and reusable representations of insights derived from practice, supporting knowledge accumulation across cycles. The framework introduces evidence and traceability as a cross-cutting mechanism linking human decisions, AI-assisted development, and artefact evolution to enable transparency, reproducibility, and systematic refinement. SHAPR is also positioned as an AI-executable research framework, as its structured processes and documentation can be interpreted by generative AI systems to guide research workflows. Simultaneously, SHAPR supports a continuum of AI involvement, allowing researchers to balance control, learning, and automation across different contexts. Beyond individual workflows, SHAPR is conceptualised as an integrated research system combining LLM workspaces, development environments, cloud storage, and version control to support scalable, knowledge-centred research practices. Overall, SHAPR provides a practical and theoretically grounded foundation for conducting rigorous, transparent, and reproducible research in AI-assisted environments, contributing to the development of scalable and methodologically sound research practices.",
       "authors": [
-        "Dasen Dai",
-        "Biao Wu",
-        "Meng Fang",
-        "Wenhao Wang"
+        "Ka Ching Chan"
       ],
-      "primary_category": "cs.CL",
+      "primary_category": "cs.SE",
       "categories": [
+        "cs.SE"
+      ],
+      "published": "2026-03-26T17:14:39+00:00",
+      "link": "https://arxiv.org/pdf/2603.25660v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "structured knowledge generation approach to AI-assisted research practice",
+      "llm_evidence_cn": "AI 辅助研究实践的结构化知识生成方法",
+      "llm_evidence": "AI 辅助研究实践的结构化知识生成方法",
+      "canonical_evidence": "AI 辅助研究实践的结构化知识生成方法",
+      "llm_tldr_en": "Operationalises a framework for research software development that transforms empirical evidence into conceptual knowledge.",
+      "llm_tldr_cn": "将研究软件开发框架业务化，将经验证据转化为概念知识。",
+      "llm_tldr": "将研究软件开发框架业务化，将经验证据转化为概念知识。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.25660v1",
+      "carry_days": 1
+    },
+    {
+      "id": "2603.25293v1",
+      "title": "DAGverse: Building Document-Grounded Semantic DAGs from Scientific Papers",
+      "abstract": "Directed Acyclic Graphs (DAGs) are widely used to represent structured knowledge in scientific and technical domains. However, datasets for real-world DAGs remain scarce because constructing them typically requires expert interpretation of domain documents. We study Doc2SemDAG construction: recovering a preferred semantic DAG from a document together with the cited evidence and context that explain it. This problem is challenging because a document may admit multiple plausible abstractions, the intended structure is often implicit, and the supporting evidence is scattered across prose, equations, captions, and figures. To address these challenges, we leverage scientific papers containing explicit DAG figures as a natural source of supervision. In this setting, the DAG figure provides the DAG structure, while the accompanying text provides context and explanation. We introduce DAGverse, a framework for constructing document-grounded semantic DAGs from online scientific papers. Its core component, DAGverse-Pipeline, is a semi-automatic system designed to produce high-precision semantic DAG examples through figure classification, graph reconstruction, semantic grounding, and validation. As a case study, we test the framework for causal DAGs and release DAGverse-1, a dataset of 108 expert-validated semantic DAGs with graph-level, node-level, and edge-level evidence. Experiments show that DAGverse-Pipeline outperforms existing Vision-Language Models on DAG classification and annotation. DAGverse provides a foundation for document-grounded DAG benchmarks and opens new directions for studying structured reasoning grounded in real-world evidence.",
+      "authors": [
+        "Shu Wan",
+        "Saketh Vishnubhatla",
+        "Iskander Kushbay",
+        "Tom Heffernan",
+        "Aaron Belikoff",
+        "Raha Moraffah",
+        "Huan Liu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
         "cs.CL"
       ],
-      "published": "2026-03-24T09:42:27+00:00",
-      "link": "https://arxiv.org/pdf/2603.22999v1",
+      "published": "2026-03-26T10:33:12+00:00",
+      "link": "https://arxiv.org/pdf/2603.25293v1",
       "tags": [
         "keyword:SR 检索",
         "query:SR 检索"
       ],
       "llm_score": 8.0,
-      "llm_evidence_en": "converts research papers into executable interactive web systems",
-      "llm_evidence_cn": "将研究论文转换为可执行的交互式网页系统",
-      "llm_evidence": "将研究论文转换为可执行的交互式网页系统",
-      "canonical_evidence": "将研究论文转换为可执行的交互式网页系统",
-      "llm_tldr_en": "An agent that transforms static PDF research papers into interactive web systems for better understanding.",
-      "llm_tldr_cn": "一种将静态PDF研究论文转换为交互式网页系统以增强理解的智能体。",
-      "llm_tldr": "一种将静态PDF研究论文转换为交互式网页系统以增强理解的智能体。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "comprehensive research paper discovery",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.22999v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.24147v1",
-      "title": "Linking Global Science Funding to Research Publications",
-      "abstract": "Funding acknowledgments in scholarly publications provide large-scale trace data on organizations that support scientific research. We present a dataset for linking global science funding organizations to research publications by systematically disambiguating unique funding acknowledgment strings extracted from publication metadata. Funder names are matched to standardized organizational identifiers using a multi-stage pipeline that combines lexical normalization, similarity-based clustering, rule-based matching, named entity recognition assistance, and manual validation. The resulting dataset links 1.9 million unique funder strings to canonical organization identifiers and records match types and unresolved cases to support transparency. Technical validation includes paper-level comparisons across bibliometric sources and manual verification against full-text acknowledgment sections, with reported recall and precision metrics. This dataset supports analyses of funding flows, institutional funding portfolios, regional representation, and concentration patterns in the global research system.",
-      "authors": [
-        "Jacob Aarup Dalsgaard",
-        "Filipi Nascimento Silva",
-        "Jin AI"
-      ],
-      "primary_category": "cs.DL",
-      "categories": [
-        "cs.DL",
-        "cs.SI"
-      ],
-      "published": "2026-03-25T10:12:55+00:00",
-      "link": "https://arxiv.org/pdf/2603.24147v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Linking science funding to research publications via systematic disambiguation",
-      "llm_evidence_cn": "通过系统消歧将科学资助与研究论文联系起来",
-      "llm_evidence": "通过系统消歧将科学资助与研究论文联系起来",
-      "canonical_evidence": "通过系统消歧将科学资助与研究论文联系起来",
-      "llm_tldr_en": "Provides a dataset and pipeline to link global science funding organizations to scholarly publications.",
-      "llm_tldr_cn": "提供了一个数据集和流程，将全球科学资助机构与学术出版物联系起来。",
-      "llm_tldr": "提供了一个数据集和流程，将全球科学资助机构与学术出版物联系起来。",
+      "llm_evidence_en": "Recovering semantic structures from scientific papers and cited evidence",
+      "llm_evidence_cn": "从科学论文和引用证据中恢复语义结构",
+      "llm_evidence": "从科学论文和引用证据中恢复语义结构",
+      "canonical_evidence": "从科学论文和引用证据中恢复语义结构",
+      "llm_tldr_en": "Introduces a method to build semantic Directed Acyclic Graphs from scientific papers and their citations.",
+      "llm_tldr_cn": "提出一种从科学论文及其引用中构建语义有向无环图的方法。",
+      "llm_tldr": "提出一种从科学论文及其引用中构建语义有向无环图的方法。",
       "llm_tags": [
         "query:sr"
       ],
@@ -332,42 +192,7 @@
       "matched_query_text": "identifying key research in a field",
       "matched_requirement_id": "req-8",
       "selection_source": "carryover_cache",
-      "paper_id": "2603.24147v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.22739v1",
-      "title": "A variational geometric framework for multi-objective level set topology optimization",
-      "abstract": "This paper proposes a variational framework for multi-objective level set topology optimization. The approach interprets the level set function as a generalized coordinate of a fictitious material and derives its equation of motion from Hamilton's principle, resulting in a damped wave equation governing the optimization process. The objective functionals are combined using a weighted sum formulation. An analysis of the underlying system structure reveals a geometric interpretation of the problem, shifting the perspective beyond conventional approaches based on purely discrete approximations of the Pareto frontier. Under suitable regularity assumptions, the set of stationary solutions forms a structured subset in objective space, in which the Pareto frontier is locally embedded and the weighting factors act as intrinsic coordinates. This perspective motivates the introduction of a dynamic evolution of the weights, leading to a coupled dynamical system for the level set function and the weighting parameters that enables adaptive exploration of the objective landscape. Numerical results demonstrate that the proposed framework provides a stable and uniform approximation of the Pareto frontier and scales to higher-dimensional objective spaces.",
-      "authors": [
-        "Jan Oellerich",
-        "Takayuki Yamada"
-      ],
-      "primary_category": "math.OC",
-      "categories": [
-        "math.OC"
-      ],
-      "published": "2026-03-24T03:04:30+00:00",
-      "link": "https://arxiv.org/pdf/2603.22739v1",
-      "tags": [
-        "keyword:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "variational framework for level set topology optimization",
-      "llm_evidence_cn": "多目标水平集拓扑优化的变分框架",
-      "llm_evidence": "多目标水平集拓扑优化的变分框架",
-      "canonical_evidence": "多目标水平集拓扑优化的变分框架",
-      "llm_tldr_en": "Proposes a variational geometric framework for multi-objective level set topology optimization using Hamilton's principle.",
-      "llm_tldr_cn": "提出了一种基于哈密顿原理的多目标水平集拓扑优化变分几何框架。",
-      "llm_tldr": "提出了一种基于哈密顿原理的多目标水平集拓扑优化变分几何框架。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "fluid topology optimization",
-      "matched_requirement_id": "req-4",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.22739v1",
+      "paper_id": "2603.25293v1",
       "carry_days": 1
     }
   ]

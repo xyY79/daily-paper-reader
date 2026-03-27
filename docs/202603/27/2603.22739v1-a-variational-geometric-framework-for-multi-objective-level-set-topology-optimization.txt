@@ -1,0 +1,3501 @@
+Title: A variational geometric framework for multi-objective level set topology optimization
+
+URL Source: https://arxiv.org/pdf/2603.22739v1
+
+Published Time: Wed, 25 Mar 2026 00:32:45 GMT
+
+Number of Pages: 64
+
+Markdown Content:
+# Highlights 
+
+A variational geometric framework for multi-objective level set topology optimization 
+
+Jan Oellerich, Takayuki Yamada 
+
+• Variational framework for multi-objective level set topology optimiza-tion. 
+
+• Level set evolution derived from Hamilton’s principle, resulting in a damped wave equation. 
+
+• Geometric interpretation of the solution set as a structured subset in objective space. 
+
+• Dynamic evolution of weighting parameters enabling adaptive explo-ration of the Pareto frontier. 
+
+• Improved stability and uniformity compared to conventional weighted sum methods. 
+
+> arXiv:2603.22739v1 [math.OC] 24 Mar 2026
+
+# A variational geometric framework for multi-objective level set topology optimization 
+
+Jan Oellerich 1, Takayuki Yamada 1
+
+> The University of Tokyo, Graduate School of Engineering, Institute of Engineering Innovation, Yayoi 2-11-16, Bunkyo-ku, Tokyo, 113-8656, Japan
+
+Abstract 
+
+This paper proposes a variational framework for multi-objective level set topology optimization. The approach interprets the level set function as a generalized coordinate of a fictitious material and derives its equation of mo-tion from Hamilton’s principle, resulting in a damped wave equation govern-ing the optimization process. The objective functionals are combined using a weighted sum formulation. An analysis of the underlying system structure reveals a geometric interpretation of the problem, shifting the perspective be-yond conventional approaches based on purely discrete approximations of the Pareto frontier. Under suitable regularity assumptions, the set of stationary solutions forms a structured subset in objective space, in which the Pareto frontier is locally embedded and the weighting factors act as intrinsic coordi-nates. This perspective motivates the introduction of a dynamic evolution of the weights, leading to a coupled dynamical system for the level set function and the weighting parameters that enables adaptive exploration of the objec-tive landscape. Numerical results demonstrate that the proposed framework provides a stable and uniform approximation of the Pareto frontier and scales to higher-dimensional objective spaces. 
+
+Keywords: Topology optimization, level set method, multi-objective optimization, variational formulation, Hamilton’s principle, geometric interpretation, coupled dynamical system 1. Introduction 
+
+Topology optimization is a powerful method for the design of complex component geometries and offers a higher degree of design freedom compared to sizing [1, 2] and shape optimization approaches [3, 4, 5]. Its objective is the identification of an optimal material distribution within a prescribed design domain under given boundary conditions. From a mathematical perspec-tive, this problem is non-trivial and has therefore led to the use of iterative procedures for the approximation of optimal structural layouts. Among the various methodological classes, boundary based approaches represent a well-established alternative to density based methods, such as SIMP [6, 7, 8], and evolutionary approaches [9, 10, 11], where topological changes are induced through modifications of the material boundary. The level set method is a prominent representative of this class [12, 13]. Its key concept is the introduction of a scalar function for the implicit representation of the structural boundary, enabling a sharp separation between material and void domains, in contrast to phase-field methods [14, 15, 16]. The level set method has been successfully applied to a wide range of topology optimiza-tion problems [17, 18, 19]. However, the majority of existing contributions mainly focus on the optimization of a single objective functional. In practical engineering applications, design tasks are frequently governed by multiple, often competing performance criteria. In such settings, the solution is no longer characterized by a single optimal design, but by a set of non-dominated configurations. These configurations constitute the Pareto set, whose image in objective space forms the Pareto frontier, representing trade-offs between conflicting objectives. The accurate approximation of Pareto-optimal solu-tions in PDE-constrained topology optimization remains challenging and has therefore attracted significant research interest. A widely used approach to multi-objective topology optimization is the weighted sum (WS) method [20], in which individual objective functionals are combined into a single scalar functional using non-negative weighting co-efficients. While straightforward to implement, this approach restricts the search to convex combinations in objective space and therefore fails to cap-ture non-convex regions of the Pareto frontier. Moreover, the method may lead to a non-uniform distribution of solutions along the Pareto frontier, often resulting in clustering in certain regions. Consequently, various extensions have been proposed to mitigate these concerns. 2Izui et al. introduced an aggregative gradient based method in which objective functionals and constraints were evaluated at multiple candidate designs in each iteration [21]. The weights were adaptively updated us-ing data envelopment analysis (DEA), thereby assessing the relative per-formance of the individual candidates. The approach was demonstrated for benchmark problems such as minimum mean compliance and volume min-imization within a density based framework. Sato et al. [22] incorporated a distance-based constraint to prevent clustered point distributions and to enhance solution diversity. A crowded-comparison mechanism was proposed in [23] to reduce the number of candidate solutions requiring evaluation. The method was implemented by means of a level set formulation and later applied to the multi-objective design of a no-moving-part valve [24] and a microchannel heat sink [25]. Furthermore, data mining techniques [26, 27] were employed in [28] to enable efficient clustering and analysis of structural layouts. An alternative adaptation of the WS method was reported by Chen and Wu who considered mean compliance minimization and maximization of the fundamental eigenvalue [29]. Using a density based formulation, the objectives were combined following the compromise programming approach [30]. The method was demonstrated on selected combinations of weighting factors in two numerical examples resulting in a sparse sampling of the objec-tive space. An extension of this method was proposed in [31] incorporating fuzzy decision-making techniques to balance the competing influence of com-pliance and eigenvalue objectives. A similar work was conducted by Luo et al. who employed grey system theory to consider both incomplete and uncertainty information [32]. Nishiwaki et al. investigated in [33] the multi-objective optimization of compliant mechanisms using the homogenization method [34, 35]. The aim was to maximize output flexibility and minimizing mean compliance by considering the ratio of the two objectives. Luo et al. investigated the maximization of mutual energy and minimization of mean compliance in compliant mechanism design using the Rational Approxima-tion of Material Properties (RAMP) method [36]. The objective functionals were combined similar to the formulation adopted in [29]. To ensure nu-merical stability, additional filtering was employed to suppress checkerboard patterns and one-node connections. Lin et al. presented in [37] a SIMP-based approach for the design of compliant mechanisms considering minimum mean compliance and maximum mutual energy. The objective functionals were combined via a logarithmic transformation based on physical programming [38, 39]. Ryu et. al proposed an adaptive weight determination strategy 3relying on the construction of a hyperplane in objective space [40, 41]. The weighting factors were iteratively calculated with respect to the preceding solution. Further work on the incorporation of the WS method can be found in [42, 43]. As an alternative scalarization strategy, the Normal Boundary Intersec-tion (NBI) method was developed by Das and Dennis to overcome the limita-tions of the WS method [44]. By introducing an additional parametrization of the search direction in objective space, the method enables the generation of evenly distributed candidate solutions along the Pareto frontier. However, Pareto optimality of the resulting solutions is not guaranteed in general. Therefore, Messac et al. proposed a modified formulation incorporating an additional Pareto filtering step to eliminate dominated solutions while main-taining a uniform distribution of sampling points [45, 46]. Subsequent refine-ments were presented in [47, 48], further improving the distribution proper-ties of the computed Pareto set. Hancock and Mattson proposed the Smart Normal Constraint (SNC) method which employs additional constraints to estimate whether a point is Pareto-efficient [49]. A modified version of this approach was later presented by Munk et al. [50, 51]. The authors coupled the SNC method with the Bi-directional Evolutionary Structural Optimiza-tion (BESO) method and demonstrated their approach on minimum mean compliance and on a multi-physics problem involving the bi-objective opti-mization of a micro fluidic mixer. An application of the SNC method to the optimization of a wing box structural layout was shown by Crescenti et al. using Altair OptiStruct software [52]. The method has been later extended for the consideration of more than two objectives [53]. Pareto tracing is another class of methods for computing Pareto-efficient solutions that directly exploits local information along the frontier to gener-ate neighboring solutions and is primarily limited to bi-objective optimiza-tion problems. Suresh proposed a Pareto tracing method implemented in MATLAB based on topological differentiation and the SIMP method [54]. The approach was demonstrated for a bi-objective problem involving mini-mum mean compliance and volume minimization. In [55], the method was extended by integrating a fixed-point iteration scheme and applied to the minimum mean compliance problem under multiple load cases. Nathan et al. further developed a Pareto tracing strategy for robust structural optimiza-tion [56], where the expected value and the standard deviation of a struc-tural response were minimized. To improve the diversity and distribution of Pareto-efficient solutions, Polynomial Chaos Expansion (PCE) was em-4ployed. Gkaragkounis et al. proposed an adjoint based prediction-correction scheme for Pareto tracing that avoids explicit Hessian evaluations by using Hessian-vector products or Quasi-Newton approximations [57]. In addition to gradient based and scalarization techniques, population-based evolutionary algorithms have been used in multi-objective optimiza-tion. In particular, the Non-dominated Sorting Genetic Algorithm II (NSGA-II) [58, 59] has gained popularity due to its ability to approximate the entire Pareto frontier within a single optimization run without requiring gradient information. However, these approaches typically rely on large populations, which may lead to considerable computational cost. Moreover, the available sensitivity information in structural optimization problems is not explicitly exploited. A review of the existing literature indicates that multi-objective topol-ogy optimization problems are predominantly addressed within density based formulations, whereas comparatively few contributions consider the level set method. Most existing strategies treat multi-objective optimization as an external layer that is superimposed on the underlying topology optimization framework. In the context of level set based approaches, this implies that the intrinsic variational structure governing the evolution of the level set function is not fully accounted for in the multi-objective setting. A consis-tent extension to multi-objective problems therefore requires a formulation in which the evolution process itself is defined in terms of vector-valued ob-jective functionals. To the best of the authors’ knowledge, a systematic formulation of such an extension within the level set framework has not yet been proposed. In [60], a variational framework was introduced for the sys-tematic derivation of the evolution equation governing the level set function in the single-objective case. Building upon this foundation, the present work generalizes the variational framework to the multi-objective setting, result-ing in a coupled evolutionary system of equations in which both the level set function and the weighting parameters evolve dynamically. Furthermore, the proposed formulation reveals a geometric interpretation of the optimiza-tion process in objective space, which naturally gives rise to a simplex-type discretization strategy for the approximation of the Pareto set. The remainder of this work is organized as follows. Section 2 introduces the fundamental formulation of multi-objective optimization problems in the context of the level set method. On this basis, a coupled evolutionary sys-tem is derived and the resulting geometric perspective on the problem is developed. Section 3 presents the numerical implementation and discretiza-5tion strategies for the approximation of the Pareto frontier. The influence of numerical parameters and the robustness of the proposed method are inves-tigated in Section 4 by means of numerical examples. Eventually, Section 5 summarizes the main findings of this work and outlines potential directions for future research. 
+
+2. Methodology 
+
+2.1. Level set based topology optimization 
+
+Topology optimization seeks the optimal domain of solid material Ω′ ⊂
+
+Rn, n ∈ { 2, 3} that minimizes a given objective functional J[u(Ω)] . The set of admissible solutions is generally constrained by design restrictions and by the governing equations of the underlying physical system. In this regard, let an isotropic, linear elastic body B occupy an open domain Ω ⊆ D ⊂ Rn,where D represents the design domain. The boundary ∂Ω is assumed smooth and is decomposed into Dirichlet and Neumann parts, Γu and Γt, with the complement ∂Ω \ (Γ u ∪ Γt). On Γt traction forces ti are imposed while Γu
+
+is subject to homogeneous Dirichlet boundary conditions. The complement 
+
+∂Ω \ (Γ u ∪ Γt) remains traction-free. Considering indices i, j, k, l ∈ { 1, . . . , n }
+
+and body forces bi, the equilibrium state in strong form reads 
+
+
+
+−∂j (Cijkl εkl (u)) = bi in Ω
+
+ui = 0 on Γu
+
+(Cijkl εkl (u)) nj = ti on Γt
+
+(Cijkl εkl (u)) nj = 0 on ∂Ω \ (Γ u ∪ Γt)
+
+(1) where Cijkl is the fourth rank elasticity tensor 
+
+Cijkl = Eν 
+
+(1 + ν)(1 − 2ν)δij δkl + E
+
+2(1 + ν)(δik δjl + δil δjk )
+
+incorporating Kronecker delta δ. Parameter E relates to Young’s modulus and ν denotes Poisson’s ratio while εkl (u) refers to the linearized strain tensor 
+
+εkl (u) = 12(∂kul + ∂luk)
+
+6being applied to the displacement field u. Considering an additional inequal-ity constraint functional G[u] and adapting Eq. (1), the original structural optimization problem is stated as 
+
+inf Ω ⊆ D ⊂ Rn J[u] = 
+
+Z
+
+> Ω
+
+j(u) dΩ s.t. G[u] ≤ 0,
+
+−∂j (Cijkl εkl (u)) = bi in Ω,ui = 0 on Γu,
+
+(Cijkl εkl (u)) nj = ti on Γt,
+
+(Cijkl εkl (u)) nj = 0 on ∂Ω \ (Γ u ∪ Γt).
+
+(2) In the next step, Problem (2) is transformed into a material distribution problem by employing the characteristic function χΩ ∈ L∞(D) 
+
+χΩ(x) = 
+
+ 1, x ∈ Ω ∪ ∂Ω0, x ∈ D \ (Ω ∪ ∂Ω) , x ∈ Rn (3) which allows the original optimization problem to be extended to the design domain D. However, the discontinuous nature of the characteristic function given in Eq. (3) renders the problem ill-posed [61]. To overcome this issue, the level set method introduces a higher-dimensional function ϕ : D → R, ϕ ∈
+
+Hκ(D) defined as 
+
+
+
+1 ≥ ϕ(x) > 0, x ∈ Ω
+
+ϕ(x) = 0 , x ∈ ∂Ω
+
+−1 ≤ ϕ(x) < 0, x ∈ D \ (Ω ∪ ∂Ω) 
+
+(4) which enables the implicit description of the structural boundary ∂Ω by evaluating its isocontour, that is ϕ(x) = 0 . Here, Hκ(D) denotes the Sobolev space over D containing weak differentiable functions of order κ ≥ 1. In addition, the characteristic function applied to the level set function in Eq. (4) can be expressed by a Heaviside function Θ( ϕ):
+
+Θ( ϕ) := 
+
+ 1, if ϕ(x) ≥ 00, otherwise . (5) 7Then, the structural optimization problem for a single objective functional reads 
+
+inf 
+
+ϕ ∈ Hκ(D) J[u, Θ] = 
+
+Z
+
+> D
+
+j(u)Θ dΩ s.t. G[u, Θ] ≤ 0,
+
+−∂j (Cijkl εkl (u)) = bi in Ω,ui = 0 on Γu,
+
+(Cijkl εkl (u)) nj = ti on Γt,
+
+(Cijkl εkl (u)) nj = 0 on ∂Ω \ (Γ u ∪ Γt)
+
+(6) in level set formulation. In contrast to Problem (6), we are faced with the simultaneous optimization of several competing objective functionals in the case of multi-objective optimization. In our research, we collect these objec-tive functionals in vector form, whereby each objective functional is assigned an individual state variable and thus also an individual equilibrium condition. Consider in total m ≥ 2 objective functionals indexed by α ∈ { 1, . . . , m },then the multi-objective topology optimization problem is formulated as 
+
+vec inf 
+
+ϕ ∈ Hκ(D) J[u1, . . . , um, Θ] = 
+
+Z 
+
+> D
+
+j1(u1)Θ dΩ , . . . , 
+
+Z
+
+> D
+
+jm(um)Θ dΩ 
+
+⊤
+
+s.t. Gα[uα, Θ] ≤ 0,
+
+−∂j (Cijkl εkl (uα)) = bα,i in Ω,uα,i = 0 on Γu
+
+> α
+
+,
+
+(Cijkl εkl (uα)) nj = tα,i on Γt
+
+> α
+
+,
+
+(Cijkl εkl (uα)) nj = 0 on ∂Ω \ (Γ u 
+
+> α
+
+∪ Γt
+
+> α
+
+).
+
+(7) By means of variational methods, the equilibrium conditions can be expressed in weak form. Therefore, the function spaces 
+
+Vα = vα = vα,i eα,i , v α,i ∈ H1(D) | vα = 0 on Γu 
+
+> α
+
+,
+
+are first introduced. Then, multiplying by an appropriate test function 
+
+vα ∈ V α, integrating over D, and applying the divergence theorem yields the governing equations 
+
+Rα =
+
+Z
+
+> D
+
+Cijkl εkl (uα)εij (vα)Θ dΩ −
+
+Z
+
+> D
+
+bα,i vα,i Θ dΩ −
+
+Z
+
+> Γt
+> α
+
+tα,i vα,i dΓ = 0 .
+
+(8) 8Using Eq. (8), Problem (7) can be written as follows: 
+
+vec inf 
+
+ϕ ∈ Hκ(D) J[u1, . . . , um, Θ] = ( J1[u1, Θ] , . . . , J m[um, Θ]) ⊤
+
+s.t. Gα[uα, Θ] ≤ 0,Rα[uα, Θ; vα] = 0 .
+
+(9) In conventional approaches to single-objective topology optimization, the originally constrained Problem (6) is typically reformulated as an uncon-strained problem by introducing the Lagrangian functional 
+
+L = J[u, Θ] + λG [u, Θ] − R[u, Θ; v]
+
+where both the inequality constraint and the equilibrium condition are incor-porated into the objective functional, and the inequality constraint is further weighted by the multiplier λ. A function ϕ′ ∈ Hκ(D) that satisfies the Karush-Kuhn-Tucker (KKT) conditions 
+
+
+
+⟨∂L/∂ϕ, δϕ ⟩ = 0 
+
+λG [u, Θ] = 0 
+
+λ ≥ 0
+
+G[u, Θ] ≤ 0
+
+(10) can then be considered a solution candidate to the optimization problem. Since a direct determination of ϕ′ is generally non-trivial, a fictitious time t
+
+is introduced, and the level set function is assumed to evolve as ϕ = ϕ(x, t ).The structural boundary is then described by ϕ(x, t ) = 0 . Differentiation with respect to t leads to the Hamilton-Jacobi equation 
+
+∂tϕ + vi∂iϕ = 0 (11) with vi = d xi/dt, which governs the evolution of the structural boundary. Under appropriate modification, Eq. (11) can be reformulated as a reaction-diffusion equation as shown in [62], allowing the optimal level set function to be approximated iteratively. In the multi-objective context, this approach has been adopted in [22, 23, 24, 28]. Note that in contrast to the single-objective case, the multi-objective formulation in Problem (9) does not yield a unique minimizer but rather a set of admissible level set functions. Consequently, the evolution of the level 9set function can no longer be characterized by a single descent direction. This intrinsic non-uniqueness necessitates the formulation of an equation of motion to describe the dynamics of the level set function in the multi-objective setting. For this purpose, we build upon the variational framework developed in our previous research [60] in the following. 
+
+2.2. Equation of motion in multi-objective optimization 
+
+As a starting point, we assume the existence of a solution to Problem (9). From this assumption it follows that the corresponding level set function induces objective values cα ∈ R for each functional Jα[uα, Θ] . Consequently, the level set function must also be a solution to the following equations for all α:
+
+Gα[uα, Θ] ≤ 0, Rα[uα, Θ; vα] = 0 , Jα[uα, Θ] − cα = 0 .
+
+Let us suppose now that more than one level set function satisfies these conditions. Then all admissible solution candidates can be collected in the set 
+
+Φ( c) = 
+
+( m\
+
+> α=1
+
+Φ1
+
+> α
+
+(c)
+
+)
+
+∩
+
+( m\
+
+> α=1
+
+Φ2
+
+> α
+
+(c)
+
+)
+
+∩
+
+( m\
+
+> α=1
+
+Φ3
+
+> α
+
+(c)
+
+)
+
+(12) with the individual subsets 
+
+Φ1
+
+> α
+
+(c) := {ϕ ∈ Hκ(D) | Gα[uα, Θ] ≤ 0},
+
+Φ2
+
+> α
+
+(c) := {ϕ ∈ Hκ(D) | Rα[uα, Θ; vα] = 0 },
+
+Φ3
+
+> α
+
+(c) := {ϕ ∈ Hκ(D) | Jα[uα, Θ] − cα = 0 },
+
+while the m objective functional values are collected in the vector c, that is 
+
+c = ( c1, . . . , c m)⊤, c ∈ Jm. Here, Jm ⊂ Rm denotes the objective functional space defined as 
+
+Jm = {J = ( J1, . . . , J m) ∈ Rm | Jα ∈ R} .
+
+On this basis, we conclude that all admissible level set functions in Φ( c) also lead to distinct topologies, as qualitatively shown in Fig. 1. This naturally raises the fundamental question of how to select a representative solution from Φ( c) in Eq. (12). However, identifying a unique solution within this set is non-trivial. To address this, we introduce in a first step a neighboring state 10 𝑚    
+
+> ⋂
+> 𝛼 =1
+> Φ1
+> 𝛼 (𝐜 )
+> 𝑚
+> ⋂
+> 𝛼 =1
+> Φ2
+> 𝛼 (𝐜 )
+> 𝑚
+> ⋂
+> 𝛼 =1
+> Φ3
+> 𝛼 (𝐜 )
+> Φ( 𝐜 )
+> Ω( 𝜙 1(𝐜 ))
+> Ω( 𝜙 2(𝐜 ))
+> Ω( 𝜙 3(𝐜 ))
+> Ω( 𝜙 𝑖 (𝐜 ))
+
+Figure 1: Different topologies Ω( ϕi(c)) obtained from Φ( c).
+
+represented by the vector c2 and refer to the current state by c1. With this neighboring state, the according solution set also changes, and with it the admissible level set functions. We note, that attempting to select a specific solution in state c2 would again face the same ambiguity as in state c1. For this reason, we adopt a different strategy: we assume the existence of ad-missible solutions for both states and focus on the transition between them. Although the explicit identification of the solutions is not possible, this as-sumption allows us to examine the development of an admissible topology from c1 to c2. As illustrated in Fig. 2, multiple trajectories appear conceiv-able between the two states. To select a meaningful path, we postulate a natural behavior of the system, namely that the evolution of the topology is smooth and free of abrupt changes. In this context, we emphasize once again that the level set function serves as a mathematical representation of the structural boundary. Since only the zero isocontour itself is relevant, it is immaterial in which domain the function is defined. We therefore decouple the level set function from the physical domain D and consider its evolution in an auxiliary domain D, which is geometrically identical to D but filled 11 𝐽 𝑚       
+
+> 𝐽 𝛼
+> 𝐽 1
+> Ω( 𝜙 (𝐜 ))
+> 𝜙 (𝐜 )
+> 𝜙 1(𝐜 )
+> 𝜙 2(𝐜 )
+> 𝜙 3(𝐜 )
+> 𝜙 4(𝐜 )
+> 𝜙 (𝐜 1)
+> 𝜙 (𝐜 2)
+> Ω( 𝜙 (𝐜 1))
+> Ω( 𝜙 (𝐜 2))
+> 𝑚
+> ⋂
+> 𝛼 =1
+> Φ1
+> 𝛼 (𝐜 1)
+> 𝑚
+> ⋂
+> 𝛼 =1
+> Φ2
+> 𝛼 (𝐜 1)
+> 𝑚
+> ⋂
+> 𝛼 =1
+> Φ3
+> 𝛼 (𝐜 1)
+> Φ( 𝐜 1)
+> 𝑚
+> ⋂
+> 𝛼 =1
+> Φ1
+> 𝛼 (𝐜 2)
+> 𝑚
+> ⋂
+> 𝛼 =1
+> Φ2
+> 𝛼 (𝐜 2)
+> 𝑚
+> ⋂
+> 𝛼 =1
+> Φ3
+> 𝛼 (𝐜 2)
+> Φ( 𝐜 2)
+
+Figure 2: Evolution of the topology Ω( ϕ(c)) in the interval [c1, c2].
+
+with fictitious material, see Fig. 3. This auxiliary domain has no physical reality; it merely provides a conceptual framework for assigning a physically motivated interpretation of the level set function in the following. In partic-ular, we conceptually interpret the fictitious material as a thin elastic film that evolves dynamically. Within this analogy, the level set function can be regarded as a state variable describing the deformation of this film. This perspective enables the definition of energetic measures, such as kinetic and potential energy, and is consistent with the previously postulated assumption of a natural, smooth development of the level set function. To distinguish between the two domains, we furthermore introduce the spatial coordinates 
+
+ξi for the auxiliary domain. Dirichlet and Neumann parts of the boundary 
+
+∂D are denoted by G u 
+
+> α
+
+and G t
+
+> α
+
+. The structural boundary in the physical domain is then represented by the zero level set, ∂Ω = {ξi ∈ R | ϕ(ξ) = 0 }.In this context, we refer to the previous theoretical observation in Fig. 2 that multiple paths of evolution exist. Due to the assumption of a natural behavior, we postulate that the topology follows a unique path among all ad-missible trajectories ϕ(c) between c1 and c2. This finding allows us to invoke 12 Γt                         
+
+> 𝑡 𝑖
+> Γu
+> 𝑥 1𝑥 2
+> 𝐸, 𝜈, 𝜌
+> D
+> 𝜙 (𝜉 1, 𝜉 2)
+> 𝜉 1𝜉 2Gt
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝐶 𝑖𝑗
+> D
+> 𝑥 1𝑥 2Γt
+> 𝑡 𝑖
+> Γu
+> 𝜙 (𝜉 1, 𝜉 2)
+> 𝜉 1𝜉 2Gt
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝜕 D⧵(Γ u∪ Γ t)
+> Physical design domain D⊂ℝ𝑛
+> 𝜕 D⧵(Gu∪Gt)
+> Auxiliary domain D⊂ℝ𝑛
+> Fictitious material (in motion)
+> 𝜙 (𝜉 1, 𝜉 2) = 0
+> 𝐹 (𝜙, 𝐰 )
+
+Figure 3: Construction of the auxiliary domain D containing fictitious material. 
+
+the fundamental principle of least action, according to which the associated action S attains an extremum along the natural evolution of the system. Here, Hamilton’s principle represents a particular formulation of the least action principle, stating that the time integral of the Lagrangian L = T − U
+
+attains an extremum, where T denotes the system’s kinetic energy and U
+
+the potential energy due to the material’s internal resistance [63]. Therefore, Hamilton’s principle is applied to our problem setting, while the level set function serves as the generalized coordinate of the system. To characterize the evolution more precisely, we describe the development of the topology in terms of a parameterized curve in the objective functional space Jm, where the parameter s ∈ R indicates the position on the trajectory, as illustrated in Fig. 4. Let C denote the smooth curve C : [ s1, s 2] → Jm with s 7 → c(s).We then define an action integral over C as 
+
+S[ϕ(ξi, c(s), s )] = 
+
+Z Z 
+
+> D×C
+
+L (ϕ, ∂ iϕ, ∂ sϕ, ξ i, c(s), s ) d nξ ds (13) with operators ∂i := ∂/∂ξ i and ∂s := ∂/∂s . Now, let ϕ(c(s)) denote the true trajectory between the two states ϕ(c(s1)) and ϕ(c(s2)) and let δϕ (c(s)) be an admissible variation that vanishes at the boundaries of the interval, i.e. 
+
+δϕ (c(s1)) = δϕ (c(s2)) = 0 . Furthermore, let ϵ be a small constant, then the first variation of Eq. (13) in ϕ follows as 
+
+∂S
+
+∂ϕ , δϕ 
+
+
+
+= ddϵ
+
+Z Z 
+
+> D×C
+
+L (ϕ + ϵδϕ, ∂ i(ϕ + ϵδϕ ), ∂ s(ϕ + ϵδϕ ), ξ i, c(s), s ) d nξ ds
+
+
+
+> ϵ=0
+
+13 𝜙 (𝜉 1, 𝜉 2)
+
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝜙 (𝜉 1, 𝜉 2)
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝑛 𝑖
+> dD
+> 𝜙 (𝜉 1, 𝜉 2)
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝑛 𝑖
+> 𝐽 𝑚
+> 𝐽 1
+> 𝐽 𝛼
+> 𝜙 (𝐜 )
+> 𝜙 (𝐜 (𝑠 1))
+> 𝜙 (𝐜 (𝑠 ))
+> 𝜙 (𝐜 (𝑠 2))
+
+2 dD dD
+
+1  
+
+> dD
+> dD
+> dD
+> Configuration at 𝐜 (𝑠 1)
+> Transition
+> Configuration at 𝐜 (𝑠 2)
+> ℝ
+> 𝑠
+> 
+> 𝐜 (𝑠 )
+
+Figure 4: Transition of the level set function from state c(s1) to c(s2). ➀ shows the acceleration of the surface element dD, ➁ shows the compression and tension of a surface element. 
+
+which yields 
+
+∂S
+
+∂ϕ , δϕ 
+
+
+
+=
+
+Z Z 
+
+D×C 
+
+∂L
+
+∂ϕ δϕ + ∂L
+
+∂(∂iϕ)∂iδϕ + ∂L
+
+∂(∂sϕ)∂sδϕ 
+
+
+
+dnξ ds. (14) The second and third term in Eq. (14) are treated via integration by parts. Here, we obtain for the second term 
+
+Z Z 
+
+D×C 
+
+∂L
+
+∂(∂iϕ)∂iδϕ dnξ ds =
+
+Z
+
+C
+
+Z
+
+∂D
+
+∂L
+
+∂(∂iϕ)δϕn i dn−1ξ ds − . . . 
+
+· · · − 
+
+Z Z 
+
+D×C 
+
+∂i
+
+ ∂L
+
+∂(∂iϕ)
+
+
+
+δϕ dnξ ds (15) 14 and for the third term 
+
+Z Z 
+
+> D×C
+
+∂L
+
+∂(∂sϕ)∂sδϕ dnξ ds =
+
+Z
+
+> D
+
+ ∂L
+
+∂(∂sϕ)δϕ 
+
+s=s2
+
+> s=s1
+
+dnξ − . . . 
+
+· · · − 
+
+Z Z 
+
+> D×C
+
+∂s
+
+ ∂L
+
+∂(∂sϕ)
+
+
+
+δϕ dnξ ds. (16) Since the boundary terms vanish in Eq. (15) and Eq. (16) by definition, the first variation reads 
+
+∂S
+
+∂ϕ , δϕ 
+
+
+
+=
+
+Z Z 
+
+> D×C
+
+∂L
+
+∂ϕ − ∂i
+
+ ∂L
+
+∂(∂iϕ)
+
+
+
+− ∂s
+
+ ∂L
+
+∂(∂sϕ)
+
+ 
+
+δϕ dnξ ds. 
+
+This is satisfied if and only if the term in parentheses vanishes, leading to 
+
+∂i
+
+ ∂L
+
+∂(∂iϕ)
+
+
+
++ ∂s
+
+ ∂L
+
+∂(∂sϕ)
+
+
+
+− ∂L
+
+∂ϕ = 0 . (17) Equation (17) is commonly known as the Euler-Lagrangian equation and de-scribes in our context the free motion of the fictitious material. However, in the optimization process, the level set function is evolved under the in-fluence of the conditions prevailing in the physical domain. To this end, we incorporate non-conservative terms Q∗ that steer the evolution of the level set function resulting in the modified Euler-Lagrangian equation 
+
+∂i
+
+ ∂L
+
+∂(∂iϕ)
+
+
+
++ ∂s
+
+ ∂L
+
+∂(∂sϕ)
+
+
+
+− ∂L
+
+∂ϕ = Q∗ (18) in strong form. To determine appropriate expressions for the kinetic and potential energy, we theoretically analyze the deformed configuration of the fictitious material, as shown in Fig. 4, by observing the behavior of an in-finitesimal surface element dD. Here, we assume that the fictitious material undergoes acceleration along C, resulting in the kinetic energy 
+
+T (∂sϕ) = 12(∂sϕ)2.
+
+Regarding the potential energy arising from the internal resistance of the fictitious material, we consider the surface element to experience both com-pression and tension. Accordingly, we model the potential energy as pro-portional to the squared gradient of the level set function ϕ, weighted by 15 a symmetric, positive-definite second-order tensor. To this end, we intro-duce coefficients (Cij )2, which define an effective tensor characterizing the material’s resistance to deformation. Thus, the potential energy is defined as 
+
+U (∂iϕ; Cij ) = 12(Cij )2∂iϕ∂ j ϕ. 
+
+The squared coefficients (Cij )2 are considered in order to emphasize the anal-ogy of the resulting evolution operator to a generalized wave operator, as will become apparent in the subsequent formulation. Based on these energetic contributions, the Lagrangian density takes the form 
+
+L = 12(∂sϕ)2 − 12(Cij )2∂iϕ∂ j ϕ. (19) As L in Eq. (19) does not explicitly depend on ϕ, the partial derivatives are computed with respect to the gradient terms. According to Eq. (18), we obtain 
+
+∂L
+
+∂(∂sϕ) = ∂sϕ, (20) 
+
+∂L
+
+∂(∂iϕ) = −12
+
+∂∂(∂iϕ)
+
+ (Cij )2∂iϕ∂ j ϕ + ( Cji )2∂iϕ∂ j ϕ = −(Cij )2∂j ϕ. (21) Note, that these two terms correspond to the contributions governing the free motion of the fictitious material. The non-conservative terms Q∗ are assumed to originate from a generalized dissipation functional R via the relation 
+
+Q∗ = −∂R
+
+∂ϕ − ∂R
+
+∂(∂sϕ) (22) which is inspired by the structure of a Rayleigh dissipation functional [64]. Here, the first term accounts for changes in the shape of the level set function, whereas the second term captures the rate of change with respect to the curve parameter s. In this context, we postulate that the dissipation functional R
+
+can be decomposed into two contributions: 
+
+R[ϕ, ∂ sϕ, ξ i, c(s), s ] = R1[ϕ, ξ i, c(s), s ] + R2[∂sϕ, ξ i, c(s), s ].
+
+Since the first term R1 depends primarily on the current shape of the level set function ϕ, it is reasonable to quantify this influence on the basis of the given functionals from Problem (9). For this purpose, we propose the 16 following expression for the first part of the dissipation functional: 
+
+R1 =
+
+> m
+
+X
+
+> α=1
+
+
+
+G∗
+
+> α
+
+[uα, Θ; λα, r α] + wα
+
+Jα[uα, Θ] − cα
+
+J∗
+
+> α
+
+− Rα[uα, Θ; vα]
+
+
+
+. (23) In Eq. (23), the first summand enforces the inequality constraint, taking into account the individual displacement fields uα. For numerical implementation, it is denoted by G∗ 
+
+> α
+
+to indicate that it will be treated using the Augmented Lagrangian method [65] to satisfy the KKT conditions in Eq. (10), with each term associated with its own multiplier λα and penalization factor rα. The objective functionals from Problem (9) are combined into a single aggre-gated functional based on the WS method, where each objective is scaled by a weighting parameter wα ∈ (0 , 1) to reflect its relative prioritization and additionally related to its initial functional value J∗
+
+> α
+
+. This provides a natural scalarization consistent with the variational structure. The weights can be collected to a vector w belonging to the open simplex defined as 
+
+∆m−1 := 
+
+(
+
+(w1, . . . , w m) ∈ Rm 0 < w α < 1,
+
+> m
+
+X
+
+> α=1
+
+wα = 1 
+
+)
+
+. (24) From this, we obtain the partial functional derivative with respect to ϕ after separating into implicit and explicit terms [66] as follows: 
+
+∂R
+
+∂ϕ =
+
+> m
+
+X
+
+> α=1
+
+ ∂G ∗
+
+> α
+
+∂uα
+
++ wα
+
+J∗
+
+> α
+
+∂J α
+
+∂uα
+
+− ∂R α
+
+∂uα
+
+ ∂uα
+
+∂Θ δ(ϕ) + . . . 
+
+· · · +
+
+∂G ∗
+
+> α
+
+∂Θ + wα
+
+J∗
+
+> α
+
+∂J α
+
+∂Θ + ∂R α
+
+∂Θ
+
+
+
+δ(ϕ)
+
+
+
+(25) In this context, δ(ϕ) denotes the Dirac Delta function. From Eq. (25) we find that the first sum vanishes if each individual summand vanishes. This occurs as soon as the terms in parentheses become zero, which corresponds to the system’s underlying adjoint equations. These are given by 
+
+Aα :
+
+∂G ∗
+
+> α
+
+∂uα
+
+, δ uα
+
+
+
++
+
+wα
+
+J∗
+
+> α
+
+∂J α
+
+∂uα
+
+, δ uα
+
+
+
+=
+
+∂R α
+
+∂uα
+
+, δ uα
+
+
+
+, δuα ∈ V α (26) in weak form. Assuming that these conditions are fulfilled, the partial deriva-tive of the dissipation functional with respect to ϕ reduces to 
+
+∂R
+
+∂ϕ =
+
+> m
+
+X
+
+> α=1
+
+∂G ∗
+
+> α
+
+∂Θ + wα
+
+1
+
+J∗
+
+> α
+
+∂J α
+
+∂Θ − ∂R α
+
+∂Θ
+
+
+
+δ(ϕ) = 
+
+> m
+
+X
+
+> α=1
+
+fα(ϕ, w α)δ(ϕ). (27) 17 where a single sensitivity contribution is defined as 
+
+fα(ϕ, w α) := ∂G ∗
+
+> α
+
+∂Θ + wα
+
+1
+
+J∗
+
+> α
+
+∂J α
+
+∂Θ − ∂R α
+
+∂Θ . (28) Here, the absolute values of the objective functional sensitivities are consid-ered. On this basis, the total sum is conveniently denoted by 
+
+F (ϕ, w) := 
+
+> m
+
+X
+
+> α=1
+
+fα(ϕ, w α). (29) In the following course of the work, Eq. (27) is referred to as the perturbation term containing the individual design sensitivities. In our modeling, the sum of these terms acts as a source of excitation for the fictitious material and thus has a significant influence on the evolution of the level set function, as shown in Fig. 3. In the next step, the second contribution of the dissipation functional is to be specified. Here, we define the expression 
+
+R2[∂sϕ, ξ i, c(s), s ; B] = 12
+
+Z Z 
+
+> D×C
+
+B(∂sϕ)2 dnξ ds (30) which corresponds to a kinetic energy dissipation during the evolution mul-tiplied by a damping constant B > 0. According to Eq. (22), differentiation of Eq. (30) with respect to ∂sϕ gives 
+
+∂R
+
+∂(∂sϕ) = B∂ sϕ. (31) Finally, insertion of Eqs. (20), (21), (29), and (31) into Eq. (18) yields 
+
+∂ss ϕ − ∂i(( Cij )2∂j ϕ) + B∂ sϕ = −F (ϕ, w)δ(ϕ).
+
+For compact representations, we introduce the operator 
+
+□′(·) ≡ ∂ss (·) − ∂i(( Cij )2∂j (·)) 
+
+which is a modified version of the D’Alembert operator □(·) that is commonly used to describe wave characteristics. Following [60], we approximate the Heaviside function by means of a hyperbolic tangent function 
+
+Θ( ϕ; b) ≈ 12(tanh (2 bϕ ) + 1) (32) 18 where b controls the width between material and void region. From Eq. (32), one obtains through differentiation with respect to ϕ the approximated Dirac Delta function 
+
+δ(ϕ; b) ≈ b sech 2(2 bϕ ). (33) A Maclaurin series expansion of Eq. (33) around ϕ = 0 , denoting the region between void and material domain, gives 
+
+b sech 2(2 bϕ ) = 
+
+> ∞
+
+X
+
+> n=1
+
+1
+
+n!dn
+
+dϕn
+
+ b sech 2(2 bϕ )
+
+> ϕ=0
+
+ϕn.
+
+By neglecting terms of higher order, the approximated Dirac Delta function reduces to the simple constant b, that is 
+
+δ(ϕ; b) ≈ b. 
+
+Taking into account additional Dirichlet and Neumann boundary conditions, the derived results lead to the following fundamental evolution problem: 
+
+
+
+□′ϕ + B∂ sϕ = −F (ϕ, w)b in D
+
+ϕ = 1 on G t
+
+> α
+
+∂iϕn i = 0 on ∂D \ (G u 
+
+> α
+
+∪ G t
+
+> α
+
+)
+
+ϕ|s=0 = ϕ0
+
+∂sϕ|s=0 = ( ∂sϕ)0
+
+(34) which fully determines the evolution of the level set function along with the adjoint equations Aα given in Eq. (26) and the governing equations Rα. It should be emphasized that the proposed formulation does not restrict the evolution to the specific dynamical structure considered here. Alternative evolution laws may be constructed by adopting different energetic contribu-tions or by modifying the balance between conservative and non-conservative contributions as demonstrated in [60]. The present choice represents one con-sistent realization within a broader class of admissible dynamical systems. 
+
+2.3. Geometric interpretations 
+
+Equation (34) describes a damped wave equation propagating along the curve parameter s in the space of objective functionals Jm. We observe that the motion of a solution candidate is governed by two interacting mechanisms: 19 1. design sensitivities resulting from the optimization problem, which de-termine a natural descent direction, and 2. weighting factors w, which act as external control parameters and in-fluence the prioritization of the objective functionals, thereby steering the trajectory in Jm.In the stationary limit case, the perturbation term F (ϕ, w) vanishes and an equilibrium state is reached. Such equilibrium configurations correspond to locally optimal designs under the weighted objective formulation. Different weighting vectors generally lead to different stationary states and thus to different locations of local optima in objective space as qualitatively shown in Fig. 5a. Let M ⊂ Jm denote the set of all stationary objective vectors 𝐽 𝑚 𝐽 𝛼     
+
+> 𝐽 1
+> 1(𝐰 1)
+> 𝐉 (𝐰 1)
+> 2(𝐰 2)
+> 𝐉 (𝐰 2)
+> 3(𝐰 3)
+> 𝐉 (𝐰 3)
+> 𝑤 2
+> 𝑤 1
+> 𝐰
+> 𝐰 + d 𝐰
+> 𝐽 2
+> 𝐽 1
+> 𝐉
+> 𝐉 + d 𝐉
+> 𝜑 (𝐰 )
+> 𝜑 (𝐰 + d 𝐰 )
+> (a) (b)
+
+Figure 5: (a) Different solutions obtained for varying weights w, (b) qualitative illustration of the mapping φ.
+
+generated by the evolutionary system. Consequently, this set can be explored systematically by varying the weighting factors. The Pareto frontier forms in this connection a subset of this solution set and is defined with respect to the standard dominance relation in M, i.e., 
+
+P = {J′ ∈ M | ∄J′′ ∈ M : J′′ ⪯ J′ ∧ J′′ ̸ = J′} , (35) where ⪯ denotes the componentwise partial order with respect to minimiza-tion. Accordingly, the inclusion P ⊆ M ⊂ Jm holds. Assuming continuously differentiable objective functionals and local uniqueness of stationary states, small perturbations of the weighting vector w induce only small changes in the equilibrium configuration and hence small shifts of the associated 20 objective vector in Jm. This motivates the introduction of a continuously differentiable mapping 
+
+φ : w ∈ ∆m−1 7 → J ∈ Jm, (36) which assigns to each admissible weighting vector the corresponding objective vector, see Fig. 5b. Recall that the open simplex defined in Eq. (24) is (m−1) -dimensional. Under suitable regularity assumptions, in particular assuming sufficiently smooth objective functionals and local uniqueness of stationary states, the mapping φ is expected to be locally regular. This suggests that its image is locally at most (m−1) -dimensional in Jm, in accordance with the Constant Rank Theorem [67]. In this sense, the solution set M can locally be regarded as a (m − 1) -dimensional smoothly parameterized structure. The dependence of stationary solutions on the weighting parameters are then approximated by a first-order Taylor series expansion 
+
+φ(w + d w) ≈ φ(w) + Dφ (w) d w,
+
+so that infinitesimal variations in the weights induce tangential shifts within the solution set. The derivative Dφ (w) thus characterizes the local sensitiv-ity of stationary states with respect to changes in the prioritization of the objective functionals. This observation gives rise to an interpretation of M
+
+as a differentiable geometric structure embedded in Jm, with the weighting factors w serving as local coordinates. In this framework, tangential direc-tions and local distance concepts can be defined consistently, allowing the solution set to be interpreted locally as a manifold-like structure. A rigorous manifold-theoretic analysis is reserved for future research. Nevertheless, the present considerations provide the conceptual basis for such an interpreta-tion. 
+
+2.4. Evolution of weightings 
+
+The previous considerations suggest that the stationary solution set M
+
+admits a local geometric structure in objective space, with the weighting vectors w acting as intrinsic coordinates. During the evolutionary process, however, the topology does not remain fixed but traces a trajectory in Jm.Since the local sensitivity structure and thus the tangent space of M depend on the current state of the system, a fixed choice of weights imposes a static parametrization on a dynamically evolving geometric object. From this per-spective, it appears natural to allow the weighting parameters themselves 21 to evolve adaptively in response to the changing sensitivity landscape. In doing so, the parametrization of the solution set becomes responsive to the local geometric structure, enabling a dynamically consistent exploration of the admissible stationary configurations. Note that the weighting parame-ters do not evolve freely in Rm, but are geometrically constrained to the open simplex defined in Eq. (24). For all evolution parameters s, they satisfy 
+
+> m
+
+X
+
+> α=1
+
+wα(s) = 1 , 0 < w α(s) < 1.
+
+These constraints must be preserved under admissible variations. Rather than enforcing the normalization condition via a Lagrange multiplier in the variational formulation, it is more natural to adopt an intrinsic parameter-ization of the simplex in which the constraints are satisfied automatically. In such coordinates, the variations become unconstrained, and the geometric structure of ∆m−1 is incorporated directly into the formulation. To this end, we employ the stick-breaking parameterization, originally introduced in the context of Dirichlet processes [68]. Therefore, we introduce the parameter space 
+
+Qm−1 = (q1, . . . , q m−1) ∈ Rm−1 0 < q μ < 1 ,
+
+whose elements q ∈ Qm−1 serve as free coordinates. The components qμ are indexed by μ ∈ { 1, . . . , m − 1}. Then, the weights can be defined as smooth functions of q via 
+
+
+
+wν (q) = (1 − qν )
+
+> ν−1
+
+Y
+
+> μ=1
+
+qμ, ν = 1 , . . . , m − 1,wm(q) =
+
+> m−1
+
+Y
+
+> μ=1
+
+qμ.
+
+(37) This representation is equivalent to the classical stick-breaking construction [69, 70, 71]. For illustration, in the case of two objective functionals, the weights reduce to 
+
+w1(q1) = 1 − q1, w2(q1) = q1,
+
+while for three objective functionals one obtains 
+
+w1(q) = 1 − q1, w2(q) = q1(1 − q2), w3(q) = q1q2.
+
+22 The inverse function of Eq. (37) accordingly reads 
+
+qμ(w) = 
+
+Pmν=μ+1 wν
+
+Pmν=μ wν
+
+, μ = 1 , . . . , m − 1. (38) By construction, positivity and normalization are satisfied identically. The dynamics of the weights can therefore be expressed equivalently in terms of the free coordinates q(s), which constitute the appropriate variation variables for applying the principle of least action. For s ∈ [s1, s 2], q ∈ Qm−1, we introduce an action functional 
+
+Sq[q(s)] = 
+
+Z s2
+
+> s1
+
+Lq(∂sq(s), q(s), s ) d s (39) and calculate the first variation of Eq. (39) in q(s) as follows: 
+
+∂Sq
+
+∂q , δ q
+
+
+
+= ddϵ
+
+Z s2
+
+> s1
+
+Lq(∂s(q + ϵδ q), q + ϵδ q) d s
+
+
+
+> ϵ=0
+
+=
+
+Z s2
+
+> s1
+
+∂Lq
+
+∂q · δq + ∂Lq
+
+∂(∂sq) · ∂sδq
+
+
+
+ds. (40) The second term in Eq. (40) is treated via integration by parts which yields 
+
+Z s2
+
+> s1
+
+∂Lq
+
+∂(∂sq) · ∂sδq ds =
+
+ ∂Lq
+
+∂(∂sq) · δq
+
+s=s2
+
+> s=s1
+
+−
+
+Z s2
+
+> s1
+
+∂s
+
+ ∂Lq
+
+∂(∂sq)
+
+
+
+· δq ds. 
+
+Since the boundary term vanishes, the Euler-Lagrangian equation in strong formulation reads 
+
+∂s
+
+ ∂Lq
+
+∂(∂sq)
+
+
+
+− ∂Lq
+
+∂q = Qq (41) where Qq represents non-conservative contributions. To model inertial and restoring effects, we adopt the mechanical ansatz Lq = Tq − Uq regarding Eq. (41) with 
+
+Tq = 12Mq|∂sq|2, Uq = 12Kq|q − q∗|2,
+
+where Mq > 0 and Kq > 0 denote effective inertia and stiffness parame-ters. The potential energy penalizes deviations of q from a reference state q∗
+
+and thereby enables a restoring tendency. The non-conservative term Qq is 23 assumed to consist of a damping component to dissipate energy from the sys-tem and an information-driven forcing term. In index notation it is proposed as 
+
+Qq,μ = −∂s ∂μmX
+
+> α=1
+
+wα(q)Jα
+
+J∗
+
+> α
+
+!
+
+− Bq∂sqμ (42) with damping coefficient Bq > 0 and operator ∂μ := ∂/∂q μ. The first con-tribution represents the s-rate of change of the gradient of the weighted objective functional and does not correspond to classical gradient descent. Instead, it represents the temporal variation of the sensitivity of the weighted objective functional, thereby driving the system according to changes in in-formation rather than absolute objective values. The forcing term vanishes once the sensitivity structure becomes stationary, ensuring asymptotic relax-ation of the weight dynamics. In this regard, we extract from Eq. (42) the inhomogeneity term 
+
+Fq,μ (ϕ, q) = ∂s ∂μmX
+
+> α=1
+
+wα(q)Jα
+
+J∗
+
+> α
+
+!
+
+,
+
+which ensures an intrinsic coupling between the parameterized weightings and obtain the resulting (m − 1) evolution equations for the weighting pa-rameters: 
+
+
+
+Mq∂ss qμ + Bq∂sqμ + Kq(qμ − q∗
+
+> μ
+
+) = −Fq,μ (ϕ, q) s ∈ [s1, s 2]
+
+qμ|s=0 = ( qμ)0
+
+∂sqμ|s=0 = ∂s(qμ)0.
+
+(43) Note that, Eq. (43) has the structure of a forced damped oscillator in the pa-rameter space Qm−1. The parameter Mq accounts for inertia, Bq introduces viscous damping, and Kq acts as a stiffness coefficient inducing a restor-ing tendency toward the reference configuration q∗. In the limit Kq → ∞ ,the conventional WS method is recovered. In this case, the restoring term 
+
+Kq(qμ − q∗
+
+> μ
+
+) dominates the evolution equation, such that the remaining terms become negligible. The resulting condition Kq(qμ − q∗
+
+> μ
+
+) ≈ 0 implies qμ = q∗
+
+> μ
+
+,i.e., the weights remain fixed at their prescribed reference values. Hence, the classical WS method arises as a limiting case of the proposed weight evo-lution. The term Fq,μ (ϕ, q) represents an external excitation generated by 24 the evolving sensitivity structure of the optimization problem. In this inter-pretation, the weighting parameters behave as dynamical degrees of freedom whose motion is driven by changes in the objective functionals. In this sense, Eqs. (34) and (43) constitute a coupled dynamical system. The two evolu-tion equations are linked through their inhomogeneity terms Fq,μ (ϕ, q) and 
+
+F (ϕ, w(q)) , and jointly characterize the trajectory of a solution candidate in objective space. 
+
+3. Numerical implementation and discretization strategies 
+
+3.1. Discrete update schemes 
+
+We discretize Eq. (34) in the curve parameter s using a finite difference scheme with step size ∆s and obtain 
+
+ϕs+1 − 2ϕs + ϕs−1
+
+∆s2 + B ϕs+1 − ϕs
+
+∆s − ∂i(( Cij )2∂j ϕs+1 ) = −F sb. 
+
+Each term f sα included in F s is normalized by a factor Csα. Rearranging yields 
+
+(1 + B∆s)ϕs+1 − ∂i(( Cij )2∂j ϕs+1 )∆ s2 = −F sb∆s2 + (2 + B∆s)ϕs − ϕs−1
+
+(44) which can be solved for ϕs+1 for each iteration s. Therefore, let 
+
+Ψ = 
+
+(
+
+δϕ ∈ Hκ(D) δϕ = 0 on Gϕ =
+
+> m
+
+[
+
+> α=1
+
+G t
+
+> α
+
+)
+
+,
+
+then by multiplying Eq. (44) with an appropriate test function δϕ ∈ Ψ and integrating over D, the weak form follows as 
+
+Z
+
+> D
+
+(1 + B∆s)ϕs+1 δϕ dD −
+
+Z
+
+> D
+
+∂i(( Cij )2∂j ϕs+1 )∆ s2δϕ dD = . . . 
+
+· · · = −
+
+Z
+
+> D
+
+F sb∆s2δϕ dD +
+
+Z
+
+> D
+
+ (2 + B∆s)ϕs − ϕs−1 δϕ dD. (45) The second term on the left-hand side is treated via integration by parts 
+
+Z
+
+> D
+
+∂i(( Cij )2∂j ϕs+1 )δϕ dD =
+
+Z
+
+> ∂D
+
+δϕ (Cij )2∂iϕs+1 nj dG − . . . 
+
+· · · − 
+
+Z
+
+> D
+
+(Cij )2∂iϕs+1 ∂j δϕ dD (46) 25 where boundary integrals vanish due to δϕ = 0 on Gϕ and homogeneous Neumann conditions on the remainder of ∂D. After insertion of Eq. (46) into Eq. (45), the discretized equation of motion reads 
+
+Z
+
+> D
+
+(1 + B∆s)ϕs+1 δϕ dD + . . . 
+
+· · · +
+
+Z
+
+> D
+
+(Cij )2∆s2∂iϕs+1 ∂j δϕ dD = −
+
+Z
+
+> D
+
+F sb∆s2δϕ dD + . . . 
+
+· · · +
+
+Z
+
+> D
+
+ (2 + B∆s)ϕs − ϕs−1 δϕ dD in D
+
+ϕs+1 = 1 on Gϕ =
+
+> m
+
+[
+
+> α=1
+
+G t
+
+> α
+
+ϕ|s=0 = ϕ0
+
+∂sϕ|s=0 = ϕ0 − ϕ−1
+
+∆s (47) 
+
+which is solved using the finite element method. In this context, let E be the set of finite elements, then the domain D is decomposed into the set ¯D =S 
+
+> e∈E
+
+Ve. Furthermore, the continuous fields are approximated by discrete nodal vectors and element-wise matrices 
+
+[M] = [
+
+> e∈E
+
+Z
+
+> Ve
+
+NξNη dVe, [B] = [
+
+> e∈E
+
+Z
+
+> Ve
+
+∂iNξ(Cij )2∂j Nη dVe
+
+containing shape functions Nξ and their spatial derivatives ∂iNξ where indices 
+
+ξ, η refer to the total amount of nodes per finite element. Without loss of generality, we set ∆s = 1 between the initial states s = −1 and s = 0 , such that only the fields {ϕ0} and {ϕ−1} need to be specified. Finally, we obtain the finite element formulation of Eq. (47) 
+
+ (1 + B∆s)[ M] + ∆ s2[B] {ϕs+1 } = [ M]( −{ Fs}b∆s2 + . . . 
+
+· · · + (2 + B∆s){ϕs} − { ϕs−1}) in ¯D
+
+{ϕs+1 } = {1} on ¯Gϕ =
+
+> m
+
+[
+
+> α=1
+
+¯G t
+
+> α
+
+ϕ|s=0 = {ϕ0}
+
+ϕ|s=−1 = {ϕ−1}
+
+(48) 
+
+26 with ¯Gϕ as the union set of the discretized boundary sections ¯G t
+
+> α
+
+. Next, Eq. (43) is discretized similarly. Here, we obtain 
+
+Mq
+
+qs+1  
+
+> μ
+
+− 2qsμ + qs−1
+
+> μ
+
+∆s2 + Bq
+
+qs+1  
+
+> μ
+
+− qsμ
+
+∆s + Kq(qs+1  
+
+> μ
+
+− q∗
+
+> μ
+
+) = −F sq,μ 
+
+which can be explicitly solved for the updated weight component, that is 
+
+qs+1  
+
+> μ
+
+= 2Mq + Bq∆sMq + Bq∆s + Kq∆s2 qsμ − Mq
+
+Mq + Bq∆s + Kq∆s2 qs−1 
+
+> μ
+
++ . . . 
+
+· · · + Kqq∗
+
+> μ
+
+∆s2 − F sq,μ ∆s2
+
+Mq + Bq∆s + Kq∆s2 (49) considering initial conditions (qμ)−1 and (qμ)0. To ensure numerical stability, the weights are constrained to the interval [εq, 1 − εq], ε q ≪ 1 during the optimization. Concluding, Eqs. (48) and (49) form the discretized coupled evolution problem. The partial differential equations are solved numerically using the software FreeFEM++ [72], combined with the mmg module [73, 74], which enables adaptive mesh refinement. The discretization described above provides the numerical framework for solving the coupled evolution equations which govern the motion of one solution candidate. In order to efficiently approximate the Pareto frontier based on the information provided by multiple solution candidates, an adaptive discretization of the weight and objective functional space is proposed in the following. 
+
+3.2. Adaptive Simplex decomposition and algorithmic implementation 
+
+According to the previously introduced geometric interpretation, it is nat-ural to discretize the weight space ∆m−1 by means of a simplicial decompo-sition. This induces a corresponding discretization of the mapping φ given in Eq. (36) from the weight space to the objective functional space. Each simplex in the discretized weight space is therefore mapped to a simplex in the objective space spanned by the respective objective vectors. In order to measure the quality of the approximation of the Pareto frontier, the simplices in the objective space are evaluated with respect to their edge lengths ls. For this purpose, the normalized objective values are considered to account for differences in scale between the objectives. If the maximum edge length of a simplex exceeds a prescribed threshold ls,max , the simplex is marked as poor and scheduled for refinement in the subsequent iteration. Under the assump-tion of a continuous mapping φ between ∆m−1 and Jm, weights located in the 27 interior of a simplex in weight space correspond to solutions located within the associated simplex in the objective space. Based on this observation, new weights are generated using the barycenters of the edges of the marked simplices. In this way, the approximation of the solution set is successively refined. To quantify the global quality of the approximation, the mean edge length ¯μ(ls) of all simplices in the objective space is taken into account. The refinement procedure is terminated once this quantity falls below the pre-scribed tolerance ls,max or after reaching a certain amount of refinement steps. In the following course of the work this approach is referred to as the Adaptive Simplex Decomposition (ASD) method. A qualitative illustration of the re-finement strategy is shown in Fig. 6. For the case of more than two objective 𝐰 ∗1              
+
+> 𝐰 ∗2
+> 𝑙 s,12
+> 𝐉 1
+> 𝐉 2
+> 𝐰 ∗1
+> 𝐰 ∗2
+> 𝐰 ∗3
+> 𝑙 s,13
+> 𝐉 1
+> 𝐉 2
+> 𝐉 3
+> 𝐰 ∗1
+> 𝐰 ∗2
+> 𝐰 ∗3
+> 𝐰 ∗4
+> 𝐉 1
+> 𝐉 4
+> 𝐉 3
+> 𝐉 2
+> 𝐰 ∗1
+> 𝐰 ∗2𝐰 ∗3
+> 𝑙 s,13
+> 𝑙 s,23
+> 𝑙 s,12
+> 𝐉 1
+> 𝐉 3
+> 𝐉 2
+> 𝐰 ∗1
+> 𝐰 ∗2𝐰 ∗3
+> 𝐰 ∗4
+> 𝐰 ∗5
+> 𝐰 ∗6
+> 𝑙 s,14 𝑙 s,46
+> 𝑙 s,16
+> 𝐉 1
+> 𝐉 3
+> 𝐉 2
+> 𝐉 4
+> 𝐉 6
+> 𝐉 5
+> 𝐰 ∗1
+> 𝐰 ∗2𝐰 ∗3
+> 𝐰 ∗4
+> 𝐰 ∗5
+> 𝐰 ∗6
+> 𝐰 ∗7𝐰 ∗9
+> 𝐰 ∗8
+> 𝐉 1
+> 𝐉 3
+> 𝐉 2
+> 𝐉 4
+> 𝐉 6
+> 𝐉 5
+> 𝐉 9
+> 𝐉 7
+> 𝐉 8
+> Refinement level 𝑖 Refinement level 𝑖 + 1 Refinement level 𝑖 + 2
+> 𝑚 = 2
+> 𝑚 = 3
+
+Figure 6: Qualitative illustration of the ASD method; poor simplices marked in orange. 
+
+functionals, the simplicial decomposition is constructed using a Delaunay tri-angulation. This preserves topological neighborhood relationships and allows the approach to be extended, in principle, to higher-dimensional objective spaces [75], thereby supporting the scalability of the proposed method. We note that a related refinement strategy was proposed by Kim and de Weck [76, 77]. In the adaptive WS method, additional constraints in the objective space were introduced to guide the search between adjacent Pareto points. While this strategy is effective for general optimization frameworks, the in-corporation of such constraints is non-trivial in a level set based formulation, since it would require the introduction of additional Lagrange multipliers 28 and modify the underlying evolution equation. In contrast, the approach proposed in this work does not alter the original optimization problem. The adaptive sampling of the Pareto frontier is achieved solely through a refine-ment of the discretization of the weight space combined with an adaptive evolution of the weights, which makes the method naturally compatible with the level set framework. The overall structure of the proposed algorithm is summarized in Algorithm 1. The procedure can be divided into an inner 
+
+Algorithm 1 Adaptive simplex decomposition method  
+
+> 1:
+
+Define input settings  
+
+> 2:
+
+Initialize the discrete reference weight set W∗ 
+
+> h
+
+= {w∗ 
+
+> i
+
+} 
+
+> 3:
+
+while mean simplex edge length ¯μ(ls) > l s,max do  
+
+> 4:
+
+for each reference weight w∗ 
+
+> i
+
+∈ W ∗ 
+
+> h
+
+do  
+
+> 5:
+
+Initialize level set functions ϕ0, ϕ −1 
+
+> 6:
+
+for s = 1 , . . . , N max do  
+
+> 7:
+
+Update weightings qs and convert to ws 
+
+> 8:
+
+Solve state problems Rα and adjoint problems Aα 
+
+> 9:
+
+Evaluate objectives Jα and constraints Gα 
+
+> 10:
+
+Compute the aggregated perturbation F (ϕs, ws) 
+
+> 11:
+
+Update level set function ϕs+1  
+
+> 12:
+
+if stationarity criterion is satisfied then  
+
+> 13:
+
+break  
+
+> 14:
+
+end if  
+
+> 15:
+
+end for  
+
+> 16:
+
+Store solution candidates  
+
+> 17:
+
+end for  
+
+> 18:
+
+Update solution register  
+
+> 19:
+
+Perform simplex construction ( Delaunay for m > 2) 
+
+> 20:
+
+Refine poor simplexes and update reference weight set Wh 
+
+> 21:
+
+end while  
+
+> 22:
+
+Remove closely spaced points and filter for Pareto efficient solutions and an outer loop. After defining the input parameters and initializing the discretized reference weight set W∗ 
+
+> h
+
+, the outer loop performs an adaptive refinement of the weight space until the termination criterion based on the mean simplex edge length is satisfied. The inner loop comprises the numer-ical solution of the coupled evolution problem for the level set function and the weights. For each reference weight, the state and adjoint problems are 29 solved and the aggregated perturbation field is evaluated in order to update the level set function. The weight parameters are updated simultaneously according to the discrete evolution scheme. Once the stationarity criterion is satisfied, the corresponding solution candidate is stored in a global solution register. Based on the collected solutions, a simplicial decomposition of the objective space is constructed. Poor simplices are identified according to the edge-length criterion, and additional reference weights are introduced to re-fine the discretization of the weight space. Filtering with respect to Pareto efficiency is performed in the final step. This allows the non-dominated sub-set according to Eq. (35) to be extracted from the adaptively reconstructed geometric structure of the solution set in the objective space, which acts as the underlying carrier of the Pareto frontier. Approximating this geometric structure rather than the Pareto frontier alone provides additional insights into the optimization problem, for instance regarding the local curvature of the mapping between weight space and objective space. 
+
+4. Numerical experiments 
+
+In this section, the proposed framework is demonstrated using several numerical examples. To avoid an excessive number of indices, we adopt the convention that quantities and their indices are assumed to correspond to the respective example under consideration. Furthermore, index α is only included if a quantity differs between the single optimization problems. If a parameter is identical for all problems, the index is omitted. 
+
+4.1. Bi-objective mean compliance minimization 
+
+We study a minimum mean compliance problem in a girder structure (α ∈ { 1, 2}), where the material domain Ω is constrained in normal direction at Γr as shown in Fig. 7. Considering traction forces ti being applied at Γt
+
+> α
+
+30 𝑥 2       
+
+> 𝑥 1
+> Γt1
+> 𝑡 𝑖
+> 𝐿
+> 3𝐿
+> ΓrΓr
+> 𝐸, 𝜈 𝑥 2
+> 𝑥 1
+> Γt2
+> 𝑡 𝑖
+> Γr
+> Γr
+> Problem definition 𝛼 = 1 Problem definition 𝛼 = 2
+> 𝐸, 𝜈
+
+Figure 7: Bi-objective minimum mean compliance problem: simply supported girder. 
+
+and neglecting body forces, the optimization problem is formulated as 
+
+vec inf 
+
+ϕ ∈ H2(D)
+
+J[u1, u2] = ( J1[u1], J 2[u2]) ⊤
+
+s.t. G[Θ] = 1
+
+V0
+
+Z
+
+> D
+
+Θ dΩ − Vf ≤ 0,
+
+−∂j (Cijkl εkl (uα)) = 0 in Ω,uα,i ni = 0 on Γr,
+
+(Cijkl εkl (uα)) nj = ti on Γt
+
+> α
+
+,
+
+(Cijkl εkl (uα)) nj = 0 on ∂Ω \ (Γ r ∪ Γt
+
+> α
+
+)
+
+(50) with objective functionals 
+
+Jα[uα] = 
+
+Z
+
+> Γt
+> α
+
+tiuα,i dΓ .
+
+Here, parameter V0 denotes the volume of the design domain. From the boundary conditions of Problem (50), the governing equations are derived in weak form as 
+
+Rα :
+
+Z
+
+> Ω
+
+Cijkl εkl (uα)εij (vα) dΩ −
+
+Z
+
+> Γt
+> α
+
+tivα,i dΓ = 0 , vα ∈ V α. (51) To extend Eq. (51) to the full design domain D, we adopt an Ersatz material approach [78]. Therefore, an auxiliary function 
+
+τ (Θ) = (1 − d)Θ a + d, d ≪ 1, a > 1, (52) 31 is introduced to express the elasticity tensor as Cijkl,ϕ (Θ) = τ (Θ) Cijkl . Not-ing that Θ ∈ { 0, 1} according to Eq. (5), the identities Θa(ϕ) ≡ Θa−1(ϕ) ≡
+
+Θ( ϕ) hold, which simplifies the derivative ∂τ /∂ Θ = a(1 − d)Θ a−1 of Eq. (52) with respect to Θ to 
+
+∂τ ∂Θ = a(1 − d)Θ . (53) Thus, the governing equations in weak form over the entire design domain are written as 
+
+Rα :
+
+Z
+
+> D
+
+τ (Θ) Cijkl εkl (uα)εij (vα) dΩ −
+
+Z
+
+> Γt
+> α
+
+tivα,i dΓ = 0 , vα ∈ V α (54) in level set formulation. Since the constraint functional does not depend on 
+
+uα, the respective adjoint equations follow directly from the remaining terms: 
+
+Aα :
+
+Z
+
+> Γt
+> α
+
+wα
+
+J∗
+
+> α
+
+tiδu α,i dΓ = 
+
+Z
+
+> D
+
+τ (Θ) Cijkl εkl (δuα)εij (vα) dΩ , δuα ∈ V α.
+
+(55) The partial functional derivative of the inequality constraint functional with respect to Θ reads 
+
+∂G ∂Θ , δ Θ
+
+
+
+= ddϵ
+
+ 1
+
+V0
+
+Z
+
+> D
+
+(Θ + ϵδ Θ) dΩ 
+
+
+
+> ϵ=0
+
+= 1
+
+V0
+
+Z
+
+> D
+
+δΘ dΩ .
+
+From this, we identify the partial derivative 
+
+∂G ∂Θ = 1
+
+V0
+
+. (56) Similarly, the partial functional derivatives of the governing equations follow as 
+
+∂R α
+
+∂Θ , δ Θ
+
+
+
+= ddϵ
+
+Z 
+
+> D
+
+τ (Θ + ϵδ Θ) Cijkl εkl (uα)εij (vα) dΩ −
+
+Z
+
+> Γt
+> α
+
+tivα,i dΓ 
+
+
+
+> ϵ=0
+
+which yields 
+
+∂R α
+
+∂Θ = ∂τ ∂ΘCijkl εkl (uα)εij (vα). (57) 32 Using Eqs. (53), (56) and (57), we subsequently obtain the respective per-turbation terms based on Eq. (28) which are required to update the level set function: 
+
+f1 = λ
+
+2V0
+
+− 1
+
+Cs
+
+> 1
+
+∂τ ∂ΘCijkl εkl (u1)εij (v1), (58) 
+
+f2 = λ
+
+2V0
+
+− 1
+
+Cs
+
+> 2
+
+∂τ ∂ΘCijkl εkl (u2)εij (v2). (59) The inequality constraint is active in both optimization problems, therefore a single Lagrangian multiplier λ is introduced, which is equally distributed between the two problems and appears as λ/ 2 in each case. Due to the self-adjoint nature of the problem, the adjoint variable is identical to the corresponding state variable. Therefore, the sum of the perturbation terms given by Eq. (58) and (59) can be reformulated according to Eq. (29) as: 
+
+F = λV0
+
+−
+
+> 2
+
+X
+
+> α=1
+
+ 1
+
+Csα
+
+∂τ ∂Θ
+
+wα
+
+J∗
+
+> α
+
+Cijkl εkl (uα)εij (uα)
+
+
+
+. (60) Furthermore, the normalization factor 
+
+Csα = 1
+
+wαV0
+
+Z
+
+> D
+
+∂R α
+
+∂Θ L2(D) 
+
+dD (61) is incorporated to balance the magnitude of the perturbation terms associated with the different objectives. The evolution problem is now fully defined by Eqs. (54), (55), and (60) and forms the basis for investigating the impacts of the numerical parameters. 
+
+4.1.1. Influence of the numerical parameters 
+
+To study the influences of the individual parameters, a reference config-uration is defined using the parameter combination Mq = Bq = Kq = 1 and initial conditions defined by the ratio ¯q1 = ( q1)0/q ∗ 
+
+> 1
+
+= 0 . If a parameter is varied in the numerical studies, all remaining parameters are kept fixed. In all experiments, Young’s modulus is set to E = 1 N /mm 2 and Poisson’s ratio to ν = 0 .3. The volume fraction is set to Vf = 0 .45 . A traction load of magni-tude |t| = 1 N is applied, and the length of the domain is given as L = 1 mm .The parameters of the Ersatz material approach are chosen as a = 3 and 
+
+d = 1 × 10 −3. The initial layout is a solid domain, i.e. ϕ−1 = ϕ0 = 1 .33 Furthermore, the evolution parameters are set to C11 = C22 = 0 .014 and 
+
+b = 1 with a damping coefficient of B = 0 .001 . The finite element size varies between hmin = 0 .5×10 −4 and hmax = 1 ×10 −2. To compare the adaptive evo-lution of the weights with the classical WS method, we examine the solution trajectory in the objective space for the reference weights W∗ 
+
+> h
+
+= {(0 .9, 0.1) }
+
+which correspond to q∗ 
+
+> 1
+
+= 0 .9 following Eqs. (37) and (38). Figure 8 shows the resulting trajectories in the objective space obtained with the classical WS method and the proposed weight evolution scheme, together with the corresponding evolution of the weight parameter q1 during the optimization. It can be observed that the adaptive weight evolution 0.3 0.4 0.5 0.6    
+
+> 0.3
+> 0.4
+> 0.5
+> 𝐉 (𝑠 = 0)
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Objective-space trajectories
+> WS method
+> Weight evolution
+> 10 010 110 2
+> 0.6
+> 0.7
+> 0.8
+> 0.9
+> iteration # [−]
+> 𝑞 1 [−]
+> Weight evolution
+> WS method
+> Weight evolution
+
+Figure 8: Comparison of the WS method and the proposed weight evolution scheme in terms of the objective-space trajectories and the evolution of the weight parameter q1.
+
+responds to the local structure of the objective landscape and consequently deviates from the trajectory produced by the standard WS method. This is also reflected in the evolution of the weight parameter q1. In particular, after approximately 20 iterations a clear deviation from the reference value becomes visible. This demonstrates that the proposed adaptive scheme is able to modify the effective weighting dynamically and thereby to explore regions of the Pareto frontier that would not be reached by a fixed weighted sum approach. In the following, the effects of the numerical parameters on the resulting solution trajectory are investigated. As shown in Fig. 9a, variations of Mq
+
+have only a minor influence on the trajectory in the objective space. However, the effect becomes more apparent in the evolution of the weight parameter 
+
+q1, which is consistent with the previously derived mechanical analogy of the weight evolution scheme. As Mq acts as an inertia term, larger values lead to a more pronounced overshooting behavior, whereas smaller values allow the weight parameter to adapt more rapidly to changes in the objective 34 0.3 0.4 0.5 0.6                                                          
+
+> 0.3
+> 0.4
+> 0.5
+> 𝐉 (𝑠 = 0)
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Objective-space trajectories
+> WS method 𝑀 𝑞 = 0 .50
+> 𝑀 𝑞 = 0 .75 𝑀 𝑞 = 1 .00
+> 𝑀 𝑞 = 1 .25 𝑀 𝑞 = 1 .50
+> 10 010 110 2
+> 0.6
+> 0.8
+> 1
+> iteration # [−]
+> 𝑞 1 [−]
+> Weight evolution
+> 𝑀 𝑞 = 0 .50
+> 𝑀 𝑞 = 0 .75
+> 𝑀 𝑞 = 1 .00
+> 𝑀 𝑞 = 1 .25
+> 𝑀 𝑞 = 1 .50
+> 0.30.40.50.6
+> 0.3
+> 0.4
+> 0.5
+> 𝐉 (𝑠 = 0)
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> WS method 𝐵 𝑞 = 0 .50
+> 𝐵 𝑞 = 0 .75 𝐵 𝑞 = 1 .00
+> 𝐵 𝑞 = 1 .25 𝐵 𝑞 = 1 .50
+> 10 010 110 2
+> 0.6
+> 0.8
+> 1
+> iteration # [−]
+> 𝑞 1 [−]
+> 𝐵 𝑞 = 0 .50
+> 𝐵 𝑞 = 0 .75
+> 𝐵 𝑞 = 1 .00
+> 𝐵 𝑞 = 1 .25
+> 𝐵 𝑞 = 1 .50
+> 0.30.40.50.60.7
+> 0.3
+> 0.4
+> 0.5
+> 𝐉 (𝑠 = 0)
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> WS method 𝐾 𝑞 = 0 .50
+> 𝐾 𝑞 = 0 .75 𝐾 𝑞 = 1 .00
+> 𝐾 𝑞 = 1 .25 𝐾 𝑞 = 1 .50
+> 10 010 110 2
+> 0.4
+> 0.6
+> 0.8
+> 1
+> iteration # [−]
+> 𝑞 1 [−]
+> 𝐾 𝑞 = 0 .50
+> 𝐾 𝑞 = 0 .75
+> 𝐾 𝑞 = 1 .00
+> 𝐾 𝑞 = 1 .25
+> 𝐾 𝑞 = 1 .50
+> (a)
+> (b)
+> (c)
+
+Figure 9: Effect of the numerical parameters on the objective-space trajectory and on the evolution of the weight parameter q1: (a) effect of Mq , (b) effect of Bq , (c) effect of Kq .
+
+landscape. A similar behavior can be observed when varying the damping parameter Bq. Again, the trajectory itself is only weakly affected, while the main influence is visible in the behavior of q1, as shown in Fig. 9b. Increasing the damping suppresses oscillations and leads to a smoother convergence of the weight parameter q1. A significantly stronger effect on the trajectory is obtained when varying Kq. With increasing Kq, the trajectory approaches that of the WS method, whereas smaller values of Kq lead to a more sensitive response to variations in the objective landscape, thus controlling the scope of exploration as illustrated in Fig. 9c. This finding is consistent with the previous analysis regarding the behavior of the weight evolution for Kq → ∞ ,see Section 2. 35 4.2. Influence of the initial conditions 
+
+Next, the influence of the initial conditions of the coupled evolution prob-lem is investigated. First, the initial weight ratios ¯q1 are varied. As illustrated in Fig. 10a, the resulting trajectories are nearly identical for all considered initial weight ratios. This indicates that the proposed evolution scheme is 0.3 0.4 0.5 0.6                                   
+
+> 0.3
+> 0.4
+> 0.5
+> 𝐉 (𝑠 = 0)
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Objective-space trajectories
+> WS method ̄𝑞 1= 0 .00 ̄𝑞 1= 0 .25 ̄𝑞 1= 0 .50 ̄𝑞 1= 0 .75 ̄𝑞 1= 1 .00
+> 10 010 110 2
+> 0.6
+> 0.7
+> 0.8
+> 0.9
+> iteration # [−]
+> 𝑞 1 [−]
+> Weight evolution ̄𝑞 1= 0 .00 ̄𝑞 1= 0 .25 ̄𝑞 1= 0 .50 ̄𝑞 1= 0 .75 ̄𝑞 1= 1 .00
+> 0.20.40.60.811.2
+> 0.5
+> 1
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Case A
+> Case B
+> Reference
+> Case C
+> Case D
+> 10 010 110 2
+> 0.6
+> 0.7
+> 0.8
+> 0.9
+> iteration # [−]
+> 𝑞 1 [−]
+> Case A
+> Case B
+> Reference
+> Case C
+> Case D
+> (a)
+> (b)
+
+Figure 10: Effects of the initial conditions of the coupled evolution problem: (a) effect of ratio ¯q1, (b) effect of ϕ−1 and ϕ0.
+
+robust with respect to perturbations in the initial weights. In a second step, the sensitivity regarding the initial conditions of the level set function is ana-lyzed by considering different combinations of ϕ−1 and ϕ0. The results show that perturbations in the topological layout are rapidly damped and that the optimization converges to almost identical topologies for all investigated configurations, see Fig. 11. Furthermore, the corresponding objective-space trajectories shown in Fig. 10b reveal only minor deviations. Small differences become noticeable after approximately 20 iterations, where the algorithm interacts with the objective landscape in slightly differ-ent ways depending on the initial conditions. This behavior can be explained by the fact that the corresponding region of the landscape is approached from different directions. However, q1 eventually converges to the same final state in all cases. Overall, the experiments indicate that the proposed coupled evo-lution scheme is robust with respect to variations in both the initial weights and the initial level set configurations. 36 Initial conditions iteration #1 iteration #3 Convergence                  
+
+> Case A
+> Initial conditions iteration #1 iteration #3 Convergence
+> Case B
+> Initial conditions iteration #1 iteration #3 Convergence
+> Case C
+> Initial conditions iteration #1 iteration #3 Convergence
+> Case D
+> 𝜙 −1 𝜙 0Optimized configuration
+
+Figure 11: Convergence of topologies under different combinations of initial conditions 
+
+ϕ−1 and ϕ0.
+
+4.2.1. Adaptive Pareto frontier refinement using ASD 
+
+Finally, the performance of the proposed ASD method is demonstrated by adaptively refining the Pareto frontier using parameters Mq = 0 .5, Bq = 2 ,and Kq = 1 . The initial weight discretization W∗ 
+
+> h
+
+= {(0 .9, 0.1) , (0 .1, 0.9) } is chosen together with a threshold value of ls,max = 0 .04 . Figure 12 shows the successive approximation of the Pareto frontier. According to the principle of the method, the poor simplices are subdivided at each refinement level, which promotes a more uniform distribution of solutions along the frontier. The decomposition of the weight simplex is shown in Fig. 13. The final ap-proximation of the Pareto frontier is presented in Fig. 14. Representative topologies along the frontier illustrate the structural trade-offs between the objectives, which become visible through noticeable rearrangements of the in-ternal struts depending on the relative objective weighting. For comparison, the results obtained using the WS method are also depicted. As expected, the WS method leads to the typical clustering of solutions in certain regions of the Pareto frontier. The convergence behavior of the mean simplex edge length is shown in Fig. 15a. Both the mean value and the standard deviation decrease rapidly with increasing refinement level, indicating a progressive homogenization of the discretization. This confirms that the proposed ASD method provides a stable and systematic refinement of the Pareto frontier. All computed solution candidates were verified to be Pareto efficient in the 37 0.55 0.6 0.65                       
+
+> 0.5
+> 0.55
+> 0.6
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 0
+> 0.55 0.60.65
+> 0.5
+> 0.55
+> 0.6
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 1
+> 0.55 0.60.65
+> 0.5
+> 0.55
+> 0.6
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 2
+> 0.55 0.60.65
+> 0.5
+> 0.55
+> 0.6
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 3
+> 0.55 0.60.65
+> 0.5
+> 0.55
+> 0.6
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 4
+> 0.55 0.60.65
+> 0.5
+> 0.55
+> 0.6
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 5
+
+Figure 12: Adaptive Pareto frontier refinement of the bi-objective minimum mean com-pliance problem using the ASD method. 
+
+final step of the procedure. Moreover, no points were removed when apply-ing a point-distance tolerance of 1 × 10 −3. This results in a well-distributed approximation of the Pareto frontier without the clustering effects observed for the classical WS approach. 
+
+4.3. Bi-objective gripper design 
+
+Next, the proposed method is applied to a bi-objective compliant mecha-nism design problem ( α ∈ { 1, 2}), illustrated in Fig. 16a. The aim is to design a gripper mechanism that maximizes the output displacement while minimiz-ing the strain energy. The material domain Ω is fixed along the boundary section Γu and embedded within the design domain D, which additionally contains a fixed region of solid material Df . Owing to the symmetry of the system, the boundary section Γr constrains the displacement in the normal direction. An input force ti is applied on boundary Γa, while Γb corresponds to the output displacement region. The vectors ra, rb ∈ Rn×1 define the desired directions of motion at the respective boundaries. Artificial springs with stiffnesses ka and kb are introduced on both sections to generate reac-tion forces and enhance numerical stability [79]. Considering an additional volume constraint and neglecting body forces, the optimization problem is 38 0.2 0.4 0.6 0.8
+
+0.2
+
+0.4
+
+0.6
+
+0.8
+
+𝑤 ∗1 [−] 
+
+> 𝑤 ∗2 [−]
+
+Weight refinement level 0
+
+0.2 0.4 0.6 0.8
+
+0.2
+
+0.4
+
+0.6
+
+0.8
+
+𝑤 ∗1 [−] 
+
+> 𝑤 ∗2 [−]
+
+Weight refinement level 1
+
+0.2 0.4 0.6 0.8
+
+0.2
+
+0.4
+
+0.6
+
+0.8
+
+𝑤 ∗1 [−] 
+
+> 𝑤 ∗2 [−]
+
+Weight refinement level 2
+
+0.2 0.4 0.6 0.8
+
+0.2
+
+0.4
+
+0.6
+
+0.8
+
+𝑤 ∗1 [−] 
+
+> 𝑤 ∗2 [−]
+
+Weight refinement level 3
+
+0.2 0.4 0.6 0.8
+
+0.2
+
+0.4
+
+0.6
+
+0.8
+
+𝑤 ∗1 [−] 
+
+> 𝑤 ∗2 [−]
+
+Weight refinement level 4
+
+0.2 0.4 0.6 0.8
+
+0.2
+
+0.4
+
+0.6
+
+0.8
+
+𝑤 ∗1 [−] 
+
+> 𝑤 ∗2 [−]
+
+Weight refinement level 5Figure 13: Weight refinement of the bi-objective minimum mean compliance problem. 
+
+stated as 
+
+vec inf 
+
+ϕ ∈ H2(D)
+
+J[u1, u2, Θ] = ( J1[u1], J 2[u2, Θ]) ⊤
+
+s.t. G[Θ] = 1
+
+V0
+
+Z
+
+D\Df
+
+Θ dΩ − Vf ≤ 0,
+
+−∂j (Cijkl εkl (uα)) = 0 in Ω,uα,i = 0 on Γu,uα,i ni = 0 on Γr,
+
+(Cijkl εkl (uα)) nj = ti − ka(ra
+
+i ra
+
+j )uα,j on Γa,
+
+(Cijkl εkl (uα)) nj = −kb(rb
+
+i rb
+
+j )uα,j on Γb,
+
+(Cijkl εkl (uα)) nj = 0 on ∂Ω \ Γg
+
+(62) 39 0.2 0.4 0.6 0.8                      
+
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> A
+> B
+> C
+> D
+> 𝑤 ∗1[−]
+> 𝑤 ∗2 [−]
+> Weight refinement
+> 0.50.52 0.54 0.56 0.58 0.60.62 0.64
+> 0.5
+> 0.52
+> 0.54
+> 0.56
+> 0.58
+> 0.6
+> 0.62
+> A
+> B
+> C
+> D
+> 𝐽 1[Nmm]
+> 𝐽 2 [Nmm]
+> Final frontier (refinement level 6)
+> WS method
+> ASD method
+> Topology A
+> 𝑤 ∗1= 0 .8875 ,𝑤 ∗2= 0 .1125
+> Topology B
+> 𝑤 ∗1= 0 .7750 ,𝑤 ∗2= 0 .2250
+> Topology C
+> 𝑤 ∗1= 0 .5500 ,𝑤 ∗2= 0 .4500
+> Topology D
+> 𝑤 ∗1= 0 .1125 ,𝑤 ∗2= 0 .8875
+
+Figure 14: Final Pareto frontier approximation and selected topologies of the bi-objective minimum mean compliance problem. 
+
+with objective functionals 
+
+J1[u1] = −
+
+Z
+
+Γb
+
+rb
+
+i u1,i dΓ ,J2[u2, Θ] = 12
+
+Z
+
+D\Df
+
+τ (Θ) Cijkl εkl (u2)εij (u2) dΩ + 12
+
+Z
+
+Df
+
+Cijkl εkl (u2)εij (u2) dΩ 
+
+and summarized boundary sections Γg := Γ u ∪ Γr ∪ Γa ∪ Γb. From the boundary conditions in Problem (62), the governing equations in weak form are obtained 
+
+Rα :
+
+Z
+
+D\Df
+
+τ (Θ) Cijkl εkl (uα)εij (vα) dΩ + 
+
+Z
+
+Df
+
+Cijkl εkl (uα)εij (vα) dΩ + . . . 
+
+· · · +
+
+Z
+
+Γb
+
+kb(rb
+
+i rb
+
+j )uα,j vα,i dΓ = 
+
+Z
+
+Γa
+
+(ti − ka(ra
+
+i ra
+
+j )uα,j )vα,i dΓ 
+
+(63) 40 0 2 4 6           
+
+> 0
+> 0.2
+> 0.4
+> 0.6
+> Refinement level # [−] ̄𝜇 (𝑙  s)
+> 0246
+> 0
+> 0.2
+> 0.4
+> Refinement level # [−] ̄𝜇 (𝑙  s)
+> 0246
+> 0
+> 0.5
+> 1
+> 1.5
+> Refinement level # [−] ̄𝜇 (𝑙  s)
+> (a) (b) (c)
+
+Figure 15: Convergence of the mean simplex length and its standard deviation: (a) bi-objective minimum mean compliance problem, (b) gripper design problem, (c) L-bracket problem. 𝑥 2   
+
+> 𝑥 1𝑡 𝑖
+> 10 𝐿
+> 5𝐿
+> 2𝐿
+> 3𝐿
+> 2𝐿
+> Γu
+> Γr𝑘 a
+> 𝑘 b
+> Γa
+> Γb𝑟 a
+> 𝑖
+> 𝑟 b
+> 𝑖
+> Df
+> Df
+> 𝐸, 𝜈
+> 𝑥 2
+> 𝑥 1
+> 𝑡 𝑖
+> 𝐿
+> 𝐿
+> 35𝐿
+> 25𝐿
+> Void
+> 𝐸, 𝜈, 𝑓 y
+> Γu
+> Γt
+> Γa
+> Γb
+> (a) (b)
+
+Figure 16: Bi-objective optimization problems: (a) gripper design problem, (b) L-bracket problem. 
+
+and the adjoint equations follow as 
+
+Aα :
+
+wα
+
+J∗
+
+α
+
+∂J α
+
+∂uα
+
+, δ uα
+
+
+
+=
+
+Z
+
+D\Df
+
+τ (Θ) Cijkl εkl (δuα)εij (vα) dΩ + . . . 
+
+· · · +
+
+Z
+
+Df
+
+Cijkl εkl (δuα)εij (vα) dΩ + . . . 
+
+· · · +
+
+Z
+
+Γb
+
+kb(rb
+
+i rb
+
+j )δu α,i vα,i dΓ + . . . 
+
+· · · +
+
+Z
+
+Γa
+
+ka(ra
+
+i ra
+
+j )δu α,j vα,i dΓ (64) 41 where 
+
+w1
+
+J∗
+
+> 1
+
+∂J 1
+
+∂u1
+
+, δ u1
+
+
+
+= −
+
+Z
+
+> Γb
+
+w1
+
+J∗
+
+> 1
+
+rb 
+
+> i
+
+δu 1,i dΓ ,
+
+w2
+
+J∗
+
+> 2
+
+∂J 2
+
+∂u2
+
+, δ u2
+
+
+
+=
+
+Z
+
+> D\Df
+
+w2
+
+J∗
+
+> 2
+
+τ (Θ) Cijkl εkl (δu2)εij (u2) dΩ + . . . 
+
+· · · +
+
+Z
+
+> Df
+
+w2
+
+J∗
+
+> 2
+
+Cijkl εkl (δu2)εij (u2) dΩ .
+
+The partial derivatives of the objective functionals with respect to Θ are given by 
+
+w1
+
+J∗
+
+> 1
+
+∂J 1
+
+∂Θ = 0 ,w2
+
+J∗
+
+> 2
+
+∂J 2
+
+∂Θ = w2
+
+2J∗
+
+> 2
+
+∂τ ∂ΘCijkl εkl (u2)εij (u2).
+
+The derivative of the constraint functional corresponds to Eq. (56), while the derivatives of the governing equations are identical to those given in Eq. (54). Subsequently, one obtains the individual perturbation terms 
+
+f1 = λ
+
+2V0
+
+− ∂τ ∂ΘCijkl εkl (u1)εij (v1), (65) 
+
+f2 = λ
+
+2V0
+
++ w2
+
+2J∗
+
+> 2
+
+∂τ ∂ΘCijkl εkl (u2)εij (u2) − ∂τ ∂ΘCijkl εkl (u2)εij (v2). (66) Summation of Eq. (65) and Eq. (66) finally yields the overall perturbation term: 
+
+F = λV0
+
++ ∂τ ∂ΘCijkl 
+
+
+
+−εkl (u1)εij (v1) + w2
+
+2J∗
+
+> 2
+
+εkl (u2)εij (u2) − εkl (u2)εij (v2)
+
+
+
+.
+
+(67) The normalization factors correspond to those of Eq. (61), thus the evo-lution of the level set function is fully determined by Eqs. (63), (64) and (67). For the numerical experiments, the artificial spring stiffnesses are set to ka = 1 × 10 5 N/mm and kb = 1 × 10 3 N/mm and the direction vectors to ra = [1 , 0] ⊤ and rb = [0 , −1] ⊤. The volume fraction is set to Vf = 0 .30 .The wave propagation components are specified as C11 = C22 = 0 .011 , and a damping coefficient of B = 0 .1 is considered. The parameters governing 42 the weight evolution are chosen as Mq = 8 , Bq = 14 , and Kq = 10 , while the maximum simplex length is set to ls,max = 0 .01 . The initial reference weight discretization is chosen as W∗ 
+
+> h
+
+= {(0 .999 , 0.001) , (0 .70 , 0.30) }. In this exam-ple, we again observe that the ASD method is able to gradually refine the Pareto frontier, as illustrated in Fig. 17. In the early iterations, the simplex −1 .2 −1 −0 .8                      
+
+> 0.1
+> 0.15 ̄𝐽 1[mm] ̄𝐽 2 [Nmm]
+> Frontier refinement level 0
+> −1 .2−1 −0 .8
+> 0.1
+> 0.15 ̄𝐽 1[mm] ̄𝐽 2 [Nmm]
+> Frontier refinement level 1
+> −1 .2−1 −0 .8
+> 0.1
+> 0.15 ̄𝐽 1[mm] ̄𝐽 2 [Nmm]
+> Frontier refinement level 2
+> −1 .2−1 −0 .8
+> 0.1
+> 0.15 ̄𝐽 1[mm] ̄𝐽 2 [Nmm]
+> Frontier refinement level 3
+> −1 .2−1 −0 .8
+> 0.1
+> 0.15 ̄𝐽 1[mm] ̄𝐽 2 [Nmm]
+> Frontier refinement level 4
+> −1 .2−1 −0 .8
+> 0.1
+> 0.15 ̄𝐽 1[mm] ̄𝐽 2 [Nmm]
+> Frontier refinement level 5
+
+Figure 17: Adaptive Pareto frontier refinement for the gripper design problem; objective functionals scaled as ¯J1 = J1 × 10 10 and ¯J2 = J2 × 10 11 .
+
+lengths exhibit significant variability. However, this difference is quickly re-duced through adaptive refinement, see Fig 15b. Figure 17 demonstrates how the frontier is progressively stabilized and finely resolved over the iterations. The final Pareto frontier, along with selected example topologies, is shown in Fig. 18. For comparison, the results obtained with the conventional WS method are also included. This highlights that the ASD method produces a more stable approximation of the Pareto frontier, whereas the WS method exhibits stronger divergence, for instance in the region between topologies G and H. Moreover, a local non-convexity is observed between topologies A and B, which is consistently captured and refined by the ASD method. A structural analysis of the topologies indicates that, for maximum output displacement, a more robust geometry of the bracket on the input side is preferred. As the priority placed on minimizing strain energy increases, the design of the more robust geometry shifts toward the output side. In the final step, nearly coincident points were removed using a distance tolerance of 6 × 10 −3. All remaining solution candidates were verified to be Pareto efficient. 43 0.7 0.8 0.9 1                                             
+
+> 0
+> 0.1
+> 0.2
+> 0.3
+> A
+> B
+> C
+> D
+> E
+> F
+> G
+> H
+> 𝑤 ∗1[−]
+> 𝑤 ∗2 [−]
+> Weight refinement
+> −1 .3−1 .2−1 .1−1 −0 .9−0 .8
+> 0.1
+> 0.15
+> A
+> B
+> C
+> D
+> E
+> FG
+> H̄𝐽 1[mm] ̄𝐽 2 [Nmm]
+> Final frontier (refinement level 6)
+> WS method
+> ASD method
+> Topology A Topology B Topology C Topology D
+> 𝑤 ∗1= 0 .9803 ,𝑤 ∗2= 0 .0197 𝑤 ∗1= 0 .8495 ,𝑤 ∗2= 0 .1505 𝑤 ∗1= 0 .8215 ,𝑤 ∗2= 0 .1785 𝑤 ∗1= 0 .7934 ,𝑤 ∗2= 0 .2067
+> Topology E Topology F Topology G Topology H
+> 𝑤 ∗1= 0 .7701 ,𝑤 ∗2= 0 .2230 𝑤 ∗1= 0 .7467 ,𝑤 ∗2= 0 .2533 𝑤 ∗1= 0 .7304 ,𝑤 ∗2= 0 .2696 𝑤 ∗1= 0 .7140 ,𝑤 ∗2= 0 .2860
+
+Figure 18: Final Pareto frontier approximation and selected topologies for the gripper design problem considering scaled objective functionals ¯J1 = J1 × 10 10 and ¯J2 = J2 × 10 11 .
+
+4.4. Bi-objective volume and strain energy minimization 
+
+We now investigate a fundamental bi-objective trade-off in lightweight structural optimization, balancing material efficiency against structural stiff-ness ( α ∈ { 1, 2}) applied to the L-bracket problem depicted in Fig. 16b. To account for stress limitations, an additional global constraint based on a p-norm aggregation of the von Mises stress is introduced [80, 81]. Consider a material domain Ω fixed at Γu and loaded by a traction vector ti at Γt. To represent adjacent void regions, Dirichlet boundary conditions ϕ = −1 are imposed along Γa and Γb. The resulting bi-objective optimization problem 44 is then formulated as 
+
+vec inf 
+
+ϕ ∈ H2(D)
+
+J[u1, u2, Θ] = ( J1[Θ] , J 2[u2, Θ]) ⊤
+
+s.t. Gα[uα, Θ] = 1
+
+V0
+
+S1/p σ [uα, Θ; p] − ¯σ ≤ 0,
+
+−∂j (Cijkl εkl (uα)) = 0 in Ω,uα,i = 0 on Γu,
+
+(Cijkl εkl (uα)) nj = ti on Γt,
+
+(Cijkl εkl (uα)) nj = 0 on ∂Ω \ (Γ u ∪ Γt)
+
+(68) with objective functionals 
+
+J1[Θ] = 
+
+Z
+
+> D
+
+Θ dΩ ,J2[u2, Θ] = 12
+
+Z
+
+> D
+
+τ (Θ) Cijkl εkl (u2)εij (u2) dΩ 
+
+and aggregated stress functional 
+
+S1/p σ [uα, Θ; p] = 
+
+Z 
+
+> D
+
+σM(uα)
+
+fy
+
+p
+
+τ (Θ) dΩ 
+
+1/p 
+
+.
+
+Here, fy represents the maximum admissible stress while p controls the penalty of stress concentrations and ¯σ denotes the limit value for the global stress aggregation. Using the stress deviator tensor 
+
+sij (uα) = σij (uα) − 13σkk (uα)δij 
+
+the von Mises stress is expressed by the relation 
+
+σM(uα) = 
+
+r32sij (uα)sij (uα).
+
+First, we derive the governing equations 
+
+Rα :
+
+Z
+
+> D
+
+τ (Θ) Cijkl εkl (uα)εij (vα) dΩ −
+
+Z
+
+> Γt
+
+tivα,i dΓ = 0 , vα ∈ V α (69) 45 from the boundary conditions in Problem (68). The adjoint equations are obtained as 
+
+Aα :
+
+
+
+λα
+
+∂G ∂uα
+
+, δ uα
+
+
+
++
+
+wα
+
+J∗
+
+> α
+
+∂J α
+
+∂uα
+
+, δ uα
+
+
+
+= . . . 
+
+· · · 
+
+Z
+
+> D
+
+τ (Θ) Cijkl εkl (δuα)εij (vα) dΩ , δuα ∈ V α (70) with the individual functional derivatives 
+
+w1
+
+J∗
+
+> 1
+
+∂J 1
+
+∂u1
+
+, δ u1
+
+
+
+= 0 ,
+
+w2
+
+J∗
+
+> 2
+
+∂J 2
+
+∂u2
+
+, δ u2
+
+
+
+=
+
+Z
+
+> D
+
+w2
+
+J∗
+
+> 2
+
+τ (Θ) Cijkl εkl (δu2)εij (u2) dΩ 
+
+and 
+
+
+
+λα
+
+∂G α
+
+∂uα
+
+, δ uα
+
+
+
+= λα
+
+V0
+
+S1/p −1
+
+> σ
+
+Z
+
+> D
+
+σM(uα)
+
+fy
+
+p−1 3τ (Θ) 2fyσM(uα)sij (uα)sij (δuα) dΩ .
+
+The derivatives of the objective functionals with respect to Θ read 
+
+w1
+
+J∗
+
+> 1
+
+∂J 1
+
+∂Θ = w1
+
+J∗
+
+> 1
+
+,w2
+
+J∗
+
+> 2
+
+∂J 2
+
+∂Θ = w2
+
+2J∗
+
+> 2
+
+∂τ ∂ΘCijkl εkl (u2)εij (u2).
+
+The derivative of the constraint functional for each problem with respect to 
+
+Θ is given by 
+
+∂G α
+
+∂Θ = λα
+
+pV 0
+
+S1/p −1 
+
+> σ
+
+[uα, Θ; p]
+
+σM(uα)
+
+fy
+
+p ∂τ ∂Θ
+
+and the derivatives of the governing equations again correspond to those given in Eq. (57). Thus, the overall perturbation term follows as 
+
+F = f1 + f2 (71) with the respective contributions 
+
+f1 = λ1
+
+pV 0
+
+S1/p −1 
+
+> σ
+
+[u1, Θ; p]
+
+σM(u1)
+
+fy
+
+p ∂τ ∂Θ + w1
+
+J∗
+
+> 1
+
+− ∂τ ∂ΘCijkl εkl (u1)εij (v1),f2 = λ2
+
+pV 0
+
+S1/p −1 
+
+> σ
+
+[u2, Θ; p]
+
+σM(u2)
+
+fy
+
+p ∂τ ∂Θ + w2
+
+2J∗
+
+> 2
+
+∂τ ∂ΘCijkl εkl (u2)εij (u2) − . . . 
+
+· · · − ∂τ ∂ΘCijkl εkl (u2)εij (v2).
+
+46 In the context of stress-constrained optimization, it is well known that struc-tural modifications, such as phase separation or the nucleation of new holes, can lead to stress concentrations and thus high-frequency components in the perturbation term causing numerical instabilities. To mitigate these effects, we apply a nonlinear scaling following [60, 82] and regularize the perturbation term F from Eq. (71) using a Helmholtz-type filtering: 
+
+Z
+
+> D
+
+(η∂ i ¯F ∂ iδ ¯F + ¯F δ ¯F ) dΩ = 
+
+Z
+
+> D
+
+1
+
+γ arsinh( γF )δ ¯F dΩ , (72) where δ ¯F ∈ H1(D) is a suitable test function and ¯F denotes the regularized perturbation. Here, parameter η > 0 is the filtering parameter and γ > 0
+
+controls the nonlinearity of the scaling. In this example, the normalization factors are determined as 
+
+Csα = 1
+
+wαV0
+
+Z
+
+> D
+
+∂R α
+
+∂Θ − wα
+
+J∗
+
+> α
+
+∂J α
+
+∂Θ L2(D) 
+
+dΩ .
+
+The evolution problem of the level set function is now completely defined by Eqs. (69), (70) and Eqs. (71) and (72). For the numerical experiments, the fictitious material parameters are set to C11 = C22 = 0 .015 and the damping coefficient to B = 0 .6. For the stress aggregation, a penalization factor of 
+
+p = 5 and a yield stress of fy = 42 N /mm 2 are assumed, while the maximum admissible aggregated stress is limited to ¯σ = 0 .05 . The parameters govern-ing the weight evolution are chosen as Mq = 6 , Bq = 12 , and Kq = 10 , and the maximum simplex length is set to ls,max = 0 .04 . For the regularization of the perturbation term, the values η = 1 ×10 −4 and γ = 2 are used. The initial reference weight discretization is defined as W∗ 
+
+> h
+
+= {(0 .05 , 0.95) , (0 .95 , 0.05) }.This example further demonstrates the gradual refinement of the Pareto fron-tier achieved by the ASD method, see Fig. 19. The resulting Pareto frontier, together with selected example topologies, is presented in Fig. 20. As ex-pected, increasing structural stiffness results in designs with higher material usage, whereas lighter configurations exhibit more slender load paths. The conventional WS method again shows clustering of solutions along the fron-tier. The corresponding convergence behavior of the ASD method is illus-trated in Fig. 15c, where both the average simplex length and its standard deviation decrease rapidly over the iterations. In the final step, no points were removed for a point-distance tolerance of 1 × 10 −3, and all solutions were verified to be Pareto efficient. 47 0.5 1                 
+
+> 1
+> 1.5
+> 2
+> 𝐽 1[mm 2]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 0
+> 0.51
+> 1
+> 1.5
+> 2
+> 𝐽 1[mm 2]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 1
+> 0.51
+> 1
+> 1.5
+> 2
+> 𝐽 1[mm 2]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 2
+> 0.51
+> 1
+> 1.5
+> 2
+> 𝐽 1[mm 2]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 3
+> 0.51
+> 1
+> 1.5
+> 2
+> 𝐽 1[mm 2]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 4
+> 0.51
+> 1
+> 1.5
+> 2
+> 𝐽 1[mm 2]
+> 𝐽 2 [Nmm]
+> Frontier refinement level 5
+
+Figure 19: Adaptive Pareto frontier refinement for the L-bracket problem. 
+
+4.5. Tri-objective minimum mean compliance 
+
+As a final example, we consider a tri-objective minimum mean compli-ance problem ( α ∈ { 1, 2, 3}) with varying loading and support conditions, see Fig. 21, to demonstrate the scalability of the proposed framework to higher-dimensional settings. The corresponding optimization problem ex-tends Problem (50) by an additional objective functional and reads 
+
+vec inf 
+
+ϕ ∈ H2(D)
+
+J[u1, u2, u3] = ( J1[u1], J 2[u2], J 3[u3]) ⊤
+
+s.t. G[Θ] = 1
+
+V0
+
+Z
+
+D
+
+Θ dΩ − Vf ≤ 0,
+
+−∂j (Cijkl εkl (uα)) = 0 in Ω,uα,i ni = 0 on Γr
+
+α,uα,i = 0 on Γu,
+
+(Cijkl εkl (uα)) nj = ti on Γt
+
+α,
+
+(Cijkl εkl (uα)) nj = 0 on ∂Ω \ (Γ u ∪ Γr
+
+α ∪ Γt
+
+α)
+
+(73) with objective functionals 
+
+Jα[uα] = 
+
+Z
+
+Γt
+
+> α
+
+tiuα,i dΓ .
+
+48 0 0.2 0.4 0.6 0.8 1                             
+
+> 0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1
+> A
+> B
+> C
+> D
+> E
+> F
+> 𝑤 ∗1[−]
+> 𝑤 ∗2 [−]
+> Weight refinement
+> 0.40.60.811.21.4
+> 1
+> 1.5
+> 2
+> A
+> B
+> C
+> D
+> EF
+> 𝐽 1[mm 2]
+> 𝐽 2 [Nmm]
+> Final frontier (refinement level 6)
+> 0.40.60.811.21.4
+> 1
+> 1.5
+> 2
+> 𝐽 1[mm 2]
+> 𝐽 2 [Nmm]
+> Final frontier (WS method)
+> 0.25
+> 1.00
+> 1.75
+> 2.50
+> 3.25
+> 4.00
+> 4.75
+> 5.50
+> 6.25
+> 0.30
+> 1.20
+> 2.10
+> 3.00
+> 3.90
+> 4.80
+> 5.70
+> 6.60
+> 0.25
+> 1.00
+> 1.75
+> 2.50
+> 3.25
+> 4.00
+> 4.75
+> 5.50
+> 6.25
+> 7.00
+> 0.00
+> 1.20
+> 2.40
+> 3.60
+> 4.80
+> 6.00
+> 7.20
+> 8.40
+> 0.00
+> 0.75
+> 1.50
+> 2.25
+> 3.00
+> 3.75
+> 4.50
+> 5.25
+> 6.00
+> 0.00
+> 0.75
+> 1.50
+> 2.25
+> 3.00
+> 3.75
+> 4.50
+> 5.25
+> Topology A Topology B Topology C 𝜎 M[N∕mm 2]𝜎 M[N∕mm 2]𝜎 M[N∕mm 2]
+> Topology D Topology E Topology F 𝜎 M[N∕mm 2]𝜎 M[N∕mm 2]𝜎 M[N∕mm 2]
+
+Figure 20: Final Pareto frontier approximation and selected topologies for the L-bracket problem. 
+
+Since the derivation of the governing equations and sensitivity terms of Prob-lem (73) follows directly from the bi-objective case in Problem (50) we focus on the numerical results in the following. The parameters are chosen as 
+
+C11 = C22 = 0 .018 and B = 0 .002 . The volume constraint is given as 
+
+Vf = 0 .45 . For the weight evolution, we set Mq = 0 .5, Bq = 5 , and Kq = 0 .5,while the maximum simplex length is prescribed as ls,max = 0 .15 . The initial weight discretization is given by 
+
+W∗
+
+h = {(0 .70 , 0.15 , 0.15) , (0 .15 , 0.70 , 0.15) , (0 .15 , 0.15 , 0.70) }.
+
+Figure 22 illustrates the iterative refinement of the Pareto frontier across suc-cessive refinement levels. Simplices whose maximum edge length exceeds the 49 𝑥 2          
+
+> 𝑥 1
+> Γt1
+> 𝑡 𝑖
+> 𝐿
+> 2𝐿
+> Γu
+> 𝐸, 𝜈 𝑥 2
+> 𝑥 1
+> Γt2
+> 𝑡 𝑖
+> Γu
+> Γr2
+> 𝐸, 𝜈 𝑥 2
+> 𝑥 1
+> Γt3
+> 𝑡 𝑖
+> Γu
+> Γr3
+> 𝐸, 𝜈
+> Problem definition 𝛼 = 1 Problem definition 𝛼 = 2 Problem definition 𝛼 = 3
+
+Figure 21: Tri-objective minimum mean compliance problem: clamped girder under dif-ferent loading and supporting conditions. 
+
+prescribed threshold ls,max are refined accordingly. The associated refinement of the weight simplex is shown in Fig. 23. A total of six refinement levels are performed to approximate the Pareto frontier. The final approximation and selected topologies are shown in Fig. 24. The convergence behavior in Fig. 25b indicates that the termination criterion is already achieved at re-finement level 3. The mean simplex edge length decreases rapidly during the first refinement steps and stabilizes thereafter, demonstrating convergence of the adaptive refinement procedure. At the same time, the standard devia-tion remains bounded, which suggests a uniform distribution of simplex sizes without the occurrence of degeneracies. Figure 25a further shows the evolu-tion of the weights for topology D from Fig. 24, illustrating their adaptation to the local objective landscape. 
+
+5. Conclusions 
+
+In this paper, we proposed a variational framework for multi-objective level set topology optimization. At the core of the approach is the inter-pretation of the level set function as a generalized coordinate of a fictitious material. By assigning suitable energy terms and applying Hamilton’s prin-ciple, the evolution equation of the level set function can be derived in a multi-objective setting, resulting in a damped wave equation governing the design evolution. The objective functionals are combined through a weighted sum formulation and incorporated into a perturbation term that drives the system dynamics. An analysis of the derived equations naturally suggests a higher-level geometric interpretation of the problem. Under suitable reg-50 2.42.6                  
+
+> 0.28 0.3
+> 0.32
+> 1
+> 𝐽 1[Nmm] 𝐽 2[Nmm]
+> 𝐽 3 [Nmm]
+> Refinement level 0
+> 2.42.6
+> 0.28 0.3
+> 0.32
+> 1
+> 𝐽 1[Nmm] 𝐽 2[Nmm]
+> 𝐽 3 [Nmm]
+> Refinement level 1
+> 2.42.6
+> 0.28 0.3
+> 0.32
+> 1
+> 𝐽 1[Nmm] 𝐽 2[Nmm]
+> 𝐽 3 [Nmm]
+> Refinement level 2
+> 2.42.6
+> 0.28 0.3
+> 0.32
+> 1
+> 𝐽 1[Nmm] 𝐽 2[Nmm]
+> 𝐽 3 [Nmm]
+> Refinement level 3
+> 2.42.6
+> 0.28 0.3
+> 0.32
+> 1
+> 𝐽 1[Nmm] 𝐽 2[Nmm]
+> 𝐽 3 [Nmm]
+> Refinement level 4
+> 2.42.6
+> 0.28 0.3
+> 0.32
+> 1
+> 𝐽 1[Nmm] 𝐽 2[Nmm]
+> 𝐽 3 [Nmm]
+> Refinement level 5
+
+Figure 22: Adaptive Pareto frontier refinement of the tri-objective minimum mean com-pliance problem using the ASD method. 
+
+ularity assumptions, the set of stationary solutions can be regarded as a geometric structure embedded in the space of objective functionals, within which the Pareto frontier is locally contained. In this interpretation, the weighting factors act as intrinsic coordinates. This viewpoint motivates the introduction of a dynamic evolution of the weights, allowing the optimization process to adapt to changes in the objective landscape during the evolution. As a result, a coupled dynamical system for the level set function and the weighting factors is obtained. The key findings and contributions of this work are summarized as follows: 1. Development of a variational framework for multi-objective level set topology optimization, in which the level set function is interpreted as a generalized coordinate of a dynamical system. The corresponding evolution equation is derived from Hamilton’s principle and results in a damped wave equation governing the design evolution. 2. Introduction of a geometric interpretation of stationary solutions in the objective space. Under suitable regularity assumptions, the solu-tion set can be regarded as a structured subset in which the Pareto 51 0.20.40.6                  
+
+> 0.2
+> 0.4
+> 0.6
+> 0.2
+> 0.4
+> 0.6
+> 𝑤 ∗1[−]
+> 𝑤 ∗2[−]
+> 𝑤 ∗3 [−]
+> Weight refinement level 0
+> 0.20.40.6
+> 0.2
+> 0.4
+> 0.6
+> 0.2
+> 0.4
+> 0.6
+> 𝑤 ∗1[−]
+> 𝑤 ∗2[−]
+> 𝑤 ∗3 [−]
+> Weight refinement level 1
+> 0.20.40.6
+> 0.2
+> 0.4
+> 0.6
+> 0.2
+> 0.4
+> 0.6
+> 𝑤 ∗1[−]
+> 𝑤 ∗2[−]
+> 𝑤 ∗3 [−]
+> Weight refinement level 2
+> 0.20.40.6
+> 0.2
+> 0.4
+> 0.6
+> 0.2
+> 0.4
+> 0.6
+> 𝑤 ∗1[−]
+> 𝑤 ∗2[−]
+> 𝑤 ∗3 [−]
+> Weight refinement level 3
+> 0.20.40.6
+> 0.2
+> 0.4
+> 0.6
+> 0.2
+> 0.4
+> 0.6
+> 𝑤 ∗1[−]
+> 𝑤 ∗2[−]
+> 𝑤 ∗3 [−]
+> Weight refinement level 4
+> 0.20.40.6
+> 0.2
+> 0.4
+> 0.6
+> 0.2
+> 0.4
+> 0.6
+> 𝑤 ∗1[−]
+> 𝑤 ∗2[−]
+> 𝑤 ∗3 [−]
+> Weight refinement level 5
+
+Figure 23: Weight refinement of the tri-objective minimum mean compliance problem. 
+
+frontier is locally embedded, with the weighting factors acting as in-trinsic coordinates. This establishes a structure-aware perspective on multi-objective optimization. 3. Development of an adaptive simplex decomposition strategy for the iterative approximation of the Pareto frontier, enabling targeted re-finement in regions with higher curvature or stronger variation of the objectives. 4. Introduction of a dynamic evolution of the weighting parameters, en-abling an adaptive exploration of the objective landscape during the optimization process. The weighting dynamics are characterized by the parameters Mq, Bq, and Kq, which control responsiveness, damp-ing, and scope of exploration. The conventional WS method arises as a limiting case of the proposed dynamics. 5. Numerical results demonstrate that the proposed framework yields sta-ble and uniform approximations of the Pareto frontier and remains ef-fective for higher-dimensional objective spaces, as illustrated by several numerical examples, including a tri-objective optimization problem. 52 0.20.30.40.50.60.7                 
+
+> 0.2
+> 0.4
+> 0.6
+> 0.2
+> 0.4
+> 0.6
+> A
+> B
+> C
+> D
+> 𝑤 ∗1[−]
+> 𝑤 ∗2[−]
+> 𝑤 ∗3 [−]
+> Weight refinement
+> 2.32.42.52.62.7
+> 0.28
+> 0.3
+> 0.32
+> 0.9
+> 1
+> 1.1
+> A
+> B
+> C
+> D
+> 𝐽 1[Nmm]
+> 𝐽 2[Nmm]
+> 𝐽 3 [Nmm]
+> Final frontier (refinement level 6)
+> Topology A
+> 𝑤 ∗1= 0 .4250 ,𝑤 ∗2= 0 .1500 ,𝑤 ∗3= 0 .4250
+> Topology B
+> 𝑤 ∗1= 0 .5625 ,𝑤 ∗2= 0 .1500 ,𝑤 ∗3= 0 .2875
+> Topology C
+> 𝑤 ∗1= 0 .1500 ,𝑤 ∗2= 0 .1844 ,𝑤 ∗3= 0 .6656
+> Topology D
+> 𝑤 ∗1= 0 .1844 ,𝑤 ∗2= 0 .4938 ,𝑤 ∗3= 0 .3219
+
+Figure 24: Final Pareto frontier approximation and selected topologies of the tri-objective minimum mean compliance problem. 
+
+The findings also open several avenues for future research. In particular, the explicit integration of the geometric structure of the solution set, together with enhanced simplex quality measures, directly into the evolution process represents a promising extension of the present framework. Furthermore, adaptive strategies for the automatic tuning of the weight evolution param-eters are expected to further enhance the robustness and efficiency of the proposed approach. 
+
+Acknowlegdement 
+
+This work was supported by the JSPS KAKENHI Grant Number 24KF0144. 
+
+References 
+
+[1] K. Svanberg, Optimization of geometry in truss design, Com-puter Methods in Applied Mechanics and Engineering 28 (1981) 63–80. doi:10.1016/0045-7825(81)90027-X. 53 0 0.2 0.4 0.6 0.8          
+
+> 0
+> 0.1
+> 0.2
+> 0.3
+> 0.4
+> 𝐪 (𝑠 = 0)
+> 𝑞 1[−]
+> 𝑞 2 [−]
+> 𝐪
+> 𝐪 ∗
+> 0123456
+> 0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> Refinement level # [−] ̄𝜇 (𝑙  s)
+> (a) (b)
+
+Figure 25: Evaluation plots of the tri-objective minimum mean compliance problem: (a) weight evolution of topology D, (b) convergence of the mean simplex length and its stan-dard deviation. 
+
+[2] C. D. Nha, Y. Xie, G. Steven, An evolutionary structural optimization method for sizing problems with discrete design variables, Computers & Structures 68 (1998) 419–431. doi:10.1016/S0045-7949(98)00062-5. [3] H. Azegami, Shape optimization problems, Springer Optimization and Its Applications, 1 ed., Springer Singapore, Singapore, 2020. doi:10.1007/978-981-15-7618-8. [4] G. Wu, A framework for structural shape optimization based on au-tomatic differentiation, the adjoint method and accelerated linear al-gebra, Structural and Multidisciplinary Optimization 66 (2023) 151. doi:10.1007/s00158-023-03601-0. [5] C. Guoyong, C. Changyu, Shape optimization and mechanical properties analysis of the free-form surface, Scientific Reports 15 (2025) 27585. doi:10.1038/s41598-025-07440-5. [6] M. P. Bendsøe, O. Sigmund, Material interpolation schemes in topol-ogy optimization, Archive of Applied Mechanics 69 (1999) 635–654. doi:10.1007/s004190050248. [7] M. Bendsøe, O. Sigmund, Topology Optimization - Theory, Methods, and Applications, 2 ed., Springer Berlin, Heidelberg, Germany, 2004. doi:10.1007/978-3-662-05086-6. 54 [8] S. Zhang, H. Li, Y. Huang, An improved multi-objective topology op-timization model based on SIMP method for continuum structures in-cluding self-weight, Structural and Multidisciplinary Optimization 63 (2021) 211–230. doi:10.1007/s00158-020-02685-2. [9] Y. Xie, G. Steven, A simple evolutionary procedure for structural opti-mization, Computers & Structures 49 (1993) 885–896. doi:10.1016/0045-7949(93)90035-C. [10] X. Huang, Y. M. Xie, Bi-directional evolutionary topology optimization of continuum structures with one or multiple materials, Computational Mechanics 43 (2009) 393–401. doi:10.1007/s00466-008-0312-0. [11] D. Da, L. Xia, G. Li, X. Huang, Evolutionary topology optimiza-tion of continuum structures with smooth boundary representation, Structural and Multidisciplinary Optimization 57 (2018) 2143–2159. doi:10.1007/s00158-017-1846-6. [12] J. Sethian, A. Wiegmann, Structural Boundary Design via Level Set and Immersed Interface Methods, Journal of Computational Physics 163 (2000) 489–528. doi:10.1006/jcph.2000.6581. [13] M. Y. Wang, X. Wang, D. Guo, A level set method for structural topology optimization, Computer Methods in Applied Mechanics and Engineering 192 (2003) 227–246. doi:10.1016/S0045-7825(02)00559-5. [14] A. Takezawa, S. Nishiwaki, M. Kitamura, Shape and topology op-timization based on the phase field method and sensitivity anal-ysis, Journal of Computational Physics 229 (2010) 2697–2718. doi:10.1016/j.jcp.2009.12.017. [15] W. Xie, Q. Xia, Q. Yu, Y. Li, An effective phase field method for topology optimization without the curvature effects, Computers & Mathematics with Applications 146 (2023) 200–212. doi:10.1016/j.camwa.2023.06.037. [16] H. Chen, P. Dong, D. Wang, X.-P. Wang, A robust and stable phase field method for structural topology optimization, Journal of Computational Physics 547 (2026) 114531. doi:10.1016/j.jcp.2025.114531. 55 [17] M. Noda, K. Matsushima, T. Yamada, Orientation optimization via topological derivatives in combination with multi-material topol-ogy optimization based on extended level set method, Computer Methods in Applied Mechanics and Engineering 418 (2024) 116585. doi:10.1016/j.cma.2023.116585. [18] K. Miyajima, T. Yamada, Optimal design of unimorph-type can-tilevered piezoelectric energy harvesters using level set-based topol-ogy optimization by considering manufacturability, Computer Meth-ods in Applied Mechanics and Engineering 431 (2024) 117252. doi:10.1016/j.cma.2024.117252. [19] X. Huang, K. Guan, T. Yamada, Topology optimization considering visibility based on a fictitious physical model, Computers & Structures 323 (2026) 108140. doi:10.1016/j.compstruc.2026.108140. [20] L. Zadeh, Optimality and non-scalar-valued performance crite-ria, IEEE Transactions on Automatic Control 8 (1963) 59–60. doi:10.1109/TAC.1963.1105511. [21] K. Izui, T. Yamada, S. Nishiwaki, K. Tanaka, Multiobjective opti-mization using an aggregative gradient-based method, Structural and Multidisciplinary Optimization 51 (2015) 173–182. doi:10.1007/s00158-014-1125-8. [22] Y. Sato, K. Izui, T. Yamada, S. Nishiwaki, Gradient-based mul-tiobjective optimization using a distance constraint technique and point replacement, Engineering Optimization 48 (2016) 1226–1250. doi:10.1080/0305215X.2015.1111068. [23] Y. Sato, K. Izui, T. Yamada, S. Nishiwaki, Pareto frontier exploration in multiobjective topology optimization using adaptive weighting and point selection schemes, Structural and Multidisciplinary Optimization 55 (2017) 409–422. doi:10.1007/s00158-016-1499-x. [24] Y. Sato, K. Yaji, K. Izui, T. Yamada, S. Nishiwaki, Topology opti-mization of a no-moving-part valve incorporating pareto frontier explo-ration, Structural and Multidisciplinary Optimization 56 (2017) 839– 851. doi:10.1007/s00158-017-1690-8. 56 [25] Y. Sato, K. Yaji, K. Izui, T. Yamada, S. Nishiwaki, An Optimum Design Method for a Thermal-Fluid Device Incorporating Multiobjective Topology Optimization With an Adaptive Weighting Scheme, Journal of Mechanical Design 140 (2018) 031402. doi:10.1115/1.4038209. [26] J. Wu, Advances in K-means clustering, Springer Theses, 1 ed., Springer Berlin, Heidelberg, Berlin, Germany, 2012. doi:10.1007/978-3-642-29807-3. [27] S. Hiwa, T. Hiroyasu, M. Miki, Design mode analysis of pareto solution set for decision-making support, Journal of Applied Mathematics 2014 (2014) 520209. doi:10.1155/2014/520209. [28] Y. Sato, K. Izui, T. Yamada, S. Nishiwaki, Data mining based on clustering and association rule analysis for knowledge discovery in mul-tiobjective topology optimization, Expert Systems with Applications 119 (2019) 247–261. doi:10.1016/j.eswa.2018.10.047. [29] T.-Y. Chen, S.-C. Wu, Multiobjective optimal topology de-sign of structures, Computational Mechanics 21 (1998) 483–492. doi:10.1007/s004660050327. [30] A. Borkowski, S. Jendo, W. Prager, M. Save, Structural Optimiza-tion, Mathematical Concepts and Methods in Science and Engineering, Springer US, 1990. [31] T. Chen, C. Shieh, Fuzzy multiobjective topology optimiza-tion, Computers & Structures 78 (2000) 459–466. doi:10.1016/S0045-7949(00)00091-2. [32] Z. Luo, L.-P. Chen, J. Yang, Y.-Q. Zhang, Multiple stiffness topology optimizations of continuum structures, The International Journal of Advanced Manufacturing Technology 30 (2006) 203–214. doi:10.1007/s00170-005-0084-z. [33] S. Nishiwaki, M. I. Frecker, S. Min, N. Kikuchi, Topology opti-mization of compliant mechanisms using the homogenization method, International Journal for Numerical Methods in Engineering 42 (1998) 535–559. doi:10.1002/(SICI)1097-0207(19980615)42:3<535::AID-NME372>3.0.CO;2-J. 57 [34] M. P. Bendsøe, N. Kikuchi, Generating optimal topologies in struc-tural design using a homogenization method, Computer Methods in Ap-plied Mechanics and Engineering 71 (1988) 197–224. doi:10.1016/0045-7825(88)90086-2. [35] Y. Noguchi, T. Yamada, Topology optimization of acoustic metasurfaces by using a two-scale homogenization method, Applied Mathematical Modelling 98 (2021) 465–497. doi:10.1016/j.apm.2021.05.005. [36] Z. Luo, L. Chen, J. Yang, Y. Zhang, K. Abdel-Malek, Compliant mecha-nism design using multi-objective topology optimization scheme of con-tinuum structures, Structural and Multidisciplinary Optimization 30 (2005) 142–154. doi:10.1007/s00158-004-0512-y. [37] J. Lin, Z. Luo, L. Tong, A new multi-objective programming scheme for topology optimization of compliant mechanisms, Structural and Mul-tidisciplinary Optimization 40 (2010) 241–255. doi:10.1007/s00158-008-0355-z. [38] A. Messac, Physical programming - Effective optimization for compu-tational design, AIAA Journal 34 (1996) 149–158. doi:10.2514/3.13035. [39] A. Messac, A. Ismail-Yahaya, Multiobjective robust design using phys-ical programming, Structural and Multidisciplinary Optimization 23 (2002) 357–371. doi:10.1007/s00158-002-0196-0. [40] N. Ryu, S. Min, Multiobjective optimization with an adaptive weight determination scheme using the concept of hyperplane, International Journal for Numerical Methods in Engineering 118 (2019) 303–319. doi:10.1002/nme.6013. [41] N. Ryu, M. Seo, S. Min, Multi-objective topology optimization incor-porating an adaptive weighed-sum method and a configuration-based clustering scheme, Computer Methods in Applied Mechanics and Engi-neering 385 (2021) 114015. doi:10.1016/j.cma.2021.114015. [42] J. Hou, Z. Jiang, F. Wu, H. Lian, Z. Wang, Z. Liu, W. Li, ANovel Multi-Objective Topology Optimization Method for Stiffness and Strength-Constrained Design Using the SIMP Approach, CMES - Com-puter Modeling in Engineering and Sciences 144 (2025) 1545–1572. doi:10.32604/cmes.2025.068482. 58 [43] H. Ryu, J. Yoo, Multi-objective topological structure design using a modified adaptive weighted sum method, Finite Elements in Analysis and Design 253 (2026) 104469. doi:10.1016/j.finel.2025.104469. [44] I. Das, J. E. Dennis, Normal-Boundary Intersection: A New Method for Generating the Pareto Surface in Nonlinear Multicriteria Optimiza-tion Problems, SIAM Journal on Optimization 8 (1998) 631–657. doi:10.1137/S1052623496307510. [45] A. Messac, A. Ismail-Yahaya, C. A. Mattson, The normalized normal constraint method for generating the pareto frontier, Structural and Multidisciplinary Optimization 25 (2003) 86–98. doi:10.1007/s00158-002-0276-1. [46] A. Messac, C. A. Mattson, Normal Constraint Method with Guarantee of Even Representation of Complete Pareto Frontier, AIAA Journal 42 (2004) 2101–2111. doi:10.2514/1.8977. [47] M. Martínez, J. Sanchis, X. Blasco, Global and well-distributed Pareto frontier by modified normalized normal constraint methods for bicrite-rion problems, Structural and Multidisciplinary Optimization 34 (2007) 197–209. doi:10.1007/s00158-006-0071-5. [48] M. Martínez, S. García-Nieto, J. Sanchis, X. Blasco, Genetic algorithms optimization for normalized normal constraint method under Pareto construction, Advances in Engineering Software 40 (2009) 260–267. doi:10.1016/j.advengsoft.2008.04.004. [49] B. J. Hancock, C. A. Mattson, The smart normal constraint method for directly generating a smart Pareto set, Structural and Multidisciplinary Optimization 48 (2013) 763–775. doi:10.1007/s00158-013-0925-6. [50] D. J. Munk, G. A. Vio, G. P. Steven, T. Kipouros, Producing Smart Pareto Sets for Multi-objective Topology Optimisation Problems, in: A. Schumacher, T. Vietor, S. Fiebig, K.-U. Bletzinger, K. Maute (Eds.), Advances in Structural and Multidisciplinary Optimization, Springer International Publishing, Cham, 2018, pp. 145–162. doi:10.1007/978-3-319-67988-4_10. 59 [51] D. J. Munk, T. Kipouros, G. A. Vio, G. T. Parks, G. P. Steven, Mul-tiobjective and multi-physics topology optimization using an updated smart normal constraint bi-directional evolutionary structural optimiza-tion method, Structural and Multidisciplinary Optimization 57 (2018) 665–688. doi:10.1007/s00158-017-1781-6. [52] F. Crescenti, T. Kipouros, D. J. Munk, M. A. Savill, Generating mini-mal pareto sets in multi-objective topology optimisation: an application to the wing box structural layout, Structural and Multidisciplinary Op-timization 63 (2021) 1119–1134. doi:10.1007/s00158-020-02745-7. [53] D. J. Munk, T. Kipouros, G. A. Vio, A Generalized SNC-BESO Method for Multi-objective Topology Optimization, in: H. Rodrigues, J. Her-skovits, C. Mota Soares, A. Araújo, J. Guedes, J. Folgado, F. Moleiro, J. F. A. Madeira (Eds.), EngOpt 2018 Proceedings of the 6th Interna-tional Conference on Engineering Optimization, Springer International Publishing, Cham, 2019, pp. 3–14. doi:10.1007/978-3-319-97773-7_1. [54] K. Suresh, A 199-line matlab code for pareto-optimal tracing in topology optimization, Structural and Multidisciplinary Optimization 42 (2010) 665–679. doi:10.1007/s00158-010-0534-6. [55] I. Turevsky, K. Suresh, Efficient generation of pareto-optimal topolo-gies for compliance optimization, International Journal for Numerical Methods in Engineering 87 (2011) 1207–1228. doi:10.1002/nme.3165. [56] N. Nathan, P. S. Palar, L. R. Zuhal, A Multi-objective Approach for Ro-bust Structural Topology Optimization, AIAA SciTech Forum, Ameri-can Institute of Aeronautics and Astronautics, 2021. doi:10.2514/6.2021-1777. [57] K. Gkaragkounis, E. Papoutsis-Kiachagias, K. Giannakoglou, Adjoint-assisted pareto front tracing in aerodynamic and conjugate heat trans-fer shape optimization, Computers & Fluids 214 (2021) 104753. doi:10.1016/j.compfluid.2020.104753. [58] K. Deb, A. Pratap, S. Agarwal, T. Meyarivan, A fast and elitist multiob-jective genetic algorithm: NSGA-II, IEEE Transactions on Evolutionary Computation 6 (2002) 182–197. doi:10.1109/4235.996017. 60 [59] F. Schleifer, K. Deese, Genotype-Phenotype Mapping for Applied Evolu-tionary Multi-Objective and Multi-Physics Topology Optimization, Ap-plied Mechanics 3 (2022) 1399–1416. doi:10.3390/applmech3040080. [60] J. Oellerich, T. Yamada, A Level Set Topology Optimization Theory Based on Hamilton’s Principle, International Journal for Numerical Methods in Engineering 126 (2025) e70120. doi:10.1002/nme.70120. [61] G. Allaire, Shape Optimization by the Homogenization Method, 1 ed., Springer New York, NY, New York, 2002. doi:10.1007/978-1-4684-9286-6. [62] T. Yamada, K. Izui, S. Nishiwaki, A. Takezawa, A topology optimization method based on the level set method incorporating a fictitious interface energy, Computer Methods in Applied Mechanics and Engineering 199 (2010) 2876–2891. doi:10.1016/j.cma.2010.05.013. [63] A. Bedford, Hamilton’s principle in continuum mechanics, 1 ed., Springer Cham, Cham, Switzerland, 2021. [64] S. Mottaghi, R. Gabbai, H. Benaroya, An Analytical Mechanics Frame-work for Flow-Oscillator Modeling of Vortex-Induced Bluff-Body Os-cillations, Solid Mechanics and Its Applications, Springer International Publishing, 2019. [65] E. Burman, P. Hansbo, M. G. Larson, The Augmented Lagrangian Method as a Framework for Stabilised Methods in Computational Me-chanics, Archives of Computational Methods in Engineering 30 (2023) 2579–2604. doi:10.1007/s11831-022-09878-6. [66] P. Michaleris, D. A. Tortorelli, C. A. Vidal, Tangent operators and design sensitivity formulations for transient non-linear coupled problems with applications to elastoplasticity, International Jour-nal for Numerical Methods in Engineering 37 (1994) 2471–2499. doi:10.1002/nme.1620371408. [67] L. W. Tu, An Introduction to Manifolds, Universitext, Springer New York, NY, New York, NY, 2007. doi:10.1007/978-0-387-48101-2. [68] J. Sethuraman, A constructive definition of Dirichlet priors, Statistica Sinica 4 (1994) 639–650. 61 [69] H. Ishwaran, L. F. James, Gibbs Sampling Methods for Stick-Breaking Priors, Journal of the American Statistical Association 96 (2001) 161– 173. doi:10.1198/016214501750332758. [70] R. H. Mena, M. Ruggiero, S. G. Walker, Geometric stick-breaking processes for continuous-time Bayesian nonparametric modeling, Jour-nal of Statistical Planning and Inference 141 (2011) 3217–3230. doi:10.1016/j.jspi.2011.04.008. [71] J. Ouyang, T. Wang, J. Cao, Y. Wang, Applying Kumaraswamy dis-tribution on stick-breaking process: a Dirichlet neural topic model ap-proach, Neural Computing and Applications 36 (2024) 13731–13744. doi:10.1007/s00521-024-09783-y. [72] F. Hecht, New development in freefem++, Journal of Numerical Math-ematics 20 (2012) 251–266. doi:10.1515/jnum-2012-0013. [73] C. Dapogny, C. Dobrzynski, P. Frey, Three-dimensional adaptive do-main remeshing, implicit domain meshing, and applications to free and moving boundary problems, Journal of Computational Physics 262 (2014) 358–378. doi:10.1016/j.jcp.2014.01.005. [74] G. Balarac, F. Basile, P. Bénard, F. Bordeu, J.-B. Chapelier, L. Cirrot-tola, G. Caumon, C. Dapogny, P. Frey, A. Froehly, G. Ghigliotti, R. La-raufie, G. Lartigue, C. Legentil, R. Mercier, V. Moureau, C. Nardoni, S. Pertant, M. Zakari, Tetrahedral remeshing in the context of large-scale numerical simulation and high performance computing, Mathe-maticS In Action 11 (2022) 129–164. doi:10.5802/msia.22. [75] C. L. Lawson, Properties of n-dimensional triangulations, Com-puter Aided Geometric Design 3 (1986) 231–246. doi:10.1016/0167-8396(86)90001-4. [76] I. Y. Kim, O. L. de Weck, Adaptive weighted-sum method for bi-objective optimization: Pareto front generation, Structural and Mul-tidisciplinary Optimization 29 (2005) 149–158. doi:10.1007/s00158-004-0465-1. 62 [77] I. Y. Kim, O. L. de Weck, Adaptive weighted sum method for multiobjective optimization: a new method for pareto front genera-tion, Structural and Multidisciplinary Optimization 31 (2006) 105–116. doi:10.1007/s00158-005-0557-6. [78] J. S. Choi, T. Yamada, K. Izui, S. Nishiwaki, J. Yoo, Topology optimization using a reaction–diffusion equation, Computer Meth-ods in Applied Mechanics and Engineering 200 (2011) 2407–2420. doi:10.1016/j.cma.2011.04.013. [79] O. Sigmund, On the Design of Compliant Mechanisms Using Topology Optimization, Mechanics of Structures and Machines 25 (1997) 493–524. doi:10.1080/08905459708945415. [80] C. Le, J. Norato, T. Bruns, C. Ha, D. Tortorelli, Stress-based topology optimization for continua, Structural and Multidisciplinary Optimiza-tion 41 (2010) 605–620. doi:10.1007/s00158-009-0440-y. [81] R. Picelli, S. Townsend, C. Brampton, J. Norato, H. Kim, Stress-based shape and topology optimization with the level set method, Com-puter Methods in Applied Mechanics and Engineering 329 (2018) 1–23. doi:10.1016/j.cma.2017.09.001. [82] H. Emmendoerfer, E. A. Fancello, Topology optimization with local stress constraint based on level set evolution via reaction–diffusion, Computer Methods in Applied Mechanics and Engineering 305 (2016) 62–88. doi:10.1016/j.cma.2016.02.024. 63

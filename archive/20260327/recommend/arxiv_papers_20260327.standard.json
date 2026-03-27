@@ -1,0 +1,678 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-27T19:59:44.264893+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 15,
+    "deep_cap": 6,
+    "deep_selected": 6,
+    "quick_candidates": 43,
+    "quick_skim_target": 11,
+    "quick_selected": 11
+  },
+  "deep_dive": [
+    {
+      "id": "2603.21582v1",
+      "title": "Overview of TREC 2025 Biomedical Generative Retrieval (BioGen) Track",
+      "abstract": "Recent advances in large language models (LLMs) have made significant progress across multiple biomedical tasks, including biomedical question answering, lay-language summarization of the biomedical literature, and clinical note summarization. These models have demonstrated strong capabilities in processing and synthesizing complex biomedical information and in generating fluent, human-like responses. Despite these advancements, hallucinations or confabulations remain key challenges when using LLMs in biomedical and other high-stakes domains. Inaccuracies may be particularly harmful in high-risk situations, such as medical question answering, making clinical decisions, or appraising biomedical research. Studies on the evaluation of the LLMs' abilities to ground generated statements in verifiable sources have shown that models perform significantly",
+      "authors": [
+        "Deepak Gupta",
+        "Dina Demner-Fushman",
+        "William Hersh",
+        "Steven Bedrick",
+        "Kirk Roberts"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-03-23T05:10:16+00:00",
+      "link": "https://arxiv.org/pdf/2603.21582v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Appraising biomedical research and generative retrieval",
+      "llm_evidence_cn": "评估生物医学研究与生成式检索",
+      "llm_evidence": "评估生物医学研究与生成式检索",
+      "canonical_evidence": "评估生物医学研究与生成式检索",
+      "llm_tldr_en": "Overview of the TREC 2025 BioGen track focusing on biomedical generative retrieval and research appraisal.",
+      "llm_tldr_cn": "TREC 2025 BioGen赛道概览，关注生物医学生成式检索与研究评估。",
+      "llm_tldr": "TREC 2025 BioGen赛道概览，关注生物医学生成式检索与研究评估。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.22739v1",
+      "title": "A variational geometric framework for multi-objective level set topology optimization",
+      "abstract": "This paper proposes a variational framework for multi-objective level set topology optimization. The approach interprets the level set function as a generalized coordinate of a fictitious material and derives its equation of motion from Hamilton's principle, resulting in a damped wave equation governing the optimization process. The objective functionals are combined using a weighted sum formulation. An analysis of the underlying system structure reveals a geometric interpretation of the problem, shifting the perspective beyond conventional approaches based on purely discrete approximations of the Pareto frontier. Under suitable regularity assumptions, the set of stationary solutions forms a structured subset in objective space, in which the Pareto frontier is locally embedded and the weighting factors act as intrinsic coordinates. This perspective motivates the introduction of a dynamic evolution of the weights, leading to a coupled dynamical system for the level set function and the weighting parameters that enables adaptive exploration of the objective landscape. Numerical results demonstrate that the proposed framework provides a stable and uniform approximation of the Pareto frontier and scales to higher-dimensional objective spaces.",
+      "authors": [
+        "Jan Oellerich",
+        "Takayuki Yamada"
+      ],
+      "primary_category": "math.OC",
+      "categories": [
+        "math.OC"
+      ],
+      "published": "2026-03-24T03:04:30+00:00",
+      "link": "https://arxiv.org/pdf/2603.22739v1",
+      "tags": [
+        "keyword:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "variational framework for multi-objective topology optimization",
+      "llm_evidence_cn": "多目标拓扑优化的变分框架",
+      "llm_evidence": "多目标拓扑优化的变分框架",
+      "canonical_evidence": "多目标拓扑优化的变分框架",
+      "llm_tldr_en": "Proposes a geometric framework for level set topology optimization using Hamilton's principle.",
+      "llm_tldr_cn": "提出了一种基于哈密顿原理的水平集拓扑优化几何框架。",
+      "llm_tldr": "提出了一种基于哈密顿原理的水平集拓扑优化几何框架。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "fluid topology optimization",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.22018v1",
+      "title": "Do Papers Match Code? A Benchmark and Framework for Paper-Code Consistency Detection in Bioinformatics Software",
+      "abstract": "Ensuring consistency between research papers and their corresponding software implementations is fundamental to software reliability and scientific reproducibility. However, this problem remains underexplored, particularly in the domain of bioinformatics, where discrepancies between methodological descriptions in papers and their actual code implementations are prevalent. To address this gap, this paper introduces a new task, namely paper-code consistency detection, and curates a collection of 48 bioinformatics software projects along with their associated publications. We systematically align sentence-level algorithmic descriptions from papers with function-level code snippets. Combined with expert annotations and a hybrid negative sampling strategy, we construct the first benchmark dataset in the bioinformatics domain tailored to this task, termed BioCon. Based on this benchmark, we further propose a cross-modal consistency detection framework designed to model the semantic relationships between natural language descriptions and code implementations. The framework adopts a unified input representation and leverages pre-trained models to capture deep semantic alignment between papers and code. To mitigate the effects of class imbalance and hard samples, we incorporate a weighted focal loss to enhance model robustness. Experimental results demonstrate that our framework effectively identifies consistency between papers and code in bioinformatics, achieving an accuracy of 0.9056 and an F1 score of 0.8011. Overall, this study opens a new research direction for paper-code consistency analysis and lays the foundation for automated reproducibility assessment and cross-modal understanding in scientific software.",
+      "authors": [
+        "Tianxiang Xu",
+        "Xiaoyan Zhu",
+        "Xin Lai",
+        "Sizhe Dang",
+        "Xin Lian",
+        "Hangyu Cheng",
+        "Jiayin Wang"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.SE"
+      ],
+      "published": "2026-03-23T14:28:14+00:00",
+      "link": "https://arxiv.org/pdf/2603.22018v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "consistency detection between papers and code",
+      "llm_evidence_cn": "论文与代码之间的一致性检测",
+      "llm_evidence": "论文与代码之间的一致性检测",
+      "canonical_evidence": "论文与代码之间的一致性检测",
+      "llm_tldr_en": "A benchmark for detecting consistency between methodological descriptions in papers and their code.",
+      "llm_tldr_cn": "一个用于检测论文方法描述与其代码实现之间一致性的基准。",
+      "llm_tldr": "一个用于检测论文方法描述与其代码实现之间一致性的基准。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.22340v1",
+      "title": "Graphs RAG at Scale: Beyond Retrieval-Augmented Generation With Labeled Property Graphs and Resource Description Framework for Complex and Unknown Search Spaces",
+      "abstract": "Recent advances in Retrieval-Augmented Generation (RAG) have revolutionized knowledge-intensive tasks, yet traditional RAG methods struggle when the search space is unknown or when documents are semi-structured or structured. We introduce a novel end-to-end Graph RAG framework that leverages both Labeled Property Graph (LPG) and Resource Description Framework (RDF) architectures to overcome these limitations. Our approach enables dynamic document retrieval without the need to pre-specify the number of documents and eliminates inefficient reranking. We propose an innovative method for converting documents into RDF triplets using JSON key-value pairs, facilitating seamless integration of semi-structured data. Additionally, we present a text to Cypher framework for LPG, achieving over 90% accuracy in real-time translation of text queries to Cypher, enabling fast and reliable query generation suitable for online applications. Our empirical evaluation demonstrates that Graph RAG significantly outperforms traditional embedding-based RAG in accuracy, response quality, and reasoning, especially for complex, semi-structured tasks. These findings establish Graph RAG as a transformative solution for next-generation retrieval-augmented systems.",
+      "authors": [
+        "Manie Tadayon",
+        "Mayank Gupta"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-21T11:35:29+00:00",
+      "link": "https://arxiv.org/pdf/2603.22340v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "dynamic document retrieval in unknown search spaces",
+      "llm_evidence_cn": "未知搜索空间中的动态文档检索",
+      "llm_evidence": "未知搜索空间中的动态文档检索",
+      "canonical_evidence": "未知搜索空间中的动态文档检索",
+      "llm_tldr_en": "Proposes a Graph RAG framework for complex search spaces and structured document retrieval.",
+      "llm_tldr_cn": "提出一种 Graph RAG 框架，用于复杂搜索空间和结构化文档的检索。",
+      "llm_tldr": "提出一种 Graph RAG 框架，用于复杂搜索空间和结构化文档的检索。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.24147v1",
+      "title": "Linking Global Science Funding to Research Publications",
+      "abstract": "Funding acknowledgments in scholarly publications provide large-scale trace data on organizations that support scientific research. We present a dataset for linking global science funding organizations to research publications by systematically disambiguating unique funding acknowledgment strings extracted from publication metadata. Funder names are matched to standardized organizational identifiers using a multi-stage pipeline that combines lexical normalization, similarity-based clustering, rule-based matching, named entity recognition assistance, and manual validation. The resulting dataset links 1.9 million unique funder strings to canonical organization identifiers and records match types and unresolved cases to support transparency. Technical validation includes paper-level comparisons across bibliometric sources and manual verification against full-text acknowledgment sections, with reported recall and precision metrics. This dataset supports analyses of funding flows, institutional funding portfolios, regional representation, and concentration patterns in the global research system.",
+      "authors": [
+        "Jacob Aarup Dalsgaard",
+        "Filipi Nascimento Silva",
+        "Jin AI"
+      ],
+      "primary_category": "cs.DL",
+      "categories": [
+        "cs.DL",
+        "cs.SI"
+      ],
+      "published": "2026-03-25T10:12:55+00:00",
+      "link": "https://arxiv.org/pdf/2603.24147v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Linking science funding to research publications via systematic disambiguation",
+      "llm_evidence_cn": "通过系统消歧将科学资助与研究论文联系起来",
+      "llm_evidence": "通过系统消歧将科学资助与研究论文联系起来",
+      "canonical_evidence": "通过系统消歧将科学资助与研究论文联系起来",
+      "llm_tldr_en": "Provides a dataset and pipeline to link global science funding organizations to scholarly publications.",
+      "llm_tldr_cn": "提供了一个数据集和流程，将全球科学资助机构与学术出版物联系起来。",
+      "llm_tldr": "提供了一个数据集和流程，将全球科学资助机构与学术出版物联系起来。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "carryover_cache",
+      "paper_id": "2603.24147v1"
+    },
+    {
+      "id": "2603.23125v1",
+      "title": "From Questions to Trust Reports: A LLM-IR Framework for the TREC 2025 DRAGUN Track",
+      "abstract": "The DRAGUN Track at TREC 2025 targets the growing need for effective support tools that help users evaluate the trustworthiness of online news. We describe the UR_Trecking system submitted for both Task 1 (critical question generation) and Task 2 (retrieval-augmented trustworthiness reporting). Our approach combines LLM-based question generation with semantic filtering, diversity enforcement using clustering, and several query expansion strategies (including reasoning-based Chain-of-Thought expansion) to retrieve relevant evidence from the MS MARCO V2.1 segmented corpus. Retrieved documents are re-ranked using a monoT5 model and filtered using an LLM relevance judge together with a domain-level trustworthiness dataset. For Task 2, selected evidence is synthesized by an LLM into concise trustworthiness reports with citations. Results from the official evaluation indicate that Chain-of-Thought query expansion and re-ranking substantially improve both relevance and domain trust compared to baseline retrieval, while question-generation performance shows moderate quality with room for improvement. We conclude by outlining key challenges encountered and suggesting directions for enhancing robustness and trustworthiness assessment in future iterations of the system.",
+      "authors": [
+        "Ignacy Alwasiak",
+        "Kene Nnolim",
+        "Jaclyn Thi",
+        "Samy Ateia",
+        "Markus Bink",
+        "Gregor Donabauer",
+        "David Elsweiler",
+        "Udo Kruschwitz"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-03-24T12:22:27+00:00",
+      "link": "https://arxiv.org/pdf/2603.23125v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "LLM-IR framework for evidence retrieval",
+      "llm_evidence_cn": "用于证据检索的LLM-IR框架",
+      "llm_evidence": "用于证据检索的LLM-IR框架",
+      "canonical_evidence": "用于证据检索的LLM-IR框架",
+      "llm_tldr_en": "Describes a framework for generating critical questions and retrieving evidence to evaluate news trustworthiness.",
+      "llm_tldr_cn": "描述了一个生成关键问题并检索证据以评估新闻可信度的框架。",
+      "llm_tldr": "描述了一个生成关键问题并检索证据以评估新闻可信度的框架。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2603.24246v1",
+      "title": "Semantic Centroids and Hierarchical Density-Based Clustering for Cross-Document Software Coreference Resolution",
+      "abstract": "This paper describes the system submitted to the SOMD 2026 Shared Task for Cross-Document Coreference Resolution (CDCR) of software mentions. Our approach addresses the challenge of identifying and clustering inconsistent software mentions across scientific corpora. We propose a hybrid framework that combines dense semantic embeddings from a pre-trained Sentence-BERT model, Knowledge Base (KB) lookup strategy built from training-set cluster centroids using FAISS for efficient retrieval, and HDBSCAN density-based clustering for mentions that cannot be confidently assigned to existing clusters. Surface-form normalization and abbreviation resolution are applied to improve canonical name matching. The same core pipeline is applied to Subtasks 1 and 2. To address the large scale settings of Subtask 3, the pipeline was adapted by utilising a blocking strategy based on entity types and canonicalized surface forms. Our system achieved CoNLL F1 scores of 0.98, 0.98, and 0.96 on Subtasks 1, 2, and 3 respectively.",
+      "authors": [
+        "Julia Matela",
+        "Frank Krüger"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-25T12:35:33+00:00",
+      "link": "https://arxiv.org/pdf/2603.24246v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Identifying and clustering software mentions across scientific corpora",
+      "llm_evidence_cn": "在科学语料库中识别和聚类软件提及",
+      "llm_evidence": "在科学语料库中识别和聚类软件提及",
+      "canonical_evidence": "在科学语料库中识别和聚类软件提及",
+      "llm_tldr_en": "A hybrid framework for cross-document software coreference resolution in scientific literature.",
+      "llm_tldr_cn": "一种用于科学文献中跨文档软件共指消解的混合框架。",
+      "llm_tldr": "一种用于科学文献中跨文档软件共指消解的混合框架。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.19415v2",
+      "title": "Scalable Prompt Routing via Fine-Grained Latent Task Discovery",
+      "abstract": "Prompt routing dynamically selects the most appropriate large language model from a pool of candidates for each query, optimizing performance while managing costs. As model pools scale to include dozens of frontier models with narrow performance gaps, existing approaches face significant challenges: manually defined task taxonomies cannot capture fine-grained capability distinctions, while monolithic routers struggle to differentiate subtle differences across diverse tasks. We propose a two-stage routing architecture that addresses these limitations through automated fine-grained task discovery and task-aware quality estimation. Our first stage employs graph-based clustering to discover latent task types and trains a classifier to assign prompts to discovered tasks. The second stage uses a mixture-of-experts architecture with task-specific prediction heads for specialized quality estimates. At inference, we aggregate predictions from both stages to balance task-level stability with prompt-specific adaptability. Evaluated on 10 benchmarks with 11 frontier models, our method consistently outperforms existing baselines and surpasses the strongest individual model while incurring less than half its cost.",
+      "authors": [
+        "Yunyi Zhang",
+        "Soji Adeshina",
+        "Sheng Guan",
+        "Ashwin Ganesh",
+        "Zhen Han",
+        "Vassilis N. Ioannidis",
+        "Huzefa Rangwala",
+        "George Karypis"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-03-19T19:15:51+00:00",
+      "link": "https://arxiv.org/pdf/2603.19415v2",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Automated fine-grained task discovery for optimizing query routing",
+      "llm_evidence_cn": "用于优化查询路由的自动化细粒度任务发现",
+      "llm_evidence": "用于优化查询路由的自动化细粒度任务发现",
+      "canonical_evidence": "用于优化查询路由的自动化细粒度任务发现",
+      "llm_tldr_en": "A two-stage architecture for scalable prompt routing using graph-based latent task discovery.",
+      "llm_tldr_cn": "一种利用基于图的潜在任务发现进行可扩展提示路由的两阶段架构。",
+      "llm_tldr": "一种利用基于图的潜在任务发现进行可扩展提示路由的两阶段架构。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.19940v1",
+      "title": "Hybrid topic modelling for computational close reading: Mapping narrative themes in Pushkin's Evgenij Onegin",
+      "abstract": "This study presents a hybrid topic modelling framework for computational literary analysis that integrates Latent Dirichlet Allocation (LDA) with sparse Partial Least Squares Discriminant Analysis (sPLS-DA) to model thematic structure and longitudinal dynamics in narrative poetry. As a case study, we analyse Evgenij Onegin-Aleksandr S. Pushkin's novel in verse-using an Italian translation, testing whether unsupervised and supervised lexical structures converge in a small-corpus setting. The poetic text is segmented into thirty-five documents of lemmatised content words, from which five stable and interpretable topics emerge. To address small-corpus instability, a multi-seed consensus protocol is adopted. Using sPLS-DA as a supervised probe enhances interpretability by identifying lexical markers that refine each theme. Narrative hubs-groups of contiguous stanzas marking key episodes-extend the bag-of-words approach to the narrative level, revealing how thematic mixtures align with the poem's emotional and structural arc. Rather than replacing traditional literary interpretation, the proposed framework offers a computational form of close reading, illustrating how lightweight probabilistic models can yield reproducible thematic maps of complex poetic narratives, even when stylistic features such as metre, phonology, or native morphology are abstracted away. Despite relying on a single lemmatised translation, the approach provides a transparent methodological template applicable to other high-density literary texts in comparative studies.",
+      "authors": [
+        "Angelo Maria Sabatini"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-20T13:37:08+00:00",
+      "link": "https://arxiv.org/pdf/2603.19940v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Hybrid topic modelling for thematic structure analysis",
+      "llm_evidence_cn": "用于主题结构分析的混合主题建模",
+      "llm_evidence": "用于主题结构分析的混合主题建模",
+      "canonical_evidence": "用于主题结构分析的混合主题建模",
+      "llm_tldr_en": "Integrates LDA and sPLS-DA for computational literary analysis of narrative themes in small corpora.",
+      "llm_tldr_cn": "结合LDA和sPLS-DA，对小规模语料库中的叙事主题进行计算文学分析。",
+      "llm_tldr": "结合LDA和sPLS-DA，对小规模语料库中的叙事主题进行计算文学分析。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.24422v1",
+      "title": "OneSearch-V2: The Latent Reasoning Enhanced Self-distillation Generative Search Framework",
+      "abstract": "Generative Retrieval (GR) has emerged as a promising paradigm for modern search systems. Compared to multi-stage cascaded architecture, it offers advantages such as end-to-end joint optimization and high computational efficiency. OneSearch, as a representative industrial-scale deployed generative search framework, has brought significant commercial and operational benefits. However, its inadequate understanding of complex queries, inefficient exploitation of latent user intents, and overfitting to narrow historical preferences have limited its further performance improvement. To address these challenges, we propose \\textbf{OneSearch-V2}, a latent reasoning enhanced self-distillation generative search framework. It contains three key innovations: (1) a thought-augmented complex query understanding module, which enables deep query understanding and overcomes the shallow semantic matching limitations of direct inference; (2) a reasoning-internalized self-distillation training pipeline, which uncovers users' potential yet precise e-commerce intentions beyond log-fitting through implicit in-context learning; (3) a behavior preference alignment optimization system, which mitigates reward hacking arising from the single conversion metric, and addresses personal preference via direct user feedback. Extensive offline evaluations demonstrate OneSearch-V2's strong query recognition and user profiling capabilities. Online A/B tests further validate its business effectiveness, yielding +3.98\\% item CTR, +3.05\\% buyer conversion rate, and +2.11\\% order volume. Manual evaluation further confirms gains in search experience quality, with +1.65\\% in page good rate and +1.37\\% in query-item relevance. More importantly, OneSearch-V2 effectively mitigates common search system issues such as information bubbles and long-tail sparsity, without incurring additional inference costs or serving latency.",
+      "authors": [
+        "Ben Chen",
+        "Siyuan Wang",
+        "Yufei Ma",
+        "Zihan Liang",
+        "Xuxin Zhang",
+        "Yue Lv",
+        "Ying Yang",
+        "Huangyu Dai",
+        "Lingtao Mao",
+        "Tong Zhao",
+        "Zhipeng Qian",
+        "Xinyu Sun",
+        "Zhixin Zhai",
+        "Yang Zhao",
+        "Bochao Liu",
+        "Jingshan Lv",
+        "Xiao Liang",
+        "Hui Kong",
+        "Jing Chen",
+        "Han Li",
+        "Chenyi Lei",
+        "Wenwu Ou",
+        "Kun Gai"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-03-25T15:33:34+00:00",
+      "link": "https://arxiv.org/pdf/2603.24422v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "generative search framework for complex queries",
+      "llm_evidence_cn": "针对复杂查询的生成式搜索框架",
+      "llm_evidence": "针对复杂查询的生成式搜索框架",
+      "canonical_evidence": "针对复杂查询的生成式搜索框架",
+      "llm_tldr_en": "Enhances generative search with latent reasoning to improve understanding of complex user intents.",
+      "llm_tldr_cn": "通过潜在推理增强生成式搜索，提升对复杂用户意图的理解。",
+      "llm_tldr": "通过潜在推理增强生成式搜索，提升对复杂用户意图的理解。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.19665v1",
+      "title": "GenFacet: End-to-End Generative Faceted Search via Multi-Task Preference Alignment in E-Commerce",
+      "abstract": "Faceted search acts as a critical bridge for navigating massive ecommerce catalogs, yet traditional systems rely on static rule-based extraction or statistical ranking, struggling with emerging vocabulary, semantic gaps, and a disconnect between facet selection and underlying retrieval. In this paper, we introduce GenFacet, an industrial-grade, end-to-end generative framework deployed at JD.com. GenFacet reframes faceted search as two coupled generative tasks within a unified Large Language Model: Context-Aware Facet Generation, which dynamically synthesizes trend-responsive navigation options, and Intent-Driven Query Rewriting, which translates user interactions into precise search queries to close the retrieval loop. To bridge the gap between generative capabilities and search utility, we propose a novel multi-task training pipeline combining teacher-student distillation with GRPO. This aligns the model with complex user preferences by directly optimizing for downstream search satisfaction. Validated on China's largest selfoperated e-commerce platform via rigorous offline evaluations and online A/B tests, GenFacet demonstrated substantial improvements. Specifically, online results reveal a relative increase of 42.0% in facet Click-Through Rate (CTR) and 2.0% in User Conversion Rate (UCVR). These outcomes provide strong evidence of the benefits of generative methods for improving query understanding and user engagement in large-scale information retrieval systems.",
+      "authors": [
+        "Zhouwei Zhai",
+        "Min Yang",
+        "Jin Li"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-03-20T06:01:01+00:00",
+      "link": "https://arxiv.org/pdf/2603.19665v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "generative faceted search and query rewriting",
+      "llm_evidence_cn": "生成式分面搜索与查询重写",
+      "llm_evidence": "生成式分面搜索与查询重写",
+      "canonical_evidence": "生成式分面搜索与查询重写",
+      "llm_tldr_en": "A generative framework for faceted search that improves retrieval through context-aware query rewriting.",
+      "llm_tldr_cn": "一种生成式分面搜索框架，通过上下文感知的查询重写来改进检索。",
+      "llm_tldr": "一种生成式分面搜索框架，通过上下文感知的查询重写来改进检索。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.20088v1",
+      "title": "Beyond Accuracy: Towards a Robust Evaluation Methodology for AI Systems for Language Education",
+      "abstract": "The rapid adoption of large language models in AI-powered language education has created an urgent need for evaluations that assess pedagogical effectiveness, particularly in language learning--one of the most common LLM use cases (Tamkin et al. 2024, Costa-Gomes et al. 2025). With only narrowly defined task-specific evaluations of AI system capabilities in second language (L2) education existing in the literature, we require more holistic approaches in this AI for education space. To address this gap, we introduce L2-Bench, a novel evaluation benchmark grounded in a validated \"language learning experience designer\" construct to assess AI capabilities across L2 education contexts. Our methodology integrates pedagogical theory, sociotechnical AI evaluation methods, and operationalizes a hierarchical taxonomy to structure an expert-curated dataset of over 1,000 authentic rubric-scored task-response pairs with measurement and scoring pipeline. We report the results of a pilot validation exercise (N = 39) on an initial sample of our dataset (tasks were validated as authentic [M = 4.23 out of 5], but criteria scores were lower [M = 3.94], with universally poor inter-annotator agreement despite good internal consistency), alongside the experimental design for our follow-up practitioner data validation study as we iterate and scale to the full dataset. Ultimately, this research not only offers methodological lessons towards a more context-specific AI evaluations ecosystem, but also works towards better design of reproducible evaluations for AI systems deployed to educational contexts.",
+      "authors": [
+        "James Edgell",
+        "Wm. Matthew Kennedy",
+        "Isaac Pattis",
+        "Ben Knight",
+        "Danielle Carvalho",
+        "Elizabeth Wonnacott"
+      ],
+      "primary_category": "cs.CY",
+      "categories": [
+        "cs.CY"
+      ],
+      "published": "2026-03-20T16:13:03+00:00",
+      "link": "https://arxiv.org/pdf/2603.20088v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "novel evaluation methodology for AI systems in education",
+      "llm_evidence_cn": "教育领域AI系统的创新评估方法论",
+      "llm_evidence": "教育领域AI系统的创新评估方法论",
+      "canonical_evidence": "教育领域AI系统的创新评估方法论",
+      "llm_tldr_en": "Introduces a robust benchmark for evaluating AI pedagogical effectiveness in language learning.",
+      "llm_tldr_cn": "引入了一个用于评估语言学习中AI教学有效性的稳健基准。",
+      "llm_tldr": "引入了一个用于评估语言学习中AI教学有效性的稳健基准。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.24580v1",
+      "title": "Retrieval Improvements Do Not Guarantee Better Answers: A Study of RAG for AI Policy QA",
+      "abstract": "Retrieval-augmented generation (RAG) systems are increasingly used to analyze complex policy documents, but achieving sufficient reliability for expert usage remains challenging in domains characterized by dense legal language and evolving, overlapping regulatory frameworks. We study the application of RAG to AI governance and policy analysis using the AI Governance and Regulatory Archive (AGORA) corpus, a curated collection of 947 AI policy documents. Our system combines a ColBERT-based retriever fine-tuned with contrastive learning and a generator aligned to human preferences using Direct Preference Optimization (DPO). We construct synthetic queries and collect pairwise preferences to adapt the system to the policy domain. Through experiments evaluating retrieval quality, answer relevance, and faithfulness, we find that domain-specific fine-tuning improves retrieval metrics but does not consistently improve end-to-end question answering performance. In some cases, stronger retrieval counterintuitively leads to more confident hallucinations when relevant documents are absent from the corpus. These results highlight a key concern for those building policy-focused RAG systems: improvements to individual components do not necessarily translate to more reliable answers. Our findings provide practical insights for designing grounded question-answering systems over dynamic regulatory corpora.",
+      "authors": [
+        "Saahil Mathur",
+        "Ryan David Rittner",
+        "Vedant Ajit Thakur",
+        "Daniel Stuart Schiff",
+        "Tunazzina Islam"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.CY",
+        "cs.IR",
+        "cs.LG"
+      ],
+      "published": "2026-03-25T17:54:39+00:00",
+      "link": "https://arxiv.org/pdf/2603.24580v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "RAG for complex policy document analysis",
+      "llm_evidence_cn": "用于复杂政策文档分析的RAG",
+      "llm_evidence": "用于复杂政策文档分析的RAG",
+      "canonical_evidence": "用于复杂政策文档分析的RAG",
+      "llm_tldr_en": "Studies RAG application for AI policy analysis using a curated corpus and contrastive learning retrieval.",
+      "llm_tldr_cn": "研究了利用精选语料库和对比学习检索进行AI政策分析的RAG应用。",
+      "llm_tldr": "研究了利用精选语料库和对比学习检索进行AI政策分析的RAG应用。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.19711v1",
+      "title": "EvoTaxo: Building and Evolving Taxonomy from Social Media Streams",
+      "abstract": "Constructing taxonomies from social media corpora is challenging because posts are short, noisy, semantically entangled, and temporally dynamic. Existing taxonomy induction methods are largely designed for static corpora and often struggle to balance robustness, scalability, and sensitivity to evolving discourse. We propose EvoTaxo, a LLM-based framework for building and evolving taxonomies from temporally ordered social media streams. Rather than clustering raw posts directly, EvoTaxo converts each post into a structured draft action over the current taxonomy, accumulates structural evidence over time windows, and consolidates candidate edits through dual-view clustering that combines semantic similarity with temporal locality. A refinement-and-arbitration procedure then selects reliable edits before execution, while each node maintains a concept memory bank to preserve semantic boundaries over time. Experiments on two Reddit corpora show that EvoTaxo produces more balanced taxonomies than baselines, with clearer post-to-leaf assignment, better corpus coverage at comparable taxonomy size, and stronger structural quality. A case study on the Reddit community /r/ICE_Raids further shows that EvoTaxo captures meaningful temporal shifts in discourse. Our codebase is available here.",
+      "authors": [
+        "Yiyang Li",
+        "Tianyi Ma",
+        "Yanfang Ye"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-20T07:33:29+00:00",
+      "link": "https://arxiv.org/pdf/2603.19711v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Building and evolving taxonomies from dynamic streams to identify discourse",
+      "llm_evidence_cn": "从动态流中构建和演化分类法以识别话语",
+      "llm_evidence": "从动态流中构建和演化分类法以识别话语",
+      "canonical_evidence": "从动态流中构建和演化分类法以识别话语",
+      "llm_tldr_en": "EvoTaxo uses LLMs to build and evolve taxonomies from social media streams using dual-view clustering.",
+      "llm_tldr_cn": "EvoTaxo利用大模型通过双视图聚类从社交媒体流中构建和演化分类体系。",
+      "llm_tldr": "EvoTaxo利用大模型通过双视图聚类从社交媒体流中构建和演化分类体系。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.20990v1",
+      "title": "ECI: Effective Contrastive Information to Evaluate Hard-Negatives",
+      "abstract": "Hard negatives play a critical role in training and fine-tuning dense retrieval models, as they are semantically similar to positive documents yet non-relevant, and correctly distinguishing them is essential for improving retrieval accuracy. However, identifying effective hard negatives typically requires extensive ablation studies involving repeated fine-tuning with different negative sampling strategies and hyperparameters, resulting in substantial computational cost. In this paper, we introduce ECI: Effective Contrastive Information , a theoretically grounded metric grounded in Information Theory and Information Retrieval principles that enables practitioners to assess the quality of hard negatives prior to model fine-tuning. ECI evaluates negatives by optimizing the trade-off between Information Capacity the logarithmic bound on mutual information determined by set size and Discriminative Efficiency, a harmonic balance of Signal Magnitude (Hardness) and Safety (Max-Margin). Unlike heuristic approaches, ECI strictly penalizes unsafe, false-positive negatives prevalent in generative methods. We evaluate ECI across hard-negative sets mined or generated using BM25, cross-encoders, and large language models. Our results demonstrate that ECI accurately predicts downstream retrieval performance, identifying that hybrid strategies (BM25+Cross-Encoder) offer the optimal balance of volume and reliability, significantly reducing the need for costly end-to-end ablation studies.",
+      "authors": [
+        "Aarush Sinha",
+        "Rahul Seetharaman",
+        "Aman Bansal"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-22T00:21:05+00:00",
+      "link": "https://arxiv.org/pdf/2603.20990v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Evaluating hard-negatives to improve retrieval accuracy",
+      "llm_evidence_cn": "评估硬负样本以提高检索准确性",
+      "llm_evidence": "评估硬负样本以提高检索准确性",
+      "canonical_evidence": "评估硬负样本以提高检索准确性",
+      "llm_tldr_en": "A metric based on Information Theory to assess hard-negative quality for better retrieval model training.",
+      "llm_tldr_cn": "一种基于信息论的指标，用于评估硬负样本质量以优化检索模型训练。",
+      "llm_tldr": "一种基于信息论的指标，用于评估硬负样本质量以优化检索模型训练。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.24925v1",
+      "title": "GraphER: An Efficient Graph-Based Enrichment and Reranking Method for Retrieval-Augmented Generation",
+      "abstract": "Semantic search in retrieval-augmented generation (RAG) systems is often insufficient for complex information needs, particularly when relevant evidence is scattered across multiple sources. Prior approaches to this problem include agentic retrieval strategies, which expand the semantic search space by generating additional queries. However, these methods do not fully leverage the organizational structure of the data and instead rely on iterative exploration, which can lead to inefficient retrieval. Another class of approaches employs knowledge graphs to model non-semantic relationships through graph edges. Although effective in capturing richer proximities, such methods incur significant maintenance costs and are often incompatible with the vector stores used in most production systems. To address these limitations, we propose GraphER, a graph-based enrichment and reranking method that captures multiple forms of proximity beyond semantic similarity. GraphER independently enriches data objects during offline indexing and performs graph-based reranking over candidate objects at query time. This design does not require a knowledge graph, allowing GraphER to integrate seamlessly with standard vector stores. In addition, GraphER is retriever-agnostic and introduces negligible latency overhead. Experiments on multiple retrieval benchmarks demonstrate the effectiveness of the proposed approach.",
+      "authors": [
+        "Ruizhong Miao",
+        "Yuying Wang",
+        "Rongguang Wang",
+        "Chenyang Li",
+        "Tao Sheng",
+        "Sujith Ravi",
+        "Dan Roth"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CL",
+        "cs.IR"
+      ],
+      "published": "2026-03-26T01:30:22+00:00",
+      "link": "https://arxiv.org/pdf/2603.24925v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "graph-based enrichment and reranking for complex information needs",
+      "llm_evidence_cn": "针对复杂信息需求的基于图的增强和重排序方法",
+      "llm_evidence": "针对复杂信息需求的基于图的增强和重排序方法",
+      "canonical_evidence": "针对复杂信息需求的基于图的增强和重排序方法",
+      "llm_tldr_en": "Introduces GraphER to improve retrieval-augmented generation by leveraging data structure for better evidence discovery.",
+      "llm_tldr_cn": "引入 GraphER，通过利用数据结构增强检索增强生成，从而改善证据发现。",
+      "llm_tldr": "引入 GraphER，通过利用数据结构增强检索增强生成，从而改善证据发现。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.19712v1",
+      "title": "TAB-AUDIT: Detecting AI-Fabricated Scientific Tables via Multi-View Likelihood Mismatch",
+      "abstract": "AI-generated fabricated scientific manuscripts raise growing concerns with large-scale breaches of academic integrity. In this work, we present the first systematic study on detecting AI-generated fabricated scientific tables in empirical NLP papers, as information in tables serve as critical evidence for claims. We construct FabTab, the first benchmark dataset of fabricated manuscripts with tables, comprising 1,173 AI-generated papers and 1,215 human-authored ones in empirical NLP. Through a comprehensive analysis, we identify systematic differences between fabricated and real tables and operationalize them into a set of discriminative features within the TAB-AUDIT framework. The key feature, within-table mismatch, captures the perplexity gap between a table's skeleton and its numerical content. Experimental results show that RandomForest built on these features significantly outperform prior state-of-the-art methods, achieving 0.987 AUROC in-domain and 0.883 AUROC out-of-domain. Our findings highlight experimental tables as a critical forensic signal for detecting AI-generated scientific fraud and provide a new benchmark for future research.",
+      "authors": [
+        "Shuo Huang",
+        "Yan Pen",
+        "Lizhen Qu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-20T07:33:54+00:00",
+      "link": "https://arxiv.org/pdf/2603.19712v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "systematic study on detecting AI-generated scientific manuscripts",
+      "llm_evidence_cn": "对检测AI生成的科学论文的系统性研究",
+      "llm_evidence": "对检测AI生成的科学论文的系统性研究",
+      "canonical_evidence": "对检测AI生成的科学论文的系统性研究",
+      "llm_tldr_en": "Presents a framework to detect AI-fabricated scientific tables to maintain academic integrity.",
+      "llm_tldr_cn": "提出了一种检测AI伪造科学表格的框架，以维护学术诚信。",
+      "llm_tldr": "提出了一种检测AI伪造科学表格的框架，以维护学术诚信。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

@@ -1,0 +1,408 @@
+Title: Do Papers Match Code? A Benchmark and Framework for Paper-Code Consistency Detection in Bioinformatics Software
+
+URL Source: https://arxiv.org/pdf/2603.22018v1
+
+Published Time: Tue, 24 Mar 2026 02:49:14 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+# DO PAPERS MATCH CODE ? A B ENCHMARK AND FRAMEWORK FOR PAPER -C ODE CONSISTENCY DETECTION IN 
+
+# BIOINFORMATICS SOFTWARE 
+
+Tianxiang Xu, Xiaoyan Zhu, Xin Lai, Sizhe Dang, Xin Lian, Hangyu Cheng, Jiayin Wang ∗
+
+Xi’an Jiaotong University 
+
+{wangjiayin}@mail.xjtu.edu.cn 
+
+ABSTRACT 
+
+Ensuring consistency between research papers and their corresponding software implementations is fundamental to software reliability and scientific reproducibility. However, this problem remains underexplored, particularly in the domain of bioinformatics, where discrepancies between method-ological descriptions in papers and their actual code implementations are prevalent. To address this gap, this paper introduces a new task, namely paper-code consistency detection, and curates a collection of 48 bioinformatics software projects along with their associated publications. We systematically align sentence-level algorithmic descriptions from papers with function-level code snippets. Combined with expert annotations and a hybrid negative sampling strategy, we construct the first benchmark dataset in the bioinformatics domain tailored to this task, termed BioCon. Based on this benchmark, we further propose a cross-modal consistency detection framework designed to model the semantic relationships between natural language descriptions and code implementations. The framework adopts a unified input representation and leverages pre-trained models to capture deep semantic alignment between papers and code. To mitigate the effects of class imbalance and hard samples, we incorporate a weighted focal loss to enhance model robustness. Experimental results demonstrate that our framework effectively identifies consistency between papers and code in bioinformatics, achieving an accuracy of 0.9056 and an F1 score of 0.8011. Overall, this study opens a new research direction for paper-code consistency analysis and lays the foundation for automated reproducibility assessment and cross-modal understanding in scientific software. 
+
+Keywords Paper-code consistency detection · Cross-modal · Bioinformatics 
+
+1 Introduction 
+
+Bioinformatics, as an interdisciplinary field integrating modern biology and information technology, has become an indispensable tool and core methodology in life sciences research [ 1 , 2]. With the completion of the Human Genome Project and the rapid advancement of high-throughput sequencing technologies, the continuous accumulation of massive biological data has significantly accelerated progress in bioinformatics research [ 3 ]. In this context, an increasing number of studies not only report their algorithms and analytical methods in academic publications but also release corresponding software implementations on code hosting platforms, thereby facilitating reproducibility and subsequent extensions [4]. In bioinformatics research, papers typically serve to describe methods and theoretical foundations, whereas software code is responsible for implementing and executing algorithmic workflows. Ideally, the methodological descriptions in papers should be strictly consistent with their corresponding code implementations to ensure reproducibility and verifiability of research findings [ 5, 6 ]. However, in practice, inconsistencies between paper descriptions and code implementations are frequently observed [7, 8]. 
+
+> ∗
+
+Jiayin Wang is the Corresponding Author. 
+
+> arXiv:2603.22018v1 [cs.LG] 23 Mar 2026
+
+Such paper-code inconsistency is particularly common in bioinformatics. For instance, key algorithmic steps described in papers may be partially implemented or entirely missing in code, or implementation details may deviate from the original descriptions. Conversely, code may include processing procedures or parameter settings that are not explicitly documented in the paper [ 9]. These inconsistencies not only increase the difficulty for researchers to understand software behavior but also hinder reproducibility and may even compromise the fairness of method comparisons, thereby undermining the reliability of research conclusions [10]. Currently, consistency analysis between papers and code is predominantly conducted manually. Researchers typically need to examine methodological descriptions in papers and locate corresponding implementations within source code. This process is time-consuming, labor-intensive, and highly dependent on expert knowledge [ 11 ]. In bioinformatics, a typical software system often consists of dozens of modules and extensive codebases, while method descriptions are scattered across multiple sections or even different chapters of a paper, rendering fine-grained manual alignment practically infeasible [ 12 ]. Although recent advances in artificial intelligence (AI) have achieved notable success in natural language processing and software engineering [ 13 ], existing studies mainly focus on tasks such as code understanding [ 14 ], code retrieval [ 15 ], and natural language-driven code generation [ 16 ]. To the best of our knowledge, limited attention has been paid to the consistency between scientific papers and their corresponding software implemen-tations, especially in the bioinformatics domain. Therefore, leveraging AI techniques to automatically assess semantic consistency between papers and code remains an important yet underexplored research problem. However, automated paper–code consistency detection poses several challenges. First, paper text and source code represent fundamentally different modalities [ 17 ]: the former conveys algorithmic concepts in natural language, while the latter implements executable logic in programming languages, resulting in a significant cross-modal semantic gap [15, 16]. Second, only a subset of paper content directly relates to implementation, whereas a large portion is devoted to background or result analysis, necessitating accurate identification of implementation-relevant sentences. Third, in complex bioinformatics projects, a single method description may correspond to multiple functions or modules, making it challenging to effectively locate candidate implementation units within large-scale codebases [12]. To address these challenges, this paper proposes a cross-modal framework for paper-code consistency detection in the bioinformatics domain, aiming to analyze semantic alignment between methodological descriptions and their corresponding implementations. Specifically, the framework first extracts sentence-level descriptions related to algorithm implementation from papers and function-level code snippets from repositories as candidate units. It then employs pre-trained language models to learn joint representations of paper sentences and code snippets, capturing cross-modal semantic relationships. Finally, a consistency classification model is trained to determine whether a given paper description and code implementation are semantically consistent. At the data level, we construct a dedicated benchmark for this task, termed BioCon, which comprises 48 bioinformatics software projects and their associated papers. The dataset is curated through expert annotation and a hard negative sampling strategy to produce high-quality sentence-code pairs. Based on BioCon, we conduct comprehensive experi-mental evaluations of the proposed framework. The results demonstrate that our approach effectively identifies semantic consistency between paper descriptions and code implementations, providing a feasible pathway toward automated consistency analysis in bioinformatics research. The main contributions of this work are summarized as follows: 1. Task: We introduce a novel task, paper-code consistency detection. 2. Benchmark: We construct the first benchmark dataset, BioCon, for this task in the bioinformatics domain. 3. Method: We propose a cross-modal consistency detection framework that effectively models semantic alignment between paper descriptions and code implementations. 
+
+2 Related Work 
+
+2.1 Code–Text Representation Learning 
+
+To bridge the semantic gap between natural language and source code, extensive efforts have been devoted to developing pre-trained models for code understanding. These models are typically trained in a self-supervised manner on large-scale code corpora, enabling them to capture both program structures and natural language semantics. Representative works include CodeBERT [ 18 ], UniXcoder [ 19 ], and CodeT5 [ 20 , 21 ]. Most of these approaches are built upon the Transformer architecture and learn joint representations of code and natural language, thereby facilitating cross-modal semantic modeling [22, 23]. 2Building upon these advances, prior studies have applied such models to a variety of code intelligence tasks, including code search, code summarization, and code translation, achieving substantial performance improvements across multiple benchmark datasets [ 24 ]. These results demonstrate the effectiveness of pre-trained language models in capturing semantic relationships between code and natural language. However, existing research primarily focuses on matching code snippets with short textual queries. In contrast, the problem of consistency analysis between complex scientific documents and software implementations remains largely underexplored. 
+
+2.2 Code–Comment Consistency Detection 
+
+Code-comment consistency detection is an established research topic in software engineering, aiming to identify inconsistencies between source code and its associated comments. For instance, when developers modify code logic without updating the corresponding comments, discrepancies may arise, potentially misleading users and reducing code maintainability [25]. Early approaches predominantly relied on static analysis or rule-based techniques, detecting inconsistencies by matching code structures with keywords in comments [ 26 ]. With the advancement of deep learning, researchers have increasingly adopted neural models to jointly represent code and comments, identifying semantic discrepancies by measuring the similarity between their learned representations [ 27 , 28 ]. More recently, the introduction of pre-trained code language models has further improved performance by enabling more accurate modeling of the relationship between code semantics and comments [29, 30]. Despite their superficial similarity to our task, code-comment consistency detection and paper-code consistency detection differ fundamentally. Code comments are typically concise, well-structured, and closely tied to individual functions or local code segments. In contrast, methodological descriptions in bioinformatics papers are linguistically more complex and often span multiple paragraphs or even entire sections. As a result, existing methods and datasets cannot be directly transferred to the paper–code consistency detection setting. 
+
+2.3 Scientific Software Reproducibility 
+
+As software becomes increasingly integral to scientific research, the research community has begun to examine discrepancies between papers and their corresponding code and their impact on reproducibility [ 31 , 32 ]. Some studies investigate reproducibility issues by analyzing repository artifacts such as issue reports or reproduction attempts, revealing inconsistencies between published methods and actual implementations [33]. However, these efforts largely rely on manual inspection or case studies, lacking systematic methodologies and standardized benchmark datasets for automated consistency detection. Moreover, existing research has predominantly focused on the AI domain. Prior studies [ 34 ] have shown that bioin-formatics software exhibits distinct characteristics in terms of development practices, system complexity, and defect distributions compared to other domains. Therefore, constructing a benchmark dataset tailored to the bioinformatics setting is essential for advancing systematic research on paper-code consistency in this domain. 
+
+3 Benchmark Construction 
+
+To systematically study the problem of paper-code consistency detection, we construct a benchmark dataset tailored to bioinformatics software, termed BioCon. This section details the construction process, including data source collection, paper sentence extraction, code function extraction, sentence–code pair generation, and the negative sampling strategy. The overall pipeline is illustrated in Figure 1. 
+
+3.1 Data Source Collection 
+
+We first collect bioinformatics software projects along with their corresponding research papers. Specifically, following the selection criteria in prior work [ 34 ], we identify 54 Python-based bioinformatics projects from GitHub that explicitly reference associated publications, and retrieve their corresponding papers. To ensure data quality, we perform rigorous manual filtering. First, we examine each paper and exclude three projects lacking a clearly defined methodology section. Second, we analyze the corresponding repositories and remove three projects with severe defects or parsing failures. Ultimately, we retain 48 high-quality bioinformatics projects, each with both a complete paper (PDF) and a fully functional codebase. Table 1 summarizes key statistics, including average lines of code, number of files, number of functions, cyclomatic complexity, as well as project popularity (measured by stars) and paper citation counts. These statistics indicate that the 3Codebases 
+
+> Candidate code units
+
+Code Function Extraction Code extraction 
+
+> AST parsing
+> Function -level snippets
+> Retaining function Body
+> Normalization
+> Code extraction
+> AST parsing
+> Function -level snippets
+> Retaining function Body
+> Normalization
+> Candidate code units
+> Candidate code units
+> ...
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Codebase
+> Codebase
+> Codebase
+> ...
+> Candidate code units
+
+Code Function Extraction Code extraction 
+
+> AST parsing
+> Function -level snippets
+> Retaining function Body
+> Normalization
+> Candidate code units
+> Candidate code units
+> ...
+> Codebases
+> Codebases
+> Codebases
+> Codebase
+> Codebase
+> Codebase
+> ...
+
+Sentence -Code Pair Generation  
+
+> Cosine
+> similarity
+> Candidate
+> sentence set
+> Candidate
+> code units
+> Retrieve Top -10
+> relevant
+> functions
+> Pair with Top -1
+> function Positive samples
+> In -repository hard negatives
+> Cross -repository random negatives
+> Negative Sampling Strategy
+> In -repository hard negatives
+> Cross -repository random negatives
+> Negative Sampling Strategy
+> BioCon
+> Manual verification
+
+Sentence -Code Pair Generation  
+
+> Cosine
+> similarity
+> Candidate
+> sentence set
+> Candidate
+> code units
+> Retrieve Top -10
+> relevant
+> functions
+> Pair with Top -1
+> function Positive samples
+> In -repository hard negatives
+> Cross -repository random negatives
+> Negative Sampling Strategy
+> BioCon
+> Manual verification
+> Candidate sentence set
+
+Paper Sentence Extraction 
+
+> Codebases
+> Codebases
+> Paper PDFs
+> Codebases
+> Codebases
+> Paper PDFs
+> Paper
+> Paper
+> Paper
+> ...
+> Candidate sentence set
+> Candidate sentence set
+> ...
+> Sentence extraction
+> GROBID parsing
+> Sentence segmentation
+> Removing
+> Keyword -based filtering
+> Candidate sentence set
+
+Paper Sentence Extraction 
+
+> Codebases
+> Codebases
+> Paper PDFs
+> Paper
+> Paper
+> Paper
+> ...
+> Candidate sentence set
+> Candidate sentence set
+> ...
+> Sentence extraction
+> GROBID parsing
+> Sentence segmentation
+> Removing
+> Keyword -based filtering
+> Bioinformatics
+> repositories
+> Corresponding
+> papers
+> Filtering
+
+Data Source Collection   
+
+> Codebases
+> Codebases 54 bioinformatics
+> projects
+> Codebases
+> Codebases 54 bioinformatics
+> projects
+> 48 High -qualit y pr ojects
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Paper PDFs
+> Codebases
+> Codebases
+> Paper PDFs
+> 48 High -qualit y pr ojects
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Paper PDFs
+> Bioinformatics
+> repositories
+> Corresponding
+> papers
+> Filtering
+
+Data Source Collection  
+
+> Codebases
+> Codebases 54 bioinformatics
+> projects
+> 48 High -qualit y pr ojects
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Codebases
+> Paper PDFs
+> Paper PDFs  Code units
+> Sentence set
+
+Figure 1: Overall building flow of BioCon. Table 1: Metrics of bioinformatics software. 
+
+Metrics Value Metrics Value 
+
+Lines of Code 19134 Cyclomatic Complexity 2732 Number of Files 76 Number of Stars 355 Number of Functions 681 Citation Count 603 selected projects are substantial in both scale and complexity, rendering manual, sentence-level consistency analysis impractical in real-world settings. Moreover, the relatively high star counts and citation numbers suggest that these projects are representative and influential within the domain, providing a reliable foundation for paper-code consistency detection. 
+
+3.2 Paper Sentence Extraction 
+
+To obtain paper sentences relevant to code implementation, we extract sentence-level descriptions from the full text of each paper as natural language units. The process proceeds as follows. First, we use GROBID to parse each paper PDF into structured text. GROBID is specifically optimized for academic documents and can accurately identify structural elements such as sections (e.g., Methods, Experiments). Next, we perform sentence segmentation to divide the text into sentence-level units. Based on section information, we remove content unrelated to implementation, such as references, appendices, conclusions, and acknowledgments. However, even within retained sections, some sentences may still be irrelevant (e.g., background descriptions or result analyses). Therefore, we further apply keyword-based filtering to prioritize sentences closely related to methodological implementation. As a result, for each paper, we obtain a high-quality set of candidate sentences, which are treated as potential method descriptions and will be semantically aligned with code functions in subsequent steps. 
+
+3.3 Code Function Extraction 
+
+Given the collected repositories, we perform function-level parsing of source code to construct code units suitable for semantic modeling. Specifically, we parse Python source code using Abstract Syntax Trees (ASTs) and extract function-level code snippets. Function-level granularity strikes a balance between semantic completeness and manageable input length, making it well-suited for the paper-code consistency detection task. For each function, we retain the complete function body as the primary representation and additionally record metadata such as function names, file paths, and associated comments. These auxiliary signals provide useful semantic cues for both model training and manual annotation. 4Table 2: BioCon details. 
+
+Split # Projects # Consistent # Inconsistent Total 
+
+Train 38 957 4785 5742 Validation 5 90 450 540 Test 5 83 415 498 Total 48 1130 5650 6780 Furthermore, we apply normalization procedures to the code, such as removing blank lines and redundant formatting tokens, to ensure consistency in input representation. Ultimately, each software project is represented as a collection of function-level code units, where each function serves as a candidate implementation unit in the subsequent matching process. 
+
+3.4 Sentence-Code Pair Generation 
+
+After obtaining the sets of paper sentences and code functions, we construct sentence-code pairs as samples for the consistency detection task. For each paper sentence, we first retrieve the Top-10 most semantically relevant functions from the corresponding repository using cosine similarity, thereby narrowing the candidate space and reducing annotation effort. We then pair each sentence with its Top-1 candidate function and conduct manual verification by three domain experts (from bioinformatics, software engineering, and computer science). A pair is labeled as consistent only if all three experts unanimously agree that the function implements the functionality described in the sentence. To mitigate subjectivity in annotation, all other cases are discarded without labeling. Through this process, we obtain a set of high-confidence positive samples, ensuring clear semantic correspondence between paper descriptions and code implementations while effectively avoiding noise from irrelevant combinations. 
+
+3.5 Negative Sampling Strategy 
+
+To construct negative samples and enhance the discriminative capability of the framework, we design a hybrid negative sampling strategy that combines hard negatives and random negatives. Specifically, for each positive sentence–code pair, we generate negative samples from two sources: 1. In-repository hard negatives : Functions from the same repository that are semantically related but inconsistent with the sentence. In practice, functions ranked Top-5 to Top-10 during retrieval often exhibit high semantic similarity but do not implement the described functionality. 2. Cross-repository random negatives : Functions randomly sampled from different repositories and paired with the sentence. These samples are introduced to reflect real-world scenarios in bioinformatics, where code reuse or adaptation across similar projects may occur, potentially leading to misleading semantic similarity and affecting reliability. For each sentence, we construct two hard negatives and three random negatives to enhance both diversity and realism of the dataset. Compared to random negatives, hard negatives are more challenging and prevent the model from relying on superficial cues such as keyword overlap, thereby improving its ability to capture deep semantic consistency. 
+
+3.6 Benchmark Statistics 
+
+Following the above procedure, we construct BioCon, a benchmark dataset for paper-code consistency detection consisting of paper sentences and function-level code snippets. Each sample in BioCon contains three components: a paper sentence, a code function, and a binary consistency label. To prevent data leakage and evaluate generalization to unseen software projects, we split BioCon at the project level into training, validation, and test sets with a ratio of 8:1:1. Detailed statistics are presented in Table 2. 5Consistent    
+
+> Inconsistent
+> Paper sentence
+> (s)
+> Code snippet
+> (c)
+> x = [CLS] s [SEP] c [SEP]
+> Weighted Focal
+> Loss
+> Pre -trained Model
+> Weights Transfer
+> Encoder Cls head Encoder Cls head
+> Probability
+
+Figure 2: Cross-modal consistency detection framework. 
+
+4 Method 
+
+This section first provides a formal definition of the paper-code consistency detection task. We then present a cross-modal consistency detection framework based on pre-trained language models, followed by the training objective. 
+
+4.1 Task Definition 
+
+The goal of paper-code consistency detection in bioinformatics is to determine whether a methodological description in a research paper is semantically consistent with a corresponding software implementation. Specifically, given a sentence s describing a method from a paper and a function-level code snippet c, the task is to automatically determine whether the function implements the functionality described in the sentence. Formally, we define a decision function: 
+
+f (s, c ) → y (1) where y ∈ { 0, 1} denotes the consistency label. A value of y = 1 indicates that the code function implements the functionality described in the sentence, while y = 0 indicates no such relationship. Based on this formulation, each sample in BioCon is represented as a triplet (s, c, y ). The core challenge of this task lies in learning cross-modal semantic representations that bridge natural language descriptions and code implementations, thereby enabling automated consistency prediction and assisting researchers in analyzing the correspondence between papers and software systems. 
+
+4.2 Cross-modal Consistency Detection Framework 
+
+To effectively model consistency between bioinformatics papers and code, we propose a cross-modal consistency detection framework based on pre-trained language models. The overall architecture is illustrated in Figure 2. 
+
+Input Representation. For each sentence-code pair, we construct a unified input sequence by concatenating the paper sentence and the code snippet: 
+
+x = [ CLS ] sentence [SEP ] code [SEP ] (2) where [CLS ] is the classification token and [SEP ] separates the sentence and code segments. This representation enables the model to jointly encode natural language and code within a shared context, facilitating cross-modal interaction. 
+
+Encoder. We adopt UniXcoder [ 19 ] as the backbone encoder. UniXcoder is a unified code representation model pre-trained on large-scale corpora of code and natural language, which enables it to capture the alignment between program semantics and textual descriptions. Notably, the proposed framework is model-agnostic and can be instantiated with other pre-trained models; comparative results are reported in Table 3. Given the input sequence x, the encoder produces contextualized hidden representations: 
+
+H = Encoder (x), H ∈ RT ×d (3) where T denotes the sequence length and d is the hidden dimension. 6To obtain a global representation of the sentence-code pair, we use the hidden state corresponding to the [CLS ] token: 
+
+h = HCLS (4) which serves as an aggregated semantic representation capturing the relationship between the paper sentence and the code function. 
+
+Classification Head. Based on the global representation, we apply a linear classification layer to predict the consistency label: 
+
+z = W h + b (5) where W and b are learnable parameters, and z denotes the logits. The final probability distribution over classes is obtained via the softmax function: 
+
+p = Softmax( z) (6) 
+
+4.3 Training Objective 
+
+In real-world bioinformatics scenarios, the majority of sentence-code pairs are inconsistent. Consequently, the BioCon dataset exhibits a significant class imbalance. Directly applying the standard cross-entropy loss may bias the model toward the majority class, thereby degrading its ability to identify consistent pairs. To address this issue, we adopt weighted Focal Loss as the training objective to emphasize hard examples and minority-class samples. The standard cross-entropy loss for a sample is defined as: 
+
+LCE = − log( py ) (7) where py is the predicted probability for the ground-truth label y.Focal Loss [35] introduces a modulating factor to reduce the contribution of easily classified samples: 
+
+LF L = −(1 − py )γ log( py ) (8) where γ is the focusing parameter that controls the degree of emphasis on hard samples. To further mitigate class imbalance, we incorporate a weighting factor α to assign higher importance to minority-class samples. The final weighted Focal Loss is defined as: 
+
+L = −α(1 − py )γ log( py ) (9) During training, we optimize model parameters by minimizing the above loss function. This formulation improves the model’s discriminative capability under imbalanced conditions and enhances its effectiveness in real-world paper-code consistency detection scenarios. 
+
+5 Experiments 
+
+5.1 Experimental Setup Baselines. To evaluate the effectiveness of the proposed framework and the BioCon benchmark, we consider several representative pre-trained language models as backbone encoders, including CodeBERT [ 18 ], UniXcoder [ 19 ], CodeT5+ [ 21 ], and CodeGen [ 36 ]. These models have demonstrated strong performance across a variety of code-related tasks and thus serve as competitive baselines. Given that different encoders impose different input length constraints, we standardize the maximum input length to 512 tokens for fair comparison. For samples exceeding this limit, we truncate the code portion while preserving the complete paper sentence to avoid information loss in method descriptions. During training, all models are optimized using weighted Focal Loss, with the focusing parameter γ = 2 and class weights 
+
+α = [1 .0, 5.0] , to mitigate the impact of class imbalance. 
+
+Implementation details. All experiments are conducted on eight NVIDIA RTX 4090 GPUs. Pre-trained model weights are loaded via Hugging Face [ 37 ]. We adopt the AdamW optimizer with a learning rate of 2e-5, a batch size of 16, and train for 10 epochs. Early stopping is applied based on validation performance, and the best model checkpoint is selected accordingly. To reduce the impact of randomness, all reported results are averaged over three runs with different random seeds. 
+
+Evaluation Metrics. To comprehensively evaluate performance on the paper–code consistency detection task, we employ multiple metrics. In addition to accuracy (Acc) and macro-F1 (F1), we report the Matthews correlation coefficient (MCC) [ 38 , 39 ] as a key evaluation metric. Unlike Acc and F1, MCC provides a balanced measure of classification performance across both positive and negative classes and is particularly robust under class imbalance. Therefore, MCC serves as an important complementary metric for assessing the discriminative capability of models in this task. Note that Acc and F1 range from [0 , 1] , while MCC ranges from [−1, 1] .7Table 3: Performance of different pre-trained models on BioCon. 
+
+Encoder Acc F1 MCC 
+
+CodeBERT 0.8594 0.7495 0.4989 CodeT5+ 0.8574 0.7446 0.4892 CodeGen 0.8514 0.7273 0.4547 
+
+UniXcoder 0.9056 0.8011 0.6239 5.2 Main Results 
+
+Table 3 presents the overall performance of different encoders on the BioCon test set. All models are trained under identical settings, with only the encoder component varied, to isolate its impact on cross-modal consistency modeling. The results show that all pre-trained models achieve relatively strong performance, indicating that the task can be effectively addressed through cross-modal representation learning. This also validates the feasibility of the BioCon benchmark and the task formulation. Among all models, UniXcoder achieves the best performance across all evaluation metrics. Compared to CodeBERT, it improves accuracy by 0.0462 and F1 by 0.0516, with a particularly notable gain of approximately 0.125 in MCC, highlighting its superior discriminative ability under imbalanced data conditions. This advantage can be attributed to UniXcoder’s unified representation learning mechanism, which enables more effective modeling of deep semantic alignment between natural language and code. Notably, while other models exhibit performance close to UniXcoder in terms of Acc and F1, they show a significant gap in MCC. This suggests that although these models perform well in overall classification accuracy, they are less effective at handling class imbalance, particularly in identifying minority-class (consistent) samples. In contrast, CodeGen underperforms across all metrics, indicating relatively weaker generalization ability for this task. This may be due to its pre-training objective, which primarily focuses on code generation or understanding, rather than explicitly modeling semantic alignment between code and natural language. As a result, it is less effective in capturing the complex cross-modal relationships required for paper–code consistency detection. 
+
+5.3 Ablation Study 
+
+To further analyze the contribution of key design components, we conduct ablation studies from two perspectives: decision threshold selection and loss function design. Unless otherwise specified, all experiments in this section are based on UniXcoder [19] with identical training settings. 
+
+(1) Effect of Decision Threshold. Due to the significant class imbalance in BioCon, model outputs must be binarized using a decision threshold. Although weighted Focal Loss is applied during training, the final predictions still depend on threshold selection. We vary the threshold from 0.4 to 0.6 with a step size of 0.05 and evaluate its impact on Acc, F1, and MCC. As shown in Table 4, the best performance is achieved at the default threshold of 0.5, where Acc, F1, and MCC reach 0.9056, 0.8011, and 0.6239, respectively. When the threshold decreases to 0.4, the model tends to predict more positive samples, increasing recall but introducing a large number of false positives. Given the dominance of negative samples, this leads to a sharp drop in precision, and consequently lower F1 and MCC. Conversely, when the threshold increases to 0.6, the model becomes more conservative, resulting in reduced recall for positive samples. Although precision improves, F1 and MCC decrease to 0.7730 and 0.5831, respectively, indicating degraded overall performance. This phenomenon can be explained from two perspectives. First, weighted Focal Loss effectively calibrates prediction probabilities by emphasizing hard samples and balancing class contributions, resulting in well-separated probability distributions even under class imbalance, making 0.5 a natural and optimal decision boundary. Second, the peak MCC at 0.5 further confirms that this threshold yields the best agreement between predictions and ground truth. 
+
+(2) Effect of Loss Function. To evaluate the effectiveness of weighted Focal Loss, we compare it with three alternative loss functions: Cross Entropy, Focal Loss [ 35 ], and Weighted Cross Entropy [ 40 ], while keeping all other settings unchanged. As shown in Table 5, standard cross-entropy achieves an accuracy of 0.8795 but yields relatively low F1 (0.6983) and MCC (0.4870). This indicates that under class imbalance, cross-entropy tends to bias the model toward the majority class, resulting in poor recall for consistent samples. Focal Loss improves performance by emphasizing hard samples, increasing F1 to 0.7646 and MCC to 0.5367, demonstrating the effectiveness of hard example mining. Weighted Cross 8Table 4: Effect of threshold selection. 
+
+Threshold Acc F1 MCC 
+
+0.4 0.8594 0.7446 0.4891 0.45 0.8896 0.7806 0.5689 
+
+0.5 0.9056 0.8011 0.6239 
+
+0.55 0.9016 0.7847 0.6025 0.6 0.8976 0.7730 0.5831 Table 5: Effect of different loss functions. 
+
+Loss Function Acc F1 MCC 
+
+Cross Entropy 0.8795 0.6983 0.4870 Focal Loss 0.8815 0.7646 0.5367 Weighted Cross Entropy 0.8996 0.7971 0.6053 
+
+Weighted Focal Loss 0.9056 0.8011 0.6239 
+
+Entropy further improves F1 to 0.7971 and MCC to 0.6053 by directly adjusting class importance, suggesting that class reweighting is particularly effective for imbalanced consistency detection tasks. Finally, weighted Focal Loss combines the strengths of both approaches. By simultaneously addressing class imbalance and emphasizing hard samples, it achieves the best overall performance. This enables the model to balance precision on the majority class with recall on the minority class, making it particularly well-suited for the highly imbalanced paper-code consistency detection task. 
+
+6 Discussion 
+
+This section provides an in-depth analysis of the paper-code consistency detection task from the perspectives of task characteristics, practical implications, and threats to validity. 
+
+6.1 Why Is Paper-Code Consistency Detection Challenging? 
+
+Although the proposed BioCon benchmark and consistency detection framework achieve strong performance across multiple metrics, our results indicate that the task remains inherently challenging. This difficulty primarily arises from the complex and asymmetric semantic mapping between paper descriptions and code implementations. First, methodological descriptions in bioinformatics papers are typically highly abstract, often summarizing overall algorithmic workflows in a concise manner. In contrast, the corresponding code implementations decompose these workflows into multiple functions or modules. This one-to-many semantic mapping makes it difficult for simple text-code matching approaches to accurately capture the underlying correspondence. Second, bioinformatics papers contain substantial content unrelated to implementation, such as background information, related work, and experimental analysis. Even at the sentence level, accurately identifying sentences that genuinely describe implementation details remains a non-trivial challenge. Furthermore, bioinformatics software often involves numerous engineering-specific details, such as DNA/RNA data preprocessing, parameter configurations, and data cleaning procedures, which are frequently omitted or only partially described in papers. This information asymmetry further exacerbates the difficulty of consistency detection between papers and code. 
+
+6.2 Practical Implications 
+
+Paper-code consistency detection is not only a challenging research problem but also of significant practical value. First, in research practice, it can assist researchers in efficiently assessing the consistency between paper descriptions and code implementations, thereby providing an indication of reproducibility and reducing the cost of blind reproduction attempts. Second, in software maintenance and evolution, this task can help developers identify discrepancies between documented methods and actual implementations, reducing misunderstandings and errors caused by inconsistent documentation. 9Moreover, paper-code consistency detection can serve as a fundamental component for cross-modal software under-standing. For example, it can enable automatic recommendation of relevant implementation functions when reading a paper, or assist in locating corresponding methodological descriptions when analyzing source code, thereby facilitating more efficient comprehension and knowledge discovery in scientific software. 
+
+6.3 Threats to Validity 
+
+Despite the systematic design and evaluation presented in this study, several potential threats to validity should be acknowledged. 
+
+Internal Validity. Internal validity concerns whether the experimental design and implementation may affect the reliability of the results. The construction of BioCon relies on sentence–code pair selection and manual annotation. Although we improve data quality through multi-expert annotation and hard negative sampling, annotation noise may still exist. For example, some sentences may only partially describe the functionality of a code segment, introducing ambiguity in the consistency labels. 
+
+External Validity. External validity refers to the generalizability of the findings to broader contexts. BioCon is constructed from bioinformatics software projects and thus exhibits domain-specific characteristics. The applicability of our approach to other domains, such as general software engineering or AI systems, remains to be validated. Differences in writing styles and implementation practices across domains may also affect model generalization. 
+
+Construct Validity. Construct validity concerns whether the task formulation adequately reflects the research objective. In this work, paper–code consistency is modeled as a binary classification problem. However, in practice, consistency relationships may exhibit more complex structures, such as partial consistency or semantic relevance without exact correspondence. Therefore, the current formulation may not fully capture the richness of paper–code relationships. 
+
+Conclusion Validity. Conclusion validity addresses the reliability and interpretability of the findings. Although the aforementioned threats may influence the results to some extent, we believe that the systematic design of the benchmark and the proposed framework provides meaningful insights for this emerging research direction. Future work will extend the task to finer-grained consistency modeling and broader application domains to further validate the robustness and generality of our conclusions. 
+
+7 Conclusion 
+
+This paper introduces and systematically investigates the novel task of paper–code consistency detection. We construct the first benchmark dataset for this task in the bioinformatics domain, termed BioCon, which comprises 48 software projects and their associated publications. BioCon provides a standardized evaluation platform for studying cross-modal semantic consistency between research papers and code implementations. On the methodological side, we propose a unified cross-modal consistency detection framework based on pre-trained models, which effectively captures semantic alignment between methodological descriptions and their corresponding implementations. Experimental results demonstrate that our approach can accurately identify consistency relationships between papers and code, validating both the feasibility and significance of the task. More importantly, this work highlights the importance of bridging the gap between research papers and software implementations. The proposed BioCon benchmark and detection framework not only establish foundational infrastructure for future research but also offer a promising pathway toward improving reproducibility and enabling automated analysis in scientific software. 
+
+References 
+
+[1] Xu-Kai Ma, Yan Yu, Tao Huang, Dake Zhang, Caihuan Tian, Wenli Tang, Ming Luo, Pufeng Du, Guangchuang Yu, and Li Yang. Bioinformatics software development: Principles and future directions. The Innovation Life ,2(3):100083–1, 2024. [2] Teresa K Attwood, Sarah Blackford, Michelle D Brazas, Angela Davies, and Maria Victoria Schneider. A global perspective on evolving bioinformatics and data science training needs. Briefings in bioinformatics , 20(2):398–404, 2019. [3] Xiaoming Liu, Wei Zhang, et al. Bioinformatics in the age of big data: leveraging computational tools for biological discoveries. Computational Molecular Biology , 14, 2024. [4] Nitesh Kumar Sharma, Ram Ayyala, Dhrithi Deshpande, Yesha Patel, Viorel Munteanu, Dumitru Ciorba, Viorel Bostan, Andrada Fiscutean, Mohammad Vahed, Aditya Sarkar, et al. Analytical code sharing practices in biomedical research. PeerJ Computer Science , 10:e2066, 2024. 10 [5] Yujun Xu and Ulrich Mansmann. Validating the knowledge bank approach for personalized prediction of survival in acute myeloid leukemia: a reproducibility study. Human Genetics , 141(9):1467–1480, 2022. [6] Benjamin J Heil, Michael M Hoffman, Florian Markowetz, Su-In Lee, Casey S Greene, and Stephanie C Hicks. Reproducibility standards for machine learning in the life sciences. Nature methods , 18(10):1132–1135, 2021. [7] Odd Erik Gundersen and Sigbjørn Kjensmo. State of the art: Reproducibility in artificial intelligence. In 
+
+Proceedings of the AAAI conference on artificial intelligence , volume 32, 2018. [8] Peter Henderson, Riashat Islam, Philip Bachman, Joelle Pineau, Doina Precup, and David Meger. Deep rein-forcement learning that matters. In Proceedings of the AAAI conference on artificial intelligence , volume 32, 2018. [9] Lázaro Costa, Susana Barbosa, and Jácome Cunha. Let’s talk about it: Making scientific computational repro-ducibility easier. In 2025 IEEE Symposium on Visual Languages and Human-Centric Computing (VL/HCC) ,pages 46–56. IEEE, 2025. [10] Jose Armando Hernandez and Miguel Colom. Reproducible research policies and software/data management in scientific computing journals: a survey, discussion, and perspectives. Frontiers in Computer Science , 6:1491823, 2025. [11] Oscar Karnalim, Simon, and William Chivers. Layered similarity detection for programming plagiarism and collusion on weekly assessments. Computer Applications in Engineering Education , 30(6):1739–1752, 2022. [12] Yicheng Tao, Yao Qin, and Yepang Liu. Retrieval-augmented code generation: A survey with focus on repository-level approaches. arXiv preprint arXiv:2510.04905 , 2025. [13] Quanjun Zhang, Chunrong Fang, Yang Xie, Yaxin Zhang, Yun Yang, Weisong Sun, Shengcheng Yu, and Zhenyu Chen. A survey on large language models for software engineering. arXiv preprint arXiv:2312.15223 , 2023. [14] Daye Nam, Andrew Macvean, Vincent Hellendoorn, Bogdan Vasilescu, and Brad Myers. Using an llm to help with code understanding. In Proceedings of the IEEE/ACM 46th International Conference on Software Engineering ,pages 1–13, 2024. [15] Yixuan Li, Xinyi Liu, Weidong Yang, Ben Fei, Shuhao Li, Mingjie Zhou, and Lipeng Ma. Pseudobridge: Pseudo code as the bridge for better semantic and logic alignment in code retrieval. arXiv preprint arXiv:2509.20881 ,2025. [16] Qianhui Zhao, Li Zhang, Fang Liu, Junhang Cheng, Chengru Wu, Junchen Ai, Qiaoyuanhe Meng, Lichen Zhang, Xiaoli Lian, Shubin Song, et al. Towards realistic project-level code generation via multi-agent collaboration and semantic architecture modeling. arXiv preprint arXiv:2511.03404 , 2025. [17] Victor Weixin Liang, Yuhui Zhang, Yongchan Kwon, Serena Yeung, and James Y Zou. Mind the gap: Under-standing the modality gap in multi-modal contrastive representation learning. Advances in Neural Information Processing Systems , 35:17612–17625, 2022. [18] Zhangyin Feng, Daya Guo, Duyu Tang, Nan Duan, Xiaocheng Feng, Ming Gong, Linjun Shou, Bing Qin, Ting Liu, Daxin Jiang, et al. Codebert: A pre-trained model for programming and natural languages. In Findings of the association for computational linguistics: EMNLP 2020 , pages 1536–1547, 2020. [19] Daya Guo, Shuai Lu, Nan Duan, Yanlin Wang, Ming Zhou, and Jian Yin. Unixcoder: Unified cross-modal pre-training for code representation. In Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers) , pages 7212–7225, 2022. [20] Yue Wang, Weishi Wang, Shafiq Joty, and Steven CH Hoi. Codet5: Identifier-aware unified pre-trained encoder-decoder models for code understanding and generation. In Proceedings of the 2021 conference on empirical methods in natural language processing , pages 8696–8708, 2021. [21] Yue Wang, Hung Le, Akhilesh Gotmare, Nghi Bui, Junnan Li, and Steven Hoi. Codet5+: Open code large language models for code understanding and generation. In Proceedings of the 2023 conference on empirical methods in natural language processing , pages 1069–1088, 2023. [22] Dejiao Zhang, Wasi Ahmad, Ming Tan, Hantian Ding, Ramesh Nallapati, Dan Roth, Xiaofei Ma, and Bing Xiang. Code representation learning at scale. arXiv preprint arXiv:2402.01935 , 2024. [23] Shangqing Liu, Daya Guo, Jian Zhang, Wei Ma, Yanzhou Li, and Yang Liu. An empirical study of exploring the capabilities of large language models in code learning. IEEE Transactions on Software Engineering , 2025. [24] Jiabo Huang, Jianyu Zhao, Yuyang Rong, Yiwen Guo, Yifeng He, and Hao Chen. Code representation pre-training with complements from program executions. In Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track , pages 267–278, 2024. 11 [25] Shiva Radmanesh, Aaron Imani, Iftekhar Ahmed, and Mohammad Moshirpour. Investigating the impact of code comment inconsistency on bug introducing. arXiv preprint arXiv:2409.10781 , 2024. [26] Inderjot Kaur Ratol and Martin P Robillard. Detecting fragile comments. In 2017 32nd IEEE/ACM International Conference on Automated Software Engineering (ASE) , pages 112–122. IEEE, 2017. [27] Theo Steiner and Rui Zhang. Code comment inconsistency detection with bert and longformer. arXiv preprint arXiv:2207.14444 , 2022. [28] Sheena Panthaplackel, Junyi Jessy Li, Milos Gligoric, and Raymond J Mooney. Deep just-in-time inconsistency detection between comments and source code. In Proceedings of the AAAI conference on artificial intelligence ,volume 35, pages 427–435, 2021. [29] Zhengkang Xu, Shikai Guo, Yumiao Wang, Rong Chen, Hui Li, Xiaochen Li, and He Jiang. Code comment inconsistency detection based on confidence learning. IEEE Transactions on Software Engineering , 50(3):598–617, 2024. [30] Guoping Rong, Yongda Yu, Song Liu, Xin Tan, Tianyi Zhang, Haifeng Shen, and Jidong Hu. Code comment inconsistency detection and rectification using a large language model. In Proceedings of the IEEE/ACM 47th International Conference on Software Engineering , pages 1832–1843, 2025. [31] Pelin Icer Baykal, Paweł Piotr Łabaj, Florian Markowetz, Lynn M Schriml, Daniel J Stekhoven, Serghei Mangul, and Niko Beerenwinkel. Genomic reproducibility in the bioinformatics era. Genome Biology , 25(1):213, 2024. [32] Guoyi Zhang, Pekka Ristola, Han Su, Bipin Kumar, Boyu Zhang, Yujin Hu, Michael G Elliot, Viktor Drobot, Jie Zhu, Jens Staal, et al. Bioarchlinux: community-driven fresh reproducible software repository for life sciences. 
+
+Bioinformatics , 41(3):btaf106, 2025. [33] Tim Baumgärtner and Iryna Gurevych. Scicoqa: Quality assurance for scientific paper–code alignment. arXiv preprint arXiv:2601.12910 , 2026. [34] Xiaoyan Zhu, Tianxiang Xu, Xin Lai, Xin Lian, Hangyu Cheng, and Jiayin Wang. Reaching software quality for bioinformatics applications: How far are we? IEEE Transactions on Software Engineering , 2025. [35] Tsung-Yi Lin, Priya Goyal, Ross Girshick, Kaiming He, and Piotr Dollár. Focal loss for dense object detection. In 
+
+Proceedings of the IEEE international conference on computer vision , pages 2980–2988, 2017. [36] Erik Nijkamp, Bo Pang, Hiroaki Hayashi, Lifu Tu, Huan Wang, Yingbo Zhou, Silvio Savarese, and Caiming Xiong. Codegen: An open large language model for code with multi-turn program synthesis. arXiv preprint arXiv:2203.13474 , 2022. [37] Thomas Wolf, Lysandre Debut, Victor Sanh, Julien Chaumond, Clement Delangue, Anthony Moi, Pierric Cistac, Tim Rault, Rémi Louf, Morgan Funtowicz, et al. Transformers: State-of-the-art natural language processing. In 
+
+Proceedings of the 2020 conference on empirical methods in natural language processing: system demonstrations ,pages 38–45, 2020. [38] Davide Chicco, Matthijs J Warrens, and Giuseppe Jurman. The matthews correlation coefficient (mcc) is more informative than cohen’s kappa and brier score in binary classification assessment. Ieee Access , 9:78368–78381, 2021. [39] Chuan Guo, Geoff Pleiss, Yu Sun, and Kilian Q Weinberger. On calibration of modern neural networks. In 
+
+International conference on machine learning , pages 1321–1330. PMLR, 2017. [40] Alexandra N Uma, Tommaso Fornaciari, Dirk Hovy, Silviu Paun, Barbara Plank, and Massimo Poesio. Learning from disagreement: A survey. Journal of Artificial Intelligence Research , 72:1385–1470, 2021. 12
