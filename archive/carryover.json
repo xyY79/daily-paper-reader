@@ -1,83 +1,8 @@
 {
-  "generated_at": "2026-03-27T19:59:44.265997+00:00",
-  "updated_date": "20260327",
+  "generated_at": "2026-03-28T20:02:31.848837+00:00",
+  "updated_date": "20260328",
   "carryover_days": 9,
   "items": [
-    {
-      "id": "2603.25640v1",
-      "title": "RenoBench: A Citation Parsing Benchmark",
-      "abstract": "Accurate parsing of citations is necessary for machine-readable scholarly infrastructure. But, despite sustained interest in this problem, existing evaluation techniques are often not generalizable, based on synthetic data, or not publicly available. We introduce RenoBench, a public domain benchmark for citation parsing, sourced from PDFs released on four publishing ecosystems: SciELO, Redalyc, the Public Knowledge Project, and Open Research Europe. Starting from 161,000 annotated citations, we apply automated validation and feature-based sampling to produce a dataset of 10,000 citations spanning multiple languages, publication types, and platforms. We then evaluate a variety of citation parsing systems and report field-level precision and recall. Our results show strong performance from language models, particularly when fine-tuned. RenoBench enables reproducible, standardized evaluation of citation parsing systems, and provides a foundation for advancing automated citation parsing and metascientific research.",
-      "authors": [
-        "Parth Sarin",
-        "Juan Pablo Alperin",
-        "Adam Buttrick",
-        "Dione Mentis"
-      ],
-      "primary_category": "cs.DL",
-      "categories": [
-        "cs.DL",
-        "cs.CL"
-      ],
-      "published": "2026-03-26T16:52:31+00:00",
-      "link": "https://arxiv.org/pdf/2603.25640v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "citation parsing for scholarly infrastructure",
-      "llm_evidence_cn": "学术基础设施的引用解析",
-      "llm_evidence": "学术基础设施的引用解析",
-      "canonical_evidence": "学术基础设施的引用解析",
-      "llm_tldr_en": "Introduces a benchmark for citation parsing to improve the accuracy of machine-readable scholarly data.",
-      "llm_tldr_cn": "引入引用解析基准，以提高机器可读学术数据的准确性。",
-      "llm_tldr": "引入引用解析基准，以提高机器可读学术数据的准确性。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "systematic approaches to literature search",
-      "matched_requirement_id": "req-7",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.25640v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.25248v1",
-      "title": "ColBERT-Att: Late-Interaction Meets Attention for Enhanced Retrieval",
-      "abstract": "Vector embeddings from pre-trained language models form a core component in Neural Information Retrieval systems across a multitude of knowledge extraction tasks. The paradigm of late interaction, introduced in ColBERT, demonstrates high accuracy along with runtime efficiency. However, the current formulation fails to take into account the attention weights of query and document terms, which intuitively capture the \"importance\" of similarities between them, that might lead to a better understanding of relevance between the queries and documents. This work proposes ColBERT-Att, to explicitly integrate attention mechanism into the late interaction framework for enhanced retrieval performance. Empirical evaluation of ColBERT-Att depicts improvements in recall accuracy on MS-MARCO as well as on a wide range of BEIR and LoTTE benchmark datasets.",
-      "authors": [
-        "Raj Nath Patel",
-        "Sourav Dutta"
-      ],
-      "primary_category": "cs.IR",
-      "categories": [
-        "cs.IR"
-      ],
-      "published": "2026-03-26T09:51:54+00:00",
-      "link": "https://arxiv.org/pdf/2603.25248v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Enhanced retrieval performance through attention-integrated late interaction",
-      "llm_evidence_cn": "通过集成注意力的延迟交互增强检索性能",
-      "llm_evidence": "通过集成注意力的延迟交互增强检索性能",
-      "canonical_evidence": "通过集成注意力的延迟交互增强检索性能",
-      "llm_tldr_en": "ColBERT-Att integrates attention mechanisms into late interaction to improve document retrieval relevance.",
-      "llm_tldr_cn": "ColBERT-Att将注意力机制集成到延迟交互框架中，以提高文档检索的相关性。",
-      "llm_tldr": "ColBERT-Att将注意力机制集成到延迟交互框架中，以提高文档检索的相关性。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "comprehensive research paper discovery",
-      "matched_requirement_id": "req-9",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.25248v1",
-      "carry_days": 1
-    },
     {
       "id": "2603.25737v1",
       "title": "Training the Knowledge Base through Evidence Distillation and Write-Back Enrichment",
@@ -101,98 +26,21 @@
         "query:SR 检索"
       ],
       "llm_score": 8.0,
-      "llm_evidence_en": "Distilling and enriching knowledge bases for improved research discovery",
-      "llm_evidence_cn": "蒸馏和丰富知识库以改进研究发现",
-      "llm_evidence": "蒸馏和丰富知识库以改进研究发现",
-      "canonical_evidence": "蒸馏和丰富知识库以改进研究发现",
-      "llm_tldr_en": "WriteBack-RAG treats the knowledge base as a trainable component to improve retrieval success.",
-      "llm_tldr_cn": "WriteBack-RAG将知识库视为可训练组件，通过蒸馏和回写提高检索成功率。",
-      "llm_tldr": "WriteBack-RAG将知识库视为可训练组件，通过蒸馏和回写提高检索成功率。",
+      "llm_evidence_en": "systematic distillation of relevant documents for retrieval",
+      "llm_evidence_cn": "对检索相关文档进行系统提取",
+      "llm_evidence": "对检索相关文档进行系统提取",
+      "canonical_evidence": "对检索相关文档进行系统提取",
+      "llm_tldr_en": "Improves RAG systems by distilling and enriching the knowledge base for better retrieval.",
+      "llm_tldr_cn": "通过提取和丰富知识库来改进检索增强生成系统的检索效果。",
+      "llm_tldr": "通过提取和丰富知识库来改进检索增强生成系统的检索效果。",
       "llm_tags": [
         "query:sr"
       ],
       "matched_query_tag": "query:sr",
-      "matched_query_text": "comprehensive research paper discovery",
-      "matched_requirement_id": "req-9",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
       "selection_source": "carryover_cache",
       "paper_id": "2603.25737v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.25660v1",
-      "title": "SHAPR: Operationalising Human-AI Collaborative Research Through Structured Knowledge Generation",
-      "abstract": "SHAPR (Solo Human-Centred and AI-Assisted Practice) is a framework for research software development that integrates human-centred decision-making with AI-assisted capabilities. While prior work introduced SHAPR as a conceptual framework, this paper focuses on its operationalisation as a structured, traceable, and knowledge-generating approach to AI-assisted research practice. We present a set of interconnected models describing how research activities are organised through iterative cycles (Explore-Build-Use-Evaluate-Learn), how artefacts evolve through development and use, and how empirical evidence is transformed into conceptual knowledge. Central to this process are Structured Knowledge Units (SKUs), which provide modular and reusable representations of insights derived from practice, supporting knowledge accumulation across cycles. The framework introduces evidence and traceability as a cross-cutting mechanism linking human decisions, AI-assisted development, and artefact evolution to enable transparency, reproducibility, and systematic refinement. SHAPR is also positioned as an AI-executable research framework, as its structured processes and documentation can be interpreted by generative AI systems to guide research workflows. Simultaneously, SHAPR supports a continuum of AI involvement, allowing researchers to balance control, learning, and automation across different contexts. Beyond individual workflows, SHAPR is conceptualised as an integrated research system combining LLM workspaces, development environments, cloud storage, and version control to support scalable, knowledge-centred research practices. Overall, SHAPR provides a practical and theoretically grounded foundation for conducting rigorous, transparent, and reproducible research in AI-assisted environments, contributing to the development of scalable and methodologically sound research practices.",
-      "authors": [
-        "Ka Ching Chan"
-      ],
-      "primary_category": "cs.SE",
-      "categories": [
-        "cs.SE"
-      ],
-      "published": "2026-03-26T17:14:39+00:00",
-      "link": "https://arxiv.org/pdf/2603.25660v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "structured knowledge generation approach to AI-assisted research practice",
-      "llm_evidence_cn": "AI 辅助研究实践的结构化知识生成方法",
-      "llm_evidence": "AI 辅助研究实践的结构化知识生成方法",
-      "canonical_evidence": "AI 辅助研究实践的结构化知识生成方法",
-      "llm_tldr_en": "Operationalises a framework for research software development that transforms empirical evidence into conceptual knowledge.",
-      "llm_tldr_cn": "将研究软件开发框架业务化，将经验证据转化为概念知识。",
-      "llm_tldr": "将研究软件开发框架业务化，将经验证据转化为概念知识。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "methods and approaches in academic research",
-      "matched_requirement_id": "req-6",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.25660v1",
-      "carry_days": 1
-    },
-    {
-      "id": "2603.25293v1",
-      "title": "DAGverse: Building Document-Grounded Semantic DAGs from Scientific Papers",
-      "abstract": "Directed Acyclic Graphs (DAGs) are widely used to represent structured knowledge in scientific and technical domains. However, datasets for real-world DAGs remain scarce because constructing them typically requires expert interpretation of domain documents. We study Doc2SemDAG construction: recovering a preferred semantic DAG from a document together with the cited evidence and context that explain it. This problem is challenging because a document may admit multiple plausible abstractions, the intended structure is often implicit, and the supporting evidence is scattered across prose, equations, captions, and figures. To address these challenges, we leverage scientific papers containing explicit DAG figures as a natural source of supervision. In this setting, the DAG figure provides the DAG structure, while the accompanying text provides context and explanation. We introduce DAGverse, a framework for constructing document-grounded semantic DAGs from online scientific papers. Its core component, DAGverse-Pipeline, is a semi-automatic system designed to produce high-precision semantic DAG examples through figure classification, graph reconstruction, semantic grounding, and validation. As a case study, we test the framework for causal DAGs and release DAGverse-1, a dataset of 108 expert-validated semantic DAGs with graph-level, node-level, and edge-level evidence. Experiments show that DAGverse-Pipeline outperforms existing Vision-Language Models on DAG classification and annotation. DAGverse provides a foundation for document-grounded DAG benchmarks and opens new directions for studying structured reasoning grounded in real-world evidence.",
-      "authors": [
-        "Shu Wan",
-        "Saketh Vishnubhatla",
-        "Iskander Kushbay",
-        "Tom Heffernan",
-        "Aaron Belikoff",
-        "Raha Moraffah",
-        "Huan Liu"
-      ],
-      "primary_category": "cs.AI",
-      "categories": [
-        "cs.AI",
-        "cs.CL"
-      ],
-      "published": "2026-03-26T10:33:12+00:00",
-      "link": "https://arxiv.org/pdf/2603.25293v1",
-      "tags": [
-        "keyword:SR 检索",
-        "query:SR 检索"
-      ],
-      "llm_score": 8.0,
-      "llm_evidence_en": "Recovering semantic structures from scientific papers and cited evidence",
-      "llm_evidence_cn": "从科学论文和引用证据中恢复语义结构",
-      "llm_evidence": "从科学论文和引用证据中恢复语义结构",
-      "canonical_evidence": "从科学论文和引用证据中恢复语义结构",
-      "llm_tldr_en": "Introduces a method to build semantic Directed Acyclic Graphs from scientific papers and their citations.",
-      "llm_tldr_cn": "提出一种从科学论文及其引用中构建语义有向无环图的方法。",
-      "llm_tldr": "提出一种从科学论文及其引用中构建语义有向无环图的方法。",
-      "llm_tags": [
-        "query:sr"
-      ],
-      "matched_query_tag": "query:sr",
-      "matched_query_text": "identifying key research in a field",
-      "matched_requirement_id": "req-8",
-      "selection_source": "carryover_cache",
-      "paper_id": "2603.25293v1",
       "carry_days": 1
     }
   ]

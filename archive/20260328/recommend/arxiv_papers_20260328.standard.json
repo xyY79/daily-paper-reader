@@ -1,0 +1,649 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-28T20:02:31.847790+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 11,
+    "deep_cap": 6,
+    "deep_selected": 6,
+    "quick_candidates": 33,
+    "quick_skim_target": 11,
+    "quick_selected": 11
+  },
+  "deep_dive": [
+    {
+      "id": "2603.24402v2",
+      "title": "AI-Supervisor: Autonomous AI Research Supervision via a Persistent Research World Model",
+      "abstract": "Existing automated research systems operate as stateless, linear pipelines -- generating outputs without maintaining any persistent understanding of the research landscape they navigate. They process papers sequentially, propose ideas without structured gap analysis, and lack mechanisms for agents to verify, challenge, or refine each other's findings. We present \\textbf{AI-Supervisor}, a multi-agent orchestration framework where specialized agents provide end-to-end AI research supervision driven by human interests -- from literature review through gap discovery, method development, evaluation, and paper writing -- through autonomous exploration and self-correcting updates of research knowledge. Unlike sequential pipelines, AI-Supervisor maintains a continuously evolving \\emph{Research World Model}, implemented as a Knowledge Graph, that captures methods, benchmarks, known limitations, and unexplored gaps, serving as shared memory across all agents and enabling agents to explore and build upon a structured understanding of the research landscape. The framework introduces three architectural contributions: (1) \\emph{structured gap discovery} that decomposes methods into core modules, validates their performance across benchmarks, and maps the specific gaps each module creates; (2) \\emph{self-correcting discovery loops} that probe why modules succeed on certain problems and fail on others, whether benchmarks carry hidden biases, and whether evaluation protocols remain adequate for emerging challenges; and (3) \\emph{self-improving development loops} governed by cross-domain mechanism search that iteratively targets failing modules by finding solutions from other scientific fields. All agents operate under a \\emph{consensus mechanism} where independent findings are corroborated before being committed to the Research World Model.",
+      "authors": [
+        "Yunbo Long"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-25T15:16:51+00:00",
+      "link": "https://arxiv.org/pdf/2603.24402v2",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 10.0,
+      "llm_evidence_en": "Autonomous AI research supervision including literature review",
+      "llm_evidence_cn": "包括文献综述在内的自主AI研究监督",
+      "llm_evidence": "包括文献综述在内的自主AI研究监督",
+      "canonical_evidence": "包括文献综述在内的自主AI研究监督",
+      "llm_tldr_en": "AI-Supervisor automates the research lifecycle from literature review to paper writing using multi-agent systems.",
+      "llm_tldr_cn": "AI-Supervisor利用多智能体系统自动化了从文献综述到论文撰写的整个研究生命周期。",
+      "llm_tldr": "AI-Supervisor利用多智能体系统自动化了从文献综述到论文撰写的整个研究生命周期。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.22344v1",
+      "title": "Errors in AI-Assisted Retrieval of Medical Literature: A Comparative Study",
+      "abstract": "Large language models (LLMs) assisted literature retrieval may lead to erroneous references, but these errors have not been rigorously quantified. Therefore, we quantitatively assess errors in reference retrieval of widely used free-version LLM platforms and identify the factors associated with retrieval errors. We evaluated 2,000 references retrieved by 5 LLMs (Grok-2, ChatGPT GPT-4.1, Google Gemini Flash 2.5, Perplexity AI, and DeepSeek GPT-4) for 40 randomly-selected original articles (10 per journal) published Jan. 2024 to July 2025 from British Medical Journal (BMJ), Journal of the American Medical Association, and The New England Journal of Medicine (NEJM). Primary outcomes were a multimetric score ratio combining validity of digital object identifier, PubMed ID, Google-Scholar link, and relevance; and complete miss rate (proportion of references failing all applicable metrics). Multivariable regression was used to examine independent associations. LLM platforms completely failed to retrieve correct reference data 47.8% of the time. The average score ratio of the 5 LLM platforms was 0.29 (standard deviation, 0.35; range, 0-1.25), with a higher score ratio indicating a higher accuracy in retrieving relevant references and correct bibliographic data. The highest and lowest accuracies were achieved by Grok (0.57) and Genimi (0.11), respectively. Compared with BMJ, NEJM articles had lower score ratios and higher complete miss rates. Multivariable analysis shows LLM platforms and journals were independently associated with score ratios and complete miss rate, respectively. We show modest overall performance of LLMs and significant variability in retrieval accuracy across platforms and journals. LLM platforms and journals are associated with LLM's performance in retrieving medical literature. Bibliographic data should be carefully reviewed when using LLM-assisted literature retrieval.",
+      "authors": [
+        "Jenny Gao",
+        "Yongfeng Zhang",
+        "Mary L Disis",
+        "Lanjing Zhang"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.LG",
+        "stat.AP",
+        "stat.ME"
+      ],
+      "published": "2026-03-21T21:39:55+00:00",
+      "link": "https://arxiv.org/pdf/2603.22344v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Quantifying errors in AI-assisted medical literature retrieval",
+      "llm_evidence_cn": "量化AI辅助医学文献检索中的错误",
+      "llm_evidence": "量化AI辅助医学文献检索中的错误",
+      "canonical_evidence": "量化AI辅助医学文献检索中的错误",
+      "llm_tldr_en": "Evaluates the accuracy and error factors of various LLMs in retrieving medical literature references.",
+      "llm_tldr_cn": "评估了多种大模型在检索医学文献引用时的准确性及产生错误的因素。",
+      "llm_tldr": "评估了多种大模型在检索医学文献引用时的准确性及产生错误的因素。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.25248v1",
+      "title": "ColBERT-Att: Late-Interaction Meets Attention for Enhanced Retrieval",
+      "abstract": "Vector embeddings from pre-trained language models form a core component in Neural Information Retrieval systems across a multitude of knowledge extraction tasks. The paradigm of late interaction, introduced in ColBERT, demonstrates high accuracy along with runtime efficiency. However, the current formulation fails to take into account the attention weights of query and document terms, which intuitively capture the \"importance\" of similarities between them, that might lead to a better understanding of relevance between the queries and documents. This work proposes ColBERT-Att, to explicitly integrate attention mechanism into the late interaction framework for enhanced retrieval performance. Empirical evaluation of ColBERT-Att depicts improvements in recall accuracy on MS-MARCO as well as on a wide range of BEIR and LoTTE benchmark datasets.",
+      "authors": [
+        "Raj Nath Patel",
+        "Sourav Dutta"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-03-26T09:51:54+00:00",
+      "link": "https://arxiv.org/pdf/2603.25248v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Enhanced retrieval performance using late-interaction and attention",
+      "llm_evidence_cn": "利用延迟交互和注意力机制增强检索性能",
+      "llm_evidence": "利用延迟交互和注意力机制增强检索性能",
+      "canonical_evidence": "利用延迟交互和注意力机制增强检索性能",
+      "llm_tldr_en": "Integrates attention mechanisms into ColBERT to improve relevance understanding in neural information retrieval.",
+      "llm_tldr_cn": "将注意力机制集成到 ColBERT 中，以提高神经信息检索中的相关性理解。",
+      "llm_tldr": "将注意力机制集成到 ColBERT 中，以提高神经信息检索中的相关性理解。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.25660v1",
+      "title": "SHAPR: Operationalising Human-AI Collaborative Research Through Structured Knowledge Generation",
+      "abstract": "SHAPR (Solo Human-Centred and AI-Assisted Practice) is a framework for research software development that integrates human-centred decision-making with AI-assisted capabilities. While prior work introduced SHAPR as a conceptual framework, this paper focuses on its operationalisation as a structured, traceable, and knowledge-generating approach to AI-assisted research practice. We present a set of interconnected models describing how research activities are organised through iterative cycles (Explore-Build-Use-Evaluate-Learn), how artefacts evolve through development and use, and how empirical evidence is transformed into conceptual knowledge. Central to this process are Structured Knowledge Units (SKUs), which provide modular and reusable representations of insights derived from practice, supporting knowledge accumulation across cycles. The framework introduces evidence and traceability as a cross-cutting mechanism linking human decisions, AI-assisted development, and artefact evolution to enable transparency, reproducibility, and systematic refinement. SHAPR is also positioned as an AI-executable research framework, as its structured processes and documentation can be interpreted by generative AI systems to guide research workflows. Simultaneously, SHAPR supports a continuum of AI involvement, allowing researchers to balance control, learning, and automation across different contexts. Beyond individual workflows, SHAPR is conceptualised as an integrated research system combining LLM workspaces, development environments, cloud storage, and version control to support scalable, knowledge-centred research practices. Overall, SHAPR provides a practical and theoretically grounded foundation for conducting rigorous, transparent, and reproducible research in AI-assisted environments, contributing to the development of scalable and methodologically sound research practices.",
+      "authors": [
+        "Ka Ching Chan"
+      ],
+      "primary_category": "cs.SE",
+      "categories": [
+        "cs.SE"
+      ],
+      "published": "2026-03-26T17:14:39+00:00",
+      "link": "https://arxiv.org/pdf/2603.25660v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "structured knowledge generation in research practice",
+      "llm_evidence_cn": "学术研究实践中的结构化知识生成",
+      "llm_evidence": "学术研究实践中的结构化知识生成",
+      "canonical_evidence": "学术研究实践中的结构化知识生成",
+      "llm_tldr_en": "SHAPR framework operationalizes AI-assisted research through structured knowledge units and iterative cycles.",
+      "llm_tldr_cn": "SHAPR框架通过结构化知识单元和迭代循环，实现了人工智能辅助的学术研究实践。",
+      "llm_tldr": "SHAPR框架通过结构化知识单元和迭代循环，实现了人工智能辅助的学术研究实践。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.20670v1",
+      "title": "Towards Intelligent Geospatial Data Discovery: a knowledge graph-driven multi-agent framework powered by large language models",
+      "abstract": "The rapid growth in the volume, variety, and velocity of geospatial data has created data ecosystems that are highly distributed, heterogeneous, and semantically inconsistent. Existing data catalogs, portals, and infrastructures still rely largely on keyword-based search with limited semantic support, which often fails to capture user intent and leads to weak retrieval performance. To address these challenges, this study proposes a knowledge graph-driven multi-agent framework for intelligent geospatial data discovery, powered by large language models. The framework introduces a unified geospatial metadata ontology as a semantic mediation layer to align heterogeneous metadata standards across platforms and constructs a geospatial metadata knowledge graph to explicitly model datasets and their multidimensional relationships. Building on the structured representation, the framework adopts a multi-agent collaborative architecture to perform intent parsing, knowledge graph retrieval, and answer synthesis, forming an interpretable and closed-loop discovery process from user queries to results. Results from representative use cases and performance evaluation show that the framework substantially improves intent matching accuracy, ranking quality, recall, and discovery transparency compared with traditional systems. This study advances geospatial data discovery toward a more semantic, intent-aware, and intelligent paradigm, providing a practical foundation for next-generation intelligent and autonomous spatial data infrastructures and contributing to the broader vision of Autonomous GIS.",
+      "authors": [
+        "Ruixiang Liu",
+        "Zhenlong Li",
+        "Ali Khosravi Kazazi"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.MA"
+      ],
+      "published": "2026-03-21T06:16:56+00:00",
+      "link": "https://arxiv.org/pdf/2603.20670v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "intelligent geospatial data discovery using knowledge graphs and LLMs",
+      "llm_evidence_cn": "利用知识图谱和大模型进行智能地理空间数据发现",
+      "llm_evidence": "利用知识图谱和大模型进行智能地理空间数据发现",
+      "canonical_evidence": "利用知识图谱和大模型进行智能地理空间数据发现",
+      "llm_tldr_en": "A multi-agent framework for semantic geospatial data discovery to overcome keyword-based search limits.",
+      "llm_tldr_cn": "一种基于知识图谱的多智能体框架，用于克服关键词搜索限制，实现地理数据发现。",
+      "llm_tldr": "一种基于知识图谱的多智能体框架，用于克服关键词搜索限制，实现地理数据发现。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.20673v1",
+      "title": "PAVE: Premise-Aware Validation and Editing for Retrieval-Augmented LLMs",
+      "abstract": "Retrieval-augmented language models can retrieve relevant evidence yet still commit to answers before explicitly checking whether the retrieved context supports the conclusion. We present PAVE (Premise-Grounded Answer Validation and Editing), an inference-time validation layer for evidence-grounded question answering. PAVE decomposes retrieved context into question-conditioned atomic facts, drafts an answer, scores how well that draft is supported by the extracted premises, and revises low-support outputs before finalization. The resulting trace makes answer commitment auditable at the level of explicit premises, support scores, and revision decisions. In controlled ablations with a fixed retriever and backbone, PAVE outperforms simpler post-retrieval baselines in two evidence-grounded QA settings, with the largest gain reaching 32.7 accuracy points on a span-grounded benchmark. We view these findings as proof-of-concept evidence that explicit premise extraction plus support-gated revision can strengthen evidence-grounded consistency in retrieval-augmented LLM systems.",
+      "authors": [
+        "Tianyi Huang",
+        "Caden Yang",
+        "Emily Yin",
+        "Eric Wang",
+        "Michael Zhang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-03-21T06:23:21+00:00",
+      "link": "https://arxiv.org/pdf/2603.20673v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "validation layer for evidence-grounded question answering in retrieval-augmented LLMs",
+      "llm_evidence_cn": "检索增强大语言模型中基于证据问答的验证层",
+      "llm_evidence": "检索增强大语言模型中基于证据问答的验证层",
+      "canonical_evidence": "检索增强大语言模型中基于证据问答的验证层",
+      "llm_tldr_en": "Introduces PAVE to validate and edit answers in retrieval-augmented models based on extracted premises.",
+      "llm_tldr_cn": "引入 PAVE，根据提取的前提验证和编辑检索增强模型中的答案。",
+      "llm_tldr": "引入 PAVE，根据提取的前提验证和编辑检索增强模型中的答案。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2603.21139v1",
+      "title": "Ontology-driven personalized information retrieval for XML documents",
+      "abstract": "This paper addresses the challenge of improving information retrieval from semi-structured eXtensible Markup Language (XML) documents. Traditional information retrieval systems (IRS) often overlook user-specific needs and return identical results for the same query, despite differences in users' knowledge, preferences, and objectives. We integrate external semantic resources, namely a domain ontology and user profiles, into the retrieval process. Documents, queries, and user profiles are represented as vectors of weighted concepts. The ontology applies a concept-weighting mechanism that emphasizes highly specific concepts, as lower-level nodes in the hierarchy provide more precise and targeted information. Relevance is assessed using semantic similarity measures that capture conceptual relationships beyond keyword matching, enabling personalized and fine-grained matching among user profiles, queries, and documents. Experimental results show that combining ontologies with user profiles improves retrieval effectiveness, achieving higher precision and recall than keyword-based approaches. Overall, the proposed framework enhances the relevance and adaptability of XML search results, supporting more user-centered retrieval.",
+      "authors": [
+        "Ounnaci Iddir",
+        "Ahmed-ouamer Rachid",
+        "Tai Dinh"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.LG"
+      ],
+      "published": "2026-03-22T09:29:43+00:00",
+      "link": "https://arxiv.org/pdf/2603.21139v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "ontology-driven personalized information retrieval",
+      "llm_evidence_cn": "本体驱动的个性化信息检索",
+      "llm_evidence": "本体驱动的个性化信息检索",
+      "canonical_evidence": "本体驱动的个性化信息检索",
+      "llm_tldr_en": "This paper uses domain ontologies and user profiles to improve semantic relevance in XML document retrieval.",
+      "llm_tldr_cn": "本文利用领域本体和用户画像来提高XML文档检索中的语义相关性。",
+      "llm_tldr": "本文利用领域本体和用户画像来提高XML文档检索中的语义相关性。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.20059v1",
+      "title": "DIAL-KG: Schema-Free Incremental Knowledge Graph Construction via Dynamic Schema Induction and Evolution-Intent Assessment",
+      "abstract": "Knowledge Graphs (KGs) are foundational to applications such as search, question answering, and recommendation. Conventional knowledge graph construction methods are predominantly static, rely ing on a single-step construction from a fixed corpus with a prede f ined schema. However, such methods are suboptimal for real-world sce narios where data arrives dynamically, as incorporating new informa tion requires complete and computationally expensive graph reconstruc tions. Furthermore, predefined schemas hinder the flexibility of knowl edge graph construction. To address these limitations, we introduce DIAL KG, a closed-loop framework for incremental KG construction orches trated by a Meta-Knowledge Base (MKB). The framework oper ates in a three-stage cycle: (i) Dual-Track Extraction, which ensures knowledge completeness by defaulting to triple generation and switching to event extraction for complex knowledge; (ii) Governance Adjudica tion, which ensures the fidelity and currency of extracted facts to prevent hallucinations and knowledge staleness; and (iii) Schema Evolution, in which new schemas are induced from validated knowledge to guide subsequent construction cycles, and knowledge from the current round is incrementally applied to the existing KG. Extensive experiments demon strate that our framework achieves state-of-the-art (SOTA) performance in the quality of both the constructed graph and the induced schemas.",
+      "authors": [
+        "Weidong Bao",
+        "Yilin Wang",
+        "Ruyu Gao",
+        "Fangling Leng",
+        "Yubin Bao",
+        "Ge Yu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-20T15:39:22+00:00",
+      "link": "https://arxiv.org/pdf/2603.20059v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "incremental knowledge graph construction for search",
+      "llm_evidence_cn": "用于搜索的增量知识图谱构建",
+      "llm_evidence": "用于搜索的增量知识图谱构建",
+      "canonical_evidence": "用于搜索的增量知识图谱构建",
+      "llm_tldr_en": "DIAL-KG enables dynamic, schema-free knowledge graph construction to support evolving search needs.",
+      "llm_tldr_cn": "DIAL-KG实现了动态、无模式的知识图谱构建，以支持不断发展的搜索需求。",
+      "llm_tldr": "DIAL-KG实现了动态、无模式的知识图谱构建，以支持不断发展的搜索需求。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.20432v1",
+      "title": "Coding Agents are Effective Long-Context Processors",
+      "abstract": "Large Language Models (LLMs) have demonstrated remarkable progress in scaling to access massive contexts. However, the access is via the latent and uninterpretable attention mechanisms, and LLMs fail to effective process long context, exhibiting significant performance degradation as context length increases. In this work, we study whether long-context processing can be externalized from latent attention into explicit, executable interactions, by allowing coding agents to organize text in file systems and manipulate it using its native tools. We evaluate off-the-shelf frontier coding agents as the general interface for tasks that require processing long contexts, including long-context reasoning, retrieval-augmented generation, and open-domain question answering with large-scale corpus contains up to three trillion tokens. Across multiple benchmarks, these agents outperform published state-of-the-art by 17.3% on average. We attribute this efficacy to two key factors: native tool proficiency, which enables agents to leverage executable code and terminal commands rather than passive semantic queries, and file system familiarity, which allows them to navigate massive text corpora as directory structures. These findings suggest that delegating long-context processing to coding agents offers an effective alternative to semantic search or context window scaling, opening new directions for long-context processing in LLMs.",
+      "authors": [
+        "Weili Cao",
+        "Xunjian Yin",
+        "Bhuwan Dhingra",
+        "Shuyan Zhou"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-03-20T19:03:20+00:00",
+      "link": "https://arxiv.org/pdf/2603.20432v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "long-context processing for retrieval-augmented generation",
+      "llm_evidence_cn": "用于检索增强生成的长上下文处理",
+      "llm_evidence": "用于检索增强生成的长上下文处理",
+      "canonical_evidence": "用于检索增强生成的长上下文处理",
+      "llm_tldr_en": "Uses coding agents to improve long-context processing in retrieval and reasoning tasks.",
+      "llm_tldr_cn": "利用编码代理改进检索和推理任务中的长上下文处理能力。",
+      "llm_tldr": "利用编码代理改进检索和推理任务中的长上下文处理能力。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.21272v1",
+      "title": "The Library Theorem: How External Organization Governs Agentic Reasoning Capacity",
+      "abstract": "Externalized reasoning is already exploited by transformer-based agents through chain-of-thought, but structured retrieval -- indexing over one's own reasoning state -- remains underexplored. We formalize the transformer context window as an I/O page and prove that tool-augmented agents with indexed external memory achieve exponentially lower retrieval cost than agents restricted to sequential scanning: $O(\\log_b N)$ versus $Ω(N)$ page reads per query, and $O(T \\log_b T)$ versus $Θ(T^2)$ cumulative cost over $T$ reasoning steps -- a gap that widens as deliberation deepens. We test these predictions on a controlled lookup benchmark across three content types -- random hashes, ordered integers, and encyclopedia entries -- varying store size from 50 to 5,000 items, and replicate key conditions across two model generations (GPT-4o-mini and GPT-5.4). On abstract content, the indexed agent achieves median 1 page read regardless of store size, confirming the $O(1)$ prediction. Sorted pages without an index fail to close the gap: the weaker model cannot sustain binary search at scale, and the stronger model achieves near-optimal $\\log_2 N$ search but still loses to the index by $5\\times$. On familiar content (encyclopedia entries), a competing failure mode emerges: the model recognizes the domain, bypasses the retrieval protocol, and generates answers from parametric memory, producing catastrophic token expenditure even when the index is sound. This parametric memory competition dissociates the two cognitive operations that indexing combines: understanding content (where language models excel) and following navigational protocols (where they fail when understanding tempts them to shortcut). The result argues for a separation of concerns: use language models for index construction, where semantic understanding helps, and deterministic algorithms for index traversal, where it hurts.",
+      "authors": [
+        "Zachary F. Mainen"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL",
+        "cs.DS",
+        "cs.LG"
+      ],
+      "published": "2026-03-22T15:02:56+00:00",
+      "link": "https://arxiv.org/pdf/2603.21272v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "structured retrieval and indexing for information discovery",
+      "llm_evidence_cn": "用于信息发现的结构化检索与索引",
+      "llm_evidence": "用于信息发现的结构化检索与索引",
+      "canonical_evidence": "用于信息发现的结构化检索与索引",
+      "llm_tldr_en": "The Library Theorem proves that structured indexing significantly reduces retrieval costs for agentic reasoning.",
+      "llm_tldr_cn": "图书馆定理证明了结构化索引能显著降低智能体推理中的检索成本。",
+      "llm_tldr": "图书馆定理证明了结构化索引能显著降低智能体推理中的检索成本。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.20062v1",
+      "title": "The End of Rented Discovery: How AI Search Redistributes Power Between Hotels and Intermediaries",
+      "abstract": "When a traveler asks an AI search engine to recommend a hotel, which sources get cited -- and does query framing matter? We audit 1,357 grounding citations from Google Gemini across 156 hotel queries in Tokyo and document a systematic pattern we call the Intent-Source Divide. Experiential queries draw 55.9\\% of their citations from non-OTA sources, compared to 30.8\\% for transactional queries -- a 25.1 percentage-point gap ($p < 5 \\times 10^{-20}$). The effect is amplified in Japanese, where experiential queries draw 62.1\\% non-OTA citations compared to 50.0\\% in English -- consistent with a more diverse Japanese non-OTA content ecosystem. For an industry in which hotels have long paid OTAs for demand acquisition, this pattern matters because it suggests that AI search may make hotel discovery less exclusively controlled by commission-based intermediaries.",
+      "authors": [
+        "Peiying Zhu",
+        "Sidi Chang"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-20T15:44:00+00:00",
+      "link": "https://arxiv.org/pdf/2603.20062v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "AI search engine grounding citations and query framing",
+      "llm_evidence_cn": "AI搜索引擎引文落地与查询框架",
+      "llm_evidence": "AI搜索引擎引文落地与查询框架",
+      "canonical_evidence": "AI搜索引擎引文落地与查询框架",
+      "llm_tldr_en": "Audits grounding citations in AI search to understand how query framing affects information discovery.",
+      "llm_tldr_cn": "审计AI搜索中的落地引文，以了解查询框架如何影响信息发现。",
+      "llm_tldr": "审计AI搜索中的落地引文，以了解查询框架如何影响信息发现。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.21403v1",
+      "title": "Awakening: Modern Challenges and Opportunities of Software Engineering Research",
+      "abstract": "Software engineering research benefited for decades from openly available tools, accessible systems, and problems that could be studied at modest scale. Today, many of the most relevant software systems are large, proprietary, and embedded in industrial contexts that are difficult to access or replicate in academia. We review how the field reached this point, identify structural challenges facing contemporary research, and argue that incremental methodological refinement is insufficient. We discuss practical directions forward, including industrial PhDs, long-term industry-academia collaborations, larger research teams, moonshot projects, and changes to funding and evaluation practices.",
+      "authors": [
+        "Diomidis Spinellis",
+        "Zoe Kotti"
+      ],
+      "primary_category": "cs.SE",
+      "categories": [
+        "cs.SE"
+      ],
+      "published": "2026-03-22T21:09:15+00:00",
+      "link": "https://arxiv.org/pdf/2603.21403v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "methodological challenges and evaluation practices in academic research",
+      "llm_evidence_cn": "学术研究中的方法论挑战与评估实践",
+      "llm_evidence": "学术研究中的方法论挑战与评估实践",
+      "canonical_evidence": "学术研究中的方法论挑战与评估实践",
+      "llm_tldr_en": "Discusses structural challenges and practical directions for modern software engineering research.",
+      "llm_tldr_cn": "探讨了现代软件工程研究面临的结构性挑战及未来的实践方向。",
+      "llm_tldr": "探讨了现代软件工程研究面临的结构性挑战及未来的实践方向。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.24448v1",
+      "title": "Integrating Causal Machine Learning into Clinical Decision Support Systems: Insights from Literature and Practice",
+      "abstract": "Current clinical decision support systems (CDSSs) typically base their predictions on correlation, not causation. In recent years, causal machine learning (ML) has emerged as a promising way to improve decision-making with CDSSs by offering interpretable, treatment-specific reasoning. However, existing research often emphasizes model development rather than designing clinician-facing interfaces. To address this gap, we investigated how CDSSs based on causal ML should be designed to effectively support collaborative clinical decision-making. Using a design science research methodology, we conducted a structured literature review and interviewed experienced physicians. From these, we derived eight empirically grounded design requirements, developed seven design principles, and proposed nine practical design features. Our results establish guidance for designing CDSSs that deliver causal insights, integrate seamlessly into clinical workflows, and support trust, usability, and human-AI collaboration. We also reveal tensions around automation, responsibility, and regulation, highlighting the need for an adaptive certification process for ML-based medical products.",
+      "authors": [
+        "Domenique Zipperling",
+        "Lukas Schmidt",
+        "Benedikt Hahn",
+        "Niklas Kühl",
+        "Steven Kimbrough"
+      ],
+      "primary_category": "cs.HC",
+      "categories": [
+        "cs.HC",
+        "cs.AI"
+      ],
+      "published": "2026-03-25T16:00:06+00:00",
+      "link": "https://arxiv.org/pdf/2603.24448v1",
+      "tags": [
+        "keyword:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "structured literature review methodology for clinical decision support",
+      "llm_evidence_cn": "临床决策支持的结构化文献综述方法论",
+      "llm_evidence": "临床决策支持的结构化文献综述方法论",
+      "canonical_evidence": "临床决策支持的结构化文献综述方法论",
+      "llm_tldr_en": "Uses structured literature reviews to design causal machine learning interfaces for clinical decision support.",
+      "llm_tldr_cn": "利用结构化文献综述为临床决策支持设计因果机器学习界面。",
+      "llm_tldr": "利用结构化文献综述为临床决策支持设计因果机器学习界面。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.20316v1",
+      "title": "Bypassing Document Ingestion: An MCP Approach to Financial Q&A",
+      "abstract": "Answering financial questions is often treated as an information retrieval problem. In practice, however, much of the relevant information is already available in curated vendor systems, especially for quantitative analysis. We study whether, and under which conditions, Model Context Protocol (MCP) offers a more reliable alternative to standard retrieval-augmented generation (RAG) by allowing large language models (LLMs) to interact directly with data rather than relying on document ingestion and chunk retrieval. We test this by building a custom MCP server that exposes LSEG APIs as tools and evaluating it on the FinDER benchmark. The approach performs particularly well on the Financials subset, achieving up to 80.4% accuracy on multi-step numerical questions when relevant context is retrieved. The paper thus provides both a baseline for MCP-based financial question answering (QA) and evidence on where this approach breaks down, such as for questions requiring qualitative or document-specific context. Overall, direct access to curated data is a lightweight and effective alternative to document-centric RAG for quantitative financial QA, but not a substitute for all financial QA tasks.",
+      "authors": [
+        "Sasan Mansouri",
+        "Edoardo Pilla",
+        "Mark Wahrenburg",
+        "Fabian Woebbeking"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-19T22:04:42+00:00",
+      "link": "https://arxiv.org/pdf/2603.20316v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "alternative to standard retrieval-augmented generation for information retrieval",
+      "llm_evidence_cn": "信息检索中标准检索增强生成的替代方案",
+      "llm_evidence": "信息检索中标准检索增强生成的替代方案",
+      "canonical_evidence": "信息检索中标准检索增强生成的替代方案",
+      "llm_tldr_en": "Explores Model Context Protocol as a reliable alternative to RAG for direct data interaction in financial Q&A.",
+      "llm_tldr_cn": "探讨了模型上下文协议作为金融问答中直接数据交互的 RAG 可靠替代方案。",
+      "llm_tldr": "探讨了模型上下文协议作为金融问答中直接数据交互的 RAG 可靠替代方案。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.21564v1",
+      "title": "Toward a Theory of Hierarchical Memory for Language Agents",
+      "abstract": "Many recent long-context and agentic systems address context-length limitations by adding hierarchical memory: they extract atomic units from raw data, build multi-level representatives by grouping and compression, and traverse this structure to retrieve content under a token budget. Despite recurring implementations, there is no shared formalism for comparing design choices. We propose a unifying theory in terms of three operators. Extraction ($α$) maps raw data to atomic information units; coarsening ($C = (π, ρ)$) partitions units and assigns a representative to each group; and traversal ($τ$) selects which units to include in context given a query and budget. We identify a self-sufficiency spectrum for the representative function $ρ$ and show how it constrains viable retrieval strategies (a coarsening-traversal coupling). Finally, we instantiate the decomposition on eleven existing systems spanning document hierarchies, conversational memory, and agent execution traces, showcasing its generality.",
+      "authors": [
+        "Yashar Talebirad",
+        "Ali Parsaee",
+        "Csongor Y. Szepesvari",
+        "Amirhossein Nadiri",
+        "Osmar Zaiane"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI",
+        "cs.IT",
+        "cs.SI"
+      ],
+      "published": "2026-03-23T04:35:13+00:00",
+      "link": "https://arxiv.org/pdf/2603.21564v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "hierarchical memory for retrieving content from raw data",
+      "llm_evidence_cn": "从原始数据中检索内容的分层记忆理论",
+      "llm_evidence": "从原始数据中检索内容的分层记忆理论",
+      "canonical_evidence": "从原始数据中检索内容的分层记忆理论",
+      "llm_tldr_en": "Proposes a unifying theory for hierarchical memory to improve content retrieval in language agents.",
+      "llm_tldr_cn": "提出了分层记忆的统一理论，旨在改进语言智能体的内容检索效率。",
+      "llm_tldr": "提出了分层记忆的统一理论，旨在改进语言智能体的内容检索效率。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.25293v1",
+      "title": "DAGverse: Building Document-Grounded Semantic DAGs from Scientific Papers",
+      "abstract": "Directed Acyclic Graphs (DAGs) are widely used to represent structured knowledge in scientific and technical domains. However, datasets for real-world DAGs remain scarce because constructing them typically requires expert interpretation of domain documents. We study Doc2SemDAG construction: recovering a preferred semantic DAG from a document together with the cited evidence and context that explain it. This problem is challenging because a document may admit multiple plausible abstractions, the intended structure is often implicit, and the supporting evidence is scattered across prose, equations, captions, and figures. To address these challenges, we leverage scientific papers containing explicit DAG figures as a natural source of supervision. In this setting, the DAG figure provides the DAG structure, while the accompanying text provides context and explanation. We introduce DAGverse, a framework for constructing document-grounded semantic DAGs from online scientific papers. Its core component, DAGverse-Pipeline, is a semi-automatic system designed to produce high-precision semantic DAG examples through figure classification, graph reconstruction, semantic grounding, and validation. As a case study, we test the framework for causal DAGs and release DAGverse-1, a dataset of 108 expert-validated semantic DAGs with graph-level, node-level, and edge-level evidence. Experiments show that DAGverse-Pipeline outperforms existing Vision-Language Models on DAG classification and annotation. DAGverse provides a foundation for document-grounded DAG benchmarks and opens new directions for studying structured reasoning grounded in real-world evidence.",
+      "authors": [
+        "Shu Wan",
+        "Saketh Vishnubhatla",
+        "Iskander Kushbay",
+        "Tom Heffernan",
+        "Aaron Belikoff",
+        "Raha Moraffah",
+        "Huan Liu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-03-26T10:33:12+00:00",
+      "link": "https://arxiv.org/pdf/2603.25293v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "extracting structured knowledge from scientific papers",
+      "llm_evidence_cn": "从科学论文中提取结构化知识",
+      "llm_evidence": "从科学论文中提取结构化知识",
+      "canonical_evidence": "从科学论文中提取结构化知识",
+      "llm_tldr_en": "Presents DAGverse, a method for building semantic directed acyclic graphs from scientific documents and citations.",
+      "llm_tldr_cn": "提出DAGverse，一种从科学文献及其引用中构建语义有向无环图的方法。",
+      "llm_tldr": "提出DAGverse，一种从科学文献及其引用中构建语义有向无环图的方法。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.20882v1",
+      "title": "RubricRAG: Towards Interpretable and Reliable LLM Evaluation via Domain Knowledge Retrieval for Rubric Generation",
+      "abstract": "Large language models (LLMs) are increasingly evaluated and sometimes trained using automated graders such as LLM-as-judges that output scalar scores or preferences. While convenient, these approaches are often opaque: a single score rarely explains why an answer is good or bad, which requirements were missed, or how a system should be improved. This lack of interpretability limits their usefulness for model development, dataset curation, and high-stakes deployment. Query-specific rubric-based evaluation offers a more transparent alternative by decomposing quality into explicit, checkable criteria. However, manually designing high-quality, query-specific rubrics is labor-intensive and cognitively demanding and not feasible for deployment. While previous approaches have focused on generating intermediate rubrics for automated downstream evaluation, it is unclear if these rubrics are both interpretable and effective for human users. In this work, we investigate whether LLMs can generate useful, instance-specific rubrics as compared to human-authored rubrics, while also improving effectiveness for identifying good responses. Through our systematic study on two rubric benchmarks, and on multiple few-shot and post-training strategies, we find that off-the-shelf LLMs produce rubrics that are poorly aligned with human-authored ones. We introduce a simple strategy, RubricRAG, which retrieves domain knowledge via rubrics at inference time from related queries. We demonstrate that RubricRAG can generate more interpretable rubrics both for similarity to human-authored rubrics, and for improved downstream evaluation effectiveness. Our results highlight both the challenges and a promising approach of scalable, interpretable evaluation through automated rubric generation.",
+      "authors": [
+        "Kaustubh D. Dhole",
+        "Eugene Agichtein"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI",
+        "cs.CL",
+        "cs.LG"
+      ],
+      "published": "2026-03-21T17:10:14+00:00",
+      "link": "https://arxiv.org/pdf/2603.20882v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "domain knowledge retrieval for evaluation rubrics",
+      "llm_evidence_cn": "用于评估准则的领域知识检索",
+      "llm_evidence": "用于评估准则的领域知识检索",
+      "canonical_evidence": "用于评估准则的领域知识检索",
+      "llm_tldr_en": "RubricRAG uses domain knowledge retrieval to generate interpretable rubrics for evaluating LLM outputs.",
+      "llm_tldr_cn": "RubricRAG利用领域知识检索生成可解释的准则，用于评估大模型输出。",
+      "llm_tldr": "RubricRAG利用领域知识检索生成可解释的准则，用于评估大模型输出。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

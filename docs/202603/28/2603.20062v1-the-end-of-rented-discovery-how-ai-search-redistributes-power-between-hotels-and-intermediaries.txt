@@ -1,0 +1,315 @@
+Title: The End of Rented Discovery: How AI Search Redistributes Power Between Hotels and Intermediaries
+
+URL Source: https://arxiv.org/pdf/2603.20062v1
+
+Published Time: Mon, 23 Mar 2026 01:04:13 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+# The End of Rented Discovery: How AI Search Redistributes Power Between Hotels and Intermediaries 
+
+# Peiying Zhu * Sidi Chang * †
+
+peiying@blossomai.co schang@blossomai.co Blossom AI Blossom AI San Francisco, CA, USA San Francisco, CA, USA 
+
+Abstract 
+
+When a traveler asks an AI search engine to recommend a hotel, which sources get cited—and does query framing matter? We audit 1,357 grounding citations from Google Gemini across 156 hotel queries in Tokyo and document a systematic pattern we call the Intent-Source Divide. Experiential queries draw 55.9% of their citations from non-OTA sources, compared to 30.8% for transactional queries—a 25.1 percentage-point gap ( p < 5 × 10 −20 ). The effect is amplified in Japanese, where experiential queries draw 62.1% non-OTA citations compared to 50.0% in English—consistent with a more diverse Japanese non-OTA content ecosystem. For an industry in which hotels have long paid OTAs for demand acquisition, this pattern matters because it suggests that AI search may make hotel discovery less exclusively controlled by commission-based intermediaries. 
+
+Keywords: generative engine optimization, AI search, hotel discovery, online travel agencies, hotel intermediation, intent-source divide, hospitality strategy, platform economics 
+
+# 1 Introduction 
+
+The hospitality distribution landscape has long been or-ganized around a simple bargain: Online Travel Agencies help travelers discover hotels, and hotels pay for that dis-covery through commission. Commission rates commonly range from 15% to 25% of booking value [9], and for in-dependent properties OTA-originated bookings can rep-resent over 61% of room revenue [8]. This arrangement is costly, but hotels have historically accepted it because OTAs control the comparison interface that travelers use at the moment of discovery. The economics are well docu-mented: OTAs boost visibility and occupancy but extract high margins [2, 10], and market entry dynamics show that brand loyalty consolidated through OTA platforms can deter independent hotel entries [3]. Generative AI search may change that arrangement. When a traveler asks Gemini or another AI system for a hotel recommendation, the system no longer merely ranks links; it synthesizes an answer and cites the sources it relies on. The strategic question for hotels is therefore no longer only whether they appear on OTA platforms, but whether AI systems continue to route discovery through those platforms or begin citing hotel-owned content and other non-OTA sources directly. In that sense, AI search is not simply a new marketing channel—it is a possible redistribution of who controls hotel discovery. 
+
+> ∗Both authors contributed equally to this research.
+> †Corresponding author.
+
+# 1.1 GEO and Citation Audits: What We Know About AI Search 
+
+Generative AI search engines synthesize answers from multiple sources and cite those sources as grounding ref-erences, creating a discovery architecture where visibil-ity may depend on content relevance rather than page authority alone. The emerging GEO literature has be-gun to characterize these patterns: traditional SEO sig-nals do not straightforwardly predict AI citation [1], AI search shows systematic bias toward editorial content over brand-owned content [5], query intent significantly shapes source selection [6], and AI citations concentrate heav-ily among a small number of outlets [16]. Citation au-dits across platforms have identified sentiment, commer-cial, and geographic biases [14] and a “discovery gap” in which discovery-style queries produce very different cita-tion patterns than named-entity queries [15]. Our study adapts this citation-audit methodology for the hospitality domain. 
+
+# 1.2 Theoretical Grounding: Query In-tent and Source Diversity 
+
+Our study draws on two established lines of research. First, the information retrieval literature has long rec-ognized that query intent shapes search behavior and re-sult characteristics. Broder [4] proposed a foundational taxonomy distinguishing navigational, informational, and transactional queries, demonstrating that different intent types activate different retrieval strategies and satisfy dif-ferent information needs. Our transactional/experiential distinction maps onto this taxonomy: transactional ho-tel queries resemble Broder’s transactional class (goal: 1 
+
+> arXiv:2603.20062v1 [cs.IR] 20 Mar 2026 The End of Rented Discovery Zhu & Chang
+
+complete a specific action), while experiential queries re-semble the informational class (goal: acquire knowledge about a topic). The key insight from this literature is that query intent is not merely a user characteristic but a structural feature of the query that determines what kinds of web content constitute a satisfactory answer. Second, the algorithm auditing literature [11, 13] has established that search engine ranking algorithms embed systematic biases in which information sources gain vis-ibility. Our study extends this tradition to generative AI search, where the mechanism shifts from ranking to citation—the AI system does not rank sources but selects which to cite as grounding for its synthesized response. The citation-audit methodology we employ is conceptu-ally equivalent to the ranking-audit methodology of tra-ditional search engine studies, adapted for the generative paradigm. These two strands converge in a simple theoretical pre-diction: if AI search operates as a content-matching sys-tem (retrieving sources whose content best matches the query’s information need), then queries with different in-tent types should systematically retrieve different source types, because the web content that best answers a trans-actional query (structured data, price comparisons, book-ing interfaces) differs from the content that best answers an experiential query (narrative descriptions, editorial recommendations, atmosphere characterizations). The intent-source divide, if observed, would be consistent with content-matching playing a significant role in AI search citation, though it would not rule out authority signals as a contributing factor. 
+
+# 1.3 The Gap: No Study Has Done This for Hospitality 
+
+Despite growing work on AI search citation patterns and on hotel-OTA distribution economics, to our knowledge, no study has examined how AI search changes intermedi-ation in hospitality. This gap matters because hotels are a rare setting where the discovery intermediary is clearly identifiable and economically important. If Gemini cites Booking.com, Expedia, or Jalan, the hotel is being sur-faced through a commission-based intermediary. If Gem-ini cites the hotel’s own website, the hotel is competing for discovery more directly. Citation source does not tell us exactly where the guest will book, but it does tell us who captured the discovery moment at the moment the rec-ommendation was made. In a market where discovery has long been rented from OTAs, that distinction has direct strategic and economic significance. Additionally, hotels have a spatial dimension that interacts with query in-tent (a station-access query differs from a neighborhood-atmosphere query), and the three-tier market structure (international chains, domestic chains, independents) cre-ates natural variation in web presence, content depth, and OTA dependency. 
+
+# 1.4 Why Tokyo 
+
+We study this question in Tokyo for three reasons that make it an ideal natural laboratory. First, Tokyo’s hotel market exhibits a well-defined three-tier structure: in-ternational chains (Marriott, Hyatt, Hilton, InterConti-nental) with global brand websites optimized for English-language discovery; domestic chains (APA Hotels, Toyoko Inn, Dormy Inn, Mitsui Garden Hotels) with content-rich Japanese-language websites serving a large domestic mar-ket; and independent properties (ryokans, boutique ho-tels, capsule hotels, design hotels) with highly variable web presences. This three-tier structure generates natu-ral variation in website content depth, language coverage, and OTA dependency that allows us to examine whether AI citation patterns systematically differ across market segments. Second, Tokyo operates within two linguistically sep-arate web ecosystems. English-language and Japanese-language web content about Tokyo hotels are largely dis-tinct corpora: they feature different domains, different editorial voices, different OTA platforms (Booking.com and Expedia dominate the English web; Jalan, Rakuten Travel, and Ikyu dominate the Japanese web), and dif-ferent non-OTA content types. Because Google Search grounding—the mechanism through which Gemini re-trieves source material—searches the web in the query language, English and Japanese queries effectively sur-face different information markets. This bilingual struc-ture allows us to test whether AI citation patterns reflect properties of the underlying web ecosystem rather than properties of the AI model itself. Third, Tokyo is one of the world’s largest inbound tourism markets: Japan recorded 36.9 million foreign vis-itors in 2024, the highest figure in the country’s history, with Tokyo as the primary gateway [12]. Hotel discover-ability in Tokyo has substantial economic consequences. The combination of high visitor volume, a competitive hotel market, and the coexistence of international and domestic booking platforms makes Tokyo a setting where the question of AI search intermediation is both empiri-cally tractable and practically significant. 
+
+# 1.5 Research Questions 
+
+We pose three research questions: 1. Discovery intermediation by intent. Does query framing shift AI hotel discovery away from OTA in-termediaries? 2. Language and ecosystem structure. Does the shift depend on the language-specific web ecosystem? 2The End of Rented Discovery Zhu & Chang 
+
+3. Hotel-direct citation and content depth. Do hotel-owned websites appear in AI citations, and what content characteristics appear to distinguish cited from non-cited properties? These questions are addressed through a systematic au-dit of 1,357 grounding citations from 156 queries to Gem-ini 2.5 Flash, using a paired query design that isolates the effect of intent framing on source selection. This is a hospitality strategy paper about AI-era hotel discov-ery. It uses GEO concepts and citation-audit methods as the mechanism and methodology, but its core contri-bution is to the question of who controls hotel discovery as the search interface shifts from link-based ranking to AI-synthesized recommendation. 
+
+# 2 Data and Methods 
+
+# 2.1 Query Design 
+
+We designed a structured query corpus of 156 queries or-ganized as category-matched pairs. Each pair consists of a transactional variant and an experiential variant ad-dressing the same traveler need category in the same ge-ographic area, executed in both English and Japanese. This paired design ensures that the only variable changing between queries within a pair is the intent framing—not the topic, geographic scope, or language—allowing us to isolate the effect of intent on citation source composition. 
+
+Query categories. We identified four traveler need categories that span the primary dimensions of ho-tel search: (1) Budget —price-sensitive discovery, where OTAs have a strong structural advantage due to price comparison functionality; (2) Rating/Quality —quality-oriented discovery, where aggregated review scores and star ratings are the primary signals; (3) Convenience —location and access-oriented discovery, where proximity to transit nodes and walkability are the key criteria; and (4) Business —work-oriented discovery, where workspace quality, quiet environments, and business amenities de-fine the need. These categories were selected to cover the range of functional and experiential dimensions that prior research on hotel choice behavior has identified as primary decision factors. For each category, the transactional variant was de-signed to resemble a booking-oriented query—the kind of query that would naturally lead to an OTA listing (e.g., “Cheap hotel in Shinjuku,” “Best rated hotel in Shibuya”). The experiential variant was designed to de-scribe the same need in terms of the guest experience rather than a bookable attribute (e.g., “Good value hotel with local charm in Shinjuku,” “Hotel with exceptional service and atmosphere in Shibuya”). Japanese transla-tions were crafted to be natural-sounding queries rather than literal translations, preserving the intent distinction in idiomatic Japanese (e.g., transactional: “ 新宿で安い
+
+ホテル ”; experiential: “ 新宿で地元の雰囲気が楽しめる 
+
+コスパ の良いホテル ”). 
+
+Geographic scope. Area-level queries were executed across 9 of Tokyo’s 23 special wards, selected on the basis of hotel density and tourism significance. The nine wards comprise the Toshin 5-ku ( 都心5区) core— Chiyoda, Chuo, Minato, Shinjuku, and Shibuya—which constitute Tokyo’s central business and tourism district, plus four additional wards with high concentrations of tourist-relevant hotels: Taito (Asakusa and Ueno, the traditional ryokan district), Toshima (Ikebukuro, a major budget hotel hub), Shinagawa (a Shinkansen gateway and business hotel cluster), and Koto (Toyosu and Odaiba, with newer hotel developments). The remaining 14 wards were excluded because they contain relatively few tourist-oriented hotels and would have generated queries about predominantly residential areas, introducing noise with-out proportionate analytical value. In addition to the 144 area-level queries (4 categories × 2 intents × 9 wards 
+
+× 2 languages), we included 12 city-level queries (3 cat-egories × 2 intents × 2 languages) that address Tokyo as a whole, yielding a total of 156 queries. Appendix B provides sample queries illustrating the paired design. 
+
+# 2.2 Data Collection 
+
+All 156 queries were executed on Gemini 2.5 Flash with Google Search grounding enabled in March 2026, us-ing default generation parameters (temperature = 1.0, no seed; see Appendix A for full configuration). When grounding is active, Gemini issues Google Search queries in the input language, retrieves top results, and synthe-sizes a response citing the consulted web pages. Each query was executed once; because Gemini’s grounding output is non-deterministic, we additionally re-ran astratified subset of 20 queries five times each to assess test-retest reliability (see Appendix E). We extracted 1,357 grounding citations across 156 queries, yielding a mean of 8.7 citations per query (range: 2–32, CV: 53%). To address variability in citation counts, we employ both citation-weighted and query-weighted analytical ap-proaches (see Section 2.5). 
+
+# 2.3 Source Classification 
+
+Each grounding citation was classified as either OTA (booking-oriented intermediary, including global, Japanese, APAC, and meta-search platforms) or non-OTA. Non-OTA sources were further classified into nine sub-types: hotel direct, editorial curation, travel blog, travel media, local tourism, coworking/workspace, travel agency, user-generated content, and accommodation plat-form. Classification was by domain matching against cu-rated lists (see Appendix C). 3The End of Rented Discovery Zhu & Chang 
+
+# 2.4 Hotel Name Extraction and Tier Classification 
+
+Hotel names were extracted from Gemini’s responses and classified into three tiers: international chain (Mar-riott, Hyatt, Hilton, IHG, Accor and sub-brands), do-mestic chain (APA Hotel, Toyoko Inn, Dormy Inn, Su-per Hotel, Mitsui Garden, Prince Hotels, and others), or independent . Classification follows the guest-facing brand name—the name a traveler would recognize—not the parent company. A hotel qualifies as “chain” if its brand name appears on three or more properties—a threshold that captures the brand recognition and cross-property consistency relevant to traveler search behavior, while excluding one-off coincidental name overlaps. 
+
+# 2.5 Statistical Methods 
+
+We test the Intent-Source Divide using chi-squared tests, odds ratios with 95% confidence intervals, and Cramer’s V for effect size. To adjust for language and query cate-gory, we estimate logistic regression models at the citation level ( n = 1 ,357) and a query-level quasibinomial specifi-cation ( n = 156) to address non-independence of citations within queries. A Mann-Whitney U test provides a query-weighted robustness check. Full test details, coefficients, and robustness results are reported in Appendices D–E. Citations are clustered within queries and shared tem-plates, so citation-level p-values and confidence inter-vals should be interpreted with caution. The query-level model confirms that results are substantively unchanged when this clustering is accounted for. 
+
+# 3 Results 
+
+Across 156 Gemini 2.5 Flash queries, we extracted 1,357 grounding citations. OTAs account for 55.3% of all cita-tions (751 of 1,357), with the remainder distributed across hotel direct websites, editorial platforms, travel blogs, and other non-OTA sources. We observed systematic varia-tion in this OTA/non-OTA split by query intent, lan-guage, and category. Because citations are partially clus-tered within queries and shared templates, the citation-level results below should be interpreted as substantively informative but somewhat optimistic in precision. The main pattern, however, is large in magnitude and is cor-roborated by query-level robustness checks. 
+
+# 3.1 The Intent-Source Divide 
+
+The central empirical finding is a substantial difference in non-OTA citation rates between experiential and transac-tional hotel queries. Non-OTA sources account for 55.9% of experiential citations (419 of 750) but only 30.8% of transactional citations (187 of 607), a gap of 25.1 percent-age points. A chi-squared test confirms that this differ-ence is highly significant: χ2(1) = 84 .23, p = 4 .40 ×10 −20 .The unadjusted odds ratio is 2.84 (95% CI [2.27, 3.56]): experiential queries are nearly three times as likely to cite non-OTA sources as transactional queries. The associa-tion is moderate in size by Cramer’s V ( V = 0 .249). To examine whether this pattern holds after account-ing for language and query category, we estimated two logistic regression models predicting the probability that a citation comes from a non-OTA source. Full coeffi-cients are reported in Appendix D (Tables 8–9). In the main-effects model (Model 1), experiential intent is the strongest predictor (adjusted OR = 2.95, 95% CI [2.34, 3.71], p < 0.001). Japanese queries also produce signifi-cantly more non-OTA citations than English queries (OR = 1.33, 95% CI [1.06, 1.67], p = 0 .015). Relative to bud-get queries, business and convenience queries produce sig-nificantly more non-OTA citations (business OR = 2.57, convenience OR = 2.00). Model 2 adds an interaction between experiential in-tent and Japanese-language queries. This interaction is significant (OR = 1.77, 95% CI [1.12, 2.80], p = 0 .015; AIC 1732.1 vs. 1736.0; likelihood-ratio χ2(1) = 5.90, 
+
+p = 0 .015), indicating that the non-OTA boost from ex-periential framing is amplified in Japanese. For Japanese-language experiential queries, 62.1% of citations come from non-OTA sources—nearly double the 31.8% ob-served for English transactional queries (direct cell com-parison: OR = 3.52, 95% CI [2.53, 4.90], p < 10 −14 ). This is consistent with the descriptive language split reported in Section 3.2. The intent-source divide is robust across all four query categories. Table 1 presents the category-level break-down: Several patterns are notable. Budget queries show the lowest non-OTA share in the transactional condition (15.5%), consistent with the structural advantage that OTA platforms hold in price-comparison functionality. Business queries show the largest absolute gap (28.4 per-centage points) and the highest non-OTA share in the ex-periential condition (68.5%), driven by coworking review platforms, hotel direct websites describing workspace amenities, and specialized business travel content that OTA listings do not provide. Convenience queries show the smallest gap (19.0 pp), suggesting that location and access information is somewhat available across both OTA and non-OTA sources. All four category-level gaps remain significant under Bonferroni correction (adjusted 
+
+α = 0 .0125). The intent-source divide is robust to query-weighted analysis, in which each query contributes equally re-gardless of citation count (query-weighted non-OTA rates: 55.1% experiential vs. 27.1% transactional; Mann-Whitney U = 4 ,721, p < 10 −9). It also survives con-4The End of Rented Discovery Zhu & Chang 
+
+Table 1: Non-OTA Citation Rate by Query Category and Intent                                       
+
+> Category T non-OTA% E non-OTA% Gap (pp) 95% CI χ2(1) p-value Budget 15.5% 42.5% 27.0 [17.5, 36.5] 26.00 3.4×10 −7
+> Rating/Quality 22.1% 46.7% 24.6 [13.6, 35.5] 16.78 4.2×10 −5
+> Business 40.1% 68.5% 28.4 [18.1, 38.7] 25.81 3.8×10 −7
+> Convenience 40.1% 59.2% 19.0 [9.3, 28.8] 13.29 2.7×10 −4
+
+trols for query length and lexical richness, answer-type specificity tests, and test-retest replication across five in-dependent runs (ICC = 0.656). Full robustness results are reported in Appendix E; a summary of all statistical tests is in Appendix D (Table 10). 
+
+# 3.2 Language, Ecosystem Structure, and Non-OTA Composition 
+
+The intent-source divide operates differently across lan-guages. Table 2 presents the four-segment breakdown: Table 2: OTA and Non-OTA Citation Rates by Language and Intent Segment OTA% Non-OTA% N
+
+EN Transactional 68.2% 31.8% 274 EN Experiential 50.0% 50.0% 386 JP Transactional 70.0% 30.0% 333 JP Experiential 37.9% 62.1% 364 The most striking cell is Japanese experiential: 62.1% of citations come from non-OTA sources. In English, the intent gap is 18.2 percentage points; in Japanese, 32.1 percentage points—nearly twice as large. The in-teraction term confirms this amplification (OR = 1.77, 
+
+p = 0 .015). The divergence is concentrated in experi-ential queries (EN 50.0% OTA vs. JP 37.9%, a 12.1 pp gap) rather than transactional queries (EN 68.2% vs. JP 70.0%, a 1.8 pp gap). This amplification is consistent with the structure of two effectively separate web ecosystems. Japanese queries cite Japanese-domain pages 68.4% of the time; English queries cite Japanese-domain pages only 6.4%. The non-OTA channel accounts for 42.4% of English citations (280 of 660) and 46.8% of Japanese citations (326 of 697), with significantly different composition ( χ2(10) = 171 .90, p < 
+
+0.001). Table 3 presents the breakdown: Table 3: Non-OTA Source-Type Composition by Lan-guage (% of Non-OTA Citations) Source Type EN JP Travel blog 22.9% 1.2% Editorial curation 22.5% 12.3% Hotel direct 19.3% 23.6% Travel agency 0.0% 12.9% Travel media 8.9% 3.7% UGC 6.4% 8.6% Coworking/workspace 2.5% 8.3% Local tourism 5.4% 7.7% Accommodation platform 2.5% 4.3% Other 8.9% 17.5% The English non-OTA channel is dominated by travel blogs (22.9%) and editorial curation sites (22.5%)— international content creators writing about Tokyo for foreign tourists. The Japanese non-OTA channel is more diverse: hotel direct websites are the largest category (23.6%), but the most distinctive feature is the pres-ence of source types absent from English—travel agency sites (12.9% vs. 0.0%) and coworking/workspace plat-forms (8.3% vs. 2.5%). These are not better or worse ecosystems—they are differently structured, with differ-ent source types available to absorb the OTA share when queries become experiential. 
+
+# 3.3 Hotel Direct Citation: Language Matters More Than Intent 
+
+A more nuanced pattern emerges for hotel-direct cita-tion. Within each language, we do not detect a clear intent effect: in English, hotel-direct citation rates are nearly identical for transactional and experiential queries (8.0% vs. 8.3%, p = 0 .90), while in Japanese the expe-riential rate is higher than the transactional rate (12.6% vs. 9.3%), though this within-language difference is not statistically significant ( p = 0 .16). Table 4 presents hotel-direct citations as a share of all citations by segment. The stronger pattern is cross-linguistic. Aggregating across intent, hotel-direct websites account for 8.2% of all English citations and 11.0% of all Japanese citations. Al-though this 2.8 percentage-point gap falls short of conven-tional significance in a citation-level test ( χ2(1) = 2 .87, 
+
+p = 0 .090), the query-level model—which avoids pseudo-5The End of Rented Discovery Zhu & Chang 
+
+Table 4: Hotel Direct Citation Rate (% of All Citations) by Language and Intent                
+
+> Language T-rate E-rate Difference 95% CI p
+> English 8.0% ( n=274) 8.3% ( n=386) +0.3 pp [−4.0, 4.5] 0.90 Japanese 9.3% ( n=333) 12.6% ( n=364) +3.3 pp [−1.3, 8.0] 0.16
+
+replication across citations within the same response— shows that Japanese queries are significantly more likely than English queries to produce any hotel-direct citation (OR = 2.27, 95% CI [1.08, 4.75], p = 0 .030), controlling for intent and category. This cross-linguistic difference is especially visible in experiential search. Among experiential queries, hotel-direct citation is 12.6% in Japanese compared with 8.3% in English (one-sided z-test, p = 0 .026). Taken together, these results suggest that hotel-direct capture is shaped less by transactional versus experiential framing alone than by the structure and depth of the underlying lan-guage ecosystem. This is consistent with the possibil-ity that Japanese hotel websites contain richer search-answerable content, a possibility explored in the content audit below. 
+
+# 3.4 Exploratory Content Audit: What Characterizes Cited Hotels? 
+
+To explore what distinguishes cited from non-cited ho-tels, we audited the websites of seven hotels that Gemini cites directly and seven control hotels that were not cited. We scored each hotel on a search-answerable depth (SAD) scale across five dimensions (FAQ, area guide, blog, access information, unique/distinctive content), each scored 0–3 based on depth of content available for Google Search to retrieve: 0 = absent; 1 = present but shallow (e.g., a FAQ with <10 questions); 2 = moderate depth (e.g., 10–25 FAQ questions or area content covering several neighbor-hoods); 3 = deep (e.g., a 30+ question FAQ organized by topic, or dedicated neighborhood pages with 500+ words each). The key distinction is not whether a con-tent feature exists, but whether it is deep enough to rank in Google Search for relevant traveler queries. Table 5 presents the results. Cited hotels average 8.6/15 (range: 5–13); control ho-tels average 3.4/15 (range: 1–5), a significant difference (Mann-Whitney U = 48, p = 0 .003). Every hotel scoring 6 or above was cited; every hotel below 6 was not (Fisher exact p = 0 .002). The K5 case illustrates why depth matters more than feature presence. Hotel K5—a design boutique hotel in Nihonbashi with a 9.6/10 Booking.com rating, bilingual content, Schema.org markup, a neighborhood page, and a FAQ—scores only 5/15 on the depth scale because each feature is brief. Gemini mentions K5 by name in three responses but draws its information from OTA and editorial sources (Expedia, Hotels.com, myboutiqueho-tel.com), not from k5-tokyo.com. The hotel is discovered, but through intermediaries. By contrast, Kadoya Hotel— an independent with no schema markup and no tech-nical SEO—scores 13/15 because its 33-question FAQ, 13-attraction sightseeing guide, and regular blog create 20+ indexed pages that directly answer traveler queries. Kadoya achieves direct citation; K5 does not. The audit suggests a two-stage process for hotel direct citation in AI search: first, the hotel website must contain content deep enough to rank in Google Search for relevant queries; second, the retrieved content must answer the question better than competing OTA or editorial pages. Hotels that fail at the first stage never reach the second. 
+
+# 4 Discussion 
+
+# 4.1 What This Means for Hotel Discov-ery 
+
+Traditional hotel discovery rewards accumulated authority—review volume, ratings, advertising spend, domain authority. Our findings are consistent with a retrieval process in which question-content fit plays a major role, even if authority and ranking signals still matter. The intent-source divide (Section 3.1) supports this interpretation: when the question is transactional, non-OTA sources account for only 30.8% of citations; when the question is experiential, non-OTA citation rises to 55.9%. The 25.1 percentage-point swing suggests that the source of hotel discovery in AI search is not fixed—it depends on how the query is framed. 
+
+# 4.2 The Hotel Website as Discovery As-set 
+
+The most actionable finding for hotel operators is that hotel-direct citation is stable across query intent but sen-sitive to content depth. Three observations point in this direction, with the third remaining exploratory. 
+
+First, hotel-direct citation does not vary by in-tent. Hotel-direct rates are stable across transactional and experiential queries in both languages (Table 4). This means a hotel website with deep, question-answering con-tent earns citations under both conditions—it does not need to be optimized for one narrow class of prompts. The intent-stability is theoretically consistent with how grounding works: a hotel website with neighborhood 6The End of Rented Discovery Zhu & Chang 
+
+Table 5: Search-Answerable Depth Audit (14 Hotels)                                                                                                          
+
+> Hotel Cited FAQ Area Guide Blog Access Unique Content SAD Score Kimpton Shinjuku Yes 3322313/15 Kadoya Hotel Yes 3322313/15 Super Hotel Yes 2222210/15 Park Hotel Tokyo Yes 111137/15 Tokyu Stay Yes 100236/15 TRUNK (Hotel) Yes 021126/15 Prince Hotels Yes 000325/15 Hotel K5 No 111115/15 NOHGA Hotel Ueno No 020125/15 Ryokan Shigetsu No 110114/15 Aoyama Grand Hotel No 101114/15 Hotel Niwa Tokyo No 010113/15 Marunouchi Hotel No 100102/15 Shibuya Stream Excel No 000101/15
+
+guides, transit information, and atmosphere descriptions is relevant to both transactional and experiential queries simultaneously. 
+
+Second, Japanese queries produce significantly more hotel-direct citations than English queries 
+
+(Section 3.3: query-level OR = 2.27, p = 0.030). Japanese hotel brand websites tend to contain deeper question-answering content—neighborhood guides, tran-sit information, area descriptions—than their English counterparts, which tend to be booking-oriented. The im-plication is that content depth at the language-ecosystem level translates into measurably higher hotel-direct cita-tion rates. 
+
+Third, content depth—not just content presence—separates cited from non-cited ho-tels. The search-answerable depth (SAD) audit of 14 hotels (Section 3.4) shows that cited hotels score significantly higher than non-cited hotels (mean 8.6/15 vs. 3.4/15; Mann-Whitney U = 48, p = 0 .003). Every hotel scoring 6 or above on the depth scale was cited; every hotel below 6 was not (Fisher exact p = 0 .002). The K5 case is instructive: a hotel with a perfect binary feature score (FAQ page, area guide, bilingual content) but shallow depth on each feature was never cited directly—Gemini drew K5 information from OTA and editorial intermediaries instead. Hotels cannot control how travelers phrase queries, but they can control the depth of their own content. Our ex-ploratory audit suggests that content depth may be one factor that distinguishes hotels whose websites capture the discovery moment from those discovered through in-termediaries. 
+
+# 4.3 Implications for Different Stakehold-ers 
+
+Independent hotels may have the most to gain. The K5-vs-Kadoya comparison (Section 3.4) shows that brand prestige and technical sophistication do not determine di-rect citation—content depth does. Kadoya, a single inde-pendent with no schema markup and no SEO, achieves direct citation through a 33-question FAQ and a 13-attraction sightseeing guide. K5, a design boutique with a 9.6 rating and full technical implementation, does not. Content depth may level the playing field in ways that OTA rankings do not. 
+
+Domestic chains are well-positioned in Japanese but underinvested in English. Japanese queries produce 2.27 × more hotel-direct citations than English queries (Section 3.3, p = 0 .030), consistent with deeper Japanese-language content on domestic chain websites. For the 36.9 million inbound visitors to Japan [12], the English-language content gap represents unrealized discovery po-tential. 
+
+International chains have the resources for con-tent investment but face structural barriers. Kimpton Shinjuku scores 13/15 on search-answerable depth and achieves direct citation—but Kimpton is an outlier. Most international chain property pages are centrally man-aged booking endpoints without the location-specific, question-answering content that AI search retrieves. 
+
+OTAs remain the dominant citation source at 55.3% overall and 69.2% for transactional queries. Disinterme-diation is not imminent. However, OTA citation drops to 44.1% for experiential queries—a 25.1 percentage-point swing that represents the contestable frontier where non-OTA sources, including hotel-direct websites, can com-pete. 7The End of Rented Discovery Zhu & Chang 
+
+# 4.4 Connection to the Broader GEO Field 
+
+Our findings contribute to the emerging understanding of how AI search systems allocate visibility. The GEO liter-ature has identified systematic patterns: citation concen-tration among a few outlets [16], earned media bias [5], geographic and commercial bias [14], and a discovery gap for new entities [15]. Our study adds a domain-specific dimension by showing that these patterns operate differ-ently depending on query intent and the structure of the underlying web ecosystem. The “earned media bias” identified by Chen, M. et al. [5]—a systematic preference for editorial content over brand-owned content—requires reinterpretation in light of our results. In the hotel domain, OTAs are commercial intermediaries, not earned media in the traditional sense. Our data suggest that AI search does not prefer earned media per se but rather cites whatever content type best answers the query: OTA listing pages for transactional queries, editorial and blog content for experiential queries. The apparent earned media bias may be partially an ar-tifact of query distribution—if experiential queries pre-dominate in a study, earned media will naturally appear favored. Our taxonomy reveals that the intent-source di-vide operates along the OTA/non-OTA boundary rather than the brand-owned/earned-media boundary. Hotel di-rect websites constitute a consistent 19–24% of the non-OTA channel across intent conditions, while OTA sources fluctuate dramatically. This suggests that the relevant analytical frame for AI search citation is not “earned vs. owned media” but “which content best answers the spe-cific query.” The role-augmented intent-driven GEO framework [6] provides theoretical scaffolding for this finding. That framework argues that query intent is a primary determi-nant of AI search behavior. Our four-category, two-intent design provides empirical evidence within the hospital-ity domain: the same hotel market produces dramati-cally different citation patterns depending on whether the query is transactional or experiential. The intent-source divide may reflect a structural property of how AI search matches queries to available content. 
+
+# 5 Limitations 
+
+This study has six limitations that bound the generaliz-ability and causal interpretation of our findings. 
+
+1. Single platform, single point in time. All 156 queries were executed on Gemini 2.5 Flash with Google Search grounding in March 2026. Google regu-larly updates both the underlying language model and the grounding mechanism that determines which web sources are retrieved and cited. A model version change, a mod-ification to grounding source ranking, or an update to Google Search’s index could alter the citation patterns we document. Furthermore, other AI search platforms— ChatGPT with browsing enabled, Perplexity, Claude— employ different retrieval architectures and may exhibit different source-type preferences. ChatGPT uses Bing rather than Google Search for web grounding, which ac-cesses a different index and applies different ranking sig-nals. Perplexity maintains its own search index and ci-tation system. Our findings are specific to the Gemini-Google Search grounding pipeline and should not be as-sumed to generalize across platforms without empirical cross-validation. 
+
+2. Correlation, not causation. We observe that hotels with richer website content—neighborhood guides, FAQ pages, sightseeing information, access maps—receive more direct citations from Gemini. However, we can-not establish that content depth causes direct citation. The observed association is susceptible to confounding: well-known hotels with strong brands may both invest in website content and receive citations due to brand recog-nition, search engine authority, or backlink profiles that are correlated with but distinct from content depth. Ahotel that is frequently mentioned on third-party web-sites may accumulate domain authority that benefits its direct citation rate independently of its own content. The K5 case (Section 3.4) reinforces this limitation: ahotel with strong content features but shallow search-answerable depth was not cited, suggesting that content alone does not determine citation—Google Search rank-ing also plays a role. The causal test—modifying a ho-tel’s website content and measuring subsequent changes in Gemini citation behavior—would require a controlled intervention design with pre-post measurement, which we propose as future work but have not conducted in this study. 
+
+3. Single market. Tokyo’s hotel web ecosystem has characteristics that may limit generalizability to other tourism markets. The Japanese web contains a dense network of domestic OTAs (Jalan, Rakuten Travel, Ikyu), Japanese editorial platforms (icotto.jp, ozmall.co.jp), and Japanese-language hotel brand websites that collectively create a rich non-OTA content supply. Other tourism markets may have thinner non-OTA content ecosystems, which would affect the magnitude of the intent-source di-vide. The EN-JP difference in hotel direct citation rate (11.0% vs. 8.2%, p = 0 .090) may be specific to the bilin-gual information landscape of Tokyo, where two linguisti-cally separate web ecosystems serve the same geographic market. Cities with a single dominant language (e.g., Paris, Bangkok) or cities where the local-language web is less developed would present different dynamics. Addi-tionally, Tokyo’s hotel market includes distinctive prop-erty types (capsule hotels, ryokans, business hotels with specific Japanese amenities) that generate unique content not found in other markets, potentially inflating the ex-8The End of Rented Discovery Zhu & Chang 
+
+periential query effect. 
+
+4. Query framing and answer-type specificity. 
+
+Our experiential queries are not only longer and lexically richer than transactional queries (addressed via robust-ness checks in Appendix E) but also embed implicit con-straints on what constitutes a good answer. A supple-mentary test with 20 “experiential-but-OTA-answerable” queries (Appendix E) found that experiential framing produces high non-OTA rates (54.0%) even when the question could be answered by OTA review data, sug-gesting the effect is driven by framing rather than answer-type bias. However, this supplementary set is small (20 queries, 137 citations) and was not part of the original study design. A larger, more systematic manipulation of answer-type specificity independent of framing would provide stronger evidence. 
+
+5. Sample size and partial replication. Our 156 queries yielded 1,357 citations, providing adequate sta-tistical power for the core intent-source divide ( χ2 =84 .23, p = 4 .40 × 10 −20 ) and the language interaction effect ( p = 0 .015). However, sub-analyses—particularly the category-by-language-by-intent breakdowns and the hotel-direct intent comparison within each language— operate on smaller cell sizes where statistical power is re-duced. Gemini’s grounding output is non-deterministic: re-running the same query produces partially different citation sets (within-query SD = 0.142 in our 20-query replication test; Appendix E). While the ICC of 0.656 in-dicates moderate-to-good reliability and the intent-source divide replicated in all five runs, the replication covered only 20 of 156 queries. A full multi-run design re-running all 156 queries would provide tighter query-level esti-mates, particularly for sub-group analyses. Additionally, the 156 queries are generated from 16 template types (4 categories × 2 intents × 2 languages), with variation only in the ward name. Citations from queries sharing a tem-plate are not fully independent, which may understate standard errors in the logistic regression. Given the large effect size ( χ2 = 84 .23), template clustering is unlikely to alter the headline finding, but a mixed-effects model with template as a random effect would provide more conser-vative inference. 
+
+6. Discovery, not booking. This study measures who controls the discovery moment—which sources AI search cites—not who closes the booking. The billboard effect [2, 10] means OTA-cited hotels may still receive direct bookings. Our OTA citation rates should be in-terpreted as measures of discovery intermediation, not booking capture. 
+
+# 6 Future Work 
+
+Three extensions would most strengthen these findings. First, cross-platform validation —executing the same query set on ChatGPT, Perplexity, and Claude—would test whether the intent-source divide is specific to Gem-ini or a general property of AI search. Second, a causal intervention study partnering with a hospitality busi-ness to expand website content and track citation changes would establish whether content depth causes citation rather than merely correlating with it. Third, multi-market replication in cities with different OTA land-scapes and web ecosystems would test generalizability be-yond Tokyo. 
+
+# 7 Conclusion 
+
+AI search may be making hotel discovery more con-testable. This study documents a 25.1 percentage-point shift in non-OTA citation between transactional and ex-periential queries, amplified in Japanese where a more diverse content ecosystem absorbs a larger share of the experiential shift. Hotel-direct citation is stable across intent conditions, and Japanese queries produce signif-icantly more hotel-direct citations than English queries (OR = 2.27, p = 0 .030), consistent with deeper question-answering content on Japanese hotel websites. For an industry that has historically rented discovery from commission-based intermediaries, these findings suggest that the discovery moment itself is becoming contestable. Hotels with deep, question-answering content appear bet-ter positioned to compete for that moment directly. Our results do not imply that AI will eliminate intermedi-ation or that citation source maps onto booking chan-nel. They do suggest that AI search opens a new path-way to discovery—one where hotels with deep, question-answering content can be found without paying an inter-mediary for the privilege. 
+
+# References 
+
+[1] Pranjal Aggarwal, Vishvak Murahari, Tanmay Ra-jpurohit, Ashwin Kalyan, Karthik Narasimhan, and Ameet Deshpande. GEO: Generative engine opti-mization. In Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Min-ing , 2024. [2] Chris K. Anderson. The billboard effect: Online travel agent impact on non-OTA reservation volume. 
+
+Cornell Hospitality Report , 9(16):6–9, 2009. [3] Simone Bianco. Deter and divert: How incumbents’ market structures guide hotel entry strategies. Jour-nal of Hospitality & Tourism Research , 2025. [4] Andrei Broder. A taxonomy of web search. ACM SIGIR Forum , 36(2):3–10, 2002. [5] Mahe Chen, Xiaoxuan Wang, Kaiwen Chen, and Nick Koudas. Generative engine optimization: 9The End of Rented Discovery Zhu & Chang 
+
+How to dominate AI search. arXiv preprint arXiv:2509.08919 , 2025. [6] Xiaolu Chen, Haojie Wu, Jie Bao, Zhen Chen, Yong Liao, and Hu Huang. Role-augmented intent-driven generative search engine optimization. arXiv preprint arXiv:2508.11158 , 2025. [7] Domenic V. Cicchetti. Guidelines, criteria, and rules of thumb for evaluating normed and standardized assessment instruments in psychology. Psychological Assessment , 6(4):284–290, 1994. [8] Cloudbeds. The state of independent lodging report. Technical report, Cloudbeds, 2025. [9] D-EDGE. Hotel distribution report 2024. Technical report, D-EDGE Hospitality Solutions, 2024. [10] Anindya Ghose, Panagiotis G. Ipeirotis, and Beibei Li. Designing ranking systems for hotels on travel search engines by mining user-generated and crowd-sourced content. Marketing Science , 31(3):493–520, 2012. [11] Lucas D. Introna and Helen Nissenbaum. Shaping the web: Why the politics of search engines matters. 
+
+The Information Society , 16(3):169–185, 2000. [12] Japan National Tourism Organization (JNTO). Vis-itor arrivals to Japan, 2024 statistics. Technical re-port, JNTO, 2025. [13] Juhi Kulshrestha et al. Quantifying search bias: In-vestigating sources of bias for political searches in so-cial media. In Proceedings of the 2017 ACM Confer-ence on Computer Supported Cooperative Work and Social Computing , pages 417–432, 2017. [14] Alice Li and Luanne Sinnamon. Generative AI search engines as arbiters of public knowledge: An audit of bias and authority. In Proceedings of the Association for Information Science and Technology , volume 61, 2024. [15] Amit Prakash Sharma. The discovery gap: How Product Hunt startups vanish in LLM organic dis-covery queries. arXiv preprint arXiv:2601.00912 ,2026. [16] Kai-Cheng Yang. News source citing patterns in AI search systems. arXiv preprint arXiv:2507.05301 ,2025. 10 The End of Rented Discovery Zhu & Chang 
+
+# A Experimental Setup 
+
+Model and API configuration. All queries were executed on Gemini 2.5 Flash via the Google GenAI Python SDK ( google-genai ) with the following configuration: 
+
+• Model: gemini-2.5-flash 
+
+• Google Search grounding: enabled ( GoogleSearch tool) 
+
+• Temperature: 1.0 (default; not explicitly overridden) 
+
+• Seed: not available (Gemini API does not support deterministic seeding for grounded responses) 
+
+• Data collection period: March 2026 
+
+Response structure. Each API response contains: (a) a generated text answer in markdown, and (b) a struc-tured list of grounding citations ( grounding chunks )—the URLs and titles of web pages consulted during response generation. We extract and classify the grounding citations; the text responses are used only for hotel name extrac-tion. 
+
+Example query and response format: 
+
+{"query_id": "q0157", "model": "gemini-2.5-flash", "prompt": "Cheap hotel in Chiyoda", "query_language": "en", "query_intent": "transactional", "query_category": "budget", "area": "Chiyoda", "sources": [ {"url": "...", "text": "hotelscombined.com"}, {"url": "...", "text": "expedia.com"}, {"url": "...", "text": "hotels.com"}, {"url": "...", "text": "hostelworld.com"}, {"url": "...", "text": "kayak.com.ph"}, {"url": "...", "text": "momondo.co.za"}, {"url": "...", "text": "agoda.com"} ]}
+
+# B Sample Queries 
+
+The following 10 queries illustrate the paired transactional-experiential design across categories and languages. The full corpus comprises 156 queries (144 area-level + 12 city-level). Table 6: Sample Queries from the Paired Design                                             
+
+> ID Language Category Intent Query q0157 EN Budget Transactional Cheap hotel in Chiyoda q0176 EN Budget Experiential Good value hotel with local charm in Chuo q0194 EN Rating Transactional Best rated hotel in Chuo q0212 EN Rating Experiential Hotel with exceptional service and atmosphere in Chuo q0229 EN Convenience Transactional Hotel near Chiyoda station with easy access q0169 JP Budget Transactional 新宿で安いホテル
+> q0184 JP Budget Experiential 東京都千代 田区で地元の雰囲気が楽しめる コスパ の良いホテル
+> q0208 JP Rating Transactional 豊島で評価の高いホテル
+> q0275 JP Business Transactional 東京都中 央区で出張向けの ホテル
+> q0293 JP Business Experiential 東京都中 央区で仕事 スペ ースがあり 静かな ホテル
+
+11 The End of Rented Discovery Zhu & Chang 
+
+# C Source Classification Taxonomy 
+
+Citations were classified using domain-substring matching. The table below shows the taxonomy structure with representative examples. Table 7: Source Classification Taxonomy 
+
+Category Type Examples 
+
+OTA Global OTA booking.com, expedia.com (incl. regional variants), hotels.com, tripadvisor.com Japanese OTA jalan.net, rakuten.co.jp, ikyu.com, jtb.co.jp APAC OTA agoda.com, trip.com, traveloka.com Meta-search kayak.com, trivago, skyscanner, hotelscombined 
+
+Non-OTA Hotel direct kimptonshinjuku.com, superhotel.co.jp, princehotels.com Editorial curation wanderlog.com, myboutiquehotel.com, icotto.jp, ozmall.co.jp Travel blog Individual travel bloggers Travel media Forbes, Lonely Planet, livejapan.com Local tourism Ward-level tourism boards, gotokyo.org Coworking/workspace bizcomfort.jp, e-office.space Travel agency skyticket.jp, travel.co.jp User-generated YouTube, Reddit, note.com Accommodation platform Airbnb, HafH 
+
+# D Statistical Results 
+
+Table 8: Citation-Level Logistic Regression— P (non-OTA Citation) 
+
+Variable M1 Coef M1 OR [95% CI] M1 p M2 Coef M2 OR [95% CI] M2 p
+
+Intercept −1.429 0.24 [0.18, 0.32] < 0.001 −1.241 0.29 [0.21, 0.40] < 0.001 Intent (experiential) 1.080 2.95 [2.34, 3.71] < 0.001 0.782 2.19 [1.57, 3.04] < 0.001 Language (Japanese) 0.283 1.33 [1.06, 1.67] 0.015 −0.053 0.95 [0.67, 1.35] 0.769 Category: Rating 0.039 1.04 [0.74, 1.47] 0.827 0.037 1.04 [0.73, 1.47] 0.833 Category: Convenience 0.694 2.00 [1.48, 2.71] < 0.001 0.690 1.99 [1.47, 2.70] < 0.001 Category: Business 0.944 2.57 [1.87, 3.54] < 0.001 0.945 2.57 [1.87, 3.54] < 0.001 Experiential × Japanese — — — 0.571 1.77 [1.12, 2.80] 0.015 Model 1: AIC = 1736.0, Log-L = −862.0. Model 2: AIC = 1732.1, Log-L = −859.1. LR test: χ2(1) = 5 .90, p = 0 .015. 
+
+n = 1 ,357 citations. Reference: transactional, English, budget. DV = non-OTA citation. 
+
+Table 9: Query-Level Quasibinomial Regression ( n = 156 queries) To address non-independence, we re-estimated Model 2 at the query level using grouped binomial regression. Scale parameter = 0.262 (slight underdispersion). Variable OR [95% CI] p
+
+Experiential 2.19 [1.85, 2.59] < 0.001 Japanese 0.95 [0.79, 1.14] 0.566 Rating 1.04 [0.87, 1.24] 0.680 Convenience 1.99 [1.71, 2.33] < 0.001 Business 2.57 [2.18, 3.03] < 0.001 Experiential × Japanese 1.77 [1.40, 2.24] < 0.001 Coefficients are substantively identical to citation-level estimates, confirming the finding is not an artifact of pseudo-replication. 12 Table 10: Complete Statistical Test Summary 
+
+Test Statistic Value p
+
+Core finding 
+
+Chi-squared (intent × source) χ2(1) 84.23 4.4 × 10 −20 
+
+Unadjusted OR (non-OTA, E vs T) OR [95% CI] 2.84 [2.27, 3.56] —Cramer’s V V 0.249 —Mann-Whitney U (query-weighted) U 4,721 < 10 −9
+
+Category-level 
+
+Budget χ2(1) 26.00 3.4 × 10 −7
+
+Rating/Quality χ2(1) 16.78 4.2 × 10 −5
+
+Business χ2(1) 25.81 3.8 × 10 −7
+
+Convenience χ2(1) 13.29 2.7 × 10 −4
+
+Language interaction 
+
+LR test (Model 2 vs Model 1) χ2(1) 5.90 0.015 Interaction OR (experiential × JP) OR [95% CI] 1.77 [1.12, 2.80] 0.015 Direct cell: JP-E vs EN-T (non-OTA, unadj.) OR [95% CI] 3.52 [2.53, 4.90] < 10 −14 
+
+Non-OTA composition 
+
+JP-domain share (JP queries) % 68.4% —JP-domain share (EN queries) % 6.4% —EN vs JP composition χ2(10) 171.90 < 0.001 Hotel-direct EN vs JP χ2(1) 2.87 0.090 (n.s.) 
+
+Robustness 
+
+Answer-type specificity (non-OTA: OA vs E) z −0.40 0.69 (n.s.) Answer-type specificity (non-OTA: OA vs T) z 5.14 < 0.0001 Query-length OLS (pooled, intent β) β 0.27 0.0001 Query-length OLS (JP only, intent β) β 0.45 < 0.0001 ICC (test-retest, 20 queries × 5 runs) ICC(1,1) 0.656 —
+
+Hotel-direct 
+
+Hotel-direct EN vs JP (query-level logistic) OR [95% CI] 2.27 [1.08, 4.75] 0.030 Hotel-direct JP-E vs EN-E (one-sided z) z — 0.026 
+
+Exploratory 
+
+SAD cited vs control (Mann-Whitney) U 48 0.003 SAD threshold (Fisher exact) — — 0.002 
+
+# E Robustness Checks 
+
+Query length and lexical richness. OLS regression controlling for query length, adjective density, subjectivity, and type-token ratio confirms that intent remains the strongest predictor in a pooled model ( β = 0 .27, p = 0 .0001, 
+
+n = 156). In Japanese alone, intent survives all lexical controls ( β = 0 .45, p < 0.0001). 
+
+Answer-type specificity. 20 supplementary queries using experiential language but asking OTA-answerable questions produced an OTA citation rate of 46.0% (54.0% non-OTA, n = 137), statistically indistinguishable from the original experiential non-OTA rate of 55.9% ( z = −0.40, p = 0 .69) and significantly higher than the transactional non-OTA rate ( z = 5 .14, p < 0.0001). 
+
+Test-retest reliability. Re-running 20 stratified queries five times each yielded ICC(1,1) = 0.656 (moderate-to-good; [7]). The intent-source divide was positive in all five runs. 
+
+Query-weighted analysis. Treating each query as a single observation: non-OTA rates 27.1% (transactional) vs. 55.1% (experiential). Mann-Whitney U = 4 ,721, p < 10 −9.13
