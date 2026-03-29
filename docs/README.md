@@ -4,73 +4,71 @@
 ────────────────────────────────────────
 
 ## 每次日报
-- 最新运行日期：2026-03-28
-- 运行时间：2026-03-28 20:04:28 UTC
+- 最新运行日期：2026-03-29
+- 运行时间：2026-03-29 20:09:10 UTC
 - 运行状态：成功
 - 本次总论文数：17
 - 精读区：6
 - 速读区：11
 
 ### 今日简报（AI）
-今日精选 17 篇前沿论文，深度聚焦 AI 自主科研监督系统与医疗文献检索的可靠性评估。
-重点关注满分力作 AI-Supervisor 提出的科研世界模型，以及 AI 在辅助医疗检索中存在的误差对比研究。
-建议普通读者关注“图书馆定理”揭示的外部组织如何提升智能体推理能力，以此优化个人的知识管理策略。
-- 详情：[/202603/28/README](/202603/28/README)
+今日深度研读 17 篇论文，重点聚焦满分神作 NoveltyAgent 带来的自主创新分析范式与
+- 详情：[/202603/29/README](/202603/29/README)
 
 ### 精读区论文标签
-1. [AI-Supervisor: Autonomous AI Research Supervision via a Persistent Research World Model](/202603/28/2603.24402v2-ai-supervisor-autonomous-ai-research-supervision-via-a-persistent-research-world-model)  
+1. [NoveltyAgent: Autonomous Novelty Reporting Agent with Point-wise Novelty Analysis and Self-Validation](/202603/29/2603.20884v1-noveltyagent-autonomous-novelty-reporting-agent-with-point-wise-novelty-analysis-and-self-validation)  
    标签：评分：10.0/10、query:sr
-   evidence：包括文献综述在内的自主AI研究监督
-2. [Errors in AI-Assisted Retrieval of Medical Literature: A Comparative Study](/202603/28/2603.22344v1-errors-in-ai-assisted-retrieval-of-medical-literature-a-comparative-study)  
-   标签：评分：9.0/10、query:sr
-   evidence：量化AI辅助医学文献检索中的错误
-3. [ColBERT-Att: Late-Interaction Meets Attention for Enhanced Retrieval](/202603/28/2603.25248v1-colbert-att-late-interaction-meets-attention-for-enhanced-retrieval)  
-   标签：评分：9.0/10、query:sr
-   evidence：利用延迟交互和注意力机制增强检索性能
-4. [SHAPR: Operationalising Human-AI Collaborative Research Through Structured Knowledge Generation](/202603/28/2603.25660v1-shapr-operationalising-human-ai-collaborative-research-through-structured-knowledge-generation)  
-   标签：评分：9.0/10、query:sr
-   evidence：学术研究实践中的结构化知识生成
-5. [Towards Intelligent Geospatial Data Discovery: a knowledge graph-driven multi-agent framework powered by large language models](/202603/28/2603.20670v1-towards-intelligent-geospatial-data-discovery-a-knowledge-graph-driven-multi-agent-framework-powered-by-large-language-models)  
+   evidence：自主创新性报告和相关论文数据库构建
+2. [flexvec: SQL Vector Retrieval with Programmatic Embedding Modulation](/202603/29/2603.22587v1-flexvec-sql-vector-retrieval-with-programmatic-embedding-modulation)  
    标签：评分：8.0/10、query:sr
-   evidence：利用知识图谱和大模型进行智能地理空间数据发现
-6. [PAVE: Premise-Aware Validation and Editing for Retrieval-Augmented LLMs](/202603/28/2603.20673v1-pave-premise-aware-validation-and-editing-for-retrieval-augmented-llms)  
+   evidence：面向AI智能体的可编程向量检索
+3. [DALDALL: Data Augmentation for Lexical and Semantic Diverse in Legal Domain by leveraging LLM-Persona](/202603/29/2603.22765v1-daldall-data-augmentation-for-lexical-and-semantic-diverse-in-legal-domain-by-leveraging-llm-persona)  
    标签：评分：8.0/10、query:sr
-   evidence：检索增强大语言模型中基于证据问答的验证层
+   evidence：信息检索中多样化查询生成的增强方法
+4. [TaCo: Data-adaptive and Query-aware Subspace Collision for High-dimensional Approximate Nearest Neighbor Search](/202603/29/2603.24919v1-taco-data-adaptive-and-query-aware-subspace-collision-for-high-dimensional-approximate-nearest-neighbor-search)  
+   标签：评分：8.0/10、query:sr
+   evidence：高维近似最近邻搜索
+5. [UniAI-GraphRAG: Synergizing Ontology-Guided Extraction, Multi-Dimensional Clustering, and Dual-Channel Fusion for Robust Multi-Hop Reasoning](/202603/29/2603.25152v1-uniai-graphrag-synergizing-ontology-guided-extraction-multi-dimensional-clustering-and-dual-channel-fusion-for-robust-multi-hop-reasoning)  
+   标签：评分：8.0/10、query:sr
+   evidence：增强的结构化知识组织与检索框架
+6. [Adaptive Chunking: Optimizing Chunking-Method Selection for RAG](/202603/29/2603.25333v1-adaptive-chunking-optimizing-chunking-method-selection-for-rag)  
+   标签：评分：8.0/10、query:sr
+   evidence：优化分块以提高检索效果
 
 ### 速读区论文标签
-1. [Ontology-driven personalized information retrieval for XML documents](/202603/28/2603.21139v1-ontology-driven-personalized-information-retrieval-for-xml-documents)  
+1. [RenoBench: A Citation Parsing Benchmark](/202603/29/2603.25640v1-renobench-a-citation-parsing-benchmark)  
    标签：评分：8.0/10、query:sr
-   evidence：本体驱动的个性化信息检索
-2. [The Library Theorem: How External Organization Governs Agentic Reasoning Capacity](/202603/28/2603.21272v1-the-library-theorem-how-external-organization-governs-agentic-reasoning-capacity)  
+   evidence：学术基础设施的引文解析
+2. [Training the Knowledge Base through Evidence Distillation and Write-Back Enrichment](/202603/29/2603.25737v1-training-the-knowledge-base-through-evidence-distillation-and-write-back-enrichment)  
    标签：评分：8.0/10、query:sr
-   evidence：用于信息发现的结构化检索与索引
-3. [Integrating Causal Machine Learning into Clinical Decision Support Systems: Insights from Literature and Practice](/202603/28/2603.24448v1-integrating-causal-machine-learning-into-clinical-decision-support-systems-insights-from-literature-and-practice)  
-   标签：评分：8.0/10、query:sr
-   evidence：临床决策支持的结构化文献综述方法论
-4. [DAGverse: Building Document-Grounded Semantic DAGs from Scientific Papers](/202603/28/2603.25293v1-dagverse-building-document-grounded-semantic-dags-from-scientific-papers)  
-   标签：评分：8.0/10、query:sr
-   evidence：从科学论文中提取结构化知识
-5. [DIAL-KG: Schema-Free Incremental Knowledge Graph Construction via Dynamic Schema Induction and Evolution-Intent Assessment](/202603/28/2603.20059v1-dial-kg-schema-free-incremental-knowledge-graph-construction-via-dynamic-schema-induction-and-evolution-intent-assessment)  
+   evidence：用于改进RAG知识库的证据蒸馏与富化
+3. [Can we automatize scientific discovery in the cognitive sciences?](/202603/29/2603.20988v1-can-we-automatize-scientific-discovery-in-the-cognitive-sciences)  
    标签：评分：7.0/10、query:sr
-   evidence：用于搜索的增量知识图谱构建
-6. [The End of Rented Discovery: How AI Search Redistributes Power Between Hotels and Intermediaries](/202603/28/2603.20062v1-the-end-of-rented-discovery-how-ai-search-redistributes-power-between-hotels-and-intermediaries)  
+   evidence：利用大语言模型自动化科学发现循环
+4. [Guideline-grounded retrieval-augmented generation for ophthalmic clinical decision support](/202603/29/2603.21925v1-guideline-grounded-retrieval-augmented-generation-for-ophthalmic-clinical-decision-support)  
    标签：评分：7.0/10、query:sr
-   evidence：AI搜索引擎引文落地与查询框架
-7. [Bypassing Document Ingestion: An MCP Approach to Financial Q&A](/202603/28/2603.20316v1-bypassing-document-ingestion-an-mcp-approach-to-financial-qa)  
+   evidence：包含查询分解和重排序的可控检索框架
+5. [On the Challenges and Opportunities of Learned Sparse Retrieval for Code](/202603/29/2603.22008v1-on-the-challenges-and-opportunities-of-learned-sparse-retrieval-for-code)  
    标签：评分：7.0/10、query:sr
-   evidence：信息检索中标准检索增强生成的替代方案
-8. [RubricRAG: Towards Interpretable and Reliable LLM Evaluation via Domain Knowledge Retrieval for Rubric Generation](/202603/28/2603.20882v1-rubricrag-towards-interpretable-and-reliable-llm-evaluation-via-domain-knowledge-retrieval-for-rubric-generation)  
+   evidence：用于代码发现的学习型稀疏检索
+6. [ProGRank: Probe-Gradient Reranking to Defend Dense-Retriever RAG from Corpus Poisoning](/202603/29/2603.22934v1-progrank-probe-gradient-reranking-to-defend-dense-retriever-rag-from-corpus-poisoning)  
    标签：评分：7.0/10、query:sr
-   evidence：用于评估准则的领域知识检索
-9. [Coding Agents are Effective Long-Context Processors](/202603/28/2603.20432v1-coding-agents-are-effective-long-context-processors)  
+   evidence：防御稠密检索RAG中的语料库投毒
+7. [Parametric Knowledge and Retrieval Behavior in RAG Fine-Tuning for Electronic Design Automation](/202603/29/2603.23047v1-parametric-knowledge-and-retrieval-behavior-in-rag-fine-tuning-for-electronic-design-automation)  
+   标签：评分：7.0/10、query:sr
+   evidence：RAG系统中的检索行为与评估
+8. [Mixture of Demonstrations for Textual Graph Understanding and Question Answering](/202603/29/2603.23554v1-mixture-of-demonstrations-for-textual-graph-understanding-and-question-answering)  
+   标签：评分：7.0/10、query:sr
+   evidence：用于特定领域发现的检索增强生成
+9. [GoogleTrendArchive: A Year-Long Archive of Real-Time Web Search Trends Worldwide](/202603/29/2603.21871v1-googletrendarchive-a-year-long-archive-of-real-time-web-search-trends-worldwide)  
    标签：评分：6.0/10、query:sr
-   evidence：用于检索增强生成的长上下文处理
-10. [Awakening: Modern Challenges and Opportunities of Software Engineering Research](/202603/28/2603.21403v1-awakening-modern-challenges-and-opportunities-of-software-engineering-research)  
+   evidence：实时网络搜索趋势存档以发现模式
+10. [The Semantic Ladder: A Framework for Progressive Formalization of Natural Language Content for Knowledge Graphs and AI Systems](/202603/29/2603.22136v1-the-semantic-ladder-a-framework-for-progressive-formalization-of-natural-language-content-for-knowledge-graphs-and-ai-systems)  
    标签：评分：6.0/10、query:sr
-   evidence：学术研究中的方法论挑战与评估实践
-11. [Toward a Theory of Hierarchical Memory for Language Agents](/202603/28/2603.21564v1-toward-a-theory-of-hierarchical-memory-for-language-agents)  
+   evidence：自然语言内容形式化的框架
+11. [Do Large Language Models Reduce Research Novelty? Evidence from Information Systems Journals](/202603/29/2603.22510v1-do-large-language-models-reduce-research-novelty-evidence-from-information-systems-journals)  
    标签：评分：6.0/10、query:sr
-   evidence：从原始数据中检索内容的分层记忆理论
+   evidence：使用嵌入向量衡量研究论文的语义创新性
 
 
 ════════════════════════════════════════
