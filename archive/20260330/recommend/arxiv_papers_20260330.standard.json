@@ -1,0 +1,677 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-30T20:36:58.573947+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 6,
+    "deep_cap": 6,
+    "deep_selected": 6,
+    "quick_candidates": 19,
+    "quick_skim_target": 11,
+    "quick_selected": 11
+  },
+  "deep_dive": [
+    {
+      "id": "2603.26116v1",
+      "title": "Reconciling Latent Variables and Networks: Exploring and extending the Psychometric-Toolbox",
+      "abstract": "Since the introduction of network psychometrics, several connections to statistical models in \"classical\" psychometrics (i.e., IRT, SEM, GLM) as well as to approaches from other research fields have been established. In this paper, these developments have been reviewed and synthesized and, based on an exploratory literature search, further advanced and presented in an accessible visual format. This perspective opens up promising opportunities to extend the psychometric-toolbox by incorporating and learning from statistical methodologies developed in other research domains, which often address similar or even identical problems. Highlighting these methodological commonalities may also foster collaboration across research fields that have traditionally remained largely independent. Moreover, awareness of these connections may render methodological development more systematic and goal-directed and may enable a meaningful division of labor, for example between the development of statistical methodology and its practical implementation for empirical research through software tools. Finally, these methodological advances provide new opportunities for empirical research and may contribute to a reconciliation with longstanding conceptual issues concerning psychometric constructs and, more broadly, psychological phenomena.",
+      "authors": [
+        "Kevin Kistermann",
+        "Vivato V. Andriamiarana",
+        "Augustin Kelava"
+      ],
+      "primary_category": "stat.ME",
+      "categories": [
+        "stat.ME",
+        "stat.AP"
+      ],
+      "published": "2026-03-27T07:03:48+00:00",
+      "link": "https://arxiv.org/pdf/2603.26116v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "exploratory literature search and methodological synthesis",
+      "llm_evidence_cn": "探索性文献检索与方法论综合",
+      "llm_evidence": "探索性文献检索与方法论综合",
+      "canonical_evidence": "探索性文献检索与方法论综合",
+      "llm_tldr_en": "Synthesizes psychometric methodologies based on an exploratory literature search.",
+      "llm_tldr_cn": "在探索性文献检索的基础上，综合并推进了心理测量学方法论。",
+      "llm_tldr": "在探索性文献检索的基础上，综合并推进了心理测量学方法论。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.26496v1",
+      "title": "Innovation Discovery System for Networking Research",
+      "abstract": "As networking systems become increasingly complex, achieving disruptive innovation grows more challenging. At the same time, recent progress in Large Language Models (LLMs) has shown strong potential for scientific hypothesis formation and idea generation. Nevertheless, applying LLMs effectively to networking research remains difficult for two main reasons: standalone LLMs tend to generate ideas by recombining existing solutions, and current open-source networking resources do not provide the structured, idea-level knowledge necessary for data-driven scientific discovery.   To bridge this gap, we present SciNet, a research idea generation system specifically designed for networking. SciNet is built upon three key components: (1) constructing a networking-oriented scientific discovery dataset from top-tier networking conferences, (2) simulating the human idea discovery workflow through problem setting, inspiration retrieval, and idea generation, and (3) developing an idea evaluation method that jointly measures novelty and practicality. Experimental results show that \\system consistently produces practical and novel networking research ideas across multiple LLM backbones, and outperforms standalone LLM-based generation in overall idea quality.",
+      "authors": [
+        "Mengrui Zhang",
+        "Bang Huang",
+        "Yunxin Xu",
+        "Haiying Huang",
+        "Luxi Zhao",
+        "Mochun Long",
+        "Qingyu Song",
+        "Qiao Xiang",
+        "Xue Liu",
+        "Jiwu Shu"
+      ],
+      "primary_category": "cs.NI",
+      "categories": [
+        "cs.NI"
+      ],
+      "published": "2026-03-27T14:59:22+00:00",
+      "link": "https://arxiv.org/pdf/2603.26496v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "research idea generation system for scientific discovery",
+      "llm_evidence_cn": "用于科学发现的研究想法生成系统",
+      "llm_evidence": "用于科学发现的研究想法生成系统",
+      "canonical_evidence": "用于科学发现的研究想法生成系统",
+      "llm_tldr_en": "SciNet uses LLMs and structured knowledge to automate research idea generation and innovation discovery in networking.",
+      "llm_tldr_cn": "SciNet利用大模型和结构化知识，在网络研究领域实现自动化的研究想法生成和创新发现。",
+      "llm_tldr": "SciNet利用大模型和结构化知识，在网络研究领域实现自动化的研究想法生成和创新发现。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.23989v1",
+      "title": "CoCR-RAG: Enhancing Retrieval-Augmented Generation in Web Q&A via Concept-oriented Context Reconstruction",
+      "abstract": "Retrieval-augmented generation (RAG) has shown promising results in enhancing Q&A by incorporating information from the web and other external sources. However, the supporting documents retrieved from the heterogeneous web often originate from multiple sources with diverse writing styles, varying formats, and inconsistent granularity. Fusing such multi-source documents into a coherent and knowledge-intensive context remains a significant challenge, as the presence of irrelevant and redundant information can compromise the factual consistency of the inferred answers. This paper proposes the Concept-oriented Context Reconstruction RAG (CoCR-RAG), a framework that addresses the multi-source information fusion problem in RAG through linguistically grounded concept-level integration. Specifically, we introduce a concept distillation algorithm that extracts essential concepts from Abstract Meaning Representation (AMR), a stable semantic representation that structures the meaning of texts as logical graphs. The distilled concepts from multiple retrieved documents are then fused and reconstructed into a unified, information-intensive context by Large Language Models, which supplement only the necessary sentence elements to highlight the core knowledge. Experiments on the PopQA and EntityQuestions datasets demonstrate that CoCR-RAG significantly outperforms existing context-reconstruction methods across these Web Q&A benchmarks. Furthermore, CoCR-RAG shows robustness across various backbone LLMs, establishing itself as a flexible, plug-and-play component adaptable to different RAG frameworks.",
+      "authors": [
+        "Kaize Shi",
+        "Xueyao Sun",
+        "Qika Lin",
+        "Firoj Alam",
+        "Qing Li",
+        "Xiaohui Tao",
+        "Guandong Xu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-25T06:38:09+00:00",
+      "link": "https://arxiv.org/pdf/2603.23989v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "context reconstruction for multi-source information fusion in retrieval",
+      "llm_evidence_cn": "多源信息融合的上下文重构检索技术",
+      "llm_evidence": "多源信息融合的上下文重构检索技术",
+      "canonical_evidence": "多源信息融合的上下文重构检索技术",
+      "llm_tldr_en": "Proposes CoCR-RAG to improve retrieval by fusing multi-source web documents into coherent contexts.",
+      "llm_tldr_cn": "提出CoCR-RAG框架，通过重构上下文解决多源Web文档检索中的信息融合挑战。",
+      "llm_tldr": "提出CoCR-RAG框架，通过重构上下文解决多源Web文档检索中的信息融合挑战。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.25092v1",
+      "title": "AuthorityBench: Benchmarking LLM Authority Perception for Reliable Retrieval-Augmented Generation",
+      "abstract": "Retrieval-Augmented Generation (RAG) enhances Large Language Models (LLMs) with external knowledge but remains vulnerable to low-authority sources that can propagate misinformation. We investigate whether LLMs can perceive information authority - a capability extending beyond semantic understanding. To address this, we introduce AuthorityBench, a comprehensive benchmark for evaluating LLM authority perception comprising three datasets: DomainAuth (10K web domains with PageRank-based authority), EntityAuth (22K entities with popularity-based authority), and RAGAuth (120 queries with documents of varying authority for downstream evaluation). We evaluate five LLMs using three judging methods (PointJudge, PairJudge, ListJudge) across multiple output formats. Results show that ListJudge and PairJudge with PointScore output achieve the strongest correlation with ground-truth authority, while ListJudge offers optimal cost-effectiveness. Notably, incorporating webpage text consistently degrades judgment performance, suggesting authority is distinct from textual style. Downstream experiments on RAG demonstrate that authority-guided filtering largely improves answer accuracy, validating the practical importance of authority perception for reliable knowledge retrieval. Code and benchmark are available at: https://github.com/Trustworthy-Information-Access/AuthorityBench.",
+      "authors": [
+        "Zhihui Yao",
+        "Hengran Zhang",
+        "Keping Bi"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR"
+      ],
+      "published": "2026-03-26T06:58:22+00:00",
+      "link": "https://arxiv.org/pdf/2603.25092v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Benchmarking authority perception for reliable retrieval",
+      "llm_evidence_cn": "基准测试权威感知以实现可靠检索",
+      "llm_evidence": "基准测试权威感知以实现可靠检索",
+      "canonical_evidence": "基准测试权威感知以实现可靠检索",
+      "llm_tldr_en": "Introduces AuthorityBench to evaluate LLM ability to perceive source authority in RAG.",
+      "llm_tldr_cn": "引入 AuthorityBench 来评估大模型在检索增强生成中感知来源权威性的能力。",
+      "llm_tldr": "引入 AuthorityBench 来评估大模型在检索增强生成中感知来源权威性的能力。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.25374v1",
+      "title": "Supercharging Federated Intelligence Retrieval",
+      "abstract": "RAG typically assumes centralized access to documents, which breaks down when knowledge is distributed across private data silos. We propose a secure Federated RAG system built using Flower that performs local silo retrieval, while server-side aggregation and text generation run inside an attested, confidential compute environment, enabling confidential remote LLM inference even in the presence of honest-but-curious or compromised servers. We also propose a cascading inference approach that incorporates a non-confidential third-party model (e.g., Amazon Nova) as auxiliary context without weakening confidentiality.",
+      "authors": [
+        "Dimitris Stripelis",
+        "Patrick Foley",
+        "Mohammad Naseri",
+        "William Lindskog-Münzing",
+        "Chong Shen Ng",
+        "Daniel Janes Beutel",
+        "Nicholas D. Lane"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.CL",
+        "cs.CR",
+        "cs.LG"
+      ],
+      "published": "2026-03-26T12:23:53+00:00",
+      "link": "https://arxiv.org/pdf/2603.25374v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "federated intelligence retrieval across private document silos",
+      "llm_evidence_cn": "跨私有文档库的联邦智能检索",
+      "llm_evidence": "跨私有文档库的联邦智能检索",
+      "canonical_evidence": "跨私有文档库的联邦智能检索",
+      "llm_tldr_en": "Proposes a secure Federated RAG system for retrieving information from distributed private document collections.",
+      "llm_tldr_cn": "提出了一种安全的联邦RAG系统，用于从分布式的私有文档集中检索信息。",
+      "llm_tldr": "提出了一种安全的联邦RAG系统，用于从分布式的私有文档集中检索信息。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.26253v1",
+      "title": "SocialX: A Modular Platform for Multi-Source Big Data Research in Indonesia",
+      "abstract": "Big data research in Indonesia is constrained by a fundamental fragmentation: relevant data is scattered across social media, news portals, e-commerce platforms, review sites, and academic databases, each with different formats, access methods, and noise characteristics. Researchers must independently build collection pipelines, clean heterogeneous data, and assemble separate analysis tools, a process that often overshadows the research itself. We present SocialX, a modular platform for multi-source big data research that integrates heterogeneous data collection, language-aware preprocessing, and pluggable analysis into a unified, source-agnostic pipeline. The platform separates concerns into three independent layers (collection, preprocessing, and analysis) connected by a lightweight job-coordination mechanism. This modularity allows each layer to grow independently: new data sources, preprocessing methods, or analysis tools can be added without modifying the existing pipeline. We describe the design principles that enable this extensibility, detail the preprocessing methodology that addresses challenges specific to Indonesian text across registers, and demonstrate the platform's utility through a walkthrough of a typical research workflow. SocialX is publicly accessible as a web-based platform at https://www.socialx.id.",
+      "authors": [
+        "Muhammad Apriandito Arya Saputra",
+        "Andry Alamsyah",
+        "Dian Puteri Ramadhani",
+        "Thomhert Suprapto Siadari",
+        "Hanif Fakhrurroja"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-27T10:22:34+00:00",
+      "link": "https://arxiv.org/pdf/2603.26253v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "platform for multi-source big data research including academic databases",
+      "llm_evidence_cn": "包含学术数据库在内的多源大数据研究平台",
+      "llm_evidence": "包含学术数据库在内的多源大数据研究平台",
+      "canonical_evidence": "包含学术数据库在内的多源大数据研究平台",
+      "llm_tldr_en": "SocialX integrates heterogeneous data collection and analysis for multi-source research pipelines.",
+      "llm_tldr_cn": "SocialX是一个集成异构数据采集与分析的模块化平台，支持多源大数据研究。",
+      "llm_tldr": "SocialX是一个集成异构数据采集与分析的模块化平台，支持多源大数据研究。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2603.20939v1",
+      "title": "User Preference Modeling for Conversational LLM Agents: Weak Rewards from Retrieval-Augmented Interaction",
+      "abstract": "Large language models are increasingly used as personal assistants, yet most lack a persistent user model, forcing users to repeatedly restate preferences across sessions. We propose Vector-Adapted Retrieval Scoring (VARS), a pipeline-agnostic, frozen-backbone framework that represents each user with long-term and short-term vectors in a shared preference space and uses these vectors to bias retrieval scoring over structured preference memory. The vectors are updated online from weak scalar rewards from users' feedback, enabling personalization without per-user fine-tuning. We evaluate on \\textsc{MultiSessionCollab}, an online multi-session collaboration benchmark with rich user preference profiles, across math and code tasks. Under frozen backbones, the main benefit of user-aware retrieval is improved interaction efficiency rather than large gains in raw task accuracy: our full VARS agent achieves the strongest overall performance, matches a strong Reflection baseline in task success, and reduces timeout rate and user effort. The learned long-term vectors also align with cross-user preference overlap, while short-term vectors capture session-specific adaptation, supporting the interpretability of the dual-vector design. Code, model, and data are available at https://github.com/YurenHao0426/VARS.",
+      "authors": [
+        "Yuren Hao",
+        "Shuhaib Mehri",
+        "ChengXiang Zhai",
+        "Dilek Hakkani-Tür"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.HC",
+        "cs.IR",
+        "stat.ML"
+      ],
+      "published": "2026-03-21T20:44:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.20939v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "biasing retrieval scoring based on user preference memory",
+      "llm_evidence_cn": "基于用户偏好记忆偏置检索评分",
+      "llm_evidence": "基于用户偏好记忆偏置检索评分",
+      "canonical_evidence": "基于用户偏好记忆偏置检索评分",
+      "llm_tldr_en": "A framework for personalizing retrieval in LLM agents using long-term and short-term preference vectors.",
+      "llm_tldr_cn": "一种利用长短期偏好向量实现LLM智能体个性化检索的框架。",
+      "llm_tldr": "一种利用长短期偏好向量实现LLM智能体个性化检索的框架。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.23682v1",
+      "title": "Assessment Design in the AI Era: A Method for Identifying Items Functioning Differentially for Humans and Chatbots",
+      "abstract": "The rapid adoption of large language models (LLMs) in education raises profound challenges for assessment design. To adapt assessments to the presence of LLM-based tools, it is crucial to characterize the strengths and weaknesses of LLMs in a generalizable, valid and reliable manner. However, current LLM evaluations often rely on descriptive statistics derived from benchmarks, and little research applies theory-grounded measurement methods to characterize LLM capabilities relative to human learners in ways that directly support assessment design. Here, by combining educational data mining and psychometric theory, we introduce a statistically principled approach for identifying items on which humans and LLMs show systematic response differences, pinpointing where assessments may be most vulnerable to AI misuse, and which task dimensions make problems particularly easy or difficult for generative AI. The method is based on Differential Item Functioning (DIF) analysis -- traditionally used to detect bias across demographic groups -- together with negative control analysis and item-total correlation discrimination analysis. It is evaluated on responses from human learners and six leading chatbots (ChatGPT-4o \\& 5.2, Gemini 1.5 \\& 3 Pro, Claude 3.5 \\& 4.5 Sonnet) to two instruments: a high school chemistry diagnostic test and a university entrance exam. Subject-matter experts then analyzed DIF-flagged items to characterize task dimensions associated with chatbot over- or under-performance. Results show that DIF-informed analytics provide a robust framework for understanding where LLM and human capabilities diverge, and highlight their value for improving the design of valid, reliable, and fair assessment in the AI era.",
+      "authors": [
+        "Licol Zeinfeld",
+        "Alona Strugatski",
+        "Ziva Bar-Dov",
+        "Ron Blonder",
+        "Shelley Rap",
+        "Giora Alexandron"
+      ],
+      "primary_category": "cs.HC",
+      "categories": [
+        "cs.HC",
+        "cs.AI"
+      ],
+      "published": "2026-03-24T19:39:39+00:00",
+      "link": "https://arxiv.org/pdf/2603.23682v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "method for identifying differential item functioning in AI assessments",
+      "llm_evidence_cn": "识别AI评估中差异化项目功能的统计方法",
+      "llm_evidence": "识别AI评估中差异化项目功能的统计方法",
+      "canonical_evidence": "识别AI评估中差异化项目功能的统计方法",
+      "llm_tldr_en": "Introduces a statistically principled approach to evaluate LLM capabilities relative to humans in educational assessments.",
+      "llm_tldr_cn": "引入了一种统计学方法，用于在教育评估中评估大模型相对于人类的能力。",
+      "llm_tldr": "引入了一种统计学方法，用于在教育评估中评估大模型相对于人类的能力。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.21148v1",
+      "title": "Fast Nearest Neighbor Search for $\\ell_p$ Metrics",
+      "abstract": "The Nearest Neighbor Search (NNS) problem asks to design a data structure that preprocesses an $n$-point dataset $X$ lying in a metric space $\\mathcal{M}$, so that given a query point $q \\in \\mathcal{M}$, one can quickly return a point of $X$ minimizing the distance to $q$. The efficiency of such a data structure is evaluated primarily by the amount of space it uses and the time required to answer a query. We focus on the fast query-time regime, which is crucial for modern large-scale applications, where datasets are massive and queries must be processed online, and is often modeled by query time $\\text{poly}(d \\log n)$. Our main result is such a randomized data structure for NNS in $\\ell_p$ spaces, $p>2$, that achieves $p^{O(1) + \\log\\log p}$ approximation with fast query time and $\\text{poly}(dn)$ space. Our data structure improves, or is incomparable to, the state-of-the-art for the fast query-time regime from [Bartal and Gottlieb, TCS 2019] and [Krauthgamer, Petruschka and Sapir, FOCS 2025].",
+      "authors": [
+        "Robert Krauthgamer",
+        "Nir Petruschka"
+      ],
+      "primary_category": "cs.DS",
+      "categories": [
+        "cs.DS",
+        "cs.CG",
+        "math.MG"
+      ],
+      "published": "2026-03-22T09:49:43+00:00",
+      "link": "https://arxiv.org/pdf/2603.21148v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "fast nearest neighbor search for large-scale applications",
+      "llm_evidence_cn": "大规模应用中的快速最近邻搜索",
+      "llm_evidence": "大规模应用中的快速最近邻搜索",
+      "canonical_evidence": "大规模应用中的快速最近邻搜索",
+      "llm_tldr_en": "Develops a randomized data structure for fast nearest neighbor search in high-dimensional spaces.",
+      "llm_tldr_cn": "为高维空间中的快速最近邻搜索开发了一种高效的随机化数据结构。",
+      "llm_tldr": "为高维空间中的快速最近邻搜索开发了一种高效的随机化数据结构。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.24080v1",
+      "title": "LLMpedia: A Transparent Framework to Materialize an LLM's Encyclopedic Knowledge at Scale",
+      "abstract": "Benchmarks such as MMLU suggest flagship language models approach factuality saturation, with scores above 90\\%. We show this picture is incomplete. \\emph{LLMpedia} generates encyclopedic articles entirely from parametric memory, producing ${\\sim}$1M articles across three model families without retrieval. For gpt-5-mini, the verifiable true rate on Wikipedia-covered subjects is only 74.7\\% -- more than 15 percentage points below the benchmark-based picture, consistent with the availability bias of fixed-question evaluation. Beyond Wikipedia, frontier subjects verifiable only through curated web evidence fall further to 63.2\\% true rate. Wikipedia covers just 61\\% of surfaced subjects, and three model families overlap by only 7.3\\% in subject choice. In a capture-trap benchmark inspired by prior analysis of Grokipedia, LLMpedia achieves substantially higher factuality at roughly half the textual similarity to Wikipedia. Unlike Grokipedia, every prompt, artifact, and evaluation verdict is publicly released, making LLMpedia the first fully open parametric encyclopedia -- bridging factuality evaluation and knowledge materialization. All data, code, and a browsable interface are at https://llmpedia.net.",
+      "authors": [
+        "Muhammed Saeed",
+        "Simon Razniewski"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.DB"
+      ],
+      "published": "2026-03-25T08:37:26+00:00",
+      "link": "https://arxiv.org/pdf/2603.24080v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Generating encyclopedic articles and verifying knowledge at scale",
+      "llm_evidence_cn": "大规模生成百科文章并验证知识",
+      "llm_evidence": "大规模生成百科文章并验证知识",
+      "canonical_evidence": "大规模生成百科文章并验证知识",
+      "llm_tldr_en": "Evaluates LLM factuality by generating 1M encyclopedic articles to surface knowledge gaps beyond benchmarks.",
+      "llm_tldr_cn": "通过生成百万篇百科文章评估大模型的真实性，揭示了基准测试之外的知识缺口。",
+      "llm_tldr": "通过生成百万篇百科文章评估大模型的真实性，揭示了基准测试之外的知识缺口。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.21710v1",
+      "title": "FGIM: a Fast Graph-based Indexes Merging Framework for Approximate Nearest Neighbor Search",
+      "abstract": "As the state-of-the-art methods for high-dimensional data retrieval, Approximate Nearest Neighbor Search (ANNS) approaches with graph-based indexes have attracted increasing attention and play a crucial role in many real-world applications, e.g., retrieval-augmented generation (RAG) and recommendation systems. Unlike the extensive works focused on designing efficient graph-based ANNS methods, this paper delves into merging multiple existing graph-based indexes into a single one, which is also crucial in many real-world scenarios (e.g., cluster consolidation in distributed systems and read-write contention in real-time vector databases). We propose a Fast Graph-based Indexes Merging (FGIM) framework with three core techniques: (1) Proximity Graphs (PGs) to $k$ Nearest Neighbor Graph ($k$-NNG) transformation used to extract potential candidate neighbors from input graph-based indexes through cross-querying, (2) $k$-NNG refinement designed to identify overlooked high-quality neighbors and maintain graph connectivity, and (3) $k$-NNG to PG transformation aimed at improving graph navigability and enhancing search performance. Then, we integrate our FGIM framework with the state-of-the-art ANNS method, HNSW, and other existing mainstream graph-based methods to demonstrate its generality and merging efficiency. Extensive experiments on six real-world datasets show that our FGIM framework is applicable to various mainstream graph-based ANNS methods, achieves up to 3.5$\\times$ speedup over HNSW's incremental construction and an average of 7.9$\\times$ speedup for methods without incremental support, while maintaining comparable or superior search performance.",
+      "authors": [
+        "Zekai Wu",
+        "Jiabao Jin",
+        "Peng Cheng",
+        "Xiaoyao Zhong",
+        "Lei Chen",
+        "Yongxin Tong",
+        "Zhitao Shen",
+        "Jingkuan Song",
+        "Heng Tao Shen",
+        "Xuemin Lin"
+      ],
+      "primary_category": "cs.DB",
+      "categories": [
+        "cs.DB"
+      ],
+      "published": "2026-03-23T08:53:17+00:00",
+      "link": "https://arxiv.org/pdf/2603.21710v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "fast graph-based indexes merging for search",
+      "llm_evidence_cn": "用于搜索的快速图索引合并框架",
+      "llm_evidence": "用于搜索的快速图索引合并框架",
+      "canonical_evidence": "用于搜索的快速图索引合并框架",
+      "llm_tldr_en": "Introduces FGIM, a framework for merging graph-based indexes to improve high-dimensional data retrieval efficiency.",
+      "llm_tldr_cn": "引入FGIM框架，通过合并图索引来提高高维数据检索的效率。",
+      "llm_tldr": "引入FGIM框架，通过合并图索引来提高高维数据检索的效率。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.24920v1",
+      "title": "PDET-LSH: Scalable In-Memory Indexing for High-Dimensional Approximate Nearest Neighbor Search with Quality Guarantees",
+      "abstract": "Locality-sensitive hashing (LSH) is a well-known solution for approximate nearest neighbor (ANN) search with theoretical guarantees. Traditional LSH-based methods mainly focus on improving the efficiency and accuracy of query phase by designing different query strategies, but pay little attention to improving the efficiency of the indexing phase. They typically fine-tune existing data-oriented partitioning trees to index data points and support their query strategies. However, their strategy to directly partition the multidimensional space is time-consuming, and performance degrades as the space dimensionality increases. In this paper, we design an encoding-based tree called Dynamic Encoding Tree (DE-Tree) to improve the indexing efficiency and support efficient range queries. Based on DE-Tree, we propose a novel LSH scheme called DET-LSH. DET-LSH adopts a novel query strategy, which performs range queries in multiple independent index DE-Trees to reduce the probability of missing exact NN points. Extensive experiments demonstrate that while achieving best query accuracy, DET-LSH achieves up to 6x speedup in indexing time and 2x speedup in query time over the state-of-the-art LSH-based methods. In addition, to further improve the performance of DET-LSH, we propose PDET-LSH, an in-memory method adopting the parallelization opportunities provided by multicore CPUs. PDET-LSH exhibits considerable advantages in indexing and query efficiency, especially on large-scale datasets. Extensive experiments show that, while achieving the same query accuracy as DET-LSH, PDET-LSH offers up to 40x speedup in indexing time and 62x speedup in query answering time over the state-of-the-art LSH-based methods. Our theoretical analysis demonstrates that DET-LSH and PDET-LSH offer probabilistic guarantees on query answering accuracy. This paper was published in TKDE.",
+      "authors": [
+        "Jiuqi Wei",
+        "Xiaodong Lee",
+        "Botao Peng",
+        "Quanqing Xu",
+        "Chuanhui Yang",
+        "Themis Palpanas"
+      ],
+      "primary_category": "cs.DB",
+      "categories": [
+        "cs.DB"
+      ],
+      "published": "2026-03-26T01:18:51+00:00",
+      "link": "https://arxiv.org/pdf/2603.24920v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "scalable indexing for high-dimensional search",
+      "llm_evidence_cn": "高维搜索的可扩展索引",
+      "llm_evidence": "高维搜索的可扩展索引",
+      "canonical_evidence": "高维搜索的可扩展索引",
+      "llm_tldr_en": "Proposes a dynamic encoding tree for efficient approximate nearest neighbor search in high dimensions.",
+      "llm_tldr_cn": "提出一种动态编码树，用于高维空间中高效的近似最近邻搜索。",
+      "llm_tldr": "提出一种动态编码树，用于高维空间中高效的近似最近邻搜索。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.22999v1",
+      "title": "PaperVoyager : Building Interactive Web with Visual Language Models",
+      "abstract": "Recent advances in visual language models have enabled autonomous agents for complex reasoning, tool use, and document understanding. However, existing document agents mainly transform papers into static artifacts such as summaries, webpages, or slides, which are insufficient for technical papers involving dynamic mechanisms and state transitions. In this work, we propose a Paper-to-Interactive-System Agent that converts research papers into executable interactive web systems. Given a PDF paper, the agent performs end-to-end processing without human intervention, including paper understanding, system modeling, and interactive webpage synthesis, enabling users to manipulate inputs and observe dynamic behaviors. To evaluate this task, we introduce a benchmark of 19 research papers paired with expert-built interactive systems as ground truth. We further propose PaperVoyager, a structured generation framework that explicitly models mechanisms and interaction logic during synthesis. Experiments show that PaperVoyager significantly improves the quality of generated interactive systems, offering a new paradigm for interactive scientific paper understanding.",
+      "authors": [
+        "Dasen Dai",
+        "Biao Wu",
+        "Meng Fang",
+        "Wenhao Wang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-24T09:42:27+00:00",
+      "link": "https://arxiv.org/pdf/2603.22999v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "converts research papers into interactive systems for understanding",
+      "llm_evidence_cn": "将研究论文转换为交互式系统以辅助理解",
+      "llm_evidence": "将研究论文转换为交互式系统以辅助理解",
+      "canonical_evidence": "将研究论文转换为交互式系统以辅助理解",
+      "llm_tldr_en": "PaperVoyager transforms static PDFs into interactive web systems to help researchers understand dynamic mechanisms.",
+      "llm_tldr_cn": "PaperVoyager将静态PDF论文转换为交互式网页系统，帮助研究人员理解动态机制。",
+      "llm_tldr": "PaperVoyager将静态PDF论文转换为交互式网页系统，帮助研究人员理解动态机制。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.25422v1",
+      "title": "Navigating the Prompt Space: Improving LLM Classification of Social Science Texts Through Prompt Engineering",
+      "abstract": "Recent developments in text classification using Large Language Models (LLMs) in the social sciences suggest that costs can be cut significantly, while performance can sometimes rival existing computational methods. However, with a wide variance in performance in current tests, we move to the question of how to maximize performance. In this paper, we focus on prompt context as a possible avenue for increasing accuracy by systematically varying three aspects of prompt engineering: label descriptions, instructional nudges, and few shot examples. Across two different examples, our tests illustrate that a minimal increase in prompt context yields the highest increase in performance, while further increases in context only tend to yield marginal performance increases thereafter. Alarmingly, increasing prompt context sometimes decreases accuracy. Furthermore, our tests suggest substantial heterogeneity across models, tasks, and batch size, underlining the need for individual validation of each LLM coding task rather than reliance on general rules.",
+      "authors": [
+        "Erkan Gunes",
+        "Christoffer Florczak",
+        "Tevfik Murat Yildirim"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.CY"
+      ],
+      "published": "2026-03-26T13:14:48+00:00",
+      "link": "https://arxiv.org/pdf/2603.25422v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "systematically varying prompt engineering aspects",
+      "llm_evidence_cn": "系统地改变提示工程的各个方面",
+      "llm_evidence": "系统地改变提示工程的各个方面",
+      "canonical_evidence": "系统地改变提示工程的各个方面",
+      "llm_tldr_en": "Investigates prompt engineering methods to improve LLM classification of social science research texts.",
+      "llm_tldr_cn": "研究提示工程方法，以提高大语言模型对社会科学研究文本的分类性能。",
+      "llm_tldr": "研究提示工程方法，以提高大语言模型对社会科学研究文本的分类性能。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.23710v1",
+      "title": "An In-Depth Study of Filter-Agnostic Vector Search on a PostgreSQL Database System: [Experiments and Analysis]",
+      "abstract": "Filtered Vector Search (FVS) is critical for supporting semantic search and GenAI applications in modern database systems. However, existing research most often evaluates algorithms in specialized libraries, making optimistic assumptions that do not align with enterprise-grade database systems. Our work challenges this premise by demonstrating that in a production-grade database system, commonly made assumptions do not hold, leading to performance characteristics and algorithmic trade-offs that are fundamentally different from those observed in isolated library settings. This paper presents the first in-depth analysis of filter-agnostic FVS algorithms within a production PostgreSQL-compatible system. We systematically evaluate post-filtering and inline-filtering strategies across a wide range of selectivities and correlations.   Our central finding is that the optimal algorithm is not dictated by the cost of distance computations alone, but that system-level overheads that come from both distance computations and filter operations (like page accesses and data retrieval) play a significant role. We demonstrate that graph-based approaches (such as NaviX/ACORN) can incur prohibitive numbers of filter checks and system-level overheads, compared with clustering-based indexes such as ScaNN, often canceling out their theoretical benefits in real-world database environments.   Ultimately, our findings provide the database community with crucial insights and practical guidelines, demonstrating that the optimal choice for a filter-agnostic FVS algorithm is not absolute, but rather a system-aware decision contingent on the interplay between workload characteristics and the underlying costs of data access in a real-world database architecture.",
+      "authors": [
+        "Duo Lu",
+        "Helena Caminal",
+        "Manos Chatzakis",
+        "Yannis Papakonstantinou",
+        "Yannis Chronis",
+        "Vaibhav Jain",
+        "Fatma Özcan"
+      ],
+      "primary_category": "cs.DB",
+      "categories": [
+        "cs.DB",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-03-24T20:53:28+00:00",
+      "link": "https://arxiv.org/pdf/2603.23710v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Analysis of filtered vector search for semantic search systems",
+      "llm_evidence_cn": "语义搜索系统中过滤向量检索的分析",
+      "llm_evidence": "语义搜索系统中过滤向量检索的分析",
+      "canonical_evidence": "语义搜索系统中过滤向量检索的分析",
+      "llm_tldr_en": "Analyzes filter-agnostic vector search algorithms within production-grade database systems for semantic search.",
+      "llm_tldr_cn": "在生产级数据库系统中分析了用于语义搜索的过滤无关向量检索算法。",
+      "llm_tldr": "在生产级数据库系统中分析了用于语义搜索的过滤无关向量检索算法。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.25468v1",
+      "title": "Improving metadata flows -- The simultaneous use of multiple metadata schemas at disciplinary research data repositories",
+      "abstract": "This study investigates the simultaneous use of multiple metadata schemas at research data repositories. The analysis covers how eight disciplinary research data repositories from the geosciences and social sciences use disciplinary metadata schemas and the DataCite Metadata Schema, and how two metadata records describing the same dataset compare. The results show that DataCite metadata records could be improved considerably by optimizing schema crosswalks. However, the parallel use of disciplinary and multidisciplinary metadata records is complex. For example, discipline has a significant effect on the completeness of DataCite metadata. A temporal analysis also highlights that metadata workflows are diverse, and in some cases, suboptimal crosswalks are likely not the sole cause of incomplete DataCite metadata. Comparing the disciplinary metadata schemas and the DataCite Metadata Schema on a structural level reveals that most differences between schemas are the result of different approaches to modelling statements about datasets, not the lack of opportunity to express them. The element sets of both disciplinary metadata schemas and the DataCite Metadata Schema could be extended to describe datasets in more detail. These observations demonstrate that disciplinary and multidisciplinary metadata schemas serve distinct purposes. Disciplinary repositories should take full advantage of the opportunities both options provide.",
+      "authors": [
+        "Dorothea Strecker"
+      ],
+      "primary_category": "cs.DL",
+      "categories": [
+        "cs.DL"
+      ],
+      "published": "2026-03-26T14:10:57+00:00",
+      "link": "https://arxiv.org/pdf/2603.25468v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "metadata schemas at disciplinary research data repositories",
+      "llm_evidence_cn": "学科研究数据存储库中的元数据模式",
+      "llm_evidence": "学科研究数据存储库中的元数据模式",
+      "canonical_evidence": "学科研究数据存储库中的元数据模式",
+      "llm_tldr_en": "Investigates the use of multiple metadata schemas to improve research data discovery.",
+      "llm_tldr_cn": "研究多重元数据模式的使用，以改进研究数据的发现与流动。",
+      "llm_tldr": "研究多重元数据模式的使用，以改进研究数据的发现与流动。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.24226v1",
+      "title": "UniScale: Synergistic Entire Space Data and Model Scaling for Search Ranking",
+      "abstract": "Recent advances in Large Language Models (LLMs) have inspired a surge of scaling law research in industrial search, advertising, and recommendation systems. However, existing approaches focus mainly on architectural improvements, overlooking the critical synergy between data and architecture design. We observe that scaling model parameters alone exhibits diminishing returns, i.e., the marginal gain in performance steadily declines as model size increases, and that the performance degradation caused by complex heterogeneous data distributions is often irrecoverable through model design alone. In this paper, we propose UniScale to address these limitation, a novel co-design framework that jointly optimizes data and architecture to unlock the full potential of model scaling, which includes two core parts: (1) ES$^3$ (Entire-Space Sample System), a high-quality data scaling system that expands the training signal beyond conventional sampling strategies from both intra-domain request contexts with global supervised signal constructed by hierarchical label attribution and cross-domain samples aligning with the essence of user decision under similar content exposure environment in search domain; and (2) HHSFT (Heterogeneous Hierarchical Sample Fusion Transformer), a novel architecture designed to effectively model the complex heterogeneous distribution of scaled data and to harness the entire space user behavior data with Heterogeneous Hierarchical Feature Interaction and Entire Space User Interest Fusion, thereby surpassing the performance ceiling of structure-only model tuning. Extensive experiments on large-scale real world E-commerce search platform demonstrate that UniScale achieves significant improvements through the synergistic co-design of data and architecture and exhibits clear scaling trends, delivering substantial gains in key business metrics.",
+      "authors": [
+        "Liren Yu",
+        "Caiyuan Li",
+        "Feiyi Dong",
+        "Tao Zhang",
+        "Zhixuan Zhang",
+        "Dan Ou",
+        "Haihong Tang",
+        "Bo Zheng"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.LG"
+      ],
+      "published": "2026-03-25T12:00:26+00:00",
+      "link": "https://arxiv.org/pdf/2603.24226v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "synergistic data and model scaling for search ranking",
+      "llm_evidence_cn": "搜索排序中的数据与模型协同缩放",
+      "llm_evidence": "搜索排序中的数据与模型协同缩放",
+      "canonical_evidence": "搜索排序中的数据与模型协同缩放",
+      "llm_tldr_en": "UniScale optimizes both data and architecture to improve performance in industrial search and ranking systems.",
+      "llm_tldr_cn": "UniScale通过协同优化数据和架构，提升工业搜索和排序系统的性能。",
+      "llm_tldr": "UniScale通过协同优化数据和架构，提升工业搜索和排序系统的性能。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

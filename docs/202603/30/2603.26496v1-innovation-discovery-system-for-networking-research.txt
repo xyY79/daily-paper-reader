@@ -1,0 +1,513 @@
+Title: Innovation Discovery System for Networking Research
+
+URL Source: https://arxiv.org/pdf/2603.26496v1
+
+Published Time: Mon, 30 Mar 2026 01:23:49 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# Innovation Discovery System for Networking Research 
+
+# Mengrui Zhang 1★, Bang Huang 1★, Yunxin Xu 1, Haiying Huang 1, Luxi Zhao 1,Mochun Long 1, Qingyu Song 1‡, Qiao Xiang 1‡, Xue Liu 2, Jiwu Shu 3,
+
+1School of Informatics, Xiamen University, China 
+
+2School of Computer Science, McGill University, Montreal, Canada 
+
+3Minjiang University, China 
+
+Abstract 
+
+As networking systems become increasingly complex, achiev-ing disruptive innovation grows more challenging. At the same time, recent progress in Large Language Models (LLMs) has shown strong potential for scientific hypothesis forma-tion and idea generation. Nevertheless, applying LLMs ef-fectively to networking research remains difficult for two main reasons: standalone LLMs tend to generate ideas by recombining existing solutions, and current open-source net-working resources do not provide the structured, idea-level knowledge necessary for data-driven scientific discovery. To bridge this gap, we present SciNet , a research idea gen-eration system specifically designed for networking. SciNet 
+
+is built upon three key components: (1) constructing a networking-oriented scientific discovery dataset from top-tier network-ing conferences, (2) simulating the human idea discovery workflow through problem setting, inspiration retrieval, and idea generation, and (3) developing an idea evaluation method that jointly measures novelty and practicality. Experimental results show that SciNet consistently produces practical and novel networking research ideas across multiple LLM back-bones, and outperforms standalone LLM-based generation in overall idea quality. 
+
+1 Introduction 
+
+Networking systems research has become increasingly com-plex, making disruptive innovation progressively more diffi-cult. Meanwhile, the rapid development of LLMs has enabled notable progress in scientific hypothesis and idea genera-tion. We refer to this line of work as LLM-based Scientific Discovery . For example, AIScientist [ 18 ] uses LLMs with prompt templates to generate research directions. AutoDis-covery [2] elicits prior and posterior beliefs about hypothe-ses via sampling, and uses surprisal as a reward within an MCTS procedure to balance exploration and exploitation in search of surprising discoveries. Other studies incorporate external knowledge to support idea generation, which we refer to as Data-driven Scientific Discovery . For instance, Sci-Mon [33 ] trains a language model [ 24 ] on an open-source 
+
+> 1Mengrui Zhang and Bang Huang are co-primary authors. Qingyu Song and Qiao Xiang are co-corresponding authors.
+
+paper dataset [ 17 ] to generate ideas and iteratively refine their novelty. Researchagent [ 6 ] conducts literature reviews and integrates cross-domain knowledge with LLMs to gen-erate and iteratively refine research ideas. However, these approaches are still not well suited to networking systems research, for two main reasons. 
+
+LLMs tend to recombine existing solutions. Standalone LLM-based idea generation mainly draws from large-scale knowledge stored in model parameters, but this process is implicit and difficult to justify. In practice, the generated outputs are often recombinations of memorized patterns. For networking problems that require precise architectural design, general-purpose LLMs frequently produce ideas that are random combinations of existing designs rather than gen-uinely new mechanisms. Our experiments with standalone LLM-based idea generation also show that the generated ideas are often highly similar to existing solutions. 
+
+Open-source datasets lack networking knowledge. In bioinformatics and machine learning areas, large structured open-source literature resources are available [ 17 , 20 ]. In the networking domain, however, although official organizations provide abstracts and full papers in PDF format [ 5 , 9 , 15 , 31 ], these resources are not structured for fine-grained, idea-level analysis. Existing third-party platforms that curate paper metadata (e.g., Semantic Scholar[ 3], Open Alex [ 23 ]) either cover only a subset of networking papers or provide only abstract-level information. As a result, they are insufficient for Data-driven Scientific Discovery .In this paper, we present SciNet for networking research-specific idea generation. To our best knowledge, it is the first idea-generation system tailored to networking research. We build a scientific discovery dataset with domain-specific knowledge from premier networking conferences. Moreover, we propose to generate ideas with explicit scientific reason-ing process, using knowledge-graph-based surveying and exploration with LLM-driven generation and iterative re-finement. Finally, we introduce an evaluation approach that jointly assesses idea novelty and practicality. The three key designs (D1-D3) are detailed as follows. 
+
+D1: Building a scientific discovery dataset for network-ing. We collect papers published at two premier networking  
+
+> 1
+> arXiv:2603.26496v1 [cs.NI] 27 Mar 2026 , , Zhang et al.
+
+systems conferences . We then use LLMs to extract each pa-per’s core information, unify heterogeneous structures and semantics, and construct a dataset rich in networking system design details with a consistent representation format. 
+
+D2: Scientific reasoning-based idea generation. We mimic the scientific reasoning process for idea generation, span-ning research surveying, inspirational exploration, and idea development. Specifically, we use knowledge-graph search to emulate surveying and exploration, then combine the re-trieved knowledge with an LLM to generate candidate ideas, select the one with the lowest similarity to existing solutions, and finally prompt the LLM to iteratively refine it. 
+
+D3: Idea evaluation approach. To comprehensively evalu-ate the novelty and practicality of ideas generated by SciNet ,we restrict both the input dataset and LLM resources to data available up to 2024, and then use them for idea generation. We subsequently compare each generated idea against two method sets: methods published before 2025 and methods published after 2024. Lower similarity to pre-2025 methods indicates higher novelty, while higher similarity to post-2024 methods indicates better practicality. 
+
+Evaluation Results. We implement a prototype of SciNet 
+
+and evaluate the quality of the generated ideas, and the re-sults show consistent effectiveness across different LLMs and research domains. We also conduct an ablation study, which demonstrate the effectiveness of SciNet ’s design. 
+
+2 Overview 
+
+This section overviews SciNet . As shown in Figure 1, its five components are organized into three parts matching our key designs: sand-yellow for Design D1, muted-blue for Design D2, and grass-green for Design D3. 
+
+Paper Summarization. As shown in the middle-left part of Figure 1, we collect papers published at ACM SIGCOMM [ 1 ]and USENIX NSDI [ 30 ] from 2021 to 2025, and then use LLMs to summarize and unify each paper into three structured fields: 𝐵𝑎𝑐𝑘𝑔𝑟𝑜𝑢𝑛𝑑 , 𝑃𝑟𝑜𝑏𝑙𝑒𝑚 , and 𝐷𝑒𝑠𝑖𝑔𝑛 . This step provides LLMs with detailed yet concise, semantically consistent, and structured networking domain knowledge for idea genera-tion. Compared with raw PDFs (which are unstructured and semantically heterogeneous) or abstracts (which often omit implementation details), this representation better preserves system-level design information. 
+
+Problem Setting. This step marks the beginning of idea dis-covery. Users first specify a research domain and a research problem, which substantially narrows the search space for both research surveying and inspiration exploration. 
+
+Inspiration Retrieval. After the research domain and prob-lem are specified, we mimic the processes of research sur-veying and inspiration exploration. For research surveying, a naive strategy is to sequentially search the paper-summary dataset and retrieve related pa-pers and methods. Although this approach may return rele-vant content, the results are often less explainable and are not fundamentally different from standard keyword search on platforms such as Google Scholar [ 14 ]. Instead of directly scanning papers one by one, we build a knowledge graph, called the paper graph , to capture logical connections within and across papers. We then perform search over this graph to obtain explainable results about which existing papers and methods are related to the given research domain and problem. For inspiration exploration, prior work shows that novelty tends to increase when ideas deviate further from established norms and standards [ 25 ]. A naive strategy is therefore to randomly combine ideas from different domains, but this often leads LLMs to generate impractical or infeasible ideas. To address this issue, we use citation information to extend existing methods toward potentially relevant methods in other domains, and incorporate partial synthetic information to increase diversity. Based on these signals, we build another knowledge graph, called the citation graph . We then search this graph to retrieve candidate inspirational methods. 
+
+Idea Generation. After obtaining the research-survey and inspiration-exploration results, we combine them with the research domain and problem, and then use an LLM to gen-erate candidate ideas (along with their technical challenges). We then compare each candidate idea with existing methods in the paper-summary dataset and select the least similar one as the initial idea. To further improve this idea with richer technical details, we prompt an LLM to provide optimiza-tion suggestions for addressing its technical challenges. We then iteratively refine the idea based on these suggestions, stopping when either the maximum number of iterations is reached or the LLM judges the idea to be mature. 
+
+Idea Evaluation. Prior work[ 4, 11 , 33 , 36 ] has mainly fo-cused on evaluating novelty, while practicality is often vali-dated through full-system implementation and experiments[ 19 ,21 ]. In networking research, however, such implementation-heavy validation is costly and difficult to complete within a short cycle, even with LLM assistance[ 16 , 35 ]. To evaluate both novelty and practicality in a scalable way, we adopt a time-split protocol. We partition papers into pre- and post-period sets, use only pre-period resources to build knowl-edge graphs and generate ideas, and align the LLM setting with the same temporal boundary. We then measure novelty against pre-period methods and practicality against post-period methods. This design enables a unified evaluation of both dimensions without requiring end-to-end prototype development for every generated idea.             
+
+> 2, , Problem Setting
+> {
+> Domain:{…}
+> Problem:{…}
+> }
+> Paper Summarization
+> {
+> Background:{…}
+> Problem:{…}
+> Design:{…}
+> }
+> SIGCOMM and NSDI
+> Papers
+> Inspiration Retrieval Idea Generation
+> ……
+> Threshold filter
+> Selected Idea
+> Optimization Suggestions
+> Idea Design & Challenge
+> Idea Evaluation
+> Candidate
+> Ideas
+> Idea 1
+> Idea N
+> 0.15
+> ……
+> Optimized
+> Idea
+> Novelty Optimized
+> Idea Pre -Methods
+> Practicality
+> Optimized
+> Idea Post -Methods
+> Idea 1
+> Idea N
+> ……
+> Idea 2
+> Idea 2 0.25
+
+Figure 1: Framework: SciNet summarizes SIGCOMM[ 1] and NSDI[ 30 ] papers into a struc-tured dataset, builds knowledge graphs, retrieves methods for a user-specified domain and problem, generates and iteratively refines ideas with an LLM, and evaluates their novelty and practicality against the dataset. 
+
+The next three sections describe the construction of the paper-summary dataset and the knowledge graphs for re-search surveying and inspiration exploration ( § 3), present the scientific reasoning-based idea generation process (§ 4), and the idea evaluation approach (§ 5). 
+
+3 Dataset & Knowledge Graph Construction 
+
+In this section, we describe how the summarized paper dataset is constructed (§ 3.1) and how two knowledge graphs are built: the paper graph (§ 3.2) and the citation graph (§ 3.3). 
+
+3.1 Paper Summary Dataset 
+
+To build a high-quality dataset for idea generation, we collect papers published at two premier networking systems con-ferences, ACM SIGCOMM[ 1 ] and USENIX NSDI[ 30 ], from 2021 to 2025. The resulting dataset contains 743 papers. The summarization pipeline is divided into two steps. 
+
+Semantic Cleaning. We first use LLMs to identify the re-search domain of each raw PDF paper. Because papers may describe the same domain at different levels of granularity or with different terminology, LLM outputs can vary across papers. For example, control-plane verification and data-plane verification can be merged into a unified domain, network verification . After collecting the initial domain labels for all papers, we use LLMs to merge semantically equivalent do-mains into standardized domain categories. In our dataset, 
+
+178 raw domain labels are consolidated into 50 unified do-mains. 
+
+Paper Summarization. We then use LLMs to summarize each paper into three structured components: 𝐵𝑎𝑐𝑘𝑔𝑟𝑜𝑢𝑛𝑑 
+
+(research context and motivation), 𝑃𝑟𝑜𝑏𝑙𝑒𝑚 (core limitations of existing work and the technical challenges addressed), and 
+
+𝐷𝑒𝑠𝑖𝑔𝑛 (the key method and system architecture proposed). We finally normalize these summaries into JSON format. 
+
+3.2 Paper Graph 
+
+To explicitly capture logical connections within and across papers, we construct a structured paper-level knowledge graph based on the paper-summary dataset. As shown in the left part of KG1 in Figure 2, the graph contains four entity types: 𝐷𝑜𝑚𝑎𝑖𝑛 , 𝑃𝑟𝑜𝑏𝑙𝑒𝑚 , 𝑃𝑎𝑝𝑒𝑟 , and 𝑀𝑒𝑡ℎ𝑜𝑑 . For each paper summary, 𝐷𝑜𝑚𝑎𝑖𝑛 is extracted from 𝐵𝑎𝑐𝑘𝑔𝑟𝑜𝑢𝑛𝑑 , 𝑃𝑟𝑜𝑏𝑙𝑒𝑚 is extracted from 𝑃𝑟𝑜𝑏𝑙𝑒𝑚 , 𝑃𝑎𝑝𝑒𝑟 is the paper title, and 𝑀𝑒𝑡ℎ𝑜𝑑 
+
+is extracted from 𝐷𝑒𝑠𝑖𝑔𝑛 .We then define three directed relationship types: <Domain, has, Problem> , where a research domain contains specific problems; <Problem, is solved by, Paper> , where a paper solves a specific problem; and <Paper, uses, Method> , where a paper uses a specific key method or system architecture. We then use GraphRAG [ 10 ] to construct the paper graph. After construction, the graph enables us to clearly identify which papers address which problems in which domains, as well as which methods are used in each paper. 
+
+3.3 Citation Graph 
+
+To extend existing solutions toward potentially relevant methods in other domains, we extract references from each paper (ACM SIGCOMM[ 1 ] and USENIX NSDI[ 30 ], 2021– 2025) using MinerU [ 32 ]. Since each paper contains approx-imately 20–50 references, we first filter out non-article ref-erences and then randomly sample 𝑘 = 20 references per paper. We use Semantic Scholar [ 3 ] to retrieve the abstract of each sampled reference, and then use LLMs to summarize its methods. We further randomly inject 5 synthetic cita-tion links for each paper to increase transfer diversity while preserving practical feasibility. Using the citation and method information, we construct the citation graph. As shown in the left part of KG2 in Figure 2, the graph contains two entity types, 𝑃𝑎𝑝𝑒𝑟 and 
+
+𝑀𝑒𝑡ℎ𝑜𝑑 , and two relation types: <Paper, cites, Paper> , where a paper cites another paper as a reference; and <Paper, uses, Method> , where a paper uses a specific key method or system architecture. We then use GraphRAG [ 10 ] to construct the citation graph. After constructing this knowledge graph, we can clearly trace how methods are transferred and extended across papers. 
+
+4 Idea Discovery 
+
+This section gives an example-driven walkthrough of SciNet ’s Idea Discovery workflow (Figures 2 and 3). 
+
+> 3
+
+, , Zhang et al. Domain : Traffic Engineering 
+
+Problem : Scalable Network Verification 
+
+Description: … 
+
+Problem Setting: Workflow  
+
+> 1
+
+Problem Setting  
+
+> 2
+
+Inspiration Retrieval  
+
+> 3
+
+Idea Generation 
+
+> 2
+
+KG2: Citation Graph 
+
+KG1: Paper Graph 
+
+> Domain
+> Problem
+> Paper
+> Method
+
+Output (Existing Methods): 
+
+Category : Decomposition and Modular Verification, 
+
+Description:… 
+
+Methods :
+
+1. Name : Graph Partitioning and Clustered Analysis, 
+
+Description:…, 
+
+2. Name : Modular and Compositional Verification, 
+
+Description:… 
+
+3. … 
+
+> Paper
+> Paper
+> Paper
+> Paper
+> Method
+> Method
+> Method
+> Method
+
+Output (Inspirational Methods): 
+
+Methods :
+
+1. Name : Graph Partitioning and Clustering, 
+
+Description: … 
+
+2. Name : GNNs for Network Modeling, 
+
+Description: … 
+
+3. Name : Graph Contrastive Learning, 
+
+Description: … 
+
+4. … 
+
+Inspiration Retrieval 
+
+> 2
+
+Idea Generation 
+
+Input: Existing Methods | Ideas 
+
+Output: 
+
+1. Idea : Runtime Verification using Adaptive Partitioning with Reinforcement Learning ,
+
+Similarity : 0. 15 
+
+2. … 
+
+Similarity Comparison 
+
+Input: Domain | Problem | Existing Methods | Inspirational Methods 
+
+Output: 
+
+1. Idea : Runtime Verification using Adaptive Partitioning with Reinforcement Learning ,
+
+Reasoning : … the optimal partition…may change dynamically based on traffic and 
+
+configuration. RL can be used to learn the best partitioning strategy …
+
+Design :… The RL agent learns to partition the network into modules based on 
+
+network state … 
+
+Challenge : … 
+
+2. … 
+
+Candidate Idea Generation 
+
+> 3
+> 3
+> 3
+
+Idea 
+
+Iterative Optimization 
+
+Idea : Runtime Verification using Adaptive 
+
+Partitioning with Reinforcement Learning ,
+
+Reasoning :…,
+
+Design : …,
+
+Challenge : … Handling the computational 
+
+overhead of running the RL agent in real time… 
+
+Suggestion :
+
+1. … partition update only on 
+
+events … 
+
+2. … asynchronous RL … 
+
+3. …
+
+Suggestion 
+
+> 3
+
+Figure 2: Workflow of Idea Discovery KG1: Paper Graph    
+
+> Network Verification
+> Lack of Adaptability
+> and Scalability
+> ……
+> Modularity
+> Limited Parallelism in
+> Verification Tasks
+> …… ……
+> BDDs Distributed Structure Formal Method Runtime
+> Scalability Issues With
+> Centralized Approaches
+> Domain
+> Problem
+> Paper
+> Method
+
+(a) Subset of Paper Graph KG2: Citation Graph     
+
+> ……
+> ……
+> ……
+> BDDs
+> Distributed Structure
+> Formal Method
+> Runtime ……
+> ……
+> ……
+> cites
+> cites
+> cites
+> Topological clustering
+> to partition networks
+> Reinforcement Learning
+> RL -guided fuzz testing
+
+(b) Subset of Citation Graph 
+
+Figure 3: Subsets of the SciNet Paper and Citation Graphs: (a) the Paper Graph links domains, problems, papers, and methods; (b) the Citation Graph links papers to cited papers and methods. 
+
+4.1 Problem Setting 
+
+In the problem-setting stage, as shown in the upper-left part of Figure 2, SciNet takes the research background context 
+
+B = D ⊕ P as input, including: (1) a research domain D (e.g. ,network verification) and (2) a research problem P with its description ( e.g. , scalable network verification). This input is then embedded into a knowledge-graph search prompt. 
+
+4.2 Inspiration Retrieval 
+
+In the inspiration-retrieval stage, we retrieve information from two knowledge graphs: the Paper Graph and the Cita-tion Graph. We adopt the global search function in GraphRAG[ 10 ]; unlike traditional graph search methods, global search gener-ates answers by searching over all AI-generated community reports in a map-reduce manner. This strategy is particularly effective for questions that require a holistic understanding of the entire dataset [10]. 
+
+Paper Graph. As shown in Figure 3a, we present a subset of the Paper Graph for the example domain of network veri-fication and the problem of scalable network verification. In Paper Graph, we retrieve existing methods E relevant to the research background defined in the problem-setting stage, such as "Graph Partitioning and Clustered Analysis” and "Modular and Compositional Verification” (Figure 2, KG1). We then categorize these methods into different orientations (e.g. , Decomposition and Modular Verification). 
+
+Citation Graph. After obtaining existing methods E𝑚 , we further retrieve inspirational methods I𝑚 from the Citation Graph. As shown in Figure 3b, we present a subset of the Citation Graph for the example domain of network veri-fication and the problem of scalable network verification. For each existing method, we search for its potential con-nections and treat them as candidate inspirational methods, such as “Graph Partitioning and Clustering,” “GNNs for Net-work Modeling,” and “Graph Contrastive Learning” (Figure 2, KG2). 
+
+4, , 
+
+4.3 Idea Generation 
+
+In the idea-generation stage, we divide the process into three parts: Candidate Idea Generation, Similarity Comparison, and Iterative Optimization, as shown on the right side of Figure 2. 
+
+Candidate Idea Generation. We first take the research background B, existing methods E𝑚 , and inspirational meth-ods I𝑚 as input, i.e. , B ⊕ E 𝑚 ⊕ I 𝑚 . We then use LLMs to generate 𝑘 = 20 candidate ideas I with technical challenges (e.g. , “Runtime Verification using Adaptive Partitioning with Reinforcement Learning” in Figure 2). Each idea includes a detailed design and step-by-step task decomposition. To ensure that each idea follows our reasoning principles , we enforce a structured output format that includes an explicit 
+
+𝑅𝑒𝑎𝑠𝑜𝑛𝑖𝑛𝑔 field, requiring the LLM to explain why the idea is likely to work. 
+
+Similarity Comparison. We then take the existing meth-ods E𝑚 and candidate ideas I as input. We first embed both methods and ideas into vector representations using SPECTER[ 8]. For each idea 𝑖 ∈ I , we compute its cosine similarity with each existing method 𝑒 ∈ E 𝑚 . We then set a similarity threshold 𝑡 = 0.8. For each idea, we count the number of existing methods whose cosine similarity exceeds the threshold, denoted as 𝑁 >𝑡 , and denote the total number of existing methods as 𝑁 E𝑚 . We define the idea-selection score 𝑆 as 𝑁 >𝑡  
+
+> 𝑁 E𝑚
+
+and select the idea with the minimum 𝑆 as the initial idea. 
+
+Iterative Optimization. We then use the initial idea’s tech-nical challenges to optimize its technical details. We first prompt the LLM to provide suggestions for addressing these challenges ( e.g. , “partition update only on events” in Figure 2). We then iteratively refine the idea by incorporating these suggestions until it reaches the maximum iteration count (𝑖 = 10 ) or the LLM judges it to be a mature idea. 
+
+5 Idea Evaluation Approach 
+
+In this section, we present an approach to evaluate whether 
+
+SciNet can generate ideas that are both novel and practical. To assess novelty, we compare generated ideas with exist-ing methods based on similarity. To assess practicality, we leverage the observation that system papers with working prototypes generally reflect practically realizable designs; therefore, higher similarity to such methods can indicate higher practicality. However, high similarity may also imply limited novelty. To balance these two objectives, we adopt a time-split protocol. First, we split the paper-summary dataset into two subsets: papers from 2021–2024 (pre-dataset) and papers from 2025 (post-dataset). We rebuild the Paper Graph and Citation Graph using only the pre-dataset (pre-graphs), and use these pre-graphs together with LLM versions re-leased before 2025 to generate ideas. To evaluate novelty, we follow the process in § 4.3 but compare only against existing methods in the pre-dataset (E𝑝𝑟𝑒 ). The novelty score 𝑁 𝑆 is defined as: 
+
+𝑁 𝑆 = 1 − 𝑁 >𝑡 
+
+𝑁 E𝑝𝑟𝑒 
+
+where 𝑁 >𝑡 denotes the number of methods in E𝑝𝑟𝑒 whose co-sine similarity with the generated idea exceeds the threshold 
+
+𝑡 . A higher 𝑁 𝑆 indicates a more novel idea. To evaluate practicality, we consider the maximum cosine similarity between the generated idea and the methods in the post-dataset ( E𝑝𝑜𝑠𝑡 ). The practicality score 𝑃 𝑆 is defined as: 𝑃 𝑆 = max  
+
+> 𝑒 ∈ E 𝑝𝑜𝑠𝑡
+
+cosine_sim (𝑖, 𝑒 )
+
+where 𝑖 denotes the generated idea and 𝑒 denotes a method in 
+
+E𝑝𝑜𝑠𝑡 . A higher 𝑃 𝑆 indicates that the idea is closer to methods that appear later in the literature and is therefore more likely to be practical. Finally, we combine novelty and practicality using the harmonic mean, and define the final idea quality score 𝐼 𝑆 as: 
+
+𝐼 𝑆 = 2 × 𝑁 𝑆 × 𝑃 𝑆 
+
+𝑁 𝑆 + 𝑃 𝑆 
+
+This formulation encourages ideas that achieve both high novelty and high practicality, while penalizing cases where one metric is significantly lower than the other. 
+
+6 Evaluation 
+
+We implement a prototype of SciNet and conduct extensive evaluations to investigate the following two research ques-tions: (1) Can SciNet generate high-quality research ideas across different networking domains and language models? (2) How effective is the design of SciNet in improving the generation of ideas compared to standalone LLMs? 
+
+6.1 Evaluation Setup 
+
+1) Dataset: To construct the evaluation dataset, we split the paper summary dataset introduced in § 3.1 into two parts: 
+
+Pre-Dataset (586 papers): Papers published in 2021-2024. Ideas extracted from these papers are treated as existing ideas and serve as the source knowledge for idea generation. 
+
+Post-Dataset (157 papers): Papers published in 2025. These papers are reserved only for experiments; therefore, they serve as a natural benchmark for validating the quality of the generated ideas. 
+
+2) Topics: For evaluation, we select three representative networking areas to demonstrate the effectiveness of SciNet :congestion control, traffic engineering, and network verifi-cation. 
+
+3) Metrics: We evaluate the ideas along three dimensions: novelty, practicality, and overall quality. Specifically, we use an advanced scientific corpus embedding model [ 8] to com-pute the similarity between generated ideas and those in 
+
+> 5
+
+, , Zhang et al. 
+
+Metric Congestion Control Traffic Engineering Network Verification Gemini-2.0-flash GPT-5 Qwen-plus-1220 Gemini-2.0-flash GPT-5 Qwen-plus-1220 Gemini-2.0-flash GPT-5 Qwen-plus-1220 Novelty 0.966 0.954 0.968 0.980 0.947 0.980 0.977 0.972 0.987 Practicality 0.857 0.838 0.828 0.834 0.837 0.843 0.833 0.833 0.830 Overall Quality 0.908 0.892 0.892 0.900 0.888 0.906 0.899 0.894 0.902 
+
+Table 1: Comparison across models and network domains. Congestion 
+
+> Control
+> Traffic
+> Engineering
+> Network
+> Verification
+> Research Domain
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> Overall Quality
+> Qwen-plus-1220 with SciNet
+> Qwen-plus-1220 w/o SciNet
+
+(a) Performance on Qwen-plus-1220 Congestion  
+
+> Control
+> Traffic
+> Engineering
+> Network
+> Verification
+> Research Domain
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> Overall Quality
+> Gemini-2.0-flash with SciNet
+> Gemini-2.0-flash w/o SciNet
+
+(b) Performance on Gemini-2.0-flash Congestion  
+
+> Control
+> Traffic
+> Engineering
+> Network
+> Verification
+> Research Domain
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> Overall Quality
+> GPT-5 with SciNet
+> GPT-5 w/o SciNet
+
+(c) Performance on GPT-5 
+
+Figure 4: Ablation study of SciNet across different LLM backbones. 
+
+our dataset. Then, we use the approach introduced in § 5 to calculate the scores. 
+
+4) Models: To ensure the validity of our evaluation, we select recent models with knowledge cutoffs up to 2024 from three representative large language model vendors. Specifi-cally, we evaluate GPT-5 (knowledge cutoff: September 2024) from OpenAI [ 22 ], Gemini-2.0-flash (knowledge cutoff: Au-gust 2024) from Google [ 13 ], and Qwen-plus-1220 (knowledge cutoff: November 2024) from Alibaba[7]. 
+
+6.2 Idea Quality Comparison 
+
+In this experiment, we aim to investigate the quality of ideas generated by SciNet across different domains when using different language models. The results are shown in Table 1. As observed from the table, the generated ideas exhibit strong novelty. Specifically, the novelty scores in the first row are all above 0.947, indicating that fewer than 6% of the gen-erated ideas are similar to existing ideas in the Pre-Dataset. From the practicality line, it shows that the generated ideas consistently have similar counterparts in the Post-Dataset. This suggests that these ideas have strong potential to be realized and eventually developed into publishable research paper. Moreover, when considering both novelty and practi-cality, the overall quality scores of the generated ideas are comparable across different domains and models. These re-sults demonstrate that our system performs consistently well across multiple research areas and is not sensitive to the choice of underlying language model. 
+
+6.3 Ablation Study 
+
+To investigate the effectiveness of our design in SciNet , we conducted an ablation experiment, the results of which are shown in Figure 4. Overall, across different models and research domains, applying our system consistently improves the quality of the generated ideas compared to the native outputs of the underlying language models. In particular, Figure 4b shows that, when using Gemini, our system improves the quality score of ideas generated for the traffic engineering domain by 42%. This improvement indicates that the Inspiration Re-trieval stage of SciNet effectively identifies relevant existing methods and inspirational techniques, which are then incor-porated through iterative refinement to guide the language model toward generating higher-quality ideas. In contrast, without the design, the ideas generated by standalone lan-guage models tend to overlap with a larger number of exist-ing approaches, which leads to lower overall quality scores. 
+
+7 Related Work 
+
+Literature-Based Discovery. Literature-Based Discovery (LBD) aims to uncover new knowledge from existing litera-ture in an automated manner [ 27 ]. Its classical formulation traces back to Swanson’s ABC co-occurrence model [ 28 ], which derives implicit relationships ( e.g. , “A implies B” and “B implies C”) from explicit textual evidence. More recent work has employed link-prediction models [ 12 , 29 , 34 ] to discover scientific hypotheses as pairwise links between concepts. Recent studies have further leveraged LLMs [ 2, 6 , 18 , 33 ] to generate scientific hypotheses and novel ideas. 
+
+6, , 
+
+Idea Assessment. Existing idea-assessment approaches can be roughly grouped into three categories: human as-sessment [ 6 , 18 , 26 , 33 ], which evaluates novelty and prac-ticality but is costly and hard to scale; experiment-based assessment [ 19 , 21 ], which provides strong practicality ev-idence via prototypes or demos but requires long develop-ment cycles and high engineering cost; and automatic as-sessment [2, 11 , 12 , 36 ], which is efficient but either focuses mainly on novelty or risks hallucinations and factual uncer-tainty. 
+
+8 Conclusion 
+
+We present SciNet , an idea-generation system for network-ing research. SciNet integrates a scientific discovery dataset constructed from premier networking conferences, an ex-plicit scientific reasoning process for idea generation, and and a joint novelty-practicality evaluation approach. Experi-mental results show that SciNet consistently generates high-quality ideas across different LLM backbones. 
+
+References 
+
+[1] ACM SIGCOMM. 2026. Special Interest Group on Data Communication (SIGCOMM). https://www.sigcomm.org/. Accessed: 2026-03-11. [2] Dhruv Agarwal, Bodhisattwa Prasad Majumder, Reece Adamson, Megha Chakravorty, Satvika Reddy Gavireddy, Aditya Parashar, Harshit Surana, Bhavana Dalvi Mishra, Andrew McCallum, Ashish Sab-harwal, et al . 2025. AutoDiscovery: Open-ended Scientific Discovery via Bayesian Surprise. arXiv preprint arXiv:2507.00310 (2025). [3] Allen Institute for AI. 2026. Semantic Scholar. https://www. semanticscholar.org/. Accessed: 2026-03-11. [4] Joshua Ashkinaze, Julia Mendelsohn, Li Qiwei, Ceren Budak, and Eric Gilbert. 2025. How AI ideas affect the creativity, diversity, and evolution of human ideas: evidence from a large, dynamic experiment. In Proceedings of the ACM collective intelligence conference . ACM, 198– 213. [5] Association for Computing Machinery. 2026. ACM Digital Library. https://dl.acm.org/. Accessed: 2026-03-11. [6] Jinheon Baek, Sujay Kumar Jauhar, Silviu Cucerzan, and Sung Ju Hwang. 2025. Researchagent: Iterative research idea generation over scientific literature with large language models. In NAACL’25 . ACL, 6709–6738. [7] Alibaba Cloud. 2026. Qwen. https://qwenlm.ai. Accessed: 2026-03-11. [8] Arman Cohan, Sergey Feldman, Iz Beltagy, Doug Downey, and Daniel S. Weld. 2020. SPECTER: Document-level Representation Learning using Citation-informed Transformers. In ACL’20 . ACL. [9] Cornell University. 2026. arXiv.org e-Print archive. https://arxiv.org/. Accessed: 2026-03-11. [10] Darren Edge, Ha Trinh, Newman Cheng, Joshua Bradley, Alex Chao, Apurva Mody, Steven Truitt, Dasha Metropolitansky, Robert Os-azuwa Ness, and Jonathan Larson. 2024. From local to global: A graph rag approach to query-focused summarization. arXiv preprint arXiv:2404.16130 (2024). [11] Tao Feng, Yihang Sun, and Jiaxuan You. 2025. GRAPHEVAL: A LIGHT-WEIGHT GRAPH-BASED LLM FRAMEWORK FOR IDEA EVALUA-TION. In ICLR’25 . ICLR, 9946–9974. [12] Alireza Ghafarollahi and Markus J Buehler. 2025. SciAgents: automat-ing scientific discovery through bioinspired multi-agent intelligent graph reasoning. Advanced Materials 37, 22 (2025), 2413523. [13] Google. 2026. Gemini. https://gemini.google.com. Accessed: 2026-03-11. [14] Google. 2026. Google Scholar. https://scholar.google.com/. Accessed: 2026-03-11. [15] IEEE. 2026. IEEE Xplore Digital Library. https://ieeexplore.ieee.org/. Accessed: 2026-03-11. [16] Yining Jiang, Yunxin Xu, Wenyun Xu, Yufan Zhu, Tangtang He, Haiy-ing Huang, Letian Zhu, Qingyu Song, Qiang Su, Lizhao You, Lu Tang, Wanjin Feng, Yuchao Zhang, Linghe Kong, Qiao Xiang, and Jiwu Shu. 2026. Leveraging Large Language Models for Automated Reproduc-tion of Networking Research Results. arXiv preprint arXiv:2509.21074 
+
+(2026). [17] Kyle Lo, Lucy Lu Wang, Mark Neumann, Rodney Kinney, and Daniel S Weld. 2020. S2ORC: The semantic scholar open research corpus. In 
+
+ACL’20 . ACL, 4969–4983. [18] Chris Lu, Cong Lu, Robert Tjarko Lange, Jakob Foerster, Jeff Clune, and David Ha. 2024. The ai scientist: Towards fully automated open-ended scientific discovery. arXiv preprint arXiv:2408.06292 (2024). [19] Ruiying Ma, Chieh-Jan Mike Liang, Yanjie Gao, and Francis Y Yan. 2025. Algorithm generation via creative ideation. arXiv preprint arXiv:2510.03851 (2025). [20] John H Morris, Karthik Soman, Rabia E Akbas, Xiaoyuan Zhou, Brett Smith, Elaine C Meng, Conrad C Huang, Gabriel Cerono, Gundolf 7, , Zhang et al. 
+
+Schenk, Angela Rizk-Jackson, et al . 2023. The scalable precision medicine open knowledge engine (SPOKE): a massive knowledge graph of biomedical information. Bioinformatics 39, 2 (2023), btad080. [21] Alexander Novikov, Ngân V ˜u, Marvin Eisenberger, Emilien Dupont, Po-Sen Huang, Adam Zsolt Wagner, Sergey Shirobokov, Borislav Ko-zlovskii, Francisco JR Ruiz, Abbas Mehrabian, et al . 2025. Alphaevolve: A coding agent for scientific and algorithmic discovery. arXiv preprint arXiv:2506.13131 (2025). [22] OpenAI. 2026. ChatGPT. https://chatgpt.com. Accessed: 2026-03-11. [23] Jason Priem, Heather Piwowar, and Richard Orr. 2022. OpenAlex: A fully-open index of scholarly works, authors, venues, institutions, and concepts. arXiv preprint arXiv:2205.01833 (2022). [24] Colin Raffel, Noam Shazeer, Adam Roberts, Katherine Lee, Sharan Narang, Michael Matena, Yanqi Zhou, Wei Li, and Peter J Liu. 2020. Exploring the limits of transfer learning with a unified text-to-text transformer. Journal of machine learning research 21, 140 (2020), 1–67. [25] Feng Shi and James Evans. 2023. Surprising combinations of research contents and contexts are related to impact and emerge with scientific outsiders from distant disciplines. Nature Communications 14, 1 (2023), 1641. [26] Chenglei Si, Diyi Yang, and Tatsunori Hashimoto. 2024. Can llms generate novel research ideas? a large-scale human study with 100+ nlp researchers. arXiv preprint arXiv:2409.04109 (2024). [27] Don R Swanson. 1986. Undiscovered public knowledge. The Library Quarterly 56, 2 (1986), 103–118. [28] Don R Swanson and Neil R Smalheiser. 1997. An interactive system for finding complementary literatures: a stimulus to scientific discovery. 
+
+Artificial intelligence 91, 2 (1997), 183–203. [29] Justin Sybrandt, Ilya Tyagin, Michael Shtutman, and Ilya Safro. 2020. AGATHA: automatic graph mining and transformer based hypothesis generation approach. In CIKM’20 . ACM, 2757–2764. [30] USENIX Association. 2026. NSDI: Symposium on Networked Systems Design and Implementation. https://www.usenix.org/conference/nsdi. Accessed: 2026-03-11. [31] USENIX Association. 2026. USENIX: The Advanced Computing Sys-tems Association. https://www.usenix.org/. Accessed: 2026-03-11. [32] Bin Wang, Chao Xu, Xiaomeng Zhao, Linke Ouyang, Fan Wu, Zhiyuan Zhao, Rui Xu, Kaiwen Liu, Yuan Qu, Fukai Shang, et al . 2024. Mineru: An open-source solution for precise document content extraction. 
+
+arXiv preprint arXiv:2409.18839 (2024). [33] Qingyun Wang, Doug Downey, Heng Ji, and Tom Hope. 2024. Scimon: Scientific inspiration machines optimized for novelty. In ACL’24 . ACL, 279–299. [34] Qingyun Wang, Lifu Huang, Zhiying Jiang, Kevin Knight, Heng Ji, Mohit Bansal, and Yi Luan. 2019. PaperRobot: Incremental draft gen-eration of scientific ideas. In ACL’19 . ACL, 1980–1991. [35] Qiao Xiang, Yuling Lin, Mingjun Fang, Bang Huang, Siyong Huang, Ridi Wen, Franck Le, Linghe Kong, and Jiwu Shu. 2023. Toward re-producing network research results using large language models. In 
+
+HotNets’23 . ACM, 56–62. [36] Ming Zhang, Kexin Tan, Yueyuan Huang, Yujiong Shen, Chunchun Ma, Li Ju, Xinran Zhang, Yuhui Wang, Wenqing Jing, Jingyi Deng, et al . 2026. Opennovelty: An llm-powered agentic system for verifiable scholarly novelty assessment. arXiv preprint arXiv:2601.01576 (2026). 8

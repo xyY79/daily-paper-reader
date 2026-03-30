@@ -1,0 +1,2058 @@
+Title: PDET-LSH: Scalable In-Memory Indexing for High-Dimensional Approximate Nearest Neighbor Search with Quality Guarantees
+
+URL Source: https://arxiv.org/pdf/2603.24920v1
+
+Published Time: Fri, 27 Mar 2026 00:22:10 GMT
+
+Number of Pages: 16
+
+Markdown Content:
+> JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 1
+
+# PDET-LSH: Scalable In-Memory Indexing for High-Dimensional Approximate Nearest Neighbor Search with Quality Guarantees 
+
+Jiuqi Wei, Xiaodong Lee, Botao Peng, Quanqing Xu, Chuanhui Yang, Themis Palpanas 
+
+Abstract —Locality-sensitive hashing (LSH) is a well-known solution for approximate nearest neighbor (ANN) search with theoretical guarantees. Traditional LSH-based methods mainly focus on improving the efficiency and accuracy of query phase by designing different query strategies, but pay little attention to im-proving the efficiency of the indexing phase. They typically fine-tune existing data-oriented partitioning trees to index data points and support their query strategies. However, their strategy to directly partition the multidimensional space is time-consuming, and performance degrades as the space dimensionality increases. In this paper, we design an encoding-based tree called Dynamic Encoding Tree (DE-Tree) to improve the indexing efficiency and support efficient range queries. Based on DE-Tree, we propose a novel LSH scheme called DET-LSH. DET-LSH adopts a novel query strategy, which performs range queries in multiple independent index DE-Trees to reduce the probability of missing exact NN points. Extensive experiments demonstrate that while achieving best query accuracy, DET-LSH achieves up to 6x speedup in indexing time and 2x speedup in query time over the state-of-the-art LSH-based methods. In addition, to further improve the performance of DET-LSH, we propose PDET-LSH, an in-memory method adopting the parallelization opportunities provided by multicore CPUs. PDET-LSH exhibits considerable advantages in indexing and query efficiency, especially on large-scale datasets. Extensive experiments show that, while achieving the same query accuracy as DET-LSH, PDET-LSH offers up to 40x speedup in indexing time and 62x speedup in query answering time over the state-of-the-art LSH-based methods. Our theoretical analysis demonstrates that DET-LSH and PDET-LSH offer probabilistic guarantees on query answering accuracy. 
+
+Index Terms —Locality Sensitive Hashing, Approximate Near-est Neighbor Search, High-Dimensional Spaces. 
+
+I. I NTRODUCTION 
+
+Background and Problem. Nearest neighbor (NN) search in high-dimensional Euclidean spaces is a fundamental problem in various fields, such as database, information retrieval, data mining, and machine learning. Given a dataset D of n data 
+
+This work is supported by EU Horizon projects TwinODIS ( 101160009 ), ARMADA (101168951 ), DataGEMS (101188416 ) and RECITALS (101168490 ), and by Y ΠAI ΘA & NextGenerationEU project HARSH (Y Π3 T A − 0560901 ) that is carried out within the framework of the National Recovery and Resilience Plan “Greece 2.0” with funding from the European Union – NextGenerationEU. (Corresponding author: Chuanhui Yang.) 
+
+Jiuqi Wei, Quanqing Xu, and Chuanhui Yang are with Oceanbase, Ant Group, Beijing, China (e-mail: weijiuqi.wjq@antgroup.com; xuquan-qing.xqq@oceanbase.com; rizhao.ych@oceanbase.com). Xiaodong Lee and Botao Peng are with Institute of Computing Technology, Chinese Academy of Sciences, Beijing, China (e-mail: xl@ict.ac.cn; pengb-otao@ict.ac.cn). Themis Palpanas is with LIPADE, Universit´ e Paris Cit´ e, Paris, France (e-mail: themis@mi.parisdescartes.fr). 
+
+points in d-dimensional space Rd and a query q, an NN query returns a point o∗ ∈ D which has the minimum Euclidean distance to q among all points in D. However, NN search in high-dimensional datasets is challenging due to the “curse of dimensionality” phenomenon [1]. In practice, Approximate Nearest Neighbor (ANN) search is often used as an alterna-tive [2], sacrificing some query accuracy to achieve a huge improvement in efficiency [3]–[6]. Given an approximation ratio c and a query q ∈ Rd, a c-ANN query returns a point o
+
+whose distance to q is at most c times the distance between q
+
+and its exact NN o∗, i.e., ∥q, o ∥ ≤ c · ∥ q, o ∗∥.
+
+Prior Work. Locality-sensitive hashing (LSH)-based meth-ods are known for their robust theoretical guarantees on the accuracy of query results [7]–[10]. LSH is particularly suitable for scenarios where worst-case guarantees dominate average-case performance, as it provides distribution-independent sub-linear query guarantees with provable correctness bounds [11], [12]. Moreover, unlike other ANN methods that rely on stable data distributions or trained routing structures [13], [14], LSH remains applicable under severe distribution shift, since its guarantees depend solely on the underlying dis-tance metric [15], and its efficient random projections and lightweight index construction further enable rapid deployment and immediate query response in latency-sensitive applications such as LLM inference acceleration [16]. LSH-based methods employ LSH functions to map high-dimensional points into lower-dimensional spaces for efficient indexing and query-ing. Due to LSH properties, nearby points in the original space have a higher probability of remaining close in the projected space [17]. This allows for high-quality results by examining only the neighbors of the query in the projected space [18]. Following prior works, we could group LSH-based methods into three categories: 1) boundary constraint (BC) based methods [7], [19]–[21]; 2) collision counting (C2) based methods [8], [22]–[25]; and 3) distance metric (DM) based methods [9], [26]. BC methods map points into L independent 
+
+K-dimensional projected spaces, assigning each to a hash bucket bounded by a K-dimensional hypercube. Two points 
+
+collide if they land in the same bucket in any hash table. Unlike BC, which requires collisions in all K dimensions, C2 methods relax this condition, selecting points whose collision count with the query exceeds a threshold. DM methods use the projected space distance to estimate the original distance with theoretical guarantees, selecting candidates via Euclidean range queries in that space. 
+
+Limitations and Motivation. Nowadays, new data is pro- 
+
+> arXiv:2603.24920v1 [cs.DB] 26 Mar 2026 JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 2
+
+duced at an ever-increasing rate, and the size of datasets is continuously growing [27], [28]. We need to manage large-scale data more efficiently to support further data analysis [2]. However, existing LSH-based methods mainly focus on reduc-ing query time and improving query accuracy by designing different query strategies, but pay little attention to reducing indexing time. They typically fine-tune existing data-oriented partitioning trees to index points and support their query strategies, such as R*-Tree [29] for DB-LSH [7], PM-Tree [30] for PM-LSH [9], and R-Tree [31] for SRS [26]. Data-oriented partitioning trees organize points hierarchically into bound-ing shapes (e.g., hyperrectangles) [29]–[32], but partitioning in high-dimensional space is computationally expensive and becomes less effective as dimensionality increases [1]. These limitations constrain the efficiency and dimensionality of the projected space, highlighting the need for a more efficient tree structure. From another perspective, building a more efficient tree structure boosts query accuracy by enabling more trees to be constructed within the same indexing time. For instance, DB-LSH [7] improves result accuracy by using multiple R*-Trees to minimize missing true nearest neighbors. In addition, efficient index construction and query processing are essential for large-scale ANN search. Many approaches [33]–[40] take advantage of the parallelization opportunities (i.e., SIMD in-structions, multi-socket, and multi-core architectures) provided by modern hardware to accelerate indexing and querying. However, none of the state-of-the-art LSH-based methods [7]– [9] offer parallel algorithms to improve the efficiency of indexing and querying, which limits their competitiveness and suitability for demanding modern applications. 
+
+Our Method. In this paper, we propose a novel tree structure called Dynamic Encoding Tree (DE-Tree), a novel LSH scheme called DET-LSH, and a parallel version of DET-LSH called PDET-LSH to address the high-dimensional c-ANN search problem more efficiently and accurately than current methods. First, we present DE-Tree, an encoding-based tree that independently divides and encodes each dimension of the projected space according to the data distribution. Unlike data-oriented trees, it avoids direct multi-dimensional parti-tioning, improving indexing efficiency. Its dynamic encoding ensures nearby points have similar encoding representations, enhancing query accuracy. DE-Tree also supports efficient range queries because the upper and lower bound distances between a query point and any DE-Tree node can be eas-ily calculated. Second, we propose DET-LSH, a novel LSH scheme that dynamically encodes K-dimensional projected points and builds L DE-Trees from the encoded data. DET-LSH employs a two-step query strategy combining BC and DM principles: first, coarse-grained range queries in DE-Trees retrieve a candidate set; second, fine-grained exact distance calculations are performed to sort and return the final results. This approach uses coarse filtering to boost efficiency and fine-grained verification to ensure accuracy. Third, we conduct a rigorous theoretical analysis showing that DET-LSH can correctly answer a c2-k-ANN query with a constant probability. Fourth, we redesign the encoding, indexing, and query algorithms of DET-LSH, and propose a new method called PDET-LSH, which takes advantage of the parallelization opportunities provided by multicore CPUs to accelerate indexing and querying. Furthermore, extensive experiments on various real-world datasets show that DET-LSH and PDET-LSH outperform existing LSH-based methods in both efficiency and accuracy. Our main contributions are summarized as follows 1. 
+
+> •
+
+We present a novel encoding-based tree structure called DE-Tree. Compared with data-oriented partitioning trees used in existing LSH-based methods, DE-Tree has better indexing efficiency and can support more efficient range queries based on the Euclidean distance metric.  
+
+> •
+
+We propose DET-LSH, a novel LSH scheme based on DE-Tree, and a novel query strategy that takes into account both efficiency and accuracy. We provide atheoretical analysis showing that DET-LSH answers a c2-
+
+k-ANN query with a constant success probability.  
+
+> •
+
+We propose PDET-LSH, which takes advantage of the parallelization opportunities provided by multicore CPUs to accelerate indexing and querying. To the best of our knowledge, PDET-LSH is the first parallel solution among the state-of-the-art LSH-based solutions. Our de-sign of PDET-LSH could instigate similar work on other LSH-based solutions.  
+
+> •
+
+We conduct extensive experiments, demonstrating that DET-LSH and PDET-LSH can achieve better efficiency and accuracy than existing LSH-based methods. While achieving better query accuracy than competitors, DET-LSH achieves up to 6x speedup in indexing time and 2x speedup in query time over the state-of-the-art LSH-based methods. PDET-LSH achieves the same query accuracy as DET-LSH, and up to 40x speedup in indexing time and 62x speedup in query time over the state-of-the-art LSH-based methods. II. P RELIMINARIES 
+
+A. Problem Definition 
+
+Let D be a dataset of points in d-dimensional space Rd.The dataset cardinality is denoted as |D| = n, and let ∥o1, o 2∥
+
+denote the distance between points o1, o 2 ∈ D . The query point q ∈ Rd.
+
+Definition 1 (c-ANN) . Given a query point q and an ap-proximation ratio c > 1, let o∗ be the exact nearest neighbor of q in D. A c-ANN query returns a point o ∈ D satisfying 
+
+∥q, o ∥ ≤ c · ∥ q, o ∗∥.
+
+The c-ANN query can be generalized to c-k-ANN query that returns k approximate nearest points, where k is a positive integer. 
+
+Definition 2 (c-k-ANN) . Given a query point q, an approxi-mation ratio c > 1, and an integer k. Let o∗ 
+
+> i
+
+be the i-th exact nearest neighbor of q in D. A c-k-ANN query returns k points 
+
+o1, o 2, ..., o k. For each oi ∈ D satisfying ∥q, o i∥ ≤ c · ∥ q, o ∗ 
+
+> i
+
+∥,where i ∈ [1 , k ].                                               
+
+> 1A preliminary version of this paper has appeared elsewhere [10]. JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 3
+> TABLE I NOTATIONS
+> Notation Description
+> Rdd-dimensional Euclidean space
+> DDataset of points in Rd
+> nDataset cardinality |D|
+> oA data point in D
+> qA query point in Rd
+> o′, q ′oand qin the projected space
+> o∗, o ∗
+> iThe first and i-th nearest point in Dto q
+> ∥o1, o 2∥The Euclidean distance between o1and o2
+> s, s ′Abbreviation for ∥o1, o 2∥and o′
+> 1, o ′
+> 2
+> h(o)Hash function
+> H(o)[h1(o), ..., h K(o)] , the coordinates of o′
+> Hi(o)Coordinates of o′in the i-th project space
+> cApproximation ratio
+> rSearch radius in the original space
+> rmin The initial search radius
+> dDimension of the original space
+> KDimension of the projected space
+> LNumber of independent projected spaces
+> βMaximum false positive percentage
+> NrNumber of regions in each projected space
+> NwNumber of parallel workers
+> NqNumber of queues during query answering
+> SpSpeedup ratio
+
+In fact, LSH-based methods do not solve c-ANN queries directly because o∗ and ∥q, o ∗∥ is not known in advance [7]– [9]. Instead, they solve the problem of ( r,c)-ANN proposed in [11]. 
+
+Definition 3 (( r,c)-ANN) . Given a query point q, an approx-imation ratio c > 1, and a search radius r. An ( r,c)-ANN query returns the following result: 
+
+1) If there exists a point o ∈ D such that ∥q, o ∥ ≤ r, then return a point o′ ∈ D such that ∥q, o ′∥ ≤ c · r;
+
+2) If for all o ∈ D we have ∥q, o ∥ > c · r, then return nothing; 
+
+3) If for the point o closest to q we have r < ∥q, o ∥ ≤ c · r,then return o or nothing. 
+
+The c-ANN query can be transformed into a series of ( r,c)-ANN queries with increasing radii until a point is returned. The search radius r is continuously enlarged by multiplying 
+
+c, i.e., r = rmin , r min ·c, r min ·c2, ... , where rmin is the initial search radius. In this way, as proven by [11], the ANN query can be answered with an approximation ratio c2, i.e., c2-ANN. 
+
+B. Locality-Sensitive Hashing 
+
+The capability of an LSH function h is to project closer data points into the same hash bucket with a higher probability, i.e., h(o1) = h(o2). Formally, the definition of LSH used in Euclidean space is given below [7], [9]: 
+
+Definition 4 (LSH) . Given a distance r, an approximation ratio c > 1, a family of hash functions H = {h : Rd → R}
+
+is called ( r,cr ,p1,p2)-locality-sensitive, if for ∀o1, o 2 ∈ Rd, it satisfies both of the following conditions: 
+
+1) If ∥o1, o 2∥ ≤ r, Pr [ h(o1) = h(o2)] ≥ p1;
+
+2) If ∥o1, o 2∥ > cr , Pr [ h(o1) = h(o2)] ≤ p2,where h ∈ H is randomly chosen, and the probability values 
+
+p1 and p2 satisfy p1 > p 2.
+
+A widely adopted LSH family for the Euclidean space is defined as follows [23]: 
+
+h(o) = ⃗a ·⃗o, (1) where ⃗o is the vector representation of a point o ∈ R d and ⃗a
+
+is a d-dimensional vector where each entry is independently chosen from the standard normal distribution N (0 , 1) .
+
+C. p-Stable Distribution and χ2 Distribution 
+
+A distribution T is called p-stable, if for any u real numbers v1, ..., v u and identically distributed (i.i.d.) variables 
+
+X1, ..., X u following T distribution, Pui=1 viXi has the same distribution as (Pui=1 |vi|p)1/p · X, where X is a random variable with distribution T [18]. p-stable distribution exists for any p ∈ (0 , 2] [41], and T is the normal distribution when 
+
+p = 2 .Let o′ = H(o) = [ h1(o), ..., h K (o)] denote the point o in the 
+
+K-dimensional projected space. For any two points o1, o 2 ∈D, let s = ∥o1, o 2∥ and s′ = ∥o′
+
+> 1
+
+, o ′
+
+> 2
+
+∥ denote the Euclidean distances between o1 and o2 in the original space and in the projected space. 
+
+Lemma 1. s′2 
+
+> s2
+
+follows the χ2(K) distribution. Proof. Let h′ = h(o1) − h(o2) = ⃗a · (⃗o 1 −⃗o 2) = Pdi=1 (o1[i] −
+
+o2[i]) · a[i], where a[i] follows the N (0 , 1) distribution. Since 2-stable distribution is the normal distribution, h′ has the same distribution as (Pdi=1 (o1[i] − o2[i]) 2)1/2 · X = s · X, where 
+
+X is a random variable with distribution N (0 , 1) . Therefore  
+
+> h′
+> s
+
+follows the N (0 , 1) distribution. Given K hash functions 
+
+h1(·), ..., h K (·), we have h′21 +... +h′2 
+
+> K
+> s2
+
+= s′2 
+
+> s2
+
+, which has the same distribution as PKi=1 X2 
+
+> i
+
+. Thus, s′2 
+
+> s2
+
+follows the χ2(K)
+
+distribution. 
+
+Lemma 2. Given s and s′ we have: 
+
+Pr [ s′ > s pχ2
+
+> α
+
+(K)] = α, (2) 
+
+where χ2
+
+> α
+
+(K) is the upper quantile of a distribution Y ∼
+
+χ2(K), i.e., Pr [ Y > χ 2
+
+> α
+
+(K)] = α.Proof. From Lemma 1, we have s′2 
+
+> s2
+
+∼ χ2(K). Since χ2
+
+> α
+
+(K)
+
+is the α upper quantiles of χ2(K) distribution, we have 
+
+Pr [ s′2 
+
+> s2
+
+> χ 2
+
+> α
+
+(K)] = α. Transform the formulas, we have 
+
+Pr [ s′ > s pχ2
+
+> α
+
+(K)] = α.III. T HE DET-LSH M ETHOD 
+
+In this section, we present the details of DET-LSH and the design of Dynamic Encoding Tree (DE-Tree). DET-LSH consists of three phases: an encoding phase to encode the LSH-based projected points into iSAX representations; an indexing phase to construct DE-Trees based on the iSAX representations; a query phase to perform range queries in DE-Trees for ANN search. Figure 1 provides a high-level overview of the workflow for DET-LSH. In the encoding phase, K · L hash functions project the raw data into L independent K-dimensional spaces, JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 4... ... 𝐀 1(𝐀 )           
+
+> 𝐀 𝐀 (𝐀 )
+> ...
+> Raw Dataset
+> ... ...
+> ...
+> ... ... ...
+> ...
+> DE-Tree 1
+> ...
+> Breakpoints Set iSAX
+> Representations
+> DE-Tree 𝐀
+> Breakpoints Set
+> Indexes
+> 𝐀 -dimensional
+> 𝐀 -dimensional
+> Compute hash in 𝐀 projected spaces
+> iSAX
+> Representations
+> Create
+> Index
+> Create
+> Index
+> Dynamic
+> Encoding
+> Dynamic
+> Encoding
+> Breakpoints
+> Selection
+> Breakpoints
+> Selection
+> (a) Encoding phase and indexing phase. ...
+> Query
+> ...
+> ...
+> ...
+> 𝐀 1(𝐀 )
+> 𝐀 𝐀 (𝐀 )
+> DE-Tree 1
+> ...
+> DE-Tree 𝐀
+> Indexes
+> 𝐀 -dimensional
+> 𝐀 -dimensional
+> Candidate
+> Points
+> 1st
+> 2nd
+> 3rd
+> k-th
+> ...
+> Return top-k candidates
+> as the result
+> Result
+> Compute hash in
+> 𝐀 projected spaces
+> Range
+> Query
+> Range
+> Query
+> 𝐀 2-𝐀 -ANN
+> Query
+> Candidate
+> Points (b) Query phase. Fig. 1. Overview of the DET-LSH workflow.
+
+Algorithm 1: Dynamic Encoding 
+
+Input: Parameters K, L, n, all points in projected spaces P ,sample size ns, number of regions in each projected space Nr
+
+Output: A set of encoded points EP  
+
+> 1
+
+Initialize EP with size n · L · K; 
+
+> 2
+
+B ← Select breakpoints by running multiple rounds of the 
+
+QuickSelect algorithm combined with the 
+
+divide-and-conquer strategy;  
+
+> 3
+
+for i = 1 to L do  
+
+> 4
+
+for j = 1 to K do  
+
+> 5
+
+for z = 1 to n do  
+
+> 6
+
+Obtain oz from P ; 
+
+> 7
+
+Use BinarySearch to find integer b ∈ [1 , N r ]
+
+such that Bij (b) ≤ hij (oz ) ≤ Bij (b + 1) ; 
+
+> 8
+
+EP ij (oz ) ← b-th symbol in the 8-bit alphabet;  
+
+> 9
+
+return EP ;
+
+where data-driven breakpoints are dynamically selected to par-tition each dimension and encode projected points into iSAX representations. During indexing, a DE-Tree is constructed in each projected space via top-down node splitting based on the iSAX codes. At query time, the query is mapped to the same L projected spaces, range queries are performed over multiple DE-Trees using their upper and lower bound distance properties to generate a candidate set, and the final c2-k-ANN results are returned according to the proposed query strategy. 
+
+A. Encoding Phase 
+
+Before indexing projected points with DE-Trees, DET-LSH encodes them into indexable Symbolic Aggregate approX-imation (iSAX) representations [42]. iSAX partitions each dimension using a set of non-uniform breakpoints and assigns a bit-wise symbol to each resulting region, such that points falling in the same region share identical iSAX codes. As il-lustrated in Figure 3(a), using three breakpoints per dimension in a two-dimensional space yields four regions per dimension, represented by 2-bit symbols, and thus 16 regions in total. An index constructed over these representations is shown in Figure 3(b). In practice, high-quality approximations can be achieved with at most 256 symbols per dimension, allowing each dimension to be encoded using an 8-bit alphabet [43]. This design benefits LSH-based ANN search by indepen-dently encoding each dimension, avoiding expensive multi-dimensional partitioning and thus improving indexing effi-ciency. Moreover, the symbolic regions enable efficient upper and lower bound distance computation for effective pruning during range queries, enhancing scalability and query perfor-mance in high-dimensional spaces. 
+
+Static encoding scheme. In data series similarity search, traditional iSAX-based methods adopt a static encoding scheme [33]–[35]. Exploiting the approximately Gaussian dis-tribution of normalized series [42], breakpoints b1, . . . , b a−1
+
+are chosen such that each interval under the N (0 , 1) curve has equal probability mass 1 
+
+> a
+
+, with b0 = −∞ and ba = + ∞, yield-ing dataset-independent encodings. Existing methods follow this static scheme by mapping each coordinate to its enclosing breakpoint interval via a lookup table. However, since ANN datasets often exhibit arbitrary and non-Gaussian distributions, such static encoding becomes unsuitable. 
+
+Dynamic encoding scheme. DET-LSH adopts a dynamic encoding scheme that selects breakpoints according to the data distribution, aiming to evenly partition points such that each region contains approximately the same number of points. Given a dataset of cardinality n, we first apply K ·L
+
+hash functions to obtain K-dimensional representations in 
+
+L projected spaces, where Hi(o) = [hi1(o), . . . , h iK (o)] .For each projected space i and dimension j, let Cij =[hij (o1), . . . , h ij (on)] denote the set of coordinates, and let 
+
+C↑ 
+
+> ij
+
+be its sorted version in ascending order. To divide each dimension into Nr = 256 regions, we select breakpoints Bij 
+
+such that Bij (z) = C↑ 
+
+> ij
+
+(⌊n/N r ⌋ · (z − 1)) for z = 2 , . . . , N r ,with boundary conditions Bij (1) = C↑ 
+
+> ij
+
+(1) and Bij (Nr +1) = 
+
+C↑ 
+
+> ij
+
+(n). Thus, for each dimension in each projected space, 
+
+Nr + 1 breakpoints are determined dynamically, and each coordinate hij (o) is independently encoded according to its corresponding breakpoints Bij .A straightforward approach is to fully sort Cij to obtain C↑
+
+> ij
+
+and then extract the desired breakpoints. However, since only 
+
+Nr +1 order statistics are required, complete sorting is waste-ful. Accordingly, we design a dynamic encoding algorithm (Algorithm 1) that operates directly on the unordered Cij .As illustrated in Figure 2, breakpoints are obtained through multiple rounds of QuickSelect within the divide-and-conquer 
+
+strategy. To further improve efficiency, we randomly sample 
+
+ns points from the dataset and compute breakpoints on the sampled set, with ns set to 0.1n in practice. For an unordered set Cij , QuickSelect (start, q, end ) identifies the q-th smallest element within [start, end ] and places it at position start + q,such that elements to its left (right) are smaller (larger). Thus, a single breakpoint can be obtained with one QuickSelect call. With Nr = 256 , we apply a divide-and-conquer strategy: JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 5
+
+Algorithm 2: Create Index 
+
+Input: Parameters K, L, n, encoded points set EP ,maximum size of a leaf node max size 
+
+Output: A set of DE-Trees: DET s = [ T1, ..., T L] 
+
+> 1
+
+for i = 1 to L do  
+
+> 2
+
+Initialize Ti and generate 2K first-layer nodes as the original leaf nodes;  
+
+> 3
+
+for z = 1 to n do  
+
+> 4
+
+ep i(oz ) ← (EP i1(oz ), ..., EP iK (oz )) ; 
+
+> 5
+
+pos z ← the position of oz in the dataset;  
+
+> 6
+
+target leaf ← leaf node of Ti to insert 
+
+⟨ep i(oz ), pos z ⟩; 
+
+> 7
+
+while sizeof (target leaf ) ≥ max size do  
+
+> 8
+
+SplitNode( target leaf );  
+
+> 9
+
+target leaf ← the new leaf node to insert 
+
+⟨ep i(oz ), pos z ⟩; 
+
+> 10
+
+Insert ⟨ep i(oz ), pos z ⟩ to target leaf ; 
+
+> 11
+
+return DET s ;round 1: 
+
+round 2: 
+
+round 3: 
+
+> ......
+> ......
+
+select 1 breakpoint 
+
+select 2 breakpoints 
+
+select 4 breakpoints 
+
+Quickselect 
+
+Quickselect Quickselect     
+
+> Quickselect Quickselect Quickselect Quickselect
+> Fig. 2. Illustration of the breakpoints selection process.
+
+log 2 Nr rounds are performed, where the z-th round selects 
+
+2z−1 breakpoints by running QuickSelect on the subregions generated in the previous round ( z = 1 , . . . , log 2 Nr ). For each Cij , the minimum and maximum elements are taken as Bij (1) and Bij (Nr +1) , respectively. This strategy yields a 3× speedup over full sorting (Section VI-B). Given the breakpoint set B, Algorithm 1 encodes all points into iSAX representations and outputs the encoded dataset (lines 3-8). 
+
+B. Indexing Phase 
+
+As discussed above, DET-LSH constructs L DE-Trees to support query processing. Algorithm 2 outlines the construc-tion of these trees from the encoded point set EP . For each DE-Tree, construction begins by initializing the first-layer nodes as the root’s children (line 2). According to the iSAX encoding rules, each dimension is initially split into two cases, 
+
+0∗ and 1∗, yielding 2K first-layer nodes per tree (Figure 3(b)). For each data point oz , its encoded representation ep i(oz ) in the i-th DE-Tree Ti and its dataset position pos z are obtained (lines 3-5), and the pair ⟨ep i(oz ), pos z ⟩ is inserted into the cor-responding leaf node (line 6). If the target leaf node overflows, it is recursively split until insertion succeeds (lines 7-10). Only leaf nodes store point information (encoded representations 𝐀 𝐀 𝐀 𝐀                                            
+
+> 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀
+> 𝐀 𝐀
+> 𝐀 𝐀
+> 𝐀 𝐀 𝐀 𝐀􃰀
+> 𝐀 𝐀
+> (00 ,00 )
+> (00 ,01 )
+> (00 ,10 )
+> (00 ,11 )
+> (01 ,00 )
+> (01 ,01 )
+> (01 ,10 )
+> (01 ,11 )
+> (10 ,00 )
+> (10 ,01 )
+> (10 ,10 )
+> (10 ,11 )
+> (11 ,00 )
+> (11 ,01 )
+> (11 ,10 )
+> (11 ,11 )
+> 00 01 10 11
+> 00
+> 01
+> 10
+> 11
+> (a) Encode data points into iSAX representations. root
+> [0*,0*]{0*,1*}{1*,0*}[1*,1*]
+> [00 ,0*][01 ,0*][10 ,1*][11 ,1*]
+> {00 ,00 }{00 ,01 }{01 ,00 }{01 ,01 }{10 ,10 }{10 ,11 }{11 ,10 }{11 ,11 }
+> 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀􃰀
+> (b) An index based on the iSAX representations. Fig. 3. Illustration of the Dynamic Encoding Tree (DE-Tree).
+
+Algorithm 3: DET Range Query 
+
+Input: A projected query point q′, the search radius r′, the index DE-Tree T , project dimension K
+
+Output: A set of points S 
+
+> 1
+
+Initialize a points set S ← ∅; 
+
+> 2
+
+for i = 1 to 2K do  
+
+> 3
+
+node ← the i-th child of root node in T ; 
+
+> 4
+
+Traverse the subtree rooted at node and add to S the data points in its leaf nodes whose distance to q′ is smaller than the search radius r′; 
+
+> 5
+
+return S;
+
+and positions), whereas internal nodes maintain solely index metadata. In a DE-Tree, except the root node that has 2K children, other internal nodes have only two children. This is because node splitting performs a binary refinement on a single se-lected dimension among the K dimensions. As illustrated in Figure 3(b), splitting the node [0 ∗, 0∗] along the first dimension yields two children with representations [00 , 0∗]
+
+and [01 , 0∗]. The choice of splitting dimension is critical: to promote balanced trees, we select the dimension that most evenly partitions the points between the two child nodes. This design of DE-Tree motivates performing a range query before the kNN search. The range query efficiently prunes the search space using the computed lower and upper bound distances, thereby restricting the search to a much smaller candidate set. The subsequent kNN query is then executed only within this refined set, reducing unnecessary distance computations and improving overall query efficiency. 
+
+DET Range Query. Algorithm 3 performs range queries on a DE-Tree by traversing subtrees to identify leaf nodes containing points within the search radius r′. The traversal JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 6
+
+Algorithm 4: (r,c)-ANN Query 
+
+Input: A query point q, parameters K, L, n, c, r, ϵ, β,index DE-Trees DET s = [ T1, ..., T L]
+
+Output: A point o or ∅ 
+
+> 1
+
+Initialize a candidate set S ← ∅; 
+
+> 2
+
+for i = 1 to L do  
+
+> 3
+
+Compute q′ 
+
+> i
+
+= Hi(q) = [ hi1(q), ..., h iK (q)] ; 
+
+> 4
+
+Si ← call DETRangeQuery( q′
+
+> i
+
+, ϵ · r, T i, K );  
+
+> 5
+
+S ← S ∪ Si; 
+
+> 6
+
+if |S| ≥ βn + 1 then  
+
+> 7
+
+return the point o closest to q in S; 
+
+> 8
+
+if |{ o | o ∈ S ∧ ∥ o, q ∥ ≤ c · r}| ≥ 1 then  
+
+> 9
+
+return the point o closest to q in S; 
+
+> 10
+
+return ∅;
+
+Algorithm 5: c2-k-ANN Query 
+
+Input: A query point q, parameters K, L, n, c, rmin , ϵ, β,
+
+k, index DE-Trees DET s = [ T1, ..., T L]
+
+Output: k nearest points to q in S 
+
+> 1
+
+Initialize a candidate set S ← ∅ and set r ← rmin ; 
+
+> 2
+
+while TRUE do  
+
+> 3
+
+for i = 1 to L do  
+
+> 4
+
+Compute q′ 
+
+> i
+
+= Hi(q) = [ hi1(q), ..., h iK (q)] ; 
+
+> 5
+
+Si ← call DETRangeQuery( q′
+
+> i
+
+, ϵ · r, T i, K );  
+
+> 6
+
+S ← S ∪ Si; 
+
+> 7
+
+if |S| ≥ βn + k then  
+
+> 8
+
+return the top -k points closest to q in S; 
+
+> 9
+
+if |{ o | o ∈ S ∧ ∥ o, q ∥ ≤ c · r}| ≥ k then  
+
+> 10
+
+return the top -k points closest to q in S; 
+
+> 11
+
+r ← c · r;
+
+starts from all 2K children of the root as entry points and proceeds recursively (lines 2-4). During traversal, nodes are pruned using lower and upper bound distances to the query point q′. If a node’s lower bound distance exceeds r′, all points in its subtree can be safely discarded. For a leaf node, if its upper bound distance is no greater than r′, all contained points are directly added to the candidate set S; if r′ lies between the lower and upper bounds, only points within distance r′ are examined and added. Non-leaf nodes that cannot be pruned are further expanded by traversing their subtrees. 
+
+C. Query Phase 
+
+(r,c)-ANN Query. Algorithm 4 describes how DET-LSH answers an (r, c )-ANN query for an arbitrary search radius r.After indexing, DET-LSH maintains L DE-Trees T1, . . . , T L.Given a query q, we process the L projected spaces se-quentially: for the i-th space, the projected query q′ 
+
+> i
+
+is first computed (line 3), and a range query is executed on Ti using Algorithm 3 with search radius ϵr (line 4). The parameter 
+
+ϵ ensures that if ∥o − q∥ ≤ r, then ∥o′ − q′∥ ≤ ϵr holds with constant probability, as formally analyzed in Lemma 3. Candidates returned from each range query are accumulated in a set S (line 5). Once |S| ≥ βn + 1 , the point closest to q
+
+is returned, where β is the maximum false positive percentage (lines 6-7). After all L trees are processed, if |S| < βn + 1 
+
+and S contains at least one point within distance c · r from Dynamic Encoding    
+
+> Dimension Assignment
+> Breakpoints Selection
+> iSAX Encoding
+> Encoding Workers
+> RawData LSH Codes
+> LSH projection
+> Encoded
+> Data
+> Index Construction
+> Data Allocation
+> Subtree Assignment
+> Subtree Construction
+> Indexing Workers
+> Raw
+> Query LSH Codes
+> LSH projection Range Query
+> Subtree Assignment
+> Subtree Traversal
+> Leaf Queues Buliding
+> Range Query Workers
+> Leaf Queues
+> DE-Trees
+> ANN Query
+> Candidate Selection
+> Rerank
+> Results Returning
+> ANN Query Workers
+> Encoding and Indexing Phases
+> Query Phase
+
+Fig. 4. Overview of the PDET-LSH workflow. 
+
+q, the nearest such point is returned (lines 8-9); otherwise, the algorithm returns null (line 10). According to Theorem 1, DET-LSH can correctly answer an ( r,c)-ANN query with a constant probability. 
+
+c2-k-ANN Query. Since the true nearest neighbor o∗ and its distance ∥q, o ∗∥ are unknown in advance, a c-k-ANN query cannot be executed with a fixed radius r as in ( r,c)-ANN. Instead, DET-LSH issues a sequence of ( r,c)-ANN queries with progressively increasing radii until sufficient candidates are obtained. Algorithm 5 details this procedure: most steps (lines 3-10) mirror Algorithm 4 (lines 2-9), with the key difference that termination and return conditions explicitly account for k. When neither termination condition is met, the search radius is enlarged for the next iteration (line 11). According to Theorem 2, DET-LSH can correctly answer a 
+
+c2-k-ANN query with a constant probability. IV. T HE PDET-LSH M ETHOD 
+
+In this section, we describe PDET-LSH, an in-memory LSH-based method that takes advantage of the parallelization opportunities provided by multicore CPUs. PDET-LSH has the same query accuracy as DET-LSH, while greatly improving its index-building and query-answering efficiency. The parallelism strategies we design in PDET-LSH are governed by two main principles: eliminate synchronization overheads as much as possible, and balance the workload of multiple workers. To achieve these principles, we design task-specific workload assignment strategies to balance work-load across workers, and introduce a multi-queue buffering mechanism to store leaf nodes retrieved during range queries, thereby minimizing synchronization and waiting overheads among concurrent workers. Note that our key design decision stems from the fact that in our proposed DE-Tree, the root node has a large number of child nodes. This allows us to introduce a lot of concurrency at a low synchronization cost. Figure 4 provides an overview of the workflow for PDET-LSH. In the encoding phase (dimension-partitioned) and in-dexing phase (data-partitioned), each worker independently handles its tasks on assigned subspace or data subset, per-forming breakpoints selection, iSAX encoding, and subtree construction. During queries, range query workers traverse DE-Trees to build candidate leaf queues, while ANN query workers select and rerank candidates in parallel. This parallel JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 7
+
+Algorithm 6: Parallel Dynamic Encoding 
+
+Input: Parameters K, L, n, all points in projected spaces P ,number of regions in each projected space Nr ,number of workers Nw
+
+Output: A set of encoded points EP  
+
+> 1
+
+Initialize the breakpoints set B with size L · K · (Nr + 1) ; 
+
+> 2
+
+Initialize the encoded points set EP with size n · L · K; 
+
+> 3
+
+for wid = 0 to Nw − 1 do  
+
+> 4
+
+start dimension ← wid · ⌊ KNw ⌋; 
+
+> 5
+
+end dimension ← (wid + 1) · ⌊ KNw ⌋; 
+
+> 6
+
+Obtain the dimensions of all points in the scope (start dimension , end dimension ) from P ; 
+
+> 7
+
+Create a worker to execute Breakpoints Selection in the scope;  
+
+> 8
+
+Create a worker to execute Dynamic Encoding in the scope;  
+
+> 9
+
+Wait for all workers to finish their work;  
+
+> 10
+
+return EP ;
+
+Algorithm 7: Parallel Create Index 
+
+Input: Parameters K, L, n, encoded points set EP , number of workers Nw
+
+Output: A set of DE-Trees: DET s = [ T1, ..., T L] 
+
+> 1
+
+for i = 1 to L do  
+
+> 2
+
+Initialize Ti and generate 2K first-layer nodes as the original leaf nodes;  
+
+> 3
+
+for wid = 0 to Nw − 1 do  
+
+> 4
+
+start point ← wid · ⌊ nNw ⌋; 
+
+> 5
+
+end point ← (wid + 1) · ⌊ nNw ⌋; 
+
+> 6
+
+Obtain the encoded points in the working scope (start point , end point ) from EP ; 
+
+> 7
+
+Create a worker to insert the encoded nodes that belong to the working scope into the appropriate first-layer tree nodes;  
+
+> 8
+
+Set a barrier to synchronize all workers;  
+
+> 9
+
+Create a worker to continuously and exclusively acquires first-level tree nodes and constructs subtrees rooted at those nodes;  
+
+> 10
+
+return DET s ;
+
+design exploits both data-level and space-level independence, significantly improving indexing and query efficiency. 
+
+A. Encoding Phase 
+
+Algorithm 6 presents our design for parallel dynamic en-coding. The main idea is that multiple workers can work independently within the scope of work assigned to them. Specifically, we first divide the work scope for Nw workers, that is, specific dimensions within the K-dimensional pro-jected space (lines 3-5). Then, each worker needs to create a worker (thread) and execute the breakpoints selection and dynamic encoding successively in all L DE-Trees (lines 6-8). The decision of selecting breakpoints and encoding in each dimension is similar to that in Algorithm 1. When all workers finish their work, we get the encoded points set EP (lines 9-10). 
+
+B. Indexing Phase 
+
+The root node of a DE-Tree may have up to 2K child nodes (i.e., first-layer nodes). Each of these nodes acts as the 𝐀 (𝐀 , 𝐀 )                              
+
+> 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀 𝐀
+> 𝐀 𝐀
+> 𝐀 𝐀
+> 𝐀 𝐀
+> 𝐀 𝐀
+> tree node
+> ①:𝐀 −𝐀 1, upper bound ①
+> ②
+> ③④
+> ②:𝐀 −𝐀 2, lower bound
+> ③:𝐀 −𝐀 5, upper bound
+> ④:𝐀 −𝐀 6, lower bound
+> upper bound distance:
+> (𝐀 −𝐀 1)2+(𝐀 −𝐀 5)2
+> lower bound distance:
+> (𝐀 −𝐀 2)2+(𝐀 −𝐀 6)2
+> Fig. 5. An example of calculating the upper and lower bound distances between a query qand a DE-Tree node.
+
+root of a complete binary tree that recursively partitions the corresponding subspace. Each binary tree can be constructed independently if all data points are assigned to appropriate first-layer nodes. Therefore, the DE-Tree structure naturally lends itself to parallel construction. Algorithm 7 presents the pseudocode for the parallel index creation. We initialize and build each DE-Tree sequentially (lines 1-2). First, we initialize Nw workers for each DE-Tree and assign them working scopes (specific points in the dataset) (lines 3-6). Then, each worker creates a thread to insert the encoded points within the working scope into the appropriate first-layer nodes of the DE-Tree (line 7). Up until all workers complete the task (line 8), they continue to fetch unvisited first-layer nodes, and build a complete binary subtree with the corresponding first-layer node acting as the root node for that subtree (line 9). 
+
+C. Querying Phase 
+
+Since the query strategy of PDET-LSH is based on the Euclidean distance metric, range queries can improve the efficiency of obtaining candidate points. In a DE-Tree, each space is divided into different regions by multiple breakpoints. The breakpoints on all sides of a region can be used to calculate the upper and lower bound distances between two points or between a point and a tree node. Figure 5 gives an example for calculating the upper and lower bound distances between a query q and a DE-Tree node in a two-dimensional space. Assume that the node is divided by breakpoints b1, b 2, b 5, b 6, and the coordinates of q
+
+are (x, y ). First, we need to calculate the upper and lower bound distances of each dimension based on the coordinates of q and the breakpoints dividing the node, i.e., x − b1 (upper bound), x − b2 (lower bound), and y − b5 (upper bound), 
+
+y − b6 (lower bound). Then, we use all the upper/lower bound distances obtained in each dimension to calculate the overall upper/lower bound distance: p(x − b1)2 + ( y − b5)2
+
+and p(x − b2)2 + ( y − b6)2. Therefore, the upper and lower bound distances between a query and a DE-Tree node can be calculated easily, which is suitable for range queries in PDET-LSH. Range queries can effectively prune the search space using bound distances, improving query scalability and performance. Algorithm 8 shows the parallel range query strategy we de-signed. First, we initialize Nq queues to hold leaf nodes (lines JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 8
+
+Algorithm 8: Parallel Range Query 
+
+Input: A projected query point q′, the search radius r′, the index DE-Tree T , number of workers Nw , number of queues Nq
+
+Output: A set of leaf nodes Sleaf  
+
+> 1
+
+for i = 0 to Nq − 1 do  
+
+> 2
+
+Initialize the i-th queue queues [i] to hold leaf nodes;  
+
+> 3
+
+Initialize a leaf nodes set Sleaf ← ∅; 
+
+> 4
+
+for i = 0 to Nw − 1 do  
+
+> 5
+
+Create a worker to continuously and exclusively acquires first-level tree nodes of T , performs Range Query with 
+
+q′ and r′ on the subtree, inserts the qualified leaf nodes into a random queue;  
+
+> 6
+
+Merge all leaf nodes in Nq queues into Sleaf ; 
+
+> 7
+
+return Sleaf ;
+
+1-2), avoiding multiple workers competing for a single queue. Then, we create Nw workers to continuously and exclusively traverse the subtrees and enqueue the leaf nodes that satisfy the distance bound conditions (lines 4-5). Finally, merge all leaf nodes in Nq queues into Sleaf and return it (lines 6-7). For c2-k-ANN query, the parallelization optimizations in PDET-LSH do not alter the DET-LSH query pipeline of DET-LSH (Algorithm 5); they only parallelize three of its steps, i.e., range query (line 5 in Algorithm 5), candidate selection (line 6 in Algorithm 5), and rerank (lines 8, 10 in Algorithm 5). In fact, the parallel optimizations do not alter the outcomes of these three steps—namely, the set of leaf nodes, the candidate set, and the rerank results—which remain identical to those of Algorithm 5. We note that the results returned by PDET-LSH are the same as those returned by the optimized Algorithm 5 (in Section VI-B2). That is, the query accuracy of PDET-LSH is the same as that of DET-LSH. In Section VI-D, the experimental evaluation confirms that PEDT-LSH and DET-LSH have the same recall and overall ratio, outperforming other methods. V. T HEORETICAL ANALYSIS 
+
+A. Quality Guarantee 
+
+Let Hi(o) = [ hi1(o), ..., h iK (o)] denote a data point o in the i-th projected space, where i = 1 , ..., L . We define three events as follows:  
+
+> •
+
+E1: If there exists a point o satisfying ∥o, q ∥ ≤ r, then its projected distance to q, i.e., ∥H i(o), Hi(q)∥, is smaller than ϵr for some i = 1 , ..., L ; 
+
+> •
+
+E2: If there exists a point o satisfying ∥o, q ∥ > cr , then its projected distance to q, i.e., ∥H i(o), Hi(q)∥, is smaller than ϵr for some i = 1 , ..., L ; 
+
+> •
+
+E3: Fewer than βn points satisfying E2 in dataset D.
+
+Lemma 3. Given K and c, setting L = − 1ln α1 and β =2 − 2α− 1 
+
+> lnα 1
+> 2
+
+such that α1, α2, and ϵ satisfy Equation 3, the probability that E1 occurs is at least 1− 1e and the probability that E3 occurs is at least 12 .
+
+ϵ2 = χ2 
+
+> α1
+
+(K) = c2 · χ2 
+
+> α2
+
+(K). (3) 
+
+Proof. Given a point o satisfying ∥o, q ∥ ≤ r, let s = ∥o, q ∥
+
+and s′ 
+
+> i
+
+= ∥H i(o), Hi(q)∥ denote the distances between o and 
+
+q in the original space and in the i-th projected space, where 
+
+i = 1 , ..., L . From Equation 3, we have pχ2 
+
+> α1
+
+(K) = ϵ. For each independent projected space, from Lemma 2, we have 
+
+Pr [ s′ 
+
+> i
+
+> s pχ2 
+
+> α1
+
+(K)] = Pr [ s′ 
+
+> i
+
+> ϵs ] = α1. Since s ≤ r,
+
+Pr [ s′ 
+
+> i
+
+> ϵr ] ≤ α1. Considering L projected spaces, we have 
+
+Pr [ E1 ] ≥ 1−αL 
+
+> 1
+
+= 1 − 1e . Likewise, given a point o satisfying 
+
+∥o, q ∥ > cr , let s = ∥o, q ∥ and s′ 
+
+> i
+
+= ∥H i(o), Hi(q)∥ denote the distances between o and q in the original space and in the i-th projected space, where i = 1 , ..., L . From Equation 3, we have pχ2 
+
+> α2
+
+(K) = ϵc . For each independent projected space, from Lemma 2, we have Pr [ s′ 
+
+> i
+
+> s pχ2 
+
+> α2
+
+(K)] =Pr [ s′ 
+
+> i
+
+> ϵs c ] = α2. Since s > cr , i.e., sc > r , Pr [ s′ 
+
+> i
+
+> ϵr ] >α2. Considering L projected spaces, we have Pr [ E2 ] ≤ 1−αL 
+
+> 2
+
+,thus the expected number of such points in dataset D is upper bounded by (1 − αL 
+
+> 2
+
+) · n. By Markov’s inequality , we have 
+
+Pr [ E3 ] > 1 − (1 −αL  
+
+> 2)·nβn
+
+= 12 .
+
+Theorem 1. DET-LSH (Algorithm 4) answers an ( r,c)-ANN query with at least a constant probability of 12 − 1e .Proof. We show that when E1 and E3 hold at the same time, Algorithm 4 returns an correct ( r,c)-ANN result. The probabil-ity of E1 and E3 occurring at the same time can be calculated as Pr [ E1E3 ] = Pr [ E1 ] − Pr [ E1E3 ] > Pr [ E1 ] − Pr [ E3 ] =  
+
+> 12
+
+− 1e . When E1 and E3 hold at the same time, if Algorithm 4 terminates after getting at least βn +1 candidate points (line 7), due to E3 , there are at most βn points satisfying ∥o, q ∥ > cr .Thus we can get at least one point satisfying ∥o, q ∥ ≤ cr , and the returned point is obviously a correct result. If the candidate set S has no more than βn + 1 points, but there exists at least one point in S satisfying ∥o, q ∥ ≤ cr , Algorithm 4 can also terminate and then return a result correctly (line 9). Otherwise, it indicates that no points satisfying ∥o, q ∥ ≤ cr . According to the Definition 3 of ( r,c)-ANN, nothing will be returned (line 10). Therefore, when E1 and E3 hold at the same time, Algorithm 4 can always correctly answer an ( r,c)-ANN query. In other words, DET-LSH (Algorithm 4) answers an ( r,c)-ANN query with at least a constant probability of 12 − 1e .
+
+Theorem 2. DET-LSH (Algorithm 5) answers a c2-k-ANN query with at least a constant probability of 12 − 1e .Proof. We show that when E1 and E3 hold at the same time, Algorithm 5 returns a correct c2-k-ANN result. Let o∗ 
+
+> i
+
+be the i-th exact nearest point to q in D, we assume that r∗ 
+
+> i
+
+= ∥o∗ 
+
+> i
+
+, q ∥ >rmin , where rmin is the initial search radius and i = 1 , ..., k .We denote the number of points in the candidate set under search radius r as |Sr |. Obviously, when enlarging the search radius r = rmin , r min ·c, r min ·c2, ... , there must exist a radius 
+
+r0 satisfying |Sr0 | < βn + k and |Sc·r0 | ≥ βn + k. The distribution of r∗ 
+
+> i
+
+has three cases: 1) Case 1: If for all i = 1 , ..., k satisfying r∗ 
+
+> i
+
+≤ r0, which indicates the range queries in all L index trees have been executed at r = r0 (lines 3-8). Due to E1 , all r∗
+
+> i
+
+must in Sr0 . Since Sr0 ⫋ Sc·r0 , all r∗ 
+
+> i
+
+also must in Sc·r0 .Therefore, Algorithm 5 returns the exact k nearest points 
+
+o∗ 
+
+> i
+
+to q.JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 91 2 3 4 5 6 7 8 9 10          
+
+> L
+> 0.00
+> 0.02
+> 0.04
+> 0.06
+> 0.08
+> Fig. 6. Illustration of theoretical βwhen Lvaries (for K= 16 and c= 1 .5), which is in line with Lemma 3.
+
+2) Case 2: If for all i = 1 , ..., k satisfying r∗ 
+
+> i
+
+> r 0, all 
+
+r∗ 
+
+> i
+
+not belong to Sr0 . Since Algorithm 5 may terminate after executing range queries in part of L index trees at 
+
+r = c · r0 (line 8), we cannot guarantee that r∗ 
+
+> i
+
+≤ c · r0.However, due to E3 , there are at least k points oi in 
+
+Sc·r0 satisfying ∥oi, q ∥ ≤ c2r0, i = 1 , ..., k . Therefore, we have ∥oi, q ∥ ≤ c2r0 ≤ c2r∗ 
+
+> i
+
+, i.e., each oi is a c2-ANN point for corresponding o∗ 
+
+> i
+
+.3) Case 3: If there exists an integer m ∈ (1 , k ) such that for all i = 1 , ..., m satisfying r∗ 
+
+> i
+
+≤ r0 and for all i =
+
+m+1 , ..., k satisfying r∗ 
+
+> i
+
+> r 0, indicating that Case 3 is a combination of Case 1 and Case 2 . For each i ∈ [1 , m ],Algorithm 5 returns the exact nearest point o∗ 
+
+> i
+
+to q based on Case 1 . For each i ∈ [m + 1 , k ], Algorithm 5 returns a c2-ANN point for o∗ 
+
+> i
+
+based on Case 2 .Therefore, when E1 and E3 hold simultaneously, Algorithm 5 can always correctly answer a c2-k-ANN query, i.e., DET-LSH (Algorithm 5) returns a c2-k-ANN with at least a constant probability of 12 − 1e .
+
+Theorem 3. PDET-LSH answers a c2-k-ANN query with at least a constant probability of 12 − 1e .Proof. The parallelization optimization of PDET-LSH does not change the query pipeline of DET-LSH (Algorithm 5) in steps where theoretical guarantees for result quality are required (e.g., termination conditions). Specifically, PDET-LSH parallelizes three steps in the query pipeline: range query (line 5), candidate selection (line 8), and rerank (line 11). In fact, the parallel optimizations do not alter the outcomes of these three steps—namely, the set of leaf nodes, the candidate set, and the rerank results—which remain identical to those of Algorithm 5. Moreover, as shown in the proof of Theorem 1 and Theorem 2, the termination condition of algorithms is the key to theoretical guarantees because it can guarantee the quality of the returned results. The termination condition of PDET-LSH is the same as that of Algorithm 5 (lines 7 and 9), so PDET-LSH and DET-LSH return the same results. Figures 20 and 21 confirm that under identical parameter settings, PDET-LSH and DET-LSH achieve the same query accuracy (i.e., return identical results). Therefore, PDET-LSH has the same quality guarantee as DET-LSH, i.e., PDET-LSH returns a c2-k-ANN with at least a constant probability of  
+
+> 12
+
+− 1e .
+
+B. Parameter Settings 1) DET-LSH: The performance of DET-LSH is affected by several parameters: L, K, β, c, and so on. According to Lemma 3, when K and c are set as constants, there is a mathematical relationship between L and β. We set K = 16 
+
+and c = 1 .5 by default, and Figure 6 shows the theoretical β as 
+
+L changes, which is in line with Lemma 3. Figure 6 illustrates that β and L have a negative correlation. Theoretically, a greater β means a higher fault tolerance when querying, so the accuracy of DET-LSH is improved. Meanwhile, a greater 
+
+L means fewer correct results are missed when querying, so the accuracy of DET-LSH can also be improved. However, both greater β and greater L will reduce query efficiency, so we need to find a balance between β and L. As shown in Figure 6, L = 4 is a good choice because as L increases, β
+
+drops rapidly until L = 4 , and then β drops slowly. Therefore, we choose L = 4 as the default value. For the initial search radius rmin , we follow the selection scheme proposed in [9]. Specifically, to reduce the number of iterations for different r and terminate the query process faster, we find a “magic” rmin that satisfies the following conditions: 1) when r = rmin in Algorithm 5, the number of candidate points in S satisfies |S| ≥ βn + k; 2) when 
+
+r = rmin  
+
+> c
+
+in Algorithm 5, the number of candidate points in 
+
+S satisfies |S| < βn + k. Since DET-LSH can implement dynamic incremental queries as r increases, the choice of 
+
+rmin is expected to have a relatively small impact on its performance. 
+
+2) PDET-LSH: Even though PDET-LSH improves the in-dexing and query efficiency of DET-LSH, it has the same query accuracy as DET-LSH, that is, it returns the same results. Therefore, we choose for PDET-LSH the same parameters as for DET-LSH; the choice of these parameters is discussed in Section V-B1. 
+
+C. Complexity Analysis 1) DET-LSH: In the encoding and indexing phases, DET-LSH has time cost O(n(d+log Nr )) , and space cost O(n). The time cost comes from four parts: (1) computing hash values for n points, O(L · K · n · d); (2) breakpoints selection, O(L ·
+
+K ·n·log Nr ); (3) dynamic encoding, O(L·K ·n·log Nr ); and (4) constructing L DE-Trees, O(L · n · K · log Nr ). Since both 
+
+K = O(1) and L = O(1) are constants, the total time cost is 
+
+O(n(d + log Nr )) . Obviously, the size of encoded points and 
+
+L DE-Trees are both O(L · K · n) = O(n).In the query phase, DET-LSH has time cost O(n(βd +log Nr )) . The time cost comes from four parts: (1) computing hash values for the query point q, O(L · K · d) = O(d); (2) finding candidate points in L DE-Trees, O(L · K2 · log Nr · 
+
+> nmax size
+
++ L · K · n) = O(n log Nr ); (3) computing the real distance of each candidate point to q, O(βnd ) cost; and (4) finding the top -k points to q, O(βn log k). The total time cost in the query phase is O(n(βd + log Nr )) .
+
+2) PDET-LSH: In the encoding and indexing phases, PDET-LSH has time cost O( n(d+log Nr ) 
+
+> Nw
+
+), and space cost 
+
+O(nN w log 2 Nr ). The time cost derives from three compo-nents: (1) computing hash values for n points in parallel, with complexity O( L·K·n·dNw ); (2) dynamic encoding in parallel, with JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 10 
+
+TABLE II DATASETS 
+
+Dataset Cardinality Dim. Type 
+
+Msong 994,185 420 Audio Deep1M 1,000,000 256 Image Sift10M 10,000,000 128 Image TinyImages80M 79.302,017 384 Image Sift100M 100,000,000 128 Image Yandex Deep500M 500,000,000 96 Image Microsoft SPACEV500M 500,000,000 100 Text Microsoft Turing-ANNS500M 500,000,000 100 Text 
+
+complexity O( L·K·n·log Nr 
+
+> Nw
+
+); and (3) constructing L DE-Trees in parallel, with complexity O( L·n·K·log Nr 
+
+> Nw
+
+). Therefore, the total time cost is O( n(d+log Nr ) 
+
+> Nw
+
+).The space cost relates to two components: (1) the encoded points, with complexity O(L · K · n) = O(n), and (2) the L
+
+DE-Trees built by Nw workers, with complexity O(Nw · L ·
+
+K · nmax size · log 2 Nr ) = O(nN w log 2 Nr ). Thus, the total space cost is O(nN w log 2 Nr ).In the query phase, PDET-LSH has O( nNw (βd + log Nr )) 
+
+time cost, which derives from four components: (1) com-puting hash values for the query point q, with complexity 
+
+O( L·K·dNw ) = O( dNw ); (2) finding candidate points in the L
+
+DE-Trees, with complexity O(L · K2 · log Nr · nmax size · 
+
+> 1
+> Nw
+
++ L · K · n · 1 
+
+> Nw
+
+) = O( n log Nr 
+
+> Nw
+
+); (3) computing the real distance of each candidate point to q, with complexity O( βnd Nw )
+
+cost; and (4) finding the top -k points to q, with complexity 
+
+O(βn log k). The total time cost of the query phase is thus 
+
+O( nNw (βd + log Nr )) .VI. E XPERIMENTAL EVALUATION 
+
+In this section, we evaluate the performance of DET-LSH and PDET-LSH, conduct comparative experiments with the state-of-the-art LSH-based methods. DET-LSH and PDET-LSH are implemented in C and C++ and compiled using the -O3 optimization. All LSH-based methods except for PDET-LSH use a single thread. We acknowledge that there are no parallel implementations for competitors, but given the increasing of datasets size and importance of LSH-based methods, we describe a parallel solution, which could also instigate other LSH-based solutions to do work in this area. PDET-LSH uses Pthreads and OpenMP for parallelization and SIMD for accelerating calculations. All experiments are conducted on a machine with 2 AMD EPYC 9554 CPUs @ 3.10GHz and 756 GB RAM, running on Ubuntu v22.04. 
+
+A. Experimental Setup 
+
+Datasets and Queries. We select eight high-dimensional commonly used datasets for ANN search. Table II shows the key statistics of the datasets. Note that points in Sift10M 
+
+and Sift100M are randomly chosen from the Sift1B dataset 2.Similarly, Yandex Deep500M , Microsoft SPACEV500M , and 
+
+Microsoft Turing-ANNS500M are also randomly sampled from their 1B-scale datasets 3, which are the largest datasets our 
+
+> 2
+
+http://corpus-texmex.irisa.fr/ 
+
+> 3
+
+https://big-ann-benchmarks.com/neurips21.html Msong Deep 
+
+> 1M
+> Sift
+> 10M
+> Tiny
+> 80M
+> Sift
+> 100M
+> Deep
+> 500M
+> SPACEV
+> 500M
+> Turing
+> 500M
+> 0
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> Time (s)
+> Optimized Breakpoints Selection
+> Unoptimized Breakpoints Selection
+> Dynamic Encoding
+> Create Index
+
+Fig. 7. Running time break-down for the DET-LSH encoding and indexing phases. Msong Deep     
+
+> 1M
+> Sift
+> 10M
+> Tiny
+> 80M
+> Sift
+> 100M
+> Deep
+> 500M
+> SPACEV
+> 500M
+> Turing
+> 500M
+> 10 1
+> 10 0
+> 10 1
+> 10 2
+> Time (s)  Optimized Range Query
+> Unoptimized Range Query
+> Optimized c2-k-ANN
+> Unoptimized c2-k-ANN
+> 0.6
+> 0.7
+> 0.8
+> 0.9
+> 1.0
+> Recall
+> Recall with optimized algorithm Recall with unoptimized algorithm
+
+Fig. 8. Running time and recall of optimized/non-optimized query-phase algorithms of DET-LSH. 
+
+server can handle. We randomly select 100 data points as queries and remove them from the original datasets. 
+
+Evaluation Measures. We adopt five measures to evaluate the performance of all methods: index size, indexing time, query time, recall, and overall ratio. For a query q, we denote the result set as R = {o1, ..., o k} and the exact k-NNs as 
+
+R∗ = {o∗
+
+> 1
+
+, ..., o ∗
+
+> k
+
+}, recall is defined as |R∩R∗| 
+
+> k
+
+and overall ratio is defined as 1
+
+> k
+
+Pki=1 
+
+> ∥q,o i∥
+
+∥q,o ∗ 
+
+> i
+
+∥ [7]. To evaluate the parallel performance of PDET-LSH, we adopt an additional measure: speedup ratio. Speedup ratio is defined as Sp = T1 
+
+> Tp
+
+, where p
+
+is the number of threads used, T1 is the running time of non-parallelized method, and Tp is the running time of parallel method with p threads. 
+
+Benchmark Methods. We compare DET-LSH and PDET-LSH with five state-of-the-art methods, including three LSH-based methods: DB-LSH [7], LCCS-LSH [8], and PM-LSH [9], and two non-LSH-based methods: HNSW [44] (graph-based) and IMI-OPQ [45] (quantization-based). 
+
+Parameter Settings. k in k-ANN is set to 50 by default. For DET-LSH, the parameters are set as described in Section V-B1. For PDET-LSH, we set Nw = 8 and Nq = 4 (based on the experimental results in Section VI-C2). For competitors, the parameter settings follow their source codes or papers. To make a fair comparison, we set β = 0 .1 and c = 1 .5 for DET-LSH, DB-LSH, PM-LSH. For DB-LSH, L = 5 , K = 12 ,
+
+w = 4 c2. For LCCS-LSH, m = 64 . For PM-LSH, s = 5 ,
+
+m = 15 . For HNSW, ef Construction = 200 , M = 25 . For IMI-OPQ, M = 2 , Kcoarse = 2 16 , Kf ine = 2 8+16 .
+
+B. Self-evaluation of DET-LSH 1) Encoding and Indexing Phase: Figure 7 details the algorithm runtimes for encoding and indexing. We found that dynamic encoding is slower than index creation, as locating JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 11 2 4 6 8 10 12 14 16                      
+
+> # threads
+> 0.0
+> 1.2
+> 2.4
+> 3.6
+> Indexing time (s)
+> (a) Deep1M
+> 0
+> 1
+> 2
+> 3
+> 4
+> Index size (GB)
+> 246810 12 14 16
+> # threads
+> 0
+> 8
+> 16
+> 24
+> 32
+> Indexing time (s)
+> (b) Sift10M
+> 0
+> 4
+> 8
+> 12
+> Index size (GB)
+> 246810 12 14 16
+> # threads
+> 0
+> 70
+> 140
+> 210
+> 280
+> Indexing time (s)
+> (c) Sift100M
+> 0
+> 20
+> 40
+> 60
+> 80
+> Index size (GB)
+> 246810 12 14 16
+> # threads
+> 0
+> 400
+> 800
+> 1200
+> 1600
+> Indexing time (s)
+> (d) SPACEV500M
+> 0
+> 70
+> 140
+> 210
+> 280
+> Index size (GB)
+
+Indexing time Index size 
+
+Fig. 9. Indexing performance of PDET-LSH when varying the number of threads. 2 4 6 8 10 12 14 16 
+
+> # threads
+> 0
+> 20
+> 40
+> 60
+> Query time (ms)
+
+(a) Deep1M        
+
+> 246810 12 14 16
+> # threads
+> 0
+> 40
+> 80
+> 120
+> Query time (ms)
+
+(b) Sift10M        
+
+> 246810 12 14 16
+> # threads
+> 0
+> 150
+> 300
+> 450
+> 600
+> Query time (ms)
+
+(c) Sift100M        
+
+> 246810 12 14 16
+> # threads
+> 0
+> 900
+> 1800
+> 2700
+> Query time (ms)
+
+(d) SPACEV500M   
+
+> Range query Candidate selection Rerank
+
+Fig. 10. Query performance of PDET-LSH when varying the number of threads. 0 2 4 6 8 10 12 14 16            
+
+> # priority queues
+> 20
+> 24
+> 28
+> 32
+> 36
+> Query time (ms)
+> (a) Deep1M
+> 0246810 12 14 16
+> # priority queues
+> 30
+> 40
+> 50
+> 60
+> 70
+> Query time (ms)
+> (b) Sift10M
+> 4 threads 8 threads 12 threads 16 threads
+
+Fig. 11. Query performance of PDET-LSH when varying the number of queues. 
+
+a point’s region per dimension among 256 options remains costly despite binary search optimization. Moreover, the opti-mized breakpoints selection (Section III-A), using QuickSelect with a divide-and-conquer strategy, reduces time complexity from O(n log n) to O(n log Nr ), achieving a 3x speedup over the unoptimized version. 
+
+2) Query Phase: In practice, computing distances for all points in a leaf node is expensive when its upper bound distance to q′ exceeds the search radius. Empirically, with a properly chosen leaf size in Algorithm 2, most points in such leaf nodes lie within the search radius. Accordingly, we optimize subtree traversal in two ways: (1) we relax candidate selection by adding all points of a leaf node to S whenever its lower bound distance to q′ does not exceed r; (2) we maintain a priority queue of visited leaf nodes ordered by their lower bound distances to q′, so that nodes closer to q′ contribute candidates earlier. As shown in Figure 8, with a modest loss in accuracy, the optimized Algorithm 3 and Algorithm 5 reduce query time by up to 50% and 30%, respectively. 
+
+C. Self-evaluation of PDET-LSH 1) Encoding and Indexing Phase: Since the encoding and indexing phases are tightly coupled, we report encoding per-formance as part of the indexing cost in subsequent experi-ments. Figure 9 presents the indexing performance of PDET-2 4 6 8 10 12 14 16           
+
+> # threads
+> 0
+> 4
+> 8
+> 12
+> 16
+> Speedup ratio
+> (a) Indexing
+> 246810 12 14 16
+> # threads
+> 0
+> 12
+> 24
+> 36
+> 48
+> Speedup ratio
+> (b) Query
+> Deep1M Sift10M Sift100M SPACEV500M
+
+Fig. 12. Parallel performance of PDET-LSH’s indexing and query process when varying the number of threads. 
+
+LSH with varying numbers of threads, while Figure 12(a) further reports the corresponding speedup over DET-LSH. Overall, indexing time decreases substantially as the number of threads increases from 2 to 8, but exhibits diminishing returns from 8 to 16 due to intensified resource contention. Meanwhile, index size grows with the number of threads, especially on smaller datasets (1M and 10M), because per-thread index allocation is used to avoid contention; this growth becomes less pronounced on larger datasets (100M and 500M), where data-dependent index space dominates. Considering both indexing time and index size, using 8 threads achieves a favorable trade-off across all datasets. 
+
+2) Query Phase: To study the effect of the number of queues Nq on query performance, we evaluate PDET-LSH on the Deep1M and Sift10M datasets, as shown in Figure 11. We observe that query efficiency achieves the best when 
+
+Nq = Nw 
+
+> 2
+
+, i.e., the number of queues is half the number of threads. Increasing Nq beyond this point yields negligi-ble performance gains while introducing additional queue-management overhead. Accordingly, in all subsequent experi-ments, we fix Nq = Nw 
+
+> 2
+
+regardless of the number of threads. Since PDET-LSH produces identical results to DET-LSH, both methods achieve the same query accuracy; hence, ac-curacy results are omitted in the remainder of this section for brevity. Figure 10 illustrates the per-step query perfor-JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 12 1 2 3 4 5 6
+
+L
+
+10 
+
+20 
+
+30 
+
+> Query time (ms)
+
+(a) Deep1M, Query 
+
+0.7 
+
+0.8 
+
+0.9 
+
+1.0 
+
+> Recall
+
+1 2 3 4 5 6
+
+L
+
+0.0 
+
+0.5 
+
+1.0 
+
+1.5 
+
+2.0 
+
+2.5 
+
+> Indexing time (s)
+
+(b) Deep1M, Index 
+
+0
+
+2
+
+4
+
+> Index size (GB)
+
+1 2 3 4 5 6
+
+L
+
+40 
+
+50 
+
+> Query time (ms)
+
+(c) Sift10M, Query 
+
+0.85 
+
+0.90 
+
+0.95 
+
+1.00 
+
+> Recall
+
+1 2 3 4 5 6
+
+L
+
+0
+
+5
+
+10 
+
+15 
+
+> Indexing time (s)
+
+(d) Sift10M, Index 
+
+0
+
+4
+
+8
+
+12 
+
+> Index size (GB)
+
+Query time Recall Indexing time Index size 
+
+Fig. 13. Performance of PDET-LSH under different number of projected spaces ( L). 8 10 12 14 16 
+
+K
+
+15 
+
+20 
+
+25 
+
+> Query time (ms)
+
+(a) Deep1M, Query 
+
+0.7 
+
+0.8 
+
+0.9 
+
+> Recall
+
+8 10 12 14 16 
+
+K
+
+0.5 
+
+1.0 
+
+1.5 
+
+> Indexing time (s)
+
+(b) Deep1M, Index 
+
+2
+
+> Index size (GB)
+
+8 10 12 14 16 
+
+K
+
+40 
+
+45 
+
+50 
+
+> Query time (ms)
+
+(c) Sift10M, Query 
+
+0.85 
+
+0.90 
+
+0.95 
+
+1.00 
+
+> Recall
+
+8 10 12 14 16 
+
+K
+
+4
+
+6
+
+8
+
+> Indexing time (s)
+
+(d) Sift10M, Index 
+
+4
+
+6
+
+8
+
+> Index size (GB)
+
+Query time Recall Indexing time Index size 
+
+Fig. 14. Performance of PDET-LSH under different dimension of projected spaces ( K). Deep 
+
+> 1M
+> Sift
+> 10M
+> Sift
+> 100M
+> SPACEV
+> 500M
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> Query-time memory usage (GB)
+
+(a) Datasets of different sizes. 10M 20M 30M 40M 50M 60M 70M 80M 90M 100M  
+
+> 0
+> 40
+> 80
+> 120
+> Query-time memory usage (GB)
+
+(b) Scalability on Sift dataset. Fig. 15. Query-time memory overhead of PDET-LSH. 
+
+mance of c2-k-ANN in PDET-LSH under different numbers of threads. Figure 12(b) reports the query speedup of PDET-LSH over DET-LSH. We found that as dataset size grows, the relative cost of the range query diminishes, while candidate generation and k-NN refinement dominate due to the need to process βn + k candidates. On Deep1M and Sift10M , query efficiency peaks at 8 threads, whereas larger datasets ( Sift100M 
+
+and SPACEV500M ) benefit from additional threads. This is because the AMD EPYC Processor we use has 8 cores per CCX (CPU Complex) and shares an L3 cache [46], where cross-CCX data synchronization needs to go through memory, so the data processing speed will decrease when the number of cores increases from 8 to 10. Moreover, PDET-LSH exhibits super-linear speedup ( Sp > p ) owing to parallel-aware query optimization and SIMD-accelerated distance computations, an effect that becomes more pronounced on large datasets. Overall, 8 threads provide a robust and effective configuration across datasets of different scales. 
+
+3) Parameter study on L and K: Figure 13 and Figure 14 show the performance of PDET-LSH under different L and 
+
+K, respectively. We found that increasing L and K improves query accuracy, as it increases the accuracy of the LSH projections; however, this comes at the cost of reduced query efficiency, higher indexing overhead, and larger index size. When K = 4 and L = 16 , DET-LSH achieves a good trade-off between performance and overhead on multiple datasets. Msong Deep     
+
+> 1M
+> Sift
+> 10M
+> Tiny
+> 80M
+> Sift
+> 100M
+> Deep
+> 500M
+> SPACEV
+> 500M
+> Turing
+> 500M
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> 10 6
+> Index size (MB)
+> PDET-LSH DET-LSH DB-LSH PM-LSH LCCS-LSH
+
+Fig. 16. Index size. Msong Deep     
+
+> 1M
+> Sift
+> 10M
+> Tiny
+> 80M
+> Sift
+> 100M
+> Deep
+> 500M
+> SPACEV
+> 500M
+> Turing
+> 500M
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> Indexing time (s)
+> PDET-LSH DET-LSH DB-LSH PM-LSH LCCS-LSH
+
+Fig. 17. Indexing time. 
+
+In practice, users can dynamically choose appropriate param-eter settings based on the specific application scenario and available resources. 
+
+4) Query-time memory overhead: Figure 15 shows the query-time memory consumption of PDET-LSH, including the dataset size (as the dataset needs to be kept in memory for reranking). Specifically, Figure 15(a) provides the memory usage of PDET-LSH on datasets of different sizes and dimen-sions during query processing. Figure 15(b) measures scala-bility, that is the query-time memory overhead of PDET-LSH when varying scales of the same dataset (Sift). In practice, users can adaptively tune the parameters based on available memory resources. As illustrated in Figures 13 and 14, larger JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 13 0 50 100 150 200                  
+
+> Time (ms)
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> Recall
+> (a) Deep1M
+> 0500 1000 1500 2000
+> Time (ms)
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0 Recall
+> (b) Sift10M
+> 010 20
+> Time (s)
+> 0.4
+> 0.6
+> 0.8
+> 1.0 Recall
+> (c) Sift100M
+> 025 50 75 100
+> Time (s)
+> 0.4
+> 0.6
+> 0.8
+> 1.0 Recall
+> (d) Microsoft SPACEV500M
+> PDET-LSH DET-LSH DB-LSH PM-LSH LCCS-LSH
+
+Fig. 18. Recall-time curves. 0 50 100 150 200           
+
+> Time (ms)
+> 1.00
+> 1.02
+> 1.04
+> Ratio
+> (a) Deep1M
+> 0500 1000 1500 2000
+> Time (ms)
+> 1.00
+> 1.02
+> 1.04
+> 1.06
+> Ratio
+> (b) Sift10M
+> 010 20
+> Time (s)
+> 1.00
+> 1.01
+> 1.02
+> 1.03
+> Ratio
+> (c) Sift100M
+> 025 50 75 100
+> Time (s)
+> 1.00
+> 1.01
+> 1.02
+> Ratio
+> (d) Microsoft SPACEV500M
+
+Fig. 19. Overall ratio-time curves. 0.2 0.4 0.6 0.8 1.0  
+
+> n
+> 10 2
+> 10 3
+> 10 4
+> 10 5Time (s)
+
+(a) Indexing Time     
+
+> 0.2 0.4 0.6 0.8 1.0
+> n
+> 0
+> 20
+> 40
+> 60
+> 80
+> Time (s)
+
+(b) Query Time     
+
+> 0.2 0.4 0.6 0.8 1.0
+> n
+> 0.90
+> 0.92
+> 0.94
+> 0.96
+> Recall
+
+(c) Recall     
+
+> 0.2 0.4 0.6 0.8 1.0
+> n
+> 1.001
+> 1.002
+> Ratio
+
+(d) OverallRatio 
+
+Fig. 20. Scalability: performance under different n on Microsoft SPACEV500M. 20 40 60 80 100  
+
+> k
+> 0.85
+> 0.90
+> 0.95 Recall
+
+(a) Recall on Deep1M     
+
+> 20 40 60 80 100
+> k
+> 1.002
+> 1.004
+> Ratio
+
+(b) OverallRatio on Deep1M     
+
+> 20 40 60 80 100
+> k
+> 0.88
+> 0.90
+> 0.92
+> 0.94
+> 0.96
+> 0.98
+> Recall
+
+(c) Recall on Sift100M     
+
+> 20 40 60 80 100
+> k
+> 1.0005
+> 1.0010
+> 1.0015
+> 1.0020
+> Ratio
+
+(d) OverallRatio on Sift100M 
+
+Fig. 21. Performance under different k.
+
+L or K improve query accuracy at the expense of higher memory overhead, and vice versa. 
+
+D. Comparison with LSH-based Methods 1) Indexing Performance: Figure 16 and Figure 17 sum-marize the indexing performance on all datasets, where the encoding time is included for both DET-LSH and PDET-LSH. Among single-threaded LSH-based methods, DET-LSH achieves the highest indexing efficiency, as DB-LSH and PM-LSH rely on costly data-oriented partitioning of the pro-jected space, whereas DET-LSH constructs DE-Trees by inde-pendently dividing and encoding each projected dimension; in contrast, LCCS-LSH incurs substantial overhead due to building the Circular Shift Array (CSA). The advantage of DET-LSH grows with dataset cardinality: while it is slower than PM-LSH for n ≤ 1M due to constructing four DE-Trees, it attains 2×–6× indexing speedups as n increases from 10M to 500M, reflecting the linear construction cost of DE-Trees. As the only parallel method, PDET-LSH further provides significant gains, achieving up to 40 × indexing speedup on large datasets. Regarding index size, DET-LSH is less competitive on small datasets but becomes advantageous at scale since it stores only one-byte iSAX representations per point, although building four DE-Trees limits this benefit at small scale; PDET-LSH incurs additional space overhead due to per-thread index allocation. 
+
+2) Query Performance: We evaluate query performance using the Recall–Time and OverallRatio–Time curves in Fig-ures 18 and 19. DET-LSH consistently outperforms all single-threaded LSH-based methods in both efficiency and accuracy, achieving up to 2× query speedup as n increases, owing to the fact that nearby points share similar DE-Tree encodings and thus yield higher-quality candidates via range queries. Moreover, DET-LSH offers the best efficiency–accuracy trade-off among single-threaded methods, requiring the least query time to reach the same recall or overall ratio. PDET-LSH preserves exactly the same query accuracy as DET-LSH while outperforming all competitors, since its parallel query opti-mizations do not alter the search results. As the only parallel approach, PDET-LSH further delivers substantial efficiency gains, achieving up to 62 × query speedup on large datasets over existing LSH-based methods. JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 14 0 8K 16K 24K 32K             
+
+> # Queries
+> 0
+> 1
+> 2
+> Cumulative cost (hrs)
+> (a) Sift10M, Recall=0.95, k=50
+> DET-LSH
+> IMI-OPQ
+> HNSW
+> 015K 30K 45K 60K
+> # Queries
+> 0
+> 20
+> 40
+> Cumulative cost (hrs)
+> (b) Sift100M, Recall=0.95, k=50
+> DET-LSH
+> IMI-OPQ
+> HNSW
+> 010K 20K 30K 40K
+> # Queries
+> 0
+> 1
+> 2
+> Cumulative cost (hrs)
+> (c) Sift10M, Recall=0.9, k=50
+> DET-LSH
+> IMI-OPQ
+> HNSW
+> 020K 40K 60K 80K
+> # Queries
+> 0
+> 15
+> 30
+> Cumulative cost (hrs)
+> (d) Sift100M, Recall=0.9, k=50
+> DET-LSH
+> IMI-OPQ
+> HNSW
+> Fig. 22. Cumulative query cost without parallel (start with the indexing time).
+
+3) Scalability: A method has good scalability if it performs well on datasets of different cardinalities. To evaluate scalabil-ity, we randomly sample subsets of varying cardinalities from the Microsoft SPACEV500M dataset and compare the indexing and query performance of all methods under default settings, as shown in Figure 20. While indexing and query times increase with dataset size for all methods, DET-LSH exhibits much slower growth than other single-threaded LSH-based approaches due to the efficiency of DE-Trees (Figures 20(a) and 20(b)). PDET-LSH consistently maintains—and further amplifies—its advantages in both indexing and query effi-ciency as the dataset size grows. Meanwhile, recall and overall ratio remain stable across methods, since random sampling preserves the data distribution. Overall, DET-LSH and PDET-LSH exhibit better scalability than other methods. 
+
+4) Effect of k: To study the impact of k, we evaluate all methods under varying k and report only recall and overall ratio, since k has negligible effect on query time and no effect on indexing time (Figure 21). As k increases, query accuracy of all methods slightly degrades because the number of candidate points remains fixed, increasing the likelihood of missing exact nearest neighbors. Across all settings, DET-LSH and PDET-LSH consistently achieve the best performance among all competitors. 
+
+E. Comparison with Non-LSH-based Methods 
+
+In this section, we compare DET-LSH and PDET-LSH with HNSW [44] (graph-based method) and IMI-OPQ [45] (quantization-based method). Nevertheless, LSH-based, graph-based, and quantization-based methods have different design principles and characteristics [2], [3], [47], making them suitable to different application scenarios. LSH is particularly suitable for scenarios where worst-case guarantees domi-nate average-case performance [11], [12], while graph and quantization are optimized for average-case efficiency under relatively stable data and query distributions [13]. In particular, graph-based and quantization-based methods only support ng-approximate answers [2], that is, they do not provide any qual-ity guarantees on their results. It is important to emphasize that DET-LSH and PDET-LSH have to pay the cost of providing 0 10K 20K 30K 40K              
+
+> # Queries
+> 0.0
+> 0.2
+> 0.4
+> Cumulative cost (hrs)
+> (a) Sift10M, Recall=0.95, k=50
+> PDET-LSH
+> Parallel IMI-OPQ
+> Parallel HNSW
+> 030K 60K 90K 120K
+> # Queries
+> 0
+> 2
+> 4
+> 6
+> Cumulative cost (hrs)
+> (b) Sift100M, Recall=0.95, k=50
+> PDET-LSH
+> Parallel IMI-OPQ
+> Parallel HNSW
+> 010K 20K 30K 40K
+> # Queries
+> 0.0
+> 0.2
+> 0.4
+> Cumulative cost (hrs)
+> (c) Sift10M, Recall=0.9, k=50
+> PDET-LSH
+> Parallel IMI-OPQ
+> Parallel HNSW
+> 050K 100K 150K 200K
+> # Queries
+> 0
+> 2
+> 4
+> 6
+> Cumulative cost (hrs)
+> (d) Sift100M, Recall=0.9, k=50
+> PDET-LSH
+> Parallel IMI-OPQ
+> Parallel HNSW
+> Fig. 23. Cumulative query cost in parallel (start with the indexing time).
+
+guarantees for their answers; graph-based and quantization-based methods, that do not provide any guarantees, do not have to pay this cost. Given the considerable differences in both indexing and query efficiency across different types of ANN methods, a holistic evaluation that jointly considers indexing and query performance is necessary. Figure 22 and Figure 23 show the cumulative query costs of all methods under the same recall, where the cost starts with the indexing time. Experimental results demonstrate clear advantages of DET-LSH and PDET-LSH: under the same hardware configurations (single-threaded or parallel), DET-LSH/PDET-LSH completes index construc-tion and serves up to 60K-160K queries before the best competitor answers its first query, highlighting their suitability for scenarios requiring rapid deployment and immediate query responses, such as LLM inference acceleration [16]. VII. R ELATED WORK 
+
+With the rapid growth of data volume [48]–[52], efficient management and analysis of large-scale datasets have become increasingly critical [27], [28], [53]–[57]. Approximate Near-est Neighbor (ANN) search in high-dimensional Euclidean spaces is a fundamental problem with broad applications, for which locality-sensitive hashing (LSH) methods are particu-larly attractive due to their strong theoretical accuracy guar-antees in c-ANN search [7]–[10], [19], [22]–[26]. Following prior work, existing LSH-based approaches can be catego-rized into three classes: boundary-constraint (BC)-based meth-ods [7], [19]–[21], collision-counting (C2)-based methods [8], [22]–[25], and distance-metric (DM)-based methods [9], [26]. Boundary-constraint (BC) methods employ K·L hash func-tions to map data points into L independent K-dimensional projected spaces, where each point is assigned to a hash bucket defined by a K-dimensional hypercube; two points are considered colliding if they share a bucket in at least one of the L hash tables. E2LSH [19], the seminal BC approach, uses p-stable LSH functions [18] but requires constructing additional hash tables as the search radius r increases, resulting in prohibitive index space overhead. To mitigate this issue, LSB-Forest [20] indexes projected points using B-Trees, while JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 15 
+
+SK-LSH [21] adopts a B +-Tree-based structure to improve candidate quality with lower I/O cost; however, both methods rely on heuristics and lack LSH-style theoretical guarantees. DB-LSH [7] represents the state of the art in BC methods with rigorous guarantees, proposing a dynamic search framework built upon R ∗-Trees. Collision-counting (C2) methods use K′ ·L′ hash functions to build L′ independent K′-dimensional hash tables, with 
+
+K′ < K and L′ > L , and select candidates whose collision counts exceed a threshold t < L ′. C2LSH [22] introduces this paradigm by maintaining only K′ one-dimensional hash tables ( K′ = 1) and employing virtual rehashing to dy-namically count collisions, thereby reducing index space. QALSH [23] further improves efficiency by indexing projected points with B +-Trees to avoid explicit per-dimension collision counting. To reduce space consumption, R2LSH [24] and VHP [25] extend QALSH by mapping points into multiple two-dimensional projected spaces ( K′ = 2 ) and modeling hash buckets as virtual hyperspheres ( K′ > 2), respectively. Finally, LCCS-LSH [8] generalizes collision counting from discrete point occurrences to the lengths of continuous co-substrings within a unified search framework. Distance-metric (DM) methods rely on the intuition that points close to a query q in the original space remain close in the projected space, and thus use K hash functions to embed data into a K-dimensional space. SRS [26] indexes projected points with an R-tree and performs exact NN search in the projected space, while PM-LSH [9] employs a PM-Tree [30]-based range query strategy to improve efficiency. In PM-LSH, 
+
+βn + k candidates are selected according to projected-space distances, where β is a tunable ratio ensuring search quality and n denotes the dataset cardinality. VIII. C ONCLUSIONS 
+
+In this paper, we proposed DET-LSH, a novel LSH-based approach for efficient and accurate c-ANN query processing in high-dimensional spaces with probabilistic guarantees. By combining the strengths of BC and DM methods, DET-LSH supports Euclidean distance-based range queries through multiple index trees and improves query accuracy. We also designed DE-Tree, a dynamic encoding-based index structure that enables efficient range query processing and outperforms existing data-oriented partitioning trees, especially on large-scale datasets. Furthermore, we developed PDET-LSH, an in-memory parallel extension that leverages multicore CPUs to accelerate index construction and query answering. Ex-perimental results verify the superiority of DET-LSH and PDET-LSH over state-of-the-art LSH-based methods in both efficiency and accuracy. REFERENCES [1] R. Weber, H.-J. Schek, and S. Blott, “A quantitative analysis and performance study for similarity-search methods in high-dimensional spaces,” in VLDB , 1998. [2] K. Echihabi, K. Zoumpatianos, T. Palpanas, and H. Benbrahim, “Return of the lernaean hydra: Experimental evaluation of data series approxi-mate similarity search,” VLDB , 2019. [3] Z. Wang, P. Wang, T. Palpanas, and W. Wang, “Graph- and tree-based indexes for high-dimensional vector similarity search: Analyses, comparisons, and future directions,” IEEE Data Eng. Bull. , 2023. [4] J. Wei, X. Lee, Z. Liao, T. Palpanas, and B. Peng, “Subspace collision: An efficient and accurate framework for high-dimensional approximate nearest neighbor search,” SIGMOD , 2025. [5] I. Azizi, K. Echihabi, and T. Palpanas, “Graph-based vector search: An experimental evaluation of the state-of-the-art,” SIGMOD , 2025. [6] Q. Wang, I. Ileana, and T. Palpanas, “Leafi: Data series indexes on steroids with learned filters,” SIGMOD , 2025. [7] Y. Tian, X. Zhao, and X. Zhou, “DB-LSH 2.0: Locality-Sensitive Hashing With Query-Based Dynamic Bucketing,” IEEE TKDE , 2023. [8] Y. Lei, Q. Huang, M. Kankanhalli, and A. K. Tung, “Locality-sensitive hashing scheme based on longest circular co-substring,” in SIGMOD ,2020. [9] B. Zheng, Z. Xi, L. Weng, N. Q. V. Hung, H. Liu, and C. S. Jensen, “PM-LSH: A fast and accurate LSH framework for high-dimensional approximate NN search,” VLDB , 2020. [10] J. Wei, B. Peng, X. Lee, and T. Palpanas, “Det-lsh: A locality-sensitive hashing scheme with dynamic encoding tree for approximate nearest neighbor search,” VLDB , 2024. [11] P. Indyk and R. Motwani, “Approximate nearest neighbors: towards removing the curse of dimensionality,” in ACM STOC , 1998. [12] A. Andoni and P. Indyk, “Near-optimal hashing algorithms for approx-imate nearest neighbor in high dimensions,” Communications of the ACM , vol. 51, no. 1, pp. 117–122, 2008. [13] W. Dong, C. Moses, and K. Li, “Efficient k-nearest neighbor graph construction for generic similarity measures,” in WWW , 2011. [14] T. Kraska, A. Beutel, E. H. Chi, J. Dean, and N. Polyzotis, “The case for learned index structures,” in SIGMOD , 2018. [15] A. Andoni, P. Indyk, T. Laarhoven, I. Razenshteyn, and L. Schmidt, “Practical and optimal lsh for angular distance,” NeurIPS , 2015. [16] Z. Chen, R. Sadhukhan, Z. Ye, Y. Zhou, J. Zhang, N. Nolte, Y. Tian, M. Douze, L. Bottou, Z. Jia et al. , “Magicpig: Lsh sampling for efficient llm generation,” in ICLR , 2025. [17] A. Gionis, P. Indyk, R. Motwani et al. , “Similarity search in high dimensions via hashing,” in VLDB , 1999. [18] M. Datar, N. Immorlica, P. Indyk, and V. S. Mirrokni, “Locality-sensitive hashing scheme based on p-stable distributions,” in Proceedings of the twentieth annual symposium on Computational geometry , 2004. [19] A. Andoni, “LSH Algorithm and Implementation (E2LSH),” 2005. [20] Y. Tao, K. Yi, C. Sheng, and P. Kalnis, “Quality and efficiency in high dimensional nearest neighbor search,” in ACM SIGMOD , 2009. [21] Y. Liu, J. Cui, Z. Huang, H. Li, and H. T. Shen, “SK-LSH: an efficient index structure for approximate nearest neighbor search,” VLDB , 2014. [22] J. Gan, J. Feng, Q. Fang, and W. Ng, “Locality-sensitive hashing scheme based on dynamic collision counting,” in ACM SIGMOD , 2012. [23] Q. Huang, J. Feng, Y. Zhang, Q. Fang, and W. Ng, “Query-aware locality-sensitive hashing for approximate nearest neighbor search,” 
+
+VLDB , vol. 9, no. 1, pp. 1–12, 2015. [24] K. Lu and M. Kudo, “R2LSH: A nearest neighbor search scheme based on two-dimensional projected spaces,” in ICDE . IEEE, 2020. [25] K. Lu, H. Wang, W. Wang, and M. Kudo, “VHP: approximate nearest neighbor search via virtual hypersphere partitioning,” VLDB , 2020. [26] Y. Sun, W. Wang, J. Qin, Y. Zhang, and X. Lin, “SRS: solving c-approximate nearest neighbor queries in high dimensional euclidean space with a tiny index,” Proceedings of the VLDB Endowment , 2014. [27] J. Wei, Y. Li, Y. Fu, Y. Zhang, and X. Li, “Data interoperating architecture (dia): Decoupling data and applications to give back your data ownership,” in COMPSAC . IEEE, 2023. [28] J. Wei, X. Lee, Y. Fu, Y. Li, and B. Peng, “Dominate data by yourself: a decentralized scheme for data interoperation when data is decoupled from applications,” World Wide Web , vol. 28, no. 3, pp. 1–39, 2025. [29] N. Beckmann, H.-P. Kriegel, R. Schneider, and B. Seeger, “The R*-tree: An efficient and robust access method for points and rectangles,” in ACM SIGMOD , 1990. [30] T. Skopal, J. Pokorn` y, and V. Sn´ aˇ sel, “Nearest Neighbours Search using the PM-tree,” in DASFAA . Springer, 2005. [31] A. Guttman, “R-trees: A dynamic index structure for spatial searching,” in ACM SIGMOD , 1984. [32] P. Ciaccia, M. Patella, P. Zezula et al. , “M-tree: An efficient access method for similarity search in metric spaces,” in Vldb , 1997. [33] B. Peng, P. Fatourou, and T. Palpanas, “Messi: In-memory data series indexing,” in ICDE . IEEE, 2020. [34] ——, “Paris+: Data series indexing on multi-core architectures,” TKDE ,2020. [35] ——, “SING: Sequence Indexing Using GPUs,” in ICDE . IEEE, 2021. [36] K. Echihabi, P. Fatourou, K. Zoumpatianos, T. Palpanas, and H. Ben-brahim, “Hercules against data series similarity search,” VLDB , 2022. JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 16 
+
+[37] Z. Wang, Q. Wang, P. Wang, T. Palpanas, and W. Wang, “Dumpyos: A data-adaptive multi-ary index for scalable data series similarity search,” 
+
+VLDB J. , 2024. [38] I. Azizi, K. Echihabi, and T. Palpanas, “Elpis: Graph-based similarity search for scalable data science,” VLDB , 2023. [39] M. Chatzakis, P. Fatourou, E. Kosmas, T. Palpanas, and B. Peng, “Odyssey: A journey in the land of distributed data series similarity search,” VLDB , 2023. [40] P. Fatourou, E. Kosmas, T. Palpanas, and G. Paterakis, “Fresh: A lock-free data series index,” in SRDS , 2023. [41] V. M. Zolotarev, One-dimensional stable distributions . American Mathematical Soc., 1986, vol. 65. [42] J. Shieh and E. Keogh, “iSAX: indexing and mining terabyte sized time series,” in ACM SIGKDD , 2008, pp. 623–631. [43] A. Camerra, J. Shieh, T. Palpanas, T. Rakthanmanon, and E. Keogh, “Beyond one billion time series: indexing and mining very large time series collections with isax2+,” KAIS , 2014. [44] Y. A. Malkov and D. A. Yashunin, “Efficient and robust approxi-mate nearest neighbor search using hierarchical navigable small world graphs,” IEEE TPAMI , 2018. [45] T. Ge, K. He, Q. Ke, and J. Sun, “Optimized product quantization,” 
+
+IEEE transactions on pattern analysis and machine intelligence , 2013. [46] Advanced Micro Devices, Inc, “4th Gen AMD EPYC™ Processor Architecture,” 2024. [47] W. Li, Y. Zhang, Y. Sun, W. Wang, M. Li, W. Zhang, and X. Lin, “Approximate nearest neighbor search on high dimensional data—experiments, analyses, and improvement,” IEEE TKDE , 2019. [48] Y. Fu, X. Lee, J. Wei, Y. Li, and B. Peng, “Securing the internet’s backbone: A blockchain-based and incentive-driven architecture for dns cache poisoning defense,” Computer Networks , 2024. [49] Y. Fu, J. Wei, Y. Li, B. Peng, and X. Li, “Ti-dns: A trusted and incentive dns resolution architecture based on blockchain,” in TrustCom , 2023. [50] Z. Fei, Y. Li, J. Wei, Y. Fu, B. Peng, and X. Li, “Flexauth: A decentral-ized authorization system with flexible delegation,” in TrustCom , 2023. [51] A. Zhang, X. Lee, Z. Zhuang, J. Wei, Y. Fu, and B. Peng, “Polaris: Cross-domain access control via verifiable identity and policy-based authorization,” arXiv preprint arXiv:2511.22017 , 2025. [52] Z. Zhuang, X. Lee, A. Zhang, J. Wei, Y. Fu, and B. Peng, “Structured policy modeling and context-aware generation for multi-jurisdictional compliance in global software systems,” IST , p. 108041, 2026. [53] Y. Li, J. Wei, Z. Fei, Y. Fu, and X. Lee, “Disauth: A dns-based secure authorization framework for protecting data decoupled from applications,” Computer Networks , 2024. [54] Z. Zhuang, X. Lee, J. Wei, Y. Fu, and A. Zhang, “Cbcms: a compliance management system for cross-border data transfer,” in BigData , 2024. [55] J. Wei, Q. Xu, and C. Yang, “The Virtuous Cycle: AI-Powered Vector Search and Vector Search-Augmented AI,” in ICDE , 2026. [56] C. Song, Z. Peng, J. Wei, and C. Yang, “CSAttention: Centroid-scoring attention for accelerating LLM inference,” 2026. [57] J. Wei, Z. Liao, R. Han, Q. Xu, C. Yang, and T. Palpanas, “TaCo: Data-adaptive and Query-aware Subspace Collision for High-dimensional Approximate Nearest Neighbor Search,” SIGMOD , 2026. 
+
+Jiuqi Wei received his B.S. degree in software engi-neering from Nankai University, China, in 2019, and received his Ph.D. degree at Institute of Computing Technology, Chinese Academy of Sciences, China, in 2025. He is currently a researcher of Oceanbase Lab, Ant Group. His research interests include vec-tor database, information retrieval, LLM inference acceleration, and data management. His research results have been published in top-tier conferences and journals such as SIGMOD, VLDB, and ICDE. 
+
+Xiaodong Lee received his Ph.D. degree in com-puter science from the Institute of Computing Tech-nology, Chinese Academy of Sciences, in 2004. He is currently a Professor at the Institute of Computing Technology, Chinese Academy of Sciences, and the Center for Internet Governance Director, Tsinghua University. He is also Vice Chairman of the Internet Society of China. His research interests include Internet fundamental resources management, data governance, and Internet infrastructure. 
+
+Botao Peng received his Ph.D. degree at the De-partment of Computer Science, University of the Paris, in 2020, under the supervision of Themis Palpanas. He is currently an Associate Professor at the Institute of Computing Technology, Chinese Academy of Sciences. His research focuses on high-dimensional vector management, data analysis, and Internet infrastructure. His research results have been published in top-tier conferences and journals such as SIGMOD, VLDB, ICDE, TKDE, and VLDBJ. 
+
+Quanqing Xu received his Ph.D. degree in computer science from the School of Electronics Engineering and Computer Science, Peking University (PKU), in 2009. He is currently the technical director of Oceanbase Lab, Ant Group. His research interests primarily include distributed database systems and storage systems. He is a Fellow of the IET, adistinguished member of CCF, a senior member of ACM and IEEE. 
+
+Chuanhui Yang is the CTO of OceanBase, Ant Group. His research focuses on database, distributed systems, and AI infra. As one of the founding mem-bers, he led the previous architecture design, and technology research and development of OceanBase, realizing the full implementation of OceanBase in Ant Group from scratch. He also led two Ocean-Base TPC-C tests and broke the world record, and authored the monograph ”Large-Scale Distributed Storage Systems: Principles and Practice”. 
+
+Themis Palpanas is an ACM Fellow, a Senior Member of the French University Insitute (IUF), and a Distinguished Professor of computer science at Universit´ e Paris Cit´ e. He has authored 14 patents, received 3 best paper awards and the IBM SUR award, has been Program Chair for VLDB 2025 and IEEE BigData 2023, General Chair for VLDB 2013, and has served Editor in Chief for BDR. He has been working in the fields of Data Series Management and Analytics for more than 15 years, and has developed several of the state of the art techniques.

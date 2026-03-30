@@ -4,71 +4,73 @@
 ────────────────────────────────────────
 
 ## 每次日报
-- 最新运行日期：2026-03-29
-- 运行时间：2026-03-29 20:09:10 UTC
+- 最新运行日期：2026-03-30
+- 运行时间：2026-03-30 20:38:59 UTC
 - 运行状态：成功
 - 本次总论文数：17
 - 精读区：6
 - 速读区：11
 
 ### 今日简报（AI）
-今日深度研读 17 篇论文，重点聚焦满分神作 NoveltyAgent 带来的自主创新分析范式与
-- 详情：[/202603/29/README](/202603/29/README)
+今日深挖 17 篇前沿成果，重点攻克了心理测量潜变量与网络模型的融合难题，并发布了网络研究的创新发现系统。
+研究不仅实现了潜变量与网络结构的统一建模，还通过新型图索引合并框架大幅提升了近邻搜索的效率。
+建议关注 LLM 智能体偏好建模与高维检索优化的读者，优先查阅相关速读篇目以获取最新算法灵感。
+- 详情：[/202603/30/README](/202603/30/README)
 
 ### 精读区论文标签
-1. [NoveltyAgent: Autonomous Novelty Reporting Agent with Point-wise Novelty Analysis and Self-Validation](/202603/29/2603.20884v1-noveltyagent-autonomous-novelty-reporting-agent-with-point-wise-novelty-analysis-and-self-validation)  
-   标签：评分：10.0/10、query:sr
-   evidence：自主创新性报告和相关论文数据库构建
-2. [flexvec: SQL Vector Retrieval with Programmatic Embedding Modulation](/202603/29/2603.22587v1-flexvec-sql-vector-retrieval-with-programmatic-embedding-modulation)  
+1. [Reconciling Latent Variables and Networks: Exploring and extending the Psychometric-Toolbox](/202603/30/2603.26116v1-reconciling-latent-variables-and-networks-exploring-and-extending-the-psychometric-toolbox)  
+   标签：评分：9.0/10、query:sr
+   evidence：探索性文献检索与方法论综合
+2. [Innovation Discovery System for Networking Research](/202603/30/2603.26496v1-innovation-discovery-system-for-networking-research)  
+   标签：评分：9.0/10、query:sr
+   evidence：用于科学发现的研究想法生成系统
+3. [CoCR-RAG: Enhancing Retrieval-Augmented Generation in Web Q&A via Concept-oriented Context Reconstruction](/202603/30/2603.23989v1-cocr-rag-enhancing-retrieval-augmented-generation-in-web-qa-via-concept-oriented-context-reconstruction)  
    标签：评分：8.0/10、query:sr
-   evidence：面向AI智能体的可编程向量检索
-3. [DALDALL: Data Augmentation for Lexical and Semantic Diverse in Legal Domain by leveraging LLM-Persona](/202603/29/2603.22765v1-daldall-data-augmentation-for-lexical-and-semantic-diverse-in-legal-domain-by-leveraging-llm-persona)  
+   evidence：多源信息融合的上下文重构检索技术
+4. [AuthorityBench: Benchmarking LLM Authority Perception for Reliable Retrieval-Augmented Generation](/202603/30/2603.25092v1-authoritybench-benchmarking-llm-authority-perception-for-reliable-retrieval-augmented-generation)  
    标签：评分：8.0/10、query:sr
-   evidence：信息检索中多样化查询生成的增强方法
-4. [TaCo: Data-adaptive and Query-aware Subspace Collision for High-dimensional Approximate Nearest Neighbor Search](/202603/29/2603.24919v1-taco-data-adaptive-and-query-aware-subspace-collision-for-high-dimensional-approximate-nearest-neighbor-search)  
+   evidence：基准测试权威感知以实现可靠检索
+5. [Supercharging Federated Intelligence Retrieval](/202603/30/2603.25374v1-supercharging-federated-intelligence-retrieval)  
    标签：评分：8.0/10、query:sr
-   evidence：高维近似最近邻搜索
-5. [UniAI-GraphRAG: Synergizing Ontology-Guided Extraction, Multi-Dimensional Clustering, and Dual-Channel Fusion for Robust Multi-Hop Reasoning](/202603/29/2603.25152v1-uniai-graphrag-synergizing-ontology-guided-extraction-multi-dimensional-clustering-and-dual-channel-fusion-for-robust-multi-hop-reasoning)  
+   evidence：跨私有文档库的联邦智能检索
+6. [SocialX: A Modular Platform for Multi-Source Big Data Research in Indonesia](/202603/30/2603.26253v1-socialx-a-modular-platform-for-multi-source-big-data-research-in-indonesia)  
    标签：评分：8.0/10、query:sr
-   evidence：增强的结构化知识组织与检索框架
-6. [Adaptive Chunking: Optimizing Chunking-Method Selection for RAG](/202603/29/2603.25333v1-adaptive-chunking-optimizing-chunking-method-selection-for-rag)  
-   标签：评分：8.0/10、query:sr
-   evidence：优化分块以提高检索效果
+   evidence：包含学术数据库在内的多源大数据研究平台
 
 ### 速读区论文标签
-1. [RenoBench: A Citation Parsing Benchmark](/202603/29/2603.25640v1-renobench-a-citation-parsing-benchmark)  
-   标签：评分：8.0/10、query:sr
-   evidence：学术基础设施的引文解析
-2. [Training the Knowledge Base through Evidence Distillation and Write-Back Enrichment](/202603/29/2603.25737v1-training-the-knowledge-base-through-evidence-distillation-and-write-back-enrichment)  
-   标签：评分：8.0/10、query:sr
-   evidence：用于改进RAG知识库的证据蒸馏与富化
-3. [Can we automatize scientific discovery in the cognitive sciences?](/202603/29/2603.20988v1-can-we-automatize-scientific-discovery-in-the-cognitive-sciences)  
+1. [User Preference Modeling for Conversational LLM Agents: Weak Rewards from Retrieval-Augmented Interaction](/202603/30/2603.20939v1-user-preference-modeling-for-conversational-llm-agents-weak-rewards-from-retrieval-augmented-interaction)  
    标签：评分：7.0/10、query:sr
-   evidence：利用大语言模型自动化科学发现循环
-4. [Guideline-grounded retrieval-augmented generation for ophthalmic clinical decision support](/202603/29/2603.21925v1-guideline-grounded-retrieval-augmented-generation-for-ophthalmic-clinical-decision-support)  
+   evidence：基于用户偏好记忆偏置检索评分
+2. [Fast Nearest Neighbor Search for $\ell_p$ Metrics](/202603/30/2603.21148v1-fast-nearest-neighbor-search-for-ellp-metrics)  
    标签：评分：7.0/10、query:sr
-   evidence：包含查询分解和重排序的可控检索框架
-5. [On the Challenges and Opportunities of Learned Sparse Retrieval for Code](/202603/29/2603.22008v1-on-the-challenges-and-opportunities-of-learned-sparse-retrieval-for-code)  
+   evidence：大规模应用中的快速最近邻搜索
+3. [FGIM: a Fast Graph-based Indexes Merging Framework for Approximate Nearest Neighbor Search](/202603/30/2603.21710v1-fgim-a-fast-graph-based-indexes-merging-framework-for-approximate-nearest-neighbor-search)  
    标签：评分：7.0/10、query:sr
-   evidence：用于代码发现的学习型稀疏检索
-6. [ProGRank: Probe-Gradient Reranking to Defend Dense-Retriever RAG from Corpus Poisoning](/202603/29/2603.22934v1-progrank-probe-gradient-reranking-to-defend-dense-retriever-rag-from-corpus-poisoning)  
+   evidence：用于搜索的快速图索引合并框架
+4. [PaperVoyager : Building Interactive Web with Visual Language Models](/202603/30/2603.22999v1-papervoyager--building-interactive-web-with-visual-language-models)  
    标签：评分：7.0/10、query:sr
-   evidence：防御稠密检索RAG中的语料库投毒
-7. [Parametric Knowledge and Retrieval Behavior in RAG Fine-Tuning for Electronic Design Automation](/202603/29/2603.23047v1-parametric-knowledge-and-retrieval-behavior-in-rag-fine-tuning-for-electronic-design-automation)  
+   evidence：将研究论文转换为交互式系统以辅助理解
+5. [An In-Depth Study of Filter-Agnostic Vector Search on a PostgreSQL Database System: [Experiments and Analysis]](/202603/30/2603.23710v1-an-in-depth-study-of-filter-agnostic-vector-search-on-a-postgresql-database-system-experiments-and-analysis)  
    标签：评分：7.0/10、query:sr
-   evidence：RAG系统中的检索行为与评估
-8. [Mixture of Demonstrations for Textual Graph Understanding and Question Answering](/202603/29/2603.23554v1-mixture-of-demonstrations-for-textual-graph-understanding-and-question-answering)  
+   evidence：语义搜索系统中过滤向量检索的分析
+6. [UniScale: Synergistic Entire Space Data and Model Scaling for Search Ranking](/202603/30/2603.24226v1-uniscale-synergistic-entire-space-data-and-model-scaling-for-search-ranking)  
    标签：评分：7.0/10、query:sr
-   evidence：用于特定领域发现的检索增强生成
-9. [GoogleTrendArchive: A Year-Long Archive of Real-Time Web Search Trends Worldwide](/202603/29/2603.21871v1-googletrendarchive-a-year-long-archive-of-real-time-web-search-trends-worldwide)  
+   evidence：搜索排序中的数据与模型协同缩放
+7. [Assessment Design in the AI Era: A Method for Identifying Items Functioning Differentially for Humans and Chatbots](/202603/30/2603.23682v1-assessment-design-in-the-ai-era-a-method-for-identifying-items-functioning-differentially-for-humans-and-chatbots)  
    标签：评分：6.0/10、query:sr
-   evidence：实时网络搜索趋势存档以发现模式
-10. [The Semantic Ladder: A Framework for Progressive Formalization of Natural Language Content for Knowledge Graphs and AI Systems](/202603/29/2603.22136v1-the-semantic-ladder-a-framework-for-progressive-formalization-of-natural-language-content-for-knowledge-graphs-and-ai-systems)  
+   evidence：识别AI评估中差异化项目功能的统计方法
+8. [LLMpedia: A Transparent Framework to Materialize an LLM's Encyclopedic Knowledge at Scale](/202603/30/2603.24080v1-llmpedia-a-transparent-framework-to-materialize-an-llms-encyclopedic-knowledge-at-scale)  
    标签：评分：6.0/10、query:sr
-   evidence：自然语言内容形式化的框架
-11. [Do Large Language Models Reduce Research Novelty? Evidence from Information Systems Journals](/202603/29/2603.22510v1-do-large-language-models-reduce-research-novelty-evidence-from-information-systems-journals)  
+   evidence：大规模生成百科文章并验证知识
+9. [PDET-LSH: Scalable In-Memory Indexing for High-Dimensional Approximate Nearest Neighbor Search with Quality Guarantees](/202603/30/2603.24920v1-pdet-lsh-scalable-in-memory-indexing-for-high-dimensional-approximate-nearest-neighbor-search-with-quality-guarantees)  
    标签：评分：6.0/10、query:sr
-   evidence：使用嵌入向量衡量研究论文的语义创新性
+   evidence：高维搜索的可扩展索引
+10. [Navigating the Prompt Space: Improving LLM Classification of Social Science Texts Through Prompt Engineering](/202603/30/2603.25422v1-navigating-the-prompt-space-improving-llm-classification-of-social-science-texts-through-prompt-engineering)  
+   标签：评分：6.0/10、query:sr
+   evidence：系统地改变提示工程的各个方面
+11. [Improving metadata flows -- The simultaneous use of multiple metadata schemas at disciplinary research data repositories](/202603/30/2603.25468v1-improving-metadata-flows----the-simultaneous-use-of-multiple-metadata-schemas-at-disciplinary-research-data-repositories)  
+   标签：评分：6.0/10、query:sr
+   evidence：学科研究数据存储库中的元数据模式
 
 
 ════════════════════════════════════════
