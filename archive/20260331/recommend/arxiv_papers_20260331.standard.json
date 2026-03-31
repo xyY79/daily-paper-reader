@@ -1,0 +1,685 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-31T20:06:58.640014+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 10,
+    "deep_cap": 6,
+    "deep_selected": 6,
+    "quick_candidates": 25,
+    "quick_skim_target": 11,
+    "quick_selected": 11
+  },
+  "deep_dive": [
+    {
+      "id": "2603.26791v1",
+      "title": "CRISP: Characterizing Relative Impact of Scholarly Publications",
+      "abstract": "Assessing a cited paper's impact is typically done by analyzing its citation context in isolation within the citing paper. While this focuses on the most directly relevant text, it prevents relative comparisons across all the works a paper cites. We propose CRISP, which instead jointly ranks all cited papers within a citing paper using large language models (LLMs). To mitigate LLMs' positional bias, we rank each list three times in a randomized order and aggregate the impact labels through majority voting. This joint approach leverages the full citation context, rather than evaluating citations independently, to more reliably distinguish impactful references. CRISP outperforms a prior state-of-the-art impact classifier by +9.5% accuracy and +8.3% F1 on a dataset of human-annotated citations. CRISP further gains efficiency through fewer LLM calls and performs competitively with an open-source model, enabling scalable, cost-effective citation impact analysis. We release our rankings, impact labels, and codebase to support future research.",
+      "authors": [
+        "Hannah Collison",
+        "Benjamin Van Durme",
+        "Daniel Khashabi"
+      ],
+      "primary_category": "cs.DL",
+      "categories": [
+        "cs.DL",
+        "cs.AI",
+        "cs.CL",
+        "cs.CY"
+      ],
+      "published": "2026-03-25T16:42:30+00:00",
+      "link": "https://arxiv.org/pdf/2603.26791v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "characterizing relative impact of scholarly publications through joint ranking of citations",
+      "llm_evidence_cn": "通过引文联合排序表征学术出版物的相对影响力",
+      "llm_evidence": "通过引文联合排序表征学术出版物的相对影响力",
+      "canonical_evidence": "通过引文联合排序表征学术出版物的相对影响力",
+      "llm_tldr_en": "CRISP uses LLMs to rank cited papers within a context to better identify impactful scholarly research.",
+      "llm_tldr_cn": "CRISP利用大模型对引文进行联合排序，以更准确地识别具有影响力的学术研究。",
+      "llm_tldr": "CRISP利用大模型对引文进行联合排序，以更准确地识别具有影响力的学术研究。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.27146v1",
+      "title": "Learning to Predict Future-Aligned Research Proposals with Language Models",
+      "abstract": "Large language models (LLMs) are increasingly used to assist ideation in research, but evaluating the quality of LLM-generated research proposals remains difficult: novelty and soundness are hard to measure automatically, and large-scale human evaluation is costly. We propose a verifiable alternative by reframing proposal generation as a time-sliced scientific forecasting problem. Given a research question and inspiring papers available before a cutoff time, the model generates a structured proposal and is evaluated by whether it anticipates research directions that appear in papers published after the time. We operationalize this objective with the Future Alignment Score (FAS), computed via retrieval and LLM-based semantic scoring against a held-out future corpus. To train models, we build a time-consistent dataset of 17,771 papers from targets and their pre-cutoff citations, and synthesize reasoning traces that teach gap identification and inspiration borrowing. Across Llama-3.1 and Qwen2.5 models, future-aligned tuning improves future alignment over unaligned baselines (up to +10.6% overall FAS), and domain-expert human evaluation corroborates improved proposal quality. Finally, we demonstrate practical impact by implementing two model-generated proposals with a code agent, obtaining 4.17% accuracy gain on MATH from a new prompting strategy and consistent improvements for a novel model-merging method.",
+      "authors": [
+        "Heng Wang",
+        "Pengcheng Jiang",
+        "Jiashuo Sun",
+        "Zhiyi Shi",
+        "Haofei Yu",
+        "Jiawei Han",
+        "Heng Ji"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-28T05:41:15+00:00",
+      "link": "https://arxiv.org/pdf/2603.27146v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Predicting future research directions via retrieval and semantic scoring",
+      "llm_evidence_cn": "通过检索和语义评分预测未来研究方向",
+      "llm_evidence": "通过检索和语义评分预测未来研究方向",
+      "canonical_evidence": "通过检索和语义评分预测未来研究方向",
+      "llm_tldr_en": "Evaluates LLM research proposals by their alignment with future published papers using retrieval methods.",
+      "llm_tldr_cn": "通过检索方法评估LLM生成的研究建议是否与未来发表的论文方向一致。",
+      "llm_tldr": "通过检索方法评估LLM生成的研究建议是否与未来发表的论文方向一致。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.27335v1",
+      "title": "PubMed Reasoner: Dynamic Reasoning-based Retrieval for Evidence-Grounded Biomedical Question Answering",
+      "abstract": "Trustworthy biomedical question answering (QA) systems must not only provide accurate answers but also justify them with current, verifiable evidence. Retrieval-augmented approaches partially address this gap but lack mechanisms to iteratively refine poor queries, whereas self-reflection methods kick in only after full retrieval is completed. In this context, we introduce PubMed Reasoner, a biomedical QA agent composed of three stages: self-critic query refinement evaluates MeSH terms for coverage, alignment, and redundancy to enhance PubMed queries based on partial (metadata) retrieval; reflective retrieval processes articles in batches until sufficient evidence is gathered; and evidence-grounded response generation produces answers with explicit citations. PubMed Reasoner with a GPT-4o backbone achieves 78.32% accuracy on PubMedQA, slightly surpassing human experts, and showing consistent gains on MMLU Clinical Knowledge. Moreover, LLM-as-judge evaluations prefer our responses across: reasoning soundness, evidence grounding, clinical relevance, and trustworthiness. By orchestrating retrieval-first reasoning over authoritative sources, our approach provides practical assistance to clinicians and biomedical researchers while controlling compute and token costs.",
+      "authors": [
+        "Yiqing Zhang",
+        "Xiaozhong Liu",
+        "Fabricio Murai"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-28T16:41:57+00:00",
+      "link": "https://arxiv.org/pdf/2603.27335v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Iterative query refinement and reflective retrieval for biomedical literature",
+      "llm_evidence_cn": "针对生物医学文献的迭代查询优化与反射式检索",
+      "llm_evidence": "针对生物医学文献的迭代查询优化与反射式检索",
+      "canonical_evidence": "针对生物医学文献的迭代查询优化与反射式检索",
+      "llm_tldr_en": "Introduces a QA agent that refines PubMed queries and retrieves evidence in batches for better accuracy.",
+      "llm_tldr_cn": "引入一种QA代理，通过优化PubMed查询和分批检索证据来提高准确性。",
+      "llm_tldr": "引入一种QA代理，通过优化PubMed查询和分批检索证据来提高准确性。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.28336v1",
+      "title": "A Multi-Agent Rhizomatic Pipeline for Non-Linear Literature Analysis",
+      "abstract": "Systematic literature reviews in the social sciences overwhelmingly follow arborescent logics -- hierarchical keyword filtering, linear screening, and taxonomic classification -- that suppress the lateral connections, ruptures, and emergent patterns characteristic of complex research landscapes. This research note presents the Rhizomatic Research Agent (V3), a multi-agent computational pipeline grounded in Deleuzian process-relational ontology, designed to conduct non-linear literature analysis through 12 specialized agents operating across a seven-phase architecture. The system was developed in response to the methodological groundwork established by (Narayan2023), who employed rhizomatic inquiry in her doctoral research on sustainable energy transitions but relied on manual, researcher-driven exploration. The Rhizomatic Research Agent operationalizes the six principles of the rhizome -- connection, heterogeneity, multiplicity, asignifying rupture, cartography, and decalcomania -- into an automated pipeline integrating large language model (LLM) orchestration, dual-source corpus ingestion from OpenAlex and arXiv, SciBERT semantic topography, and dynamic rupture detection protocols. Preliminary deployment demonstrates the system's capacity to surface cross-disciplinary convergences and structural research gaps that conventional review methods systematically overlook. The pipeline is open-source and extensible to any phenomenon zone where non-linear knowledge mapping is required.",
+      "authors": [
+        "Julio C. Serrano. Joonas Kevari",
+        "Rumy Narayan"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-03-30T12:06:25+00:00",
+      "link": "https://arxiv.org/pdf/2603.28336v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "multi-agent pipeline for non-linear literature analysis",
+      "llm_evidence_cn": "用于非线性文献分析的多智能体流水线",
+      "llm_evidence": "用于非线性文献分析的多智能体流水线",
+      "canonical_evidence": "用于非线性文献分析的多智能体流水线",
+      "llm_tldr_en": "Presents a multi-agent system for systematic, non-linear literature reviews in social sciences.",
+      "llm_tldr_cn": "提出了一种用于社会科学系统性非线性文献综述的多智能体系统。",
+      "llm_tldr": "提出了一种用于社会科学系统性非线性文献综述的多智能体系统。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.28589v1",
+      "title": "Towards a Medical AI Scientist",
+      "abstract": "Autonomous systems that generate scientific hypotheses, conduct experiments, and draft manuscripts have recently emerged as a promising paradigm for accelerating discovery. However, existing AI Scientists remain largely domain-agnostic, limiting their applicability to clinical medicine, where research is required to be grounded in medical evidence with specialized data modalities. In this work, we introduce Medical AI Scientist, the first autonomous research framework tailored to clinical autonomous research. It enables clinically grounded ideation by transforming extensively surveyed literature into actionable evidence through clinician-engineer co-reasoning mechanism, which improves the traceability of generated research ideas. It further facilitates evidence-grounded manuscript drafting guided by structured medical compositional conventions and ethical policies. The framework operates under 3 research modes, namely paper-based reproduction, literature-inspired innovation, and task-driven exploration, each corresponding to a distinct level of automated scientific inquiry with progressively increasing autonomy. Comprehensive evaluations by both large language models and human experts demonstrate that the ideas generated by the Medical AI Scientist are of substantially higher quality than those produced by commercial LLMs across 171 cases, 19 clinical tasks, and 6 data modalities. Meanwhile, our system achieves strong alignment between the proposed method and its implementation, while also demonstrating significantly higher success rates in executable experiments. Double-blind evaluations by human experts and the Stanford Agentic Reviewer suggest that the generated manuscripts approach MICCAI-level quality, while consistently surpassing those from ISBI and BIBM. The proposed Medical AI Scientist highlights the potential of leveraging AI for autonomous scientific discovery in healthcare.",
+      "authors": [
+        "Hongtao Wu",
+        "Boyun Zheng",
+        "Dingjie Song",
+        "Yu Jiang",
+        "Jianfeng Gao",
+        "Lei Xing",
+        "Lichao Sun",
+        "Yixuan Yuan"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-03-30T15:37:25+00:00",
+      "link": "https://arxiv.org/pdf/2603.28589v1",
+      "tags": [
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "transforming extensively surveyed literature into actionable evidence",
+      "llm_evidence_cn": "将广泛调研的文献转化为可操作的证据",
+      "llm_evidence": "将广泛调研的文献转化为可操作的证据",
+      "canonical_evidence": "将广泛调研的文献转化为可操作的证据",
+      "llm_tldr_en": "An autonomous research framework that uses literature surveys to generate medical research ideas.",
+      "llm_tldr_cn": "一种利用文献调研生成医学研究构思的自主研究框架。",
+      "llm_tldr": "一种利用文献调研生成医学研究构思的自主研究框架。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "id": "2603.28651v1",
+      "title": "Not Search, But Scan: Benchmarking MLLMs on Scan-Oriented Academic Paper Reasoning",
+      "abstract": "With the rapid progress of multimodal large language models (MLLMs), AI already performs well at literature retrieval and certain reasoning tasks, serving as a capable assistant to human researchers, yet it remains far from autonomous research. The fundamental reason is that current work on academic paper reasoning is largely confined to a search-oriented paradigm centered on pre-specified targets, with reasoning grounded in relevance retrieval, which struggles to support researcher-style full-document understanding, reasoning, and verification. To bridge this gap, we propose \\textbf{ScholScan}, a new benchmark for academic paper reasoning. ScholScan introduces a scan-oriented task setting that asks models to read and cross-check entire papers like human researchers, scanning the document to identify consistency issues. The benchmark comprises 1,800 carefully annotated questions drawn from nine error categories across 13 natural-science domains and 715 papers, and provides detailed annotations for evidence localization and reasoning traces, together with a unified evaluation protocol. We assessed 15 models across 24 input configurations and conducted a fine-grained analysis of MLLM capabilities for all error categories. Across the board, retrieval-augmented generation (RAG) methods yield no significant improvements, revealing systematic deficiencies of current MLLMs on scan-oriented tasks and underscoring the challenge posed by ScholScan. We expect ScholScan to be the leading and representative work of the scan-oriented task paradigm.",
+      "authors": [
+        "Rongjin Li",
+        "Zichen Tang",
+        "Xianghe Wang",
+        "Xinyi Hu",
+        "Zhengyu Wang",
+        "Zhengyu Lu",
+        "Yiling Huang",
+        "Jiayuan Chen",
+        "Weisheng Tan",
+        "Jiacheng Liu",
+        "Zhongjun Yang",
+        "Haihong E"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-27T15:58:23+00:00",
+      "link": "https://arxiv.org/pdf/2603.28651v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "benchmarking MLLMs on academic paper reasoning and cross-checking",
+      "llm_evidence_cn": "评估多模态大模型在学术论文推理和交叉核对方面的表现",
+      "llm_evidence": "评估多模态大模型在学术论文推理和交叉核对方面的表现",
+      "canonical_evidence": "评估多模态大模型在学术论文推理和交叉核对方面的表现",
+      "llm_tldr_en": "ScholScan benchmarks MLLMs on full-document academic paper reasoning beyond simple retrieval.",
+      "llm_tldr_cn": "ScholScan 提出了一个新的基准，用于评估大模型对学术论文全文的推理和验证能力。",
+      "llm_tldr": "ScholScan 提出了一个新的基准，用于评估大模型对学术论文全文的推理和验证能力。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2603.26815v1",
+      "title": "Resolving the Robustness-Precision Trade-off in Financial RAG through Hybrid Document-Routed Retrieval",
+      "abstract": "Retrieval-Augmented Generation (RAG) systems for financial document question answering typically follow a chunk-based paradigm: documents are split into fragments, embedded into vector space, and retrieved via similarity search. While effective in general settings, this approach suffers from cross-document chunk confusion in structurally homogeneous corpora such as regulatory filings. Semantic File Routing (SFR), which uses LLM structured output to route queries to whole documents, reduces catastrophic failures but sacrifices the precision of targeted chunk retrieval. We identify this robustness-precision trade-off through controlled evaluation on the FinDER benchmark (1,500 queries across five groups): SFR achieves higher average scores (6.45 vs. 6.02) and fewer failures (10.3% vs. 22.5%), while chunk-based retrieval (CBR) yields more perfect answers (13.8% vs. 8.5%). To resolve this trade-off, we propose Hybrid Document-Routed Retrieval (HDRR), a two-stage architecture that uses SFR as a document filter followed by chunk-based retrieval scoped to the identified document(s). HDRR eliminates cross-document confusion while preserving targeted chunk precision. Experimental results demonstrate that HDRR achieves the best performance on every metric: an average score of 7.54 (25.2% above CBR, 16.9% above SFR), a failure rate of only 6.4%, a correctness rate of 67.7% (+18.7 pp over CBR), and a perfect-answer rate of 20.1% (+6.3 pp over CBR, +11.6 pp over SFR). HDRR resolves the trade-off by simultaneously achieving the lowest failure rate and the highest precision across all five experimental groups.",
+      "authors": [
+        "Zhiyuan Cheng",
+        "Longying Lai",
+        "Yue Liu"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI",
+        "cs.IR"
+      ],
+      "published": "2026-03-26T18:05:38+00:00",
+      "link": "https://arxiv.org/pdf/2603.26815v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Hybrid document-routed retrieval for precise information discovery",
+      "llm_evidence_cn": "用于精确信息发现的混合文档路由检索",
+      "llm_evidence": "用于精确信息发现的混合文档路由检索",
+      "canonical_evidence": "用于精确信息发现的混合文档路由检索",
+      "llm_tldr_en": "Combines file routing and chunk retrieval to improve precision in complex document search.",
+      "llm_tldr_cn": "结合文件路由和分块检索，以提高复杂文档搜索中的精确度。",
+      "llm_tldr": "结合文件路由和分块检索，以提高复杂文档搜索中的精确度。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.22934v2",
+      "title": "ProGRank: Probe-Gradient Reranking to Defend Dense-Retriever RAG from Corpus Poisoning",
+      "abstract": "Retrieval-Augmented Generation (RAG) improves the reliability of large language model applications by grounding generation in retrieved evidence, but it also introduces a new attack surface: corpus poisoning. In this setting, an adversary injects or edits passages so that they are ranked into the Top-$K$ results for target queries and then affect downstream generation. Existing defences against corpus poisoning often rely on content filtering, auxiliary models, or generator-side reasoning, which can make deployment more difficult. We propose ProGRank, a post hoc, training-free retriever-side defence for dense-retriever RAG. ProGRank stress-tests each query--passage pair under mild randomized perturbations and extracts probe gradients from a small fixed parameter subset of the retriever. From these signals, it derives two instability signals, representational consistency and dispersion risk, and combines them with a score gate in a reranking step. ProGRank preserves the original passage content, requires no retraining, and also supports a surrogate-based variant when the deployed retriever is unavailable. Extensive experiments across three datasets, three dense retriever backbones, representative corpus poisoning attacks, and both retrieval-stage and end-to-end settings show that ProGRank provides stronger defence performance and a favorable robustness--utility trade-off. It also remains competitive under adaptive evasive attacks.",
+      "authors": [
+        "Xiangyu Yin",
+        "Yi Qi",
+        "Chih-Hong Cheng"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-24T08:29:15+00:00",
+      "link": "https://arxiv.org/pdf/2603.22934v2",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Retriever-side defense for dense-retriever RAG to ensure reliable evidence grounding",
+      "llm_evidence_cn": "针对稠密检索RAG的检索端防御，确保可靠的证据定位",
+      "llm_evidence": "针对稠密检索RAG的检索端防御，确保可靠的证据定位",
+      "canonical_evidence": "针对稠密检索RAG的检索端防御，确保可靠的证据定位",
+      "llm_tldr_en": "Introduces ProGRank to defend RAG systems from corpus poisoning, improving retrieval reliability.",
+      "llm_tldr_cn": "引入ProGRank防御RAG系统免受语料库投毒攻击，提高了检索结果的可靠性。",
+      "llm_tldr": "引入ProGRank防御RAG系统免受语料库投毒攻击，提高了检索结果的可靠性。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.23273v1",
+      "title": "Systemic Gendered Citation Imbalance in Computer Science: Evidence from Conferences and Journals",
+      "abstract": "Gender imbalance persists across science, technology, engineering, and mathematics (STEM) fields, including computer science, where it appears in researcher demographics, productivity, recognition, hiring, and career progression. Given computer science's rapid expansion and global influence, addressing this imbalance is essential for broadening participation and fueling innovation. Although journal-oriented disciplines exhibit consistent gender imbalances in citation practices, it remains unclear whether similar patterns arise in the conference-centric culture of computer science. Here, we systematically investigate gender imbalance in citations of conference and journal papers in computer science. We find that papers for which a woman is listed as either first or last author receive fewer citations than expected, partly because of homophilic citation tendencies (i.e., authors tend to cite papers that share specific attributes). This imbalance is especially pronounced for conference papers--particularly those published at top-tier venues--relative to journals. Moreover, we find that the prominence of the first or last author and the structure of their local co-authorship networks are potential drivers of these imbalances. By exploring how conference-centric publishing practices can amplify systemic imbalances in computer science, our study offers insights that may inform efforts to foster more equitable representation in academia.",
+      "authors": [
+        "Kazuki Nakajima",
+        "Yuya Sasaki",
+        "Sohei Tokuno",
+        "George Fletcher"
+      ],
+      "primary_category": "cs.DL",
+      "categories": [
+        "cs.DL",
+        "cs.CY",
+        "cs.SI"
+      ],
+      "published": "2026-03-24T14:37:34+00:00",
+      "link": "https://arxiv.org/pdf/2603.23273v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Systematic investigation of citation patterns in a field",
+      "llm_evidence_cn": "对某一领域引用模式的系统调查",
+      "llm_evidence": "对某一领域引用模式的系统调查",
+      "canonical_evidence": "对某一领域引用模式的系统调查",
+      "llm_tldr_en": "Analyzes gendered citation imbalances in computer science conferences and journals.",
+      "llm_tldr_cn": "分析了计算机科学会议和期刊中存在的性别引用失衡现象。",
+      "llm_tldr": "分析了计算机科学会议和期刊中存在的性别引用失衡现象。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "identifying key research in a field",
+      "matched_requirement_id": "req-8",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.27435v1",
+      "title": "Improving Attributed Long-form Question Answering with Intent Awareness",
+      "abstract": "Large language models (LLMs) are increasingly being used to generate comprehensive, knowledge-intensive reports. However, while these models are trained on diverse academic papers and reports, they are not exposed to the reasoning processes and intents that guide authors in crafting these documents. We hypothesize that enhancing a model's intent awareness can significantly improve the quality of generated long-form reports. We develop and employ structured, tag-based schemes to better elicit underlying implicit intents to write or cite. We demonstrate that these extracted intents enhance both zero-shot generation capabilities in LLMs and enable the creation of high-quality synthetic data for fine-tuning smaller models. Our experiments reveal improved performance across various challenging scientific report generation tasks, with an average improvement of +2.9 and +12.3 absolute points for large and small models over baselines, respectively. Furthermore, our analysis illuminates how intent awareness enhances model citation usage and substantially improves report readability.",
+      "authors": [
+        "Xinran Zhao",
+        "Aakanksha Naik",
+        "Jay DeYoung",
+        "Joseph Chee Chang",
+        "Jena D. Hwang",
+        "Tongshuang Wu",
+        "Varsha Kishore"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL",
+        "cs.AI"
+      ],
+      "published": "2026-03-28T22:37:25+00:00",
+      "link": "https://arxiv.org/pdf/2603.27435v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Intent awareness for generating knowledge-intensive academic reports",
+      "llm_evidence_cn": "生成知识密集型学术报告的意图感知",
+      "llm_evidence": "生成知识密集型学术报告的意图感知",
+      "canonical_evidence": "生成知识密集型学术报告的意图感知",
+      "llm_tldr_en": "Uses intent awareness to improve the quality and attribution of generated long-form academic reports.",
+      "llm_tldr_cn": "利用意图感知来提高生成的长篇学术报告的质量和归因准确性。",
+      "llm_tldr": "利用意图感知来提高生成的长篇学术报告的质量和归因准确性。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.22999v2",
+      "title": "PaperVoyager : Building Interactive Web with Visual Language Models",
+      "abstract": "Recent advances in visual language models have enabled autonomous agents for complex reasoning, tool use, and document understanding. However, existing document agents mainly transform papers into static artifacts such as summaries, webpages, or slides, which are insufficient for technical papers involving dynamic mechanisms and state transitions. In this work, we propose a Paper-to-Interactive-System Agent that converts research papers into executable interactive web systems. Given a PDF paper, the agent performs end-to-end processing without human intervention, including paper understanding, system modeling, and interactive webpage synthesis, enabling users to manipulate inputs and observe dynamic behaviors. To evaluate this task, we introduce a benchmark of 19 research papers paired with expert-built interactive systems as ground truth. We further propose PaperVoyager, a structured generation framework that explicitly models mechanisms and interaction logic during synthesis. Experiments show that PaperVoyager significantly improves the quality of generated interactive systems, offering a new paradigm for interactive scientific paper understanding.",
+      "authors": [
+        "Dasen Dai",
+        "Biao Wu",
+        "Meng Fang",
+        "Wenhao Wang"
+      ],
+      "primary_category": "cs.CL",
+      "categories": [
+        "cs.CL"
+      ],
+      "published": "2026-03-24T09:42:27+00:00",
+      "link": "https://arxiv.org/pdf/2603.22999v2",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "converting research papers into interactive systems",
+      "llm_evidence_cn": "将研究论文转换为交互式系统",
+      "llm_evidence": "将研究论文转换为交互式系统",
+      "canonical_evidence": "将研究论文转换为交互式系统",
+      "llm_tldr_en": "Develops an agent that transforms static research papers into executable interactive web systems for better understanding.",
+      "llm_tldr_cn": "开发了一种智能体，能将静态研究论文转换为可执行的交互式网页系统，以增强理解。",
+      "llm_tldr": "开发了一种智能体，能将静态研究论文转换为可执行的交互式网页系统，以增强理解。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.23375v1",
+      "title": "Natural Language Interfaces for Spatial and Temporal Databases: A Comprehensive Overview of Methods, Taxonomy, and Future Directions",
+      "abstract": "The task of building a natural language interface to a database, known as NLIDB, has recently gained significant attention from both the database and Natural Language Processing (NLP) communities. With the proliferation of geospatial datasets driven by the rapid emergence of location-aware sensors, geospatial databases play a vital role in supporting geospatial applications. However, querying geospatial and temporal databases differs substantially from querying traditional relational databases due to the presence of geospatial topological operators and temporal operators. To bridge the gap between geospatial query languages and non-expert users, the geospatial research community has increasingly focused on developing NLIDBs for geospatial databases. Yet, existing research remains fragmented across systems, datasets, and methodological choices, making it difficult to clearly understand the landscape of existing methods, their strengths and weaknesses, and opportunities for future research. Existing surveys on NLIDBs focus on general-purpose database systems and do not treat geospatial and temporal databases as primary focus for analysis. To address this gap, this paper presents a comprehensive survey of studies on NLIDBs for geospatial and temporal databases. Specifically, we provide a detailed overview of datasets, evaluation metrics, and the taxonomy of the methods for geospatial and temporal NLIDBs, as well as a comparative analysis of the existing methods. Our survey reveals recurring trends in existing methods, substantial variation in datasets and evaluation practices, and several open challenges that continue to hinder progress in this area. Based on these findings, we identify promising directions for future research to advance natural language interfaces to geospatial and temporal databases.",
+      "authors": [
+        "Samya Acharja",
+        "Kanchan Chowdhury"
+      ],
+      "primary_category": "cs.DB",
+      "categories": [
+        "cs.DB",
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-03-24T16:06:10+00:00",
+      "link": "https://arxiv.org/pdf/2603.23375v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Natural language interfaces for querying spatial and temporal databases",
+      "llm_evidence_cn": "用于查询空间和时间数据库的自然语言接口",
+      "llm_evidence": "用于查询空间和时间数据库的自然语言接口",
+      "canonical_evidence": "用于查询空间和时间数据库的自然语言接口",
+      "llm_tldr_en": "Provides an overview of methods for building natural language interfaces to geospatial and temporal databases.",
+      "llm_tldr_cn": "综述了为地理空间和时间数据库构建自然语言查询接口的方法与未来方向。",
+      "llm_tldr": "综述了为地理空间和时间数据库构建自然语言查询接口的方法与未来方向。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.28407v1",
+      "title": "MiroEval: Benchmarking Multimodal Deep Research Agents in Process and Outcome",
+      "abstract": "Recent progress in deep research systems has been impressive, but evaluation still lags behind real user needs. Existing benchmarks predominantly assess final reports using fixed rubrics, failing to evaluate the underlying research process. Most also offer limited multimodal coverage, rely on synthetic tasks that do not reflect real-world query complexity, and cannot be refreshed as knowledge evolves. To address these gaps, we introduce MiroEval, a benchmark and evaluation framework for deep research systems. The benchmark comprises 100 tasks (70 text-only, 30 multimodal), all grounded in real user needs and constructed via a dual-path pipeline that supports periodic updates, enabling a live and evolving setting. The proposed evaluation suite assesses deep research systems along three complementary dimensions: adaptive synthesis quality evaluation with task-specific rubrics, agentic factuality verification via active retrieval and reasoning over both web sources and multimodal attachments, and process-centric evaluation audits how the system searches, reasons, and refines throughout its investigation. Evaluation across 13 systems yields three principal findings: the three evaluation dimensions capture complementary aspects of system capability, with each revealing distinct strengths and weaknesses across systems; process quality serves as a reliable predictor of overall outcome while revealing weaknesses invisible to output-level metrics; and multimodal tasks pose substantially greater challenges, with most systems declining by 3 to 10 points. The MiroThinker series achieves the most balanced performance, with MiroThinker-H1 ranking the highest overall in both settings. Human verification and robustness results confirm the reliability of the benchmark and evaluation framework. MiroEval provides a holistic diagnostic tool for the next generation of deep research agents.",
+      "authors": [
+        "Fangda Ye",
+        "Yuxin Hu",
+        "Pengxiang Zhu",
+        "Yibo Li",
+        "Ziqi Jin",
+        "Yao Xiao",
+        "Yibo Wang",
+        "Lei Wang",
+        "Zhen Zhang",
+        "Lu Wang",
+        "Yue Deng",
+        "Bin Wang",
+        "Yifan Zhang",
+        "Liangcai Su",
+        "Xinyu Wang",
+        "He Zhao",
+        "Chen Wei",
+        "Qiang Ren",
+        "Bryan Hooi",
+        "An Bo",
+        "Shuicheng Yan",
+        "Lidong Bing"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-03-30T13:16:03+00:00",
+      "link": "https://arxiv.org/pdf/2603.28407v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "benchmarking deep research agents for complex queries",
+      "llm_evidence_cn": "针对复杂查询的深度研究智能体基准测试",
+      "llm_evidence": "针对复杂查询的深度研究智能体基准测试",
+      "canonical_evidence": "针对复杂查询的深度研究智能体基准测试",
+      "llm_tldr_en": "MiroEval benchmarks multimodal research agents on real-world research process and outcomes.",
+      "llm_tldr_cn": "MiroEval在真实研究过程和结果上对多模态研究智能体进行基准测试。",
+      "llm_tldr": "MiroEval在真实研究过程和结果上对多模态研究智能体进行基准测试。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.24226v2",
+      "title": "UniScale: Synergistic Entire Space Data and Model Scaling for Search Ranking",
+      "abstract": "Recent advances in Large Language Models (LLMs) have inspired a surge of scaling law research in industrial search, advertising, and recommendation systems. However, existing approaches focus mainly on architectural improvements, overlooking the critical synergy between data and architecture design. We observe that scaling model parameters alone exhibits diminishing returns, i.e., the marginal gain in performance steadily declines as model size increases, and that the performance degradation caused by complex heterogeneous data distributions is often irrecoverable through model design alone. In this paper, we propose UniScale to address these limitations, a novel co-design framework that jointly optimizes data and architecture to unlock the full potential of model scaling, which includes two core parts: (1) ES$^3$ (Entire-Space Sample System), a high-quality data scaling system that expands the training signal beyond conventional sampling strategies from both intra-domain request contexts with global supervised signal constructed by hierarchical label attribution and cross-domain samples aligning with the essence of user decision under similar content exposure environment in search domain; and (2) HHSFT (Heterogeneous Hierarchical Sample Fusion Transformer), a novel architecture designed to effectively model the complex heterogeneous distribution of scaled data and to harness the entire space user behavior data with Heterogeneous Hierarchical Feature Interaction and Entire Space User Interest Fusion, thereby surpassing the performance ceiling of structure-only model tuning. Extensive experiments demonstrate that UniScale achieves significant improvements through the synergistic co-design of data and architecture and exhibits scaling trends. Online A/B tests on a real-world e-commerce search platform further show gains of 1.70% in purchase and 2.04% in Gross Merchandise Volume (GMV).",
+      "authors": [
+        "Liren Yu",
+        "Caiyuan Li",
+        "Feiyi Dong",
+        "Tao Zhang",
+        "Zhixuan Zhang",
+        "Dan Ou",
+        "Haihong Tang",
+        "Bo Zheng"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.LG"
+      ],
+      "published": "2026-03-25T12:00:26+00:00",
+      "link": "https://arxiv.org/pdf/2603.24226v2",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "optimizing data and architecture for search ranking",
+      "llm_evidence_cn": "优化搜索排序的数据与架构协同设计",
+      "llm_evidence": "优化搜索排序的数据与架构协同设计",
+      "canonical_evidence": "优化搜索排序的数据与架构协同设计",
+      "llm_tldr_en": "UniScale is a co-design framework that optimizes data and architecture for industrial search ranking.",
+      "llm_tldr_cn": "UniScale 是一个协同优化数据和架构的框架，旨在提升工业级搜索排序性能。",
+      "llm_tldr": "UniScale 是一个协同优化数据和架构的框架，旨在提升工业级搜索排序性能。",
+      "llm_tags": [
+        "query:sr:composite"
+      ],
+      "matched_query_tag": "query:sr:composite",
+      "matched_query_text": "Papers central to 检索相关研究的论文, especially work that connects or combines: a; s; t; fluid topology optimization; f; methods and approaches in academic research; systematic approaches to literature search; identifying key research in a field; comprehensive research paper discovery.",
+      "matched_requirement_id": "req-composite-sr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.24218v1",
+      "title": "Who Benefits from RAG? The Role of Exposure, Utility and Attribution Bias",
+      "abstract": "Large Language Models (LLMs) enhanced with Retrieval-Augmented Generation (RAG) have achieved substantial improvements in accuracy by grounding their responses in external documents that are relevant to the user's query. However, relatively little work has investigated the impact of RAG in terms of fairness. Particularly, it is not yet known if queries that are associated with certain groups within a fairness category systematically receive higher accuracy, or accuracy improvements in RAG systems compared to LLM-only, a phenomenon we refer to as query group fairness. In this work, we conduct extensive experiments to investigate the impact of three key factors on query group fairness in RAG, namely: Group exposure, i.e., the proportion of documents from each group appearing in the retrieved set, determined by the retriever; Group utility, i.e., the degree to which documents from each group contribute to improving answer accuracy, capturing retriever-generator interactions; and Group attribution, i.e., the extent to which the generator relies on documents from each group when producing responses. We examine group-level average accuracy and accuracy improvements disparities across four fairness categories using three datasets derived from the TREC 2022 Fair Ranking Track for two tasks: article generation and title generation. Our findings show that RAG systems suffer from the query group fairness problem and amplify disparities in terms of average accuracy across queries from different groups, compared to an LLM-only setting. Moreover, group utility, exposure, and attribution can exhibit strong positive or negative correlations with average accuracy or accuracy improvements of queries from that group, highlighting their important role in fair RAG. Our data and code are publicly available from Github.",
+      "authors": [
+        "Mahdi Dehghan",
+        "Graham McDonald"
+      ],
+      "primary_category": "cs.IR",
+      "categories": [
+        "cs.IR",
+        "cs.AI"
+      ],
+      "published": "2026-03-25T11:45:52+00:00",
+      "link": "https://arxiv.org/pdf/2603.24218v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "investigating query group fairness in retrieval-augmented generation systems",
+      "llm_evidence_cn": "调查检索增强生成系统中的查询组公平性",
+      "llm_evidence": "调查检索增强生成系统中的查询组公平性",
+      "canonical_evidence": "调查检索增强生成系统中的查询组公平性",
+      "llm_tldr_en": "This study examines how RAG systems impact fairness in retrieving and attributing information for user queries.",
+      "llm_tldr_cn": "本研究探讨了RAG系统在检索和归属用户查询信息时对公平性的影响。",
+      "llm_tldr": "本研究探讨了RAG系统在检索和归属用户查询信息时对公平性的影响。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "systematic approaches to literature search",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.28444v1",
+      "title": "Entropic Claim Resolution: Uncertainty-Driven Evidence Selection for RAG",
+      "abstract": "Current Retrieval-Augmented Generation (RAG) systems predominantly rely on relevance-based dense retrieval, sequentially fetching documents to maximize semantic similarity with the query. However, in knowledge-intensive and real-world scenarios characterized by conflicting evidence or fundamental query ambiguity, relevance alone is insufficient for resolving epistemic uncertainty. We introduce Entropic Claim Resolution (ECR), a novel inference-time algorithm that reframes RAG reasoning as entropy minimization over competing semantic answer hypotheses. Unlike action-driven agentic frameworks (e.g., ReAct) or fixed-pipeline RAG architectures, ECR sequentially selects atomic evidence claims by maximizing Expected Entropy Reduction (EER), a decision-theoretic criterion for the value of information. The process dynamically terminates when the system reaches a mathematically defined state of epistemic sufficiency (H <= epsilon, subject to epistemic coherence). We integrate ECR into a production-grade multi-strategy retrieval pipeline (CSGR++) and analyze its theoretical properties. Our framework provides a rigorous foundation for uncertainty-aware evidence selection, shifting the paradigm from retrieving what is most relevant to retrieving what is most discriminative.",
+      "authors": [
+        "Davide Di Gioia"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI",
+        "cs.CL"
+      ],
+      "published": "2026-03-30T13:49:03+00:00",
+      "link": "https://arxiv.org/pdf/2603.28444v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 8.0,
+      "llm_evidence_en": "Uncertainty-driven evidence selection for knowledge-intensive retrieval",
+      "llm_evidence_cn": "知识密集型检索中基于不确定性的证据选择",
+      "llm_evidence": "知识密集型检索中基于不确定性的证据选择",
+      "canonical_evidence": "知识密集型检索中基于不确定性的证据选择",
+      "llm_tldr_en": "Reframes RAG as entropy minimization to select the most informative evidence claims.",
+      "llm_tldr_cn": "将RAG重构为熵最小化过程，以选择最具信息量的证据主张。",
+      "llm_tldr": "将RAG重构为熵最小化过程，以选择最具信息量的证据主张。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "comprehensive research paper discovery",
+      "matched_requirement_id": "req-9",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "8plus"
+    },
+    {
+      "id": "2603.24877v1",
+      "title": "More Than \"Means to an End\": Supporting Reasoning with Transparently Designed AI Data Science Processes",
+      "abstract": "Generative artificial intelligence (AI) tools can now help people perform complex data science tasks regardless of their expertise. While these tools have great potential to help more people work with data, their end-to-end approach does not support users in evaluating alternative approaches and reformulating problems, both critical to solving open-ended tasks in high-stakes domains. In this paper, we reflect on two AI data science systems designed for the medical setting and how they function as tools for thought. We find that success in these systems was driven by constructing AI workflows around intentionally-designed intermediate artifacts, such as readable query languages, concept definitions, or input-output examples. Despite opaqueness in other parts of the AI process, these intermediates helped users reason about important analytical choices, refine their initial questions, and contribute their unique knowledge. We invite the HCI community to consider when and how intermediate artifacts should be designed to promote effective data science thinking.",
+      "authors": [
+        "Venkatesh Sivaraman",
+        "Patrick Vossler",
+        "Adam Perer",
+        "Julian Hong",
+        "Jean Feng"
+      ],
+      "primary_category": "cs.HC",
+      "categories": [
+        "cs.HC",
+        "cs.AI"
+      ],
+      "published": "2026-03-25T23:47:54+00:00",
+      "link": "https://arxiv.org/pdf/2603.24877v1",
+      "tags": [
+        "keyword:SR 检索",
+        "query:SR 检索"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Supporting reasoning in data science through transparent AI workflows",
+      "llm_evidence_cn": "通过透明AI工作流支持数据科学推理",
+      "llm_evidence": "通过透明AI工作流支持数据科学推理",
+      "canonical_evidence": "通过透明AI工作流支持数据科学推理",
+      "llm_tldr_en": "Explores how intermediate artifacts in AI workflows help users evaluate alternative research approaches.",
+      "llm_tldr_cn": "探讨AI工作流中的中间产物如何帮助用户评估不同的研究方法。",
+      "llm_tldr": "探讨AI工作流中的中间产物如何帮助用户评估不同的研究方法。",
+      "llm_tags": [
+        "query:sr"
+      ],
+      "matched_query_tag": "query:sr",
+      "matched_query_text": "methods and approaches in academic research",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    }
+  ]
+}

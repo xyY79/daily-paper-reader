@@ -4,73 +4,74 @@
 ────────────────────────────────────────
 
 ## 每次日报
-- 最新运行日期：2026-03-30
-- 运行时间：2026-03-30 20:38:59 UTC
+- 最新运行日期：2026-03-31
+- 运行时间：2026-03-31 20:12:20 UTC
 - 运行状态：成功
 - 本次总论文数：17
 - 精读区：6
 - 速读区：11
 
 ### 今日简报（AI）
-今日深挖 17 篇前沿成果，重点攻克了心理测量潜变量与网络模型的融合难题，并发布了网络研究的创新发现系统。
-研究不仅实现了潜变量与网络结构的统一建模，还通过新型图索引合并框架大幅提升了近邻搜索的效率。
-建议关注 LLM 智能体偏好建模与高维检索优化的读者，优先查阅相关速读篇目以获取最新算法灵感。
-- 详情：[/202603/30/README](/202603/30/README)
+- 今日共生成 17 篇推荐（精读 6 篇，速读 11 篇）
+- 精读：《CRISP: Characterizing Relative Impact of Scholarly Publications》（9.0/10）, 《Learning to Predict Future-Aligned Research Proposals with Language Models》（9.0/10）
+- 速读：《Resolving the Robustness-Precision Trade-off in Financial RAG through Hybrid Document-Routed Retrieval》（8.0/10）, 《Improving Attributed Long-form Question Answering with Intent Awareness》（8.0/10）, 《MiroEval: Benchmarking Multimodal Deep Research Agents in Process and Outcome》（8.0/10）
+- 这些结果覆盖了当下较热的方向，建议先看精读区论文的关键问题与方法。
+- 详情：[/202603/31/README](/202603/31/README)
 
 ### 精读区论文标签
-1. [Reconciling Latent Variables and Networks: Exploring and extending the Psychometric-Toolbox](/202603/30/2603.26116v1-reconciling-latent-variables-and-networks-exploring-and-extending-the-psychometric-toolbox)  
+1. [CRISP: Characterizing Relative Impact of Scholarly Publications](/202603/31/2603.26791v1-crisp-characterizing-relative-impact-of-scholarly-publications)  
    标签：评分：9.0/10、query:sr
-   evidence：探索性文献检索与方法论综合
-2. [Innovation Discovery System for Networking Research](/202603/30/2603.26496v1-innovation-discovery-system-for-networking-research)  
+   evidence：通过引文联合排序表征学术出版物的相对影响力
+2. [Learning to Predict Future-Aligned Research Proposals with Language Models](/202603/31/2603.27146v1-learning-to-predict-future-aligned-research-proposals-with-language-models)  
    标签：评分：9.0/10、query:sr
-   evidence：用于科学发现的研究想法生成系统
-3. [CoCR-RAG: Enhancing Retrieval-Augmented Generation in Web Q&A via Concept-oriented Context Reconstruction](/202603/30/2603.23989v1-cocr-rag-enhancing-retrieval-augmented-generation-in-web-qa-via-concept-oriented-context-reconstruction)  
-   标签：评分：8.0/10、query:sr
-   evidence：多源信息融合的上下文重构检索技术
-4. [AuthorityBench: Benchmarking LLM Authority Perception for Reliable Retrieval-Augmented Generation](/202603/30/2603.25092v1-authoritybench-benchmarking-llm-authority-perception-for-reliable-retrieval-augmented-generation)  
-   标签：评分：8.0/10、query:sr
-   evidence：基准测试权威感知以实现可靠检索
-5. [Supercharging Federated Intelligence Retrieval](/202603/30/2603.25374v1-supercharging-federated-intelligence-retrieval)  
-   标签：评分：8.0/10、query:sr
-   evidence：跨私有文档库的联邦智能检索
-6. [SocialX: A Modular Platform for Multi-Source Big Data Research in Indonesia](/202603/30/2603.26253v1-socialx-a-modular-platform-for-multi-source-big-data-research-in-indonesia)  
-   标签：评分：8.0/10、query:sr
-   evidence：包含学术数据库在内的多源大数据研究平台
+   evidence：通过检索和语义评分预测未来研究方向
+3. [PubMed Reasoner: Dynamic Reasoning-based Retrieval for Evidence-Grounded Biomedical Question Answering](/202603/31/2603.27335v1-pubmed-reasoner-dynamic-reasoning-based-retrieval-for-evidence-grounded-biomedical-question-answering)  
+   标签：评分：9.0/10、query:sr
+   evidence：针对生物医学文献的迭代查询优化与反射式检索
+4. [A Multi-Agent Rhizomatic Pipeline for Non-Linear Literature Analysis](/202603/31/2603.28336v1-a-multi-agent-rhizomatic-pipeline-for-non-linear-literature-analysis)  
+   标签：评分：9.0/10、query:sr
+   evidence：用于非线性文献分析的多智能体流水线
+5. [Towards a Medical AI Scientist](/202603/31/2603.28589v1-towards-a-medical-ai-scientist)  
+   标签：评分：9.0/10、query:sr
+   evidence：将广泛调研的文献转化为可操作的证据
+6. [Not Search, But Scan: Benchmarking MLLMs on Scan-Oriented Academic Paper Reasoning](/202603/31/2603.28651v1-not-search-but-scan-benchmarking-mllms-on-scan-oriented-academic-paper-reasoning)  
+   标签：评分：9.0/10、query:sr
+   evidence：评估多模态大模型在学术论文推理和交叉核对方面的表现
 
 ### 速读区论文标签
-1. [User Preference Modeling for Conversational LLM Agents: Weak Rewards from Retrieval-Augmented Interaction](/202603/30/2603.20939v1-user-preference-modeling-for-conversational-llm-agents-weak-rewards-from-retrieval-augmented-interaction)  
+1. [Resolving the Robustness-Precision Trade-off in Financial RAG through Hybrid Document-Routed Retrieval](/202603/31/2603.26815v1-resolving-the-robustness-precision-trade-off-in-financial-rag-through-hybrid-document-routed-retrieval)  
+   标签：评分：8.0/10、query:sr
+   evidence：用于精确信息发现的混合文档路由检索
+2. [Improving Attributed Long-form Question Answering with Intent Awareness](/202603/31/2603.27435v1-improving-attributed-long-form-question-answering-with-intent-awareness)  
+   标签：评分：8.0/10、query:sr
+   evidence：生成知识密集型学术报告的意图感知
+3. [MiroEval: Benchmarking Multimodal Deep Research Agents in Process and Outcome](/202603/31/2603.28407v1-miroeval-benchmarking-multimodal-deep-research-agents-in-process-and-outcome)  
+   标签：评分：8.0/10、query:sr
+   evidence：针对复杂查询的深度研究智能体基准测试
+4. [Entropic Claim Resolution: Uncertainty-Driven Evidence Selection for RAG](/202603/31/2603.28444v1-entropic-claim-resolution-uncertainty-driven-evidence-selection-for-rag)  
+   标签：评分：8.0/10、query:sr
+   evidence：知识密集型检索中基于不确定性的证据选择
+5. [ProGRank: Probe-Gradient Reranking to Defend Dense-Retriever RAG from Corpus Poisoning](/202603/31/2603.22934v2-progrank-probe-gradient-reranking-to-defend-dense-retriever-rag-from-corpus-poisoning)  
    标签：评分：7.0/10、query:sr
-   evidence：基于用户偏好记忆偏置检索评分
-2. [Fast Nearest Neighbor Search for $\ell_p$ Metrics](/202603/30/2603.21148v1-fast-nearest-neighbor-search-for-ellp-metrics)  
+   evidence：针对稠密检索RAG的检索端防御，确保可靠的证据定位
+6. [PaperVoyager : Building Interactive Web with Visual Language Models](/202603/31/2603.22999v2-papervoyager--building-interactive-web-with-visual-language-models)  
    标签：评分：7.0/10、query:sr
-   evidence：大规模应用中的快速最近邻搜索
-3. [FGIM: a Fast Graph-based Indexes Merging Framework for Approximate Nearest Neighbor Search](/202603/30/2603.21710v1-fgim-a-fast-graph-based-indexes-merging-framework-for-approximate-nearest-neighbor-search)  
+   evidence：将研究论文转换为交互式系统
+7. [UniScale: Synergistic Entire Space Data and Model Scaling for Search Ranking](/202603/31/2603.24226v2-uniscale-synergistic-entire-space-data-and-model-scaling-for-search-ranking)  
    标签：评分：7.0/10、query:sr
-   evidence：用于搜索的快速图索引合并框架
-4. [PaperVoyager : Building Interactive Web with Visual Language Models](/202603/30/2603.22999v1-papervoyager--building-interactive-web-with-visual-language-models)  
+   evidence：优化搜索排序的数据与架构协同设计
+8. [More Than "Means to an End": Supporting Reasoning with Transparently Designed AI Data Science Processes](/202603/31/2603.24877v1-more-than-means-to-an-end-supporting-reasoning-with-transparently-designed-ai-data-science-processes)  
    标签：评分：7.0/10、query:sr
-   evidence：将研究论文转换为交互式系统以辅助理解
-5. [An In-Depth Study of Filter-Agnostic Vector Search on a PostgreSQL Database System: [Experiments and Analysis]](/202603/30/2603.23710v1-an-in-depth-study-of-filter-agnostic-vector-search-on-a-postgresql-database-system-experiments-and-analysis)  
-   标签：评分：7.0/10、query:sr
-   evidence：语义搜索系统中过滤向量检索的分析
-6. [UniScale: Synergistic Entire Space Data and Model Scaling for Search Ranking](/202603/30/2603.24226v1-uniscale-synergistic-entire-space-data-and-model-scaling-for-search-ranking)  
-   标签：评分：7.0/10、query:sr
-   evidence：搜索排序中的数据与模型协同缩放
-7. [Assessment Design in the AI Era: A Method for Identifying Items Functioning Differentially for Humans and Chatbots](/202603/30/2603.23682v1-assessment-design-in-the-ai-era-a-method-for-identifying-items-functioning-differentially-for-humans-and-chatbots)  
+   evidence：通过透明AI工作流支持数据科学推理
+9. [Systemic Gendered Citation Imbalance in Computer Science: Evidence from Conferences and Journals](/202603/31/2603.23273v1-systemic-gendered-citation-imbalance-in-computer-science-evidence-from-conferences-and-journals)  
    标签：评分：6.0/10、query:sr
-   evidence：识别AI评估中差异化项目功能的统计方法
-8. [LLMpedia: A Transparent Framework to Materialize an LLM's Encyclopedic Knowledge at Scale](/202603/30/2603.24080v1-llmpedia-a-transparent-framework-to-materialize-an-llms-encyclopedic-knowledge-at-scale)  
+   evidence：对某一领域引用模式的系统调查
+10. [Natural Language Interfaces for Spatial and Temporal Databases: A Comprehensive Overview of Methods, Taxonomy, and Future Directions](/202603/31/2603.23375v1-natural-language-interfaces-for-spatial-and-temporal-databases-a-comprehensive-overview-of-methods-taxonomy-and-future-directions)  
    标签：评分：6.0/10、query:sr
-   evidence：大规模生成百科文章并验证知识
-9. [PDET-LSH: Scalable In-Memory Indexing for High-Dimensional Approximate Nearest Neighbor Search with Quality Guarantees](/202603/30/2603.24920v1-pdet-lsh-scalable-in-memory-indexing-for-high-dimensional-approximate-nearest-neighbor-search-with-quality-guarantees)  
+   evidence：用于查询空间和时间数据库的自然语言接口
+11. [Who Benefits from RAG? The Role of Exposure, Utility and Attribution Bias](/202603/31/2603.24218v1-who-benefits-from-rag-the-role-of-exposure-utility-and-attribution-bias)  
    标签：评分：6.0/10、query:sr
-   evidence：高维搜索的可扩展索引
-10. [Navigating the Prompt Space: Improving LLM Classification of Social Science Texts Through Prompt Engineering](/202603/30/2603.25422v1-navigating-the-prompt-space-improving-llm-classification-of-social-science-texts-through-prompt-engineering)  
-   标签：评分：6.0/10、query:sr
-   evidence：系统地改变提示工程的各个方面
-11. [Improving metadata flows -- The simultaneous use of multiple metadata schemas at disciplinary research data repositories](/202603/30/2603.25468v1-improving-metadata-flows----the-simultaneous-use-of-multiple-metadata-schemas-at-disciplinary-research-data-repositories)  
-   标签：评分：6.0/10、query:sr
-   evidence：学科研究数据存储库中的元数据模式
+   evidence：调查检索增强生成系统中的查询组公平性
 
 
 ════════════════════════════════════════
